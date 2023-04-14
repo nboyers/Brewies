@@ -1,0 +1,617 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */; };
+		FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29329EA0D2300510FCD /* ContentView.swift */; };
+		FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29529EA0D2600510FCD /* Assets.xcassets */; };
+		FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29929EA0D2600510FCD /* Preview Assets.xcassets */; };
+		FF3FF2A429EA0D2600510FCD /* BrewiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */; };
+		FF3FF2AE29EA0D2600510FCD /* BrewiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */; };
+		FF3FF2B029EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FF3FF2A029EA0D2600510FCD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF3FF28629EA0D2300510FCD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF3FF28D29EA0D2300510FCD;
+			remoteInfo = Brewies;
+		};
+		FF3FF2AA29EA0D2600510FCD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF3FF28629EA0D2300510FCD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF3FF28D29EA0D2300510FCD;
+			remoteInfo = Brewies;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FF3FF28E29EA0D2300510FCD /* Brewies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brewies.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesApp.swift; sourceTree = "<group>"; };
+		FF3FF29329EA0D2300510FCD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FF3FF29529EA0D2600510FCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FF3FF29729EA0D2600510FCD /* Brewies.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Brewies.entitlements; sourceTree = "<group>"; };
+		FF3FF29929EA0D2600510FCD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FF3FF29F29EA0D2600510FCD /* BrewiesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrewiesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesTests.swift; sourceTree = "<group>"; };
+		FF3FF2A929EA0D2600510FCD /* BrewiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrewiesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesUITests.swift; sourceTree = "<group>"; };
+		FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FF3FF28B29EA0D2300510FCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF29C29EA0D2600510FCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF2A629EA0D2600510FCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FF3FF28529EA0D2300510FCD = {
+			isa = PBXGroup;
+			children = (
+				FF3FF29029EA0D2300510FCD /* Brewies */,
+				FF3FF2A229EA0D2600510FCD /* BrewiesTests */,
+				FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */,
+				FF3FF28F29EA0D2300510FCD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FF3FF28F29EA0D2300510FCD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF28E29EA0D2300510FCD /* Brewies.app */,
+				FF3FF29F29EA0D2600510FCD /* BrewiesTests.xctest */,
+				FF3FF2A929EA0D2600510FCD /* BrewiesUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FF3FF29029EA0D2300510FCD /* Brewies */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
+				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
+				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
+				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
+				FF3FF29829EA0D2600510FCD /* Preview Content */,
+			);
+			path = Brewies;
+			sourceTree = "<group>";
+		};
+		FF3FF29829EA0D2600510FCD /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF29929EA0D2600510FCD /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FF3FF2A229EA0D2600510FCD /* BrewiesTests */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */,
+			);
+			path = BrewiesTests;
+			sourceTree = "<group>";
+		};
+		FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */,
+				FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */,
+			);
+			path = BrewiesUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FF3FF28D29EA0D2300510FCD /* Brewies */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF3FF2B329EA0D2600510FCD /* Build configuration list for PBXNativeTarget "Brewies" */;
+			buildPhases = (
+				FF3FF28A29EA0D2300510FCD /* Sources */,
+				FF3FF28B29EA0D2300510FCD /* Frameworks */,
+				FF3FF28C29EA0D2300510FCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Brewies;
+			productName = Brewies;
+			productReference = FF3FF28E29EA0D2300510FCD /* Brewies.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FF3FF29E29EA0D2600510FCD /* BrewiesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF3FF2B629EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesTests" */;
+			buildPhases = (
+				FF3FF29B29EA0D2600510FCD /* Sources */,
+				FF3FF29C29EA0D2600510FCD /* Frameworks */,
+				FF3FF29D29EA0D2600510FCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF3FF2A129EA0D2600510FCD /* PBXTargetDependency */,
+			);
+			name = BrewiesTests;
+			productName = BrewiesTests;
+			productReference = FF3FF29F29EA0D2600510FCD /* BrewiesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FF3FF2A829EA0D2600510FCD /* BrewiesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF3FF2B929EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesUITests" */;
+			buildPhases = (
+				FF3FF2A529EA0D2600510FCD /* Sources */,
+				FF3FF2A629EA0D2600510FCD /* Frameworks */,
+				FF3FF2A729EA0D2600510FCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF3FF2AB29EA0D2600510FCD /* PBXTargetDependency */,
+			);
+			name = BrewiesUITests;
+			productName = BrewiesUITests;
+			productReference = FF3FF2A929EA0D2600510FCD /* BrewiesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FF3FF28629EA0D2300510FCD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					FF3FF28D29EA0D2300510FCD = {
+						CreatedOnToolsVersion = 14.3;
+					};
+					FF3FF29E29EA0D2600510FCD = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = FF3FF28D29EA0D2300510FCD;
+					};
+					FF3FF2A829EA0D2600510FCD = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = FF3FF28D29EA0D2300510FCD;
+					};
+				};
+			};
+			buildConfigurationList = FF3FF28929EA0D2300510FCD /* Build configuration list for PBXProject "Brewies" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FF3FF28529EA0D2300510FCD;
+			productRefGroup = FF3FF28F29EA0D2300510FCD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FF3FF28D29EA0D2300510FCD /* Brewies */,
+				FF3FF29E29EA0D2600510FCD /* BrewiesTests */,
+				FF3FF2A829EA0D2600510FCD /* BrewiesUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FF3FF28C29EA0D2300510FCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
+				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF29D29EA0D2600510FCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF2A729EA0D2600510FCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FF3FF28A29EA0D2300510FCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
+				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF29B29EA0D2600510FCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF3FF2A429EA0D2600510FCD /* BrewiesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF2A529EA0D2600510FCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF3FF2B029EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift in Sources */,
+				FF3FF2AE29EA0D2600510FCD /* BrewiesUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FF3FF2A129EA0D2600510FCD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF3FF28D29EA0D2300510FCD /* Brewies */;
+			targetProxy = FF3FF2A029EA0D2600510FCD /* PBXContainerItemProxy */;
+		};
+		FF3FF2AB29EA0D2600510FCD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF3FF28D29EA0D2300510FCD /* Brewies */;
+			targetProxy = FF3FF2AA29EA0D2600510FCD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FF3FF2B129EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FF3FF2B229EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		FF3FF2B429EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Brewies/Brewies.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FF3FF2B529EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Brewies/Brewies.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		FF3FF2B729EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Brewies.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Brewies";
+			};
+			name = Debug;
+		};
+		FF3FF2B829EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Brewies.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Brewies";
+			};
+			name = Release;
+		};
+		FF3FF2BA29EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Brewies;
+			};
+			name = Debug;
+		};
+		FF3FF2BB29EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Brewies;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FF3FF28929EA0D2300510FCD /* Build configuration list for PBXProject "Brewies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2B129EA0D2600510FCD /* Debug */,
+				FF3FF2B229EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF3FF2B329EA0D2600510FCD /* Build configuration list for PBXNativeTarget "Brewies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2B429EA0D2600510FCD /* Debug */,
+				FF3FF2B529EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF3FF2B629EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2B729EA0D2600510FCD /* Debug */,
+				FF3FF2B829EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF3FF2B929EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2BA29EA0D2600510FCD /* Debug */,
+				FF3FF2BB29EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FF3FF28629EA0D2300510FCD /* Project object */;
+}
