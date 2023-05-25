@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946DF2A0EE49100F705CB /* UserCache.swift */; };
+		FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E12A0EE7C300F705CB /* FavoriteView.swift */; };
+		FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */; };
 		FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */; };
 		FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29329EA0D2300510FCD /* ContentView.swift */; };
 		FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29529EA0D2600510FCD /* Assets.xcassets */; };
@@ -14,6 +17,18 @@
 		FF3FF2A429EA0D2600510FCD /* BrewiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */; };
 		FF3FF2AE29EA0D2600510FCD /* BrewiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */; };
 		FF3FF2B029EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */; };
+		FF3FF2BE29EA0E4200510FCD /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = FF3FF2BD29EA0E4200510FCD /* SwiftyJSON */; };
+		FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF3FF2C029EA0E5200510FCD /* Alamofire */; };
+		FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */; };
+		FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C729EA0F2600510FCD /* LocationManager.swift */; };
+		FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */; };
+		FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2CE29EA11E700510FCD /* MapView.swift */; };
+		FF3FF2D129EA15F500510FCD /* YelpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2D029EA15F500510FCD /* YelpResponse.swift */; };
+		FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2D229EA183900510FCD /* Secrets.swift */; };
+		FF3FF2D529EA1C0300510FCD /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF2D429EA1C0300510FCD /* readme.md */; };
+		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
+		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
+		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +49,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF0946DF2A0EE49100F705CB /* UserCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCache.swift; sourceTree = "<group>"; };
+		FF0946E12A0EE7C300F705CB /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
+		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
 		FF3FF28E29EA0D2300510FCD /* Brewies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brewies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesApp.swift; sourceTree = "<group>"; };
 		FF3FF29329EA0D2300510FCD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -45,6 +63,16 @@
 		FF3FF2A929EA0D2600510FCD /* BrewiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrewiesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesUITests.swift; sourceTree = "<group>"; };
 		FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FF3FF2C229EA0EC100510FCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShop.swift; sourceTree = "<group>"; };
+		FF3FF2C729EA0F2600510FCD /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpAPI.swift; sourceTree = "<group>"; };
+		FF3FF2CE29EA11E700510FCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		FF3FF2D029EA15F500510FCD /* YelpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpResponse.swift; sourceTree = "<group>"; };
+		FF3FF2D229EA183900510FCD /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
+		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,6 +80,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */,
+				FF3FF2BE29EA0E4200510FCD /* SwiftyJSON in Frameworks */,
+				FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,9 +127,14 @@
 			isa = PBXGroup;
 			children = (
 				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
-				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
-				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
 				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
+				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
+				FF3FF2D729EA1C3D00510FCD /* Misc */,
+				FF3FF2D629EA1C1A00510FCD /* Supporting Assets */,
+				FF3FF2C329EA0EE100510FCD /* Model */,
+				FF3FF2C629EA0F0800510FCD /* View Models */,
+				FF3FF2CB29EA107700510FCD /* Views */,
+				FF3FF2C229EA0EC100510FCD /* Info.plist */,
 				FF3FF29829EA0D2600510FCD /* Preview Content */,
 			);
 			path = Brewies;
@@ -129,6 +165,62 @@
 			path = BrewiesUITests;
 			sourceTree = "<group>";
 		};
+		FF3FF2C329EA0EE100510FCD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */,
+				FF3FF2D029EA15F500510FCD /* YelpResponse.swift */,
+				FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FF3FF2C629EA0F0800510FCD /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2C729EA0F2600510FCD /* LocationManager.swift */,
+				FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */,
+				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
+		FF3FF2CB29EA107700510FCD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FF77393B2A1318B3007B603F /* BrewViews */,
+				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
+				FF3FF2CE29EA11E700510FCD /* MapView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FF3FF2D629EA1C1A00510FCD /* Supporting Assets */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Supporting Assets";
+			sourceTree = "<group>";
+		};
+		FF3FF2D729EA1C3D00510FCD /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2D429EA1C0300510FCD /* readme.md */,
+				FF3FF2D229EA183900510FCD /* Secrets.swift */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		FF77393B2A1318B3007B603F /* BrewViews */ = {
+			isa = PBXGroup;
+			children = (
+				FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */,
+				FF0946E12A0EE7C300F705CB /* FavoriteView.swift */,
+				FF7739382A1316D2007B603F /* BrewDetailView.swift */,
+			);
+			path = BrewViews;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -145,6 +237,11 @@
 			dependencies = (
 			);
 			name = Brewies;
+			packageProductDependencies = (
+				FF3FF2BD29EA0E4200510FCD /* SwiftyJSON */,
+				FF3FF2C029EA0E5200510FCD /* Alamofire */,
+				FF5377A62A0B1E5E0038E5E7 /* Kingfisher */,
+			);
 			productName = Brewies;
 			productReference = FF3FF28E29EA0D2300510FCD /* Brewies.app */;
 			productType = "com.apple.product-type.application";
@@ -217,6 +314,11 @@
 				Base,
 			);
 			mainGroup = FF3FF28529EA0D2300510FCD;
+			packageReferences = (
+				FF3FF2BC29EA0E4200510FCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */,
+				FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
 			productRefGroup = FF3FF28F29EA0D2300510FCD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -234,6 +336,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
+				FF3FF2D529EA1C0300510FCD /* readme.md in Resources */,
 				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -259,8 +362,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
+				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
+				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
+				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
+				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
+				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,
+				FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */,
+				FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */,
 				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
 				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
+				FF3FF2D129EA15F500510FCD /* YelpResponse.swift in Sources */,
+				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
+				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +533,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Brewies/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Brewies requires access to your location to find nearby coffee shops";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -432,15 +548,17 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -457,6 +575,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Brewies/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Brewies requires access to your location to find nearby coffee shops";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -470,15 +590,17 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -612,6 +734,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FF3FF2BC29EA0E4200510FCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.6.4;
+			};
+		};
+		FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FF3FF2BD29EA0E4200510FCD /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF3FF2BC29EA0E4200510FCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		FF3FF2C029EA0E5200510FCD /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		FF5377A62A0B1E5E0038E5E7 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FF3FF28629EA0D2300510FCD /* Project object */;
 }
