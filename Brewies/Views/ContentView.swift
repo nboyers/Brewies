@@ -8,6 +8,7 @@
 import SwiftUI
 import CoreLocation
 import MapKit
+import BottomSheet
 
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
@@ -23,7 +24,8 @@ struct ContentView: View {
     @State private var isAnnotationSelected = false
     @State private var mapTapped = false
     @State private var showBrewPreview = false
-
+    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
+    
     let DISTANCE = CLLocationDistance(2000)
     
     var body: some View {
@@ -45,55 +47,63 @@ struct ContentView: View {
                 .onAppear(perform: {
                     fetchCoffeeShops()
                 })
-                
-                VStack {
-                    Spacer().frame(height: 75)
-                    
-                    Button(action: {
-                        fetchCoffeeShops()
-                    }) {
-                        Text("Search Area")
-                            .frame(width: 175, height: 10)
-                            .font(.title3)
-                            .padding(20)
-                            .foregroundColor(.white)
-                            .background(.secondary)
-                            .cornerRadius(25)
-                    }
-                    
-                    Spacer()
-                    
-                    if selectedCoffeeShop != nil && showBrewPreview {
-                        BrewPreviewList(
-                            coffeeShops: $coffeeShops,
-                            selectedCoffeeShop: $selectedCoffeeShop,
-                            showBrewPreview: $showBrewPreview
-                        )
-                    }
-                    
-                    Spacer().frame(height: 100)
-                }
-                
                 if showUserLocationButton {
                     GeometryReader { geo in
                         Button(action: {
                             centeredOnUser = true
                         }) {
-                            Image(systemName: "location.circle.fill")
-                                .foregroundColor(.primary)
+                            Image(systemName: "location.square.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+
                                 .imageScale(.large)
-                                .padding()
-                                .background(Color.white.opacity(0.75))
-                                .clipShape(Circle())
+                                .background(Color.black.opacity(0.75))
                         }
-                        .position(x: geo.size.width - 375, y: geo.size.height - 60)
+                        .position(x: geo.size.width - 50, y: geo.size.height / 4)
                     }
                 }
+                
             }
+            .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
+                .relativeBottom(0.20), //Floor
+                .relative(0.4), // Mid swipe
+                .relativeTop(0.75) //Top full swipe
+            ], headerContent: { // the top portion
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        fetchCoffeeShops()
+                    }) {
+                        Text("Search Area")
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 70)
+                            .font(.title3)
+                            .foregroundColor(Color(UIColor.secondaryLabel))
+                            .foregroundColor(.white)
+                            .background(.secondary)
+                            .cornerRadius(25)
+                    }
+    
+                    Spacer()
+                }
+//                .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor.quaternaryLabel)))
+                .onTapGesture {
+                    self.bottomSheetPosition = .relativeTop(0.6)
+                }
+            }) {
+                if selectedCoffeeShop != nil && showBrewPreview {
+                    BrewPreviewList(coffeeShops: $coffeeShops, selectedCoffeeShop: $selectedCoffeeShop, showBrewPreview: $showBrewPreview)
+                }
+            }
+            .enableAppleScrollBehavior()
+            .enableBackgroundBlur()
+            .backgroundBlurMaterial(.systemDark)
+            
             .onAppear {
                 locationManager.requestLocationAccess()
             }
             .edgesIgnoringSafeArea(.top)
+            
             .tabItem {
                 Image(systemName: "map")
                 Text("Map")

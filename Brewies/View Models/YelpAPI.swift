@@ -51,7 +51,7 @@ class YelpAPI {
         latitude: Double,
         longitude: Double,
         radius: Int = 7000,
-        categories: String = "coffee,localcoffee,coffeeroasteries,coffeeshops,cafe,cafes",
+        categories: String = "coffee,coffeeroasteries,coffeeshops",
         sort_by: String = "distance",
         completion: @escaping ([CoffeeShop]) -> Void
     ) {

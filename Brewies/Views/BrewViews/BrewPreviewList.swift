@@ -16,6 +16,8 @@ struct BrewPreviewList: View {
     var body: some View {
         ScrollViewReader { scrollView in
             VStack {
+                Spacer()
+                    .frame(height: 50)
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(coffeeShops) { coffeeShop in
@@ -23,7 +25,7 @@ struct BrewPreviewList: View {
                                 .id(coffeeShop.id)
                         }
                     }
-                    .padding(.horizontal, 16)
+                    .padding([.top, .horizontal])
                 }
                 .onChange(of: selectedCoffeeShop) { coffeeShop in
                     if let coffeeShop = coffeeShop {
@@ -31,18 +33,6 @@ struct BrewPreviewList: View {
                             scrollView.scrollTo(coffeeShop.id, anchor: .center)
                         }
                     }
-                }
-                
-                Button(action: {
-                    showBrewPreview = false
-                }) {
-                    Text("Clear Preview")
-                        .frame(width: 175, height: 10)
-                        .font(.title3)
-                        .padding(20)
-                        .foregroundColor(.white)
-                        .background(.secondary)
-                        .cornerRadius(25)
                 }
             }
         }
@@ -53,6 +43,9 @@ struct BrewPreview: View {
     let coffeeShop: CoffeeShop
     @Binding var showBrewPreview: Bool
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
+    
+    @State private var isDetailShowing: Bool = false
+    
     
     var isFavorite: Bool {
         coffeeShopData.favoriteShops.contains(coffeeShop)
@@ -144,9 +137,6 @@ struct BrewPreview: View {
         .cornerRadius(8)
         .shadow(radius: 4)
     }
-    
-    @State private var isDetailShowing: Bool = false
-    
     private func toggleFavorite() {
         if isFavorite {
             coffeeShopData.removeFromFavorites(coffeeShop)

@@ -29,6 +29,7 @@
 		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
+		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */,
+				FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */,
 				FF3FF2BE29EA0E4200510FCD /* SwiftyJSON in Frameworks */,
 				FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */,
 			);
@@ -241,6 +243,7 @@
 				FF3FF2BD29EA0E4200510FCD /* SwiftyJSON */,
 				FF3FF2C029EA0E5200510FCD /* Alamofire */,
 				FF5377A62A0B1E5E0038E5E7 /* Kingfisher */,
+				FFCB2A562A2141E00051B957 /* BottomSheet */,
 			);
 			productName = Brewies;
 			productReference = FF3FF28E29EA0D2300510FCD /* Brewies.app */;
@@ -318,6 +321,7 @@
 				FF3FF2BC29EA0E4200510FCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */,
 				FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 			);
 			productRefGroup = FF3FF28F29EA0D2300510FCD /* Products */;
 			projectDirPath = "";
@@ -760,6 +764,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lucaszischka/BottomSheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -777,6 +789,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		FFCB2A562A2141E00051B957 /* BottomSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */;
+			productName = BottomSheet;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
