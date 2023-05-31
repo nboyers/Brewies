@@ -8,7 +8,7 @@
 import Foundation
 
 
-struct CoffeeShop: Identifiable, Equatable, Encodable, Decodable {
+struct CoffeeShop: Identifiable, Equatable, Codable {
     
     let id: String
     let name: String

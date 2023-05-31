@@ -24,7 +24,7 @@ struct ContentView: View {
     @State private var isAnnotationSelected = false
     @State private var mapTapped = false
     @State private var showBrewPreview = false
-    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
+    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.17) // Starting position for bottomSheet
     
     let DISTANCE = CLLocationDistance(2000)
     
@@ -55,7 +55,7 @@ struct ContentView: View {
                             Image(systemName: "location.square.fill")
                                 .resizable()
                                 .frame(width: 30, height: 30)
-
+                            
                                 .imageScale(.large)
                                 .background(Color.black.opacity(0.75))
                         }
@@ -65,12 +65,11 @@ struct ContentView: View {
                 
             }
             .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
-                .relativeBottom(0.20), //Floor
-                .relative(0.4), // Mid swipe
-                .relativeTop(0.75) //Top full swipe
+                .relativeBottom(0.17), //Floor
+                .relative(0.55), // Mid swipe
+                .relativeTop(0.95) //Top full swipe
             ], headerContent: { // the top portion
                 HStack {
-                    Spacer()
                     Button(action: {
                         fetchCoffeeShops()
                     }) {
@@ -81,19 +80,17 @@ struct ContentView: View {
                             .foregroundColor(Color(UIColor.secondaryLabel))
                             .foregroundColor(.white)
                             .background(.secondary)
-                            .cornerRadius(25)
+                            .cornerRadius(40)
                     }
-    
-                    Spacer()
-                }
-//                .background(RoundedRectangle(cornerRadius: 10).fill(Color(UIColor.quaternaryLabel)))
-                .onTapGesture {
-                    self.bottomSheetPosition = .relativeTop(0.6)
                 }
             }) {
                 if selectedCoffeeShop != nil && showBrewPreview {
                     BrewPreviewList(coffeeShops: $coffeeShops, selectedCoffeeShop: $selectedCoffeeShop, showBrewPreview: $showBrewPreview)
                 }
+                AdBannerView()
+                    .frame(width: 320, height: 50)
+                
+                
             }
             .enableAppleScrollBehavior()
             .enableBackgroundBlur()
@@ -117,6 +114,8 @@ struct ContentView: View {
         }
     }
     
+    
+    //MARK: Func to retrive the cafe's from the APIs
     private func fetchCoffeeShops() {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true

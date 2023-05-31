@@ -6,7 +6,6 @@
 //
 import Foundation
 import Alamofire
-import SwiftyJSON
 
 class YelpAPI {
     private let apiKey = Secrets.yelpApiKey
@@ -97,7 +96,7 @@ class YelpAPI {
                 phone: business.display_phone,
                 url: business.url,
                 transactions: business.transactions,
-                hours: business.hours?.first?.open,
+                hours: business.hours?.first?.open, // Here we pass the business hours
                 isOpen: business.is_opened
             )
             if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
@@ -109,7 +108,7 @@ class YelpAPI {
         }
         return coffeeShops
     }
-    
+
     func fetchCoffeeShopDetails(id: String, completion: @escaping (YelpBusiness) -> Void) {
         let url = "https://api.yelp.com/v3/businesses/\(id)"
         let headers: HTTPHeaders = [
@@ -119,6 +118,7 @@ class YelpAPI {
         AF.request(url, headers: headers).responseDecodable(of: YelpBusiness.self) { response in
             switch response.result {
             case .success(let yelpBusiness):
+                print(yelpBusiness)
                 completion(yelpBusiness)
             case .failure(let error):
                 print("Error fetching coffee shop details: \(error.localizedDescription)")

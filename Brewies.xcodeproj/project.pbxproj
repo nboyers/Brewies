@@ -10,6 +10,7 @@
 		FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946DF2A0EE49100F705CB /* UserCache.swift */; };
 		FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E12A0EE7C300F705CB /* FavoriteView.swift */; };
 		FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */; };
+		FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2F263B2A256EB5000D922E /* Date+Extension.swift */; };
 		FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */; };
 		FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29329EA0D2300510FCD /* ContentView.swift */; };
 		FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29529EA0D2600510FCD /* Assets.xcassets */; };
@@ -17,7 +18,6 @@
 		FF3FF2A429EA0D2600510FCD /* BrewiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */; };
 		FF3FF2AE29EA0D2600510FCD /* BrewiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */; };
 		FF3FF2B029EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */; };
-		FF3FF2BE29EA0E4200510FCD /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = FF3FF2BD29EA0E4200510FCD /* SwiftyJSON */; };
 		FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF3FF2C029EA0E5200510FCD /* Alamofire */; };
 		FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */; };
 		FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C729EA0F2600510FCD /* LocationManager.swift */; };
@@ -29,6 +29,10 @@
 		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
+		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
+		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
+		FFB360D12A26C7DD0099017F /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D02A26C7DD0099017F /* RewardAdController.swift */; };
+		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +57,7 @@
 		FF0946DF2A0EE49100F705CB /* UserCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCache.swift; sourceTree = "<group>"; };
 		FF0946E12A0EE7C300F705CB /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
+		FF2F263B2A256EB5000D922E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		FF3FF28E29EA0D2300510FCD /* Brewies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brewies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesApp.swift; sourceTree = "<group>"; };
 		FF3FF29329EA0D2300510FCD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -74,6 +79,9 @@
 		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
 		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
+		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
+		FFB360D02A26C7DD0099017F /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RewardAdController.swift; path = ../../../../Downloads/RewardAdController.swift; sourceTree = "<group>"; };
+		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +91,7 @@
 			files = (
 				FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */,
 				FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */,
-				FF3FF2BE29EA0E4200510FCD /* SwiftyJSON in Frameworks */,
+				FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */,
 				FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,6 +113,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF2F263A2A256E9C000D922E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				FF2F263B2A256EB5000D922E /* Date+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		FF3FF28529EA0D2300510FCD = {
 			isa = PBXGroup;
 			children = (
@@ -112,6 +128,7 @@
 				FF3FF2A229EA0D2600510FCD /* BrewiesTests */,
 				FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */,
 				FF3FF28F29EA0D2300510FCD /* Products */,
+				FFB360D42A26C91F0099017F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -131,6 +148,7 @@
 				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
 				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
 				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
+				FF2F263A2A256E9C000D922E /* Extension */,
 				FF3FF2D729EA1C3D00510FCD /* Misc */,
 				FF3FF2D629EA1C1A00510FCD /* Supporting Assets */,
 				FF3FF2C329EA0EE100510FCD /* Model */,
@@ -180,9 +198,11 @@
 		FF3FF2C629EA0F0800510FCD /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				FFB360D52A26D5730099017F /* Monetization */,
 				FF3FF2C729EA0F2600510FCD /* LocationManager.swift */,
 				FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */,
 				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
+				FFB360D02A26C7DD0099017F /* RewardAdController.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -193,6 +213,8 @@
 				FF77393B2A1318B3007B603F /* BrewViews */,
 				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
 				FF3FF2CE29EA11E700510FCD /* MapView.swift */,
+				FFB360D22A26C8480099017F /* AdmobBanner.swift */,
+				FFB360CE2A26B09F0099017F /* SafariView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -223,6 +245,20 @@
 			path = BrewViews;
 			sourceTree = "<group>";
 		};
+		FFB360D42A26C91F0099017F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FFB360D52A26D5730099017F /* Monetization */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Monetization;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -240,10 +276,10 @@
 			);
 			name = Brewies;
 			packageProductDependencies = (
-				FF3FF2BD29EA0E4200510FCD /* SwiftyJSON */,
 				FF3FF2C029EA0E5200510FCD /* Alamofire */,
 				FF5377A62A0B1E5E0038E5E7 /* Kingfisher */,
 				FFCB2A562A2141E00051B957 /* BottomSheet */,
+				FFB360CC2A26A5830099017F /* GoogleMobileAds */,
 			);
 			productName = Brewies;
 			productReference = FF3FF28E29EA0D2300510FCD /* Brewies.app */;
@@ -318,10 +354,10 @@
 			);
 			mainGroup = FF3FF28529EA0D2300510FCD;
 			packageReferences = (
-				FF3FF2BC29EA0E4200510FCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */,
 				FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */,
+				FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = FF3FF28F29EA0D2300510FCD /* Products */;
 			projectDirPath = "";
@@ -367,9 +403,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
+				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
+				FFB360D12A26C7DD0099017F /* RewardAdController.swift in Sources */,
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
 				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
 				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
+				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
 				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
 				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,
 				FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */,
@@ -377,6 +416,7 @@
 				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
 				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
 				FF3FF2D129EA15F500510FCD /* YelpResponse.swift in Sources */,
+				FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */,
 				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
 				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,
 			);
@@ -551,9 +591,13 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"-ObjC",
+				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -593,9 +637,13 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"-ObjC",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -740,14 +788,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		FF3FF2BC29EA0E4200510FCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
-			};
-		};
 		FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -764,6 +804,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
 		FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lucaszischka/BottomSheet";
@@ -775,11 +823,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		FF3FF2BD29EA0E4200510FCD /* SwiftyJSON */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF3FF2BC29EA0E4200510FCD /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
-			productName = SwiftyJSON;
-		};
 		FF3FF2C029EA0E5200510FCD /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */;
@@ -789,6 +832,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
+		};
+		FFB360CC2A26A5830099017F /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
 		};
 		FFCB2A562A2141E00051B957 /* BottomSheet */ = {
 			isa = XCSwiftPackageProductDependency;

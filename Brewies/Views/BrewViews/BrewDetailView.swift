@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import SafariServices
+
 import Kingfisher
 
 struct BrewDetailView: View {
     var coffeeShop: CoffeeShop
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+    @State private var showSafariView = false
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
@@ -85,25 +88,29 @@ struct BrewDetailView: View {
                 
                 // Open Hours
                 VStack(alignment: .leading) {
-                    Text("Hours")
-                        .font(.headline)
-                        .padding(.top)
-                    
-                    // Visit website button
-                    Button(action: {
-                        openCoffeeShopWebsite()
-                    }) {
-                        HStack {
-                            Image(systemName: "globe")
-                            Text("Visit website")
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(Color.blue)
-                        .cornerRadius(8)
-                    }
-                    .padding()
-                }
+                      Text("Hours")
+                          .font(.headline)
+                          .padding(.top)
+                      
+                      Button(action: {
+                          openCoffeeShopWebsite()
+                      }) {
+                          HStack {
+                              Image(systemName: "globe")
+                              Text("Visit website")
+                          }
+                          .padding()
+                          .foregroundColor(.white)
+                          .background(Color.blue)
+                          .cornerRadius(8)
+                      }
+                      .sheet(isPresented: $showSafariView) {
+                          if let url = URL(string: coffeeShop.url) {
+                              SafariView(url: url)
+                          }
+                      }
+                      .padding()
+                  }
             }
             .navigationBarItems(trailing: closeButton)
         }
@@ -133,8 +140,7 @@ struct BrewDetailView: View {
     }
     
     private func openCoffeeShopWebsite() {
-        if let url = URL(string: coffeeShop.url), UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-        }
+        showSafariView = true
     }
+
 }

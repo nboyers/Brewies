@@ -16,8 +16,6 @@ struct BrewPreviewList: View {
     var body: some View {
         ScrollViewReader { scrollView in
             VStack {
-                Spacer()
-                    .frame(height: 50)
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(coffeeShops) { coffeeShop in
@@ -118,6 +116,7 @@ struct BrewPreview: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     
+                    //FIXME: This get's cached to whatever time the user first searched making it not correct all the time
                     Text(coffeeShop.isOpen ? "Open" : "Closed")
                         .font(.caption)
                         .foregroundColor(coffeeShop.isOpen ? .green : .red)
