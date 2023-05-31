@@ -25,7 +25,9 @@ struct ContentView: View {
     @State private var mapTapped = false
     @State private var showBrewPreview = false
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.17) // Starting position for bottomSheet
-    
+    @State private var userCredits: Int = 0
+    @State private var showNoCreditsAlert = false
+    @State private var showNoAdsAvailableAlert = false
     let DISTANCE = CLLocationDistance(2000)
     
     var body: some View {
@@ -71,7 +73,15 @@ struct ContentView: View {
             ], headerContent: { // the top portion
                 HStack {
                     Button(action: {
-                        fetchCoffeeShops()
+                        
+                        //TODO: Work on adding a credit system to incentives users to watch ads 
+                        if userCredits > 0 {
+                            fetchCoffeeShops()
+                            userCredits -= 1
+                        } else {
+                            showNoCreditsAlert = true
+                        }
+                        
                     }) {
                         Text("Search Area")
                             .padding(.vertical, 10)
@@ -82,6 +92,8 @@ struct ContentView: View {
                             .background(.secondary)
                             .cornerRadius(40)
                     }
+                    Text("Credits: \(userCredits)")
+
                 }
             }) {
                 if selectedCoffeeShop != nil && showBrewPreview {
@@ -99,6 +111,29 @@ struct ContentView: View {
             .onAppear {
                 locationManager.requestLocationAccess()
             }
+            .alert(isPresented: $showNoCreditsAlert) {
+                Alert(
+                    title: Text("No Credits Left"),
+                    message: Text("You have no credits left. Would you like to watch an ad to earn more?"),
+                    primaryButton: .default(Text("Watch Ad")) {
+                        if 1 == 0{
+                            // Code to show an ad goes here
+                            // After the ad, don't forget to increase the userCredits
+                        } else {
+                            // If there are no ads available, show the alert
+                            showNoAdsAvailableAlert = true
+                        }
+                    },
+                    secondaryButton: .cancel(Text("Cancel"))
+                )
+            }
+            .alert(isPresented: $showNoAdsAvailableAlert) {
+                Alert(
+                    title: Text("No Ads Available"),
+                    message: Text("There are currently no ads available. Please try again later."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
             .edgesIgnoringSafeArea(.top)
             
             .tabItem {
@@ -115,7 +150,8 @@ struct ContentView: View {
     }
     
     
-    //MARK: Func to retrive the cafe's from the APIs
+    
+    //MARK: Func to retrieve the cafe's from the APIs
     private func fetchCoffeeShops() {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
@@ -124,6 +160,8 @@ struct ContentView: View {
         
         if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate) {
             self.coffeeShops = cachedCoffeeShops
+            self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
+            showBrewPreview = true
         } else {
             let yelpAPI = YelpAPI()
             yelpAPI.fetchIndependentCoffeeShops(
@@ -131,8 +169,11 @@ struct ContentView: View {
                 longitude: centerCoordinate.longitude
             ) { coffeeShops in
                 self.coffeeShops = coffeeShops
+                self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
+                showBrewPreview = true
                 UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
             }
         }
     }
+    
 }
