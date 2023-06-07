@@ -1,39 +1,42 @@
 //
-//  YelpResponse.swift
+//  YelpBusiness.swift
 //  Brewies
 //
 //  Created by Noah Boyers on 6/6/23.
 //
+
 import Foundation
 
-struct YelpResponse: Decodable {
-    let businesses: [YelpBusiness]
+
+struct YelpResponse: Codable {
+    let businesses: [Business]
 }
 
-struct YelpBusiness: Decodable {
+struct Business: Codable {
     let id: String
     let alias: String
     let name: String
     let imageUrl: String
+    let isClaimed: Bool
+    let isClosed: Bool
     let url: String
     let phone: String
     let displayPhone: String
     let reviewCount: Int
     let categories: [Category]
     let rating: Double
-    let location: YelpLocation
-    let coordinates: YelpCoordinates
-    let photos: [String]?
-    let price: String?
-    let hours: [YelpHours]?
+    let location: Location
+    let coordinates: Coordinates
+    let photos: [String]
+    let price: String
+    let hours: [Hours]
     let transactions: [String]
-    let messaging: Messaging?
+    let messaging: Messaging
     
     enum CodingKeys: String, CodingKey {
-        case id, alias, name, url, phone, categories, rating, location, coordinates, photos, price, hours, transactions, messaging
+        case id, alias, name, isClaimed, isClosed, url, phone, reviewCount, categories, rating, location, coordinates, photos, price, hours, transactions, messaging
         case imageUrl = "image_url"
         case displayPhone = "display_phone"
-        case reviewCount = "review_count"
     }
 }
 
@@ -42,30 +45,30 @@ struct Category: Codable {
     let title: String
 }
 
-struct YelpCoordinates: Decodable {
-    let latitude: Double
-    let longitude: Double
-}
-
-struct YelpLocation: Decodable {
+struct Location: Codable {
     let address1: String
-    let address2: String?
+    let address2: String
     let address3: String?
     let city: String
     let zipCode: String
     let country: String
     let state: String
     let displayAddress: [String]
+    let crossStreets: String
     
     enum CodingKeys: String, CodingKey {
-        case address1, address2, address3, city, country, state
+        case address1, address2, address3, city, country, state, displayAddress, crossStreets
         case zipCode = "zip_code"
-        case displayAddress = "display_address"
     }
 }
 
-struct YelpHours: Codable {
-    let open: [YelpOpenHours]
+struct Coordinates: Codable {
+    let latitude: Double
+    let longitude: Double
+}
+
+struct Hours: Codable {
+    let open: [Open]
     let hoursType: String
     let isOpenNow: Bool
     
@@ -75,7 +78,7 @@ struct YelpHours: Codable {
     }
 }
 
-struct YelpOpenHours: Codable, Hashable {
+struct Open: Codable {
     let isOvernight: Bool
     let start: String
     let end: String

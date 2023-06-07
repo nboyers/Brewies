@@ -7,9 +7,7 @@
 
 import Foundation
 
-
 struct CoffeeShop: Identifiable, Equatable, Codable {
-    
     let id: String
     let name: String
     let latitude: Double
@@ -19,6 +17,23 @@ struct CoffeeShop: Identifiable, Equatable, Codable {
     let imageURL: String
     let photos: [String]
     
+    let address1: String?
+    let address2: String?
+    let city: String
+    let state: String
+    let zipCode: String?
+    
+    let displayPhone: String
+    let url: String
+    let transactions: [String]
+    let hours: [YelpHours]?
+    
+    var isFavorite: Bool? = false
+    var lastAccessDate: Date? = Date()
+    
+    var address: String {
+        return "\(address1 ?? ""), \(city), \(state) \(zipCode ?? "")"
+    }
     var displayImageUrls: [String] {
         if !photos.isEmpty {
             return photos
@@ -26,17 +41,7 @@ struct CoffeeShop: Identifiable, Equatable, Codable {
             return [imageURL]
         }
     }
-
-    let address: String
-    let phone: String
-    let url: String
-    let transactions: [String]
-    let hours: [YelpOpenHours]?
-    let isOpen: Bool
-    var isFavorite: Bool = false
-    var lastAccessDate: Date = Date()
 }
-
 
 extension CoffeeShop {
     static func ==(lhs: CoffeeShop, rhs: CoffeeShop) -> Bool {

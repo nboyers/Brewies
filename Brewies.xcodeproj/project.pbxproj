@@ -10,6 +10,9 @@
 		FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946DF2A0EE49100F705CB /* UserCache.swift */; };
 		FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E12A0EE7C300F705CB /* FavoriteView.swift */; };
 		FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */; };
+		FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */; };
+		FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */; };
+		FF1B5F2C2A2FFAE7000B6D6F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */; };
 		FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2F263B2A256EB5000D922E /* Date+Extension.swift */; };
 		FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */; };
 		FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29329EA0D2300510FCD /* ContentView.swift */; };
@@ -23,7 +26,6 @@
 		FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C729EA0F2600510FCD /* LocationManager.swift */; };
 		FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */; };
 		FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2CE29EA11E700510FCD /* MapView.swift */; };
-		FF3FF2D129EA15F500510FCD /* YelpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2D029EA15F500510FCD /* YelpResponse.swift */; };
 		FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2D229EA183900510FCD /* Secrets.swift */; };
 		FF3FF2D529EA1C0300510FCD /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF2D429EA1C0300510FCD /* readme.md */; };
 		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
@@ -57,6 +59,7 @@
 		FF0946DF2A0EE49100F705CB /* UserCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCache.swift; sourceTree = "<group>"; };
 		FF0946E12A0EE7C300F705CB /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
+		FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpResponse.swift; sourceTree = "<group>"; };
 		FF2F263B2A256EB5000D922E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		FF3FF28E29EA0D2300510FCD /* Brewies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brewies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesApp.swift; sourceTree = "<group>"; };
@@ -74,7 +77,6 @@
 		FF3FF2C729EA0F2600510FCD /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpAPI.swift; sourceTree = "<group>"; };
 		FF3FF2CE29EA11E700510FCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
-		FF3FF2D029EA15F500510FCD /* YelpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpResponse.swift; sourceTree = "<group>"; };
 		FF3FF2D229EA183900510FCD /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
@@ -100,6 +102,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */,
+				FF1B5F2C2A2FFAE7000B6D6F /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,8 +193,8 @@
 			isa = PBXGroup;
 			children = (
 				FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */,
-				FF3FF2D029EA15F500510FCD /* YelpResponse.swift */,
 				FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */,
+				FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -299,6 +303,10 @@
 				FF3FF2A129EA0D2600510FCD /* PBXTargetDependency */,
 			);
 			name = BrewiesTests;
+			packageProductDependencies = (
+				FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */,
+				FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */,
+			);
 			productName = BrewiesTests;
 			productReference = FF3FF29F29EA0D2600510FCD /* BrewiesTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -402,6 +410,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
 				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
 				FFB360D12A26C7DD0099017F /* RewardAdController.swift in Sources */,
@@ -415,7 +424,6 @@
 				FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */,
 				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
 				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
-				FF3FF2D129EA15F500510FCD /* YelpResponse.swift in Sources */,
 				FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */,
 				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
 				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,
@@ -505,6 +513,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -557,6 +566,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -671,10 +681,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Brewies.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Brewies";
 			};
 			name = Debug;
@@ -694,10 +706,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Brewies.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Brewies";
 			};
 			name = Release;
@@ -823,6 +837,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		FF3FF2C029EA0E5200510FCD /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */;

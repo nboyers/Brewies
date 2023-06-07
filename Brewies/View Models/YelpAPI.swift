@@ -68,37 +68,43 @@ class YelpAPI {
         ]
         
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
+            print(response)
             switch response.result {
             case .success(let yelpResponse):
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
                 completion(coffeeShops)
             case .failure(let error):
+                print()
                 print("Error fetching coffee shops: \(error.localizedDescription)")
                 completion([])
             }
         }
     }
     
-    private func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
+    func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
         var coffeeShops: [CoffeeShop] = []
-        for business in businesses where business.is_opened && !isExcludedChain(name: business.name) {
-            let address = "\(business.location.address1 ?? ""), \(business.location.city), \(business.location.state) \(String(describing: business.location.postal_code ?? ""))"
-            var coffeeShop = CoffeeShop (
+        print("BUS: \(businesses)")
+        for business in businesses where !isExcludedChain(name: business.name) {
+            var coffeeShop = CoffeeShop(
                 id: business.id,
                 name: business.name,
                 latitude: business.coordinates.latitude,
                 longitude: business.coordinates.longitude,
                 rating: business.rating,
-                reviewCount: business.review_count,
-                imageURL: business.image_url,
+                reviewCount: business.reviewCount,
+                imageURL: business.imageUrl,
                 photos: business.photos ?? [],
-                address: address,
-                phone: business.display_phone,
+                address1: business.location.address1,
+                address2: business.location.address2,
+                city: business.location.city,
+                state: business.location.state,
+                zipCode: business.location.zipCode,
+                displayPhone: business.displayPhone,
                 url: business.url,
                 transactions: business.transactions,
-                hours: business.hours?.first?.open, // Here we pass the business hours
-                isOpen: business.is_opened
+                hours:  business.hours
             )
+            
             if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
                 coffeeShop.isFavorite = true
                 favoriteCoffeeShops.append(coffeeShop)
@@ -108,7 +114,7 @@ class YelpAPI {
         }
         return coffeeShops
     }
-
+    
     func fetchCoffeeShopDetails(id: String, completion: @escaping (YelpBusiness) -> Void) {
         let url = "https://api.yelp.com/v3/businesses/\(id)"
         let headers: HTTPHeaders = [
@@ -118,7 +124,7 @@ class YelpAPI {
         AF.request(url, headers: headers).responseDecodable(of: YelpBusiness.self) { response in
             switch response.result {
             case .success(let yelpBusiness):
-                print(yelpBusiness)
+                print(response)
                 completion(yelpBusiness)
             case .failure(let error):
                 print("Error fetching coffee shop details: \(error.localizedDescription)")
@@ -126,7 +132,7 @@ class YelpAPI {
         }
     }
     
-    private func isExcludedChain(name: String) -> Bool {
+    func isExcludedChain(name: String) -> Bool {
         for chain in chainCompanyNames {
             if name.contains(chain) {
                 return true

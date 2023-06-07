@@ -12,6 +12,7 @@ import BottomSheet
 
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
+    private var rewardAds = RewardAdController()
     @State private var coffeeShops: [CoffeeShop] = []
     @State private var showAlert = false
     @State private var selectedCoffeeShop: CoffeeShop?
@@ -25,10 +26,11 @@ struct ContentView: View {
     @State private var mapTapped = false
     @State private var showBrewPreview = false
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.17) // Starting position for bottomSheet
-    @State private var userCredits: Int = 0
+    @State private var userCredits: Int = 2
     @State private var showNoCreditsAlert = false
     @State private var showNoAdsAvailableAlert = false
     let DISTANCE = CLLocationDistance(2000)
+    
     
     var body: some View {
         TabView {
@@ -66,6 +68,31 @@ struct ContentView: View {
                 }
                 
             }
+            .alert(isPresented: $showNoCreditsAlert) {
+                Alert(
+                    title: Text("No Credits Left"),
+                    message: Text("You have no credits left. Would you like to watch an ad to earn more?"),
+                    primaryButton: .default(Text("Watch Ad")) {
+                        // Assuming rewardAds is an instance of RewardAdController
+                        let adsShown = rewardAds.show()
+                        if adsShown {
+                            userCredits += 1
+                        } else {
+                            // If there are no ads available, show the alert
+                            showNoAdsAvailableAlert = true
+                        }
+                    },
+                    secondaryButton: .cancel(Text("Cancel"))
+                )
+            }
+            .alert(isPresented: $showNoAdsAvailableAlert) {
+                Alert(
+                    title: Text("No Ads Available"),
+                    message: Text("There are currently no ads available. Please try again later."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            
             .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
                 .relativeBottom(0.17), //Floor
                 .relative(0.55), // Mid swipe
@@ -74,7 +101,7 @@ struct ContentView: View {
                 HStack {
                     Button(action: {
                         
-                        //TODO: Work on adding a credit system to incentives users to watch ads 
+                        //TODO: Work on adding a credit system to incentives users to watch ads
                         if userCredits > 0 {
                             fetchCoffeeShops()
                             userCredits -= 1
@@ -93,7 +120,7 @@ struct ContentView: View {
                             .cornerRadius(40)
                     }
                     Text("Credits: \(userCredits)")
-
+                    
                 }
             }) {
                 if selectedCoffeeShop != nil && showBrewPreview {
@@ -111,29 +138,7 @@ struct ContentView: View {
             .onAppear {
                 locationManager.requestLocationAccess()
             }
-            .alert(isPresented: $showNoCreditsAlert) {
-                Alert(
-                    title: Text("No Credits Left"),
-                    message: Text("You have no credits left. Would you like to watch an ad to earn more?"),
-                    primaryButton: .default(Text("Watch Ad")) {
-                        if 1 == 0{
-                            // Code to show an ad goes here
-                            // After the ad, don't forget to increase the userCredits
-                        } else {
-                            // If there are no ads available, show the alert
-                            showNoAdsAvailableAlert = true
-                        }
-                    },
-                    secondaryButton: .cancel(Text("Cancel"))
-                )
-            }
-            .alert(isPresented: $showNoAdsAvailableAlert) {
-                Alert(
-                    title: Text("No Ads Available"),
-                    message: Text("There are currently no ads available. Please try again later."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
+
             .edgesIgnoringSafeArea(.top)
             
             .tabItem {
@@ -175,5 +180,10 @@ struct ContentView: View {
             }
         }
     }
-    
 }
+struct ContentView_Preview: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+

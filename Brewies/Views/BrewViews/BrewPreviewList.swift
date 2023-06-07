@@ -112,14 +112,14 @@ struct BrewPreview: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    Text(coffeeShop.phone)
+                    Text(coffeeShop.displayPhone)
                         .font(.caption)
                         .foregroundColor(.gray)
                     
                     //FIXME: This get's cached to whatever time the user first searched making it not correct all the time
-                    Text(coffeeShop.isOpen ? "Open" : "Closed")
-                        .font(.caption)
-                        .foregroundColor(coffeeShop.isOpen ? .green : .red)
+                    //                    Text(coffeeShop.hour ? "Open" : "Closed")
+                    //                        .font(.caption)
+                    //                        .foregroundColor(coffeeShop.isOpen ? .green : .red)
                 }
                 
             }

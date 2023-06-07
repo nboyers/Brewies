@@ -37,16 +37,17 @@ class CoffeeShopData: ObservableObject {
             favoriteShops.remove(at: index)
         }
         if !cachedShops.contains(coffeeShop) {
-            var coffeeShop = coffeeShop
-            coffeeShop.lastAccessDate = Date()
-            cachedShops.append(coffeeShop)
+            var mutableCoffeeShop = coffeeShop
+            mutableCoffeeShop.lastAccessDate = Date()
+            cachedShops.append(mutableCoffeeShop)
         }
         removeExpiredCachedShops()
     }
+
     
     private func removeExpiredCachedShops() {
         let currentDate = Date()
-        cachedShops.removeAll(where: { Calendar.current.date(byAdding: .hour, value: 72, to: $0.lastAccessDate)! < currentDate })
+        cachedShops.removeAll(where: { Calendar.current.date(byAdding: .hour, value: 72, to: $0.lastAccessDate ?? Date.now)! < currentDate })
     }
     
     private func saveFavoriteShops() {

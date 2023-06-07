@@ -6,30 +6,41 @@
 //
 
 import XCTest
+@testable import Brewies
+import GoogleMobileAdsTarget
 
 final class BrewiesTests: XCTestCase {
-
+    var yelpAPI: YelpAPI!
+    
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        yelpAPI = YelpAPI()
     }
-
+    
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        yelpAPI = nil
+        super.tearDown()
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func testIsExcludedChain() {
+        XCTAssertTrue(yelpAPI.isExcludedChain(name: "Starbucks"))
+        XCTAssertFalse(yelpAPI.isExcludedChain(name: "My Local Coffee Shop"))
     }
+    
+    
+    func testFetchIndependentCoffeeShops() {
+        let expectation = XCTestExpectation(description: "Fetch independent coffee shops")
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
+        yelpAPI.fetchIndependentCoffeeShops(
+            latitude: 27.814343,
+            longitude: -82.780275
+        ) { coffeeShops in
+            XCTAssertFalse(coffeeShops.isEmpty)
+            expectation.fulfill()
         }
-    }
 
+        wait(for: [expectation], timeout: 10.0)
+    }
 }

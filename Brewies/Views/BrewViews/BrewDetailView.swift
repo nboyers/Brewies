@@ -81,7 +81,7 @@ struct BrewDetailView: View {
                     Button(action: {
                         callCoffeeShop()
                     }) {
-                        Text(coffeeShop.phone)
+                        Text(coffeeShop.displayPhone)
                     }
                 }
                 .padding(.horizontal)
@@ -133,7 +133,7 @@ struct BrewDetailView: View {
     }
     
     private func callCoffeeShop() {
-        let phoneNumber = coffeeShop.phone
+        let phoneNumber = coffeeShop.displayPhone
         if let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url)
         }
