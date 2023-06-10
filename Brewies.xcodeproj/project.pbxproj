@@ -31,9 +31,15 @@
 		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
+		FF8E43402A339DB100CEC800 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E433F2A339DB100CEC800 /* SignInWithAppleButton.swift */; };
+		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
+		FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */; };
+		FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */; };
+		FF8E43852A33D51800CEC800 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43842A33D51800CEC800 /* User.swift */; };
+		FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43912A34F5C100CEC800 /* PhotosView.swift */; };
+		FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43942A34F9B500CEC800 /* SmallMap.swift */; };
 		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
 		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
-		FFB360D12A26C7DD0099017F /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D02A26C7DD0099017F /* RewardAdController.swift */; };
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
 /* End PBXBuildFile section */
@@ -81,8 +87,14 @@
 		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
 		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
+		FF8E433F2A339DB100CEC800 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
+		FF8E43462A339FA700CEC800 /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardAdController.swift; sourceTree = "<group>"; };
+		FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Extension.swift"; sourceTree = "<group>"; };
+		FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
+		FF8E43842A33D51800CEC800 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		FF8E43912A34F5C100CEC800 /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
+		FF8E43942A34F9B500CEC800 /* SmallMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallMap.swift; sourceTree = "<group>"; };
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
-		FFB360D02A26C7DD0099017F /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RewardAdController.swift; path = ../../../../Downloads/RewardAdController.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -121,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				FF2F263B2A256EB5000D922E /* Date+Extension.swift */,
+				FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -195,6 +208,7 @@
 				FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */,
 				FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */,
 				FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */,
+				FF8E43842A33D51800CEC800 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -202,11 +216,11 @@
 		FF3FF2C629EA0F0800510FCD /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				FF8E43812A33CE5300CEC800 /* Coordinators */,
 				FFB360D52A26D5730099017F /* Monetization */,
 				FF3FF2C729EA0F2600510FCD /* LocationManager.swift */,
 				FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */,
 				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
-				FFB360D02A26C7DD0099017F /* RewardAdController.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -214,11 +228,12 @@
 		FF3FF2CB29EA107700510FCD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FF8E43932A34F99C00CEC800 /* Maps */,
+				FF8E43422A339E8D00CEC800 /* Misc */,
+				FF8E43412A339E6700CEC800 /* Monetization */,
+				FF8E433E2A339D9E00CEC800 /* Account */,
 				FF77393B2A1318B3007B603F /* BrewViews */,
 				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
-				FF3FF2CE29EA11E700510FCD /* MapView.swift */,
-				FFB360D22A26C8480099017F /* AdmobBanner.swift */,
-				FFB360CE2A26B09F0099017F /* SafariView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -245,8 +260,50 @@
 				FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */,
 				FF0946E12A0EE7C300F705CB /* FavoriteView.swift */,
 				FF7739382A1316D2007B603F /* BrewDetailView.swift */,
+				FF8E43912A34F5C100CEC800 /* PhotosView.swift */,
 			);
 			path = BrewViews;
+			sourceTree = "<group>";
+		};
+		FF8E433E2A339D9E00CEC800 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				FF8E433F2A339DB100CEC800 /* SignInWithAppleButton.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		FF8E43412A339E6700CEC800 /* Monetization */ = {
+			isa = PBXGroup;
+			children = (
+				FFB360D22A26C8480099017F /* AdmobBanner.swift */,
+			);
+			path = Monetization;
+			sourceTree = "<group>";
+		};
+		FF8E43422A339E8D00CEC800 /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				FFB360CE2A26B09F0099017F /* SafariView.swift */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		FF8E43812A33CE5300CEC800 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		FF8E43932A34F99C00CEC800 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2CE29EA11E700510FCD /* MapView.swift */,
+				FF8E43942A34F9B500CEC800 /* SmallMap.swift */,
+			);
+			path = Maps;
 			sourceTree = "<group>";
 		};
 		FFB360D42A26C91F0099017F /* Frameworks */ = {
@@ -259,6 +316,7 @@
 		FFB360D52A26D5730099017F /* Monetization */ = {
 			isa = PBXGroup;
 			children = (
+				FF8E43462A339FA700CEC800 /* RewardAdController.swift */,
 			);
 			path = Monetization;
 			sourceTree = "<group>";
@@ -413,20 +471,26 @@
 				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
 				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
-				FFB360D12A26C7DD0099017F /* RewardAdController.swift in Sources */,
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
 				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
 				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
 				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
+				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
 				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
+				FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */,
+				FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */,
 				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,
+				FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */,
 				FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */,
 				FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */,
 				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
+				FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */,
 				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
 				FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */,
 				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
+				FF8E43402A339DB100CEC800 /* SignInWithAppleButton.swift in Sources */,
 				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,
+				FF8E43852A33D51800CEC800 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

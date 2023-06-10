@@ -15,6 +15,7 @@ struct BrewiesApp: App {
             ContentView()
                 .onAppear {
                 GADMobileAds.sharedInstance().start(completionHandler: nil)
+                  
             }
         }
     }

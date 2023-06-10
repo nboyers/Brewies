@@ -9,9 +9,13 @@ import SwiftUI
 import CoreLocation
 import MapKit
 import BottomSheet
+import AuthenticationServices
+
 
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
+    @ObservedObject var user = User()
+    
     private var rewardAds = RewardAdController()
     @State private var coffeeShops: [CoffeeShop] = []
     @State private var showAlert = false
@@ -25,11 +29,13 @@ struct ContentView: View {
     @State private var isAnnotationSelected = false
     @State private var mapTapped = false
     @State private var showBrewPreview = false
-    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.17) // Starting position for bottomSheet
-    @State private var userCredits: Int = 2
+    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
+    @State private var userCredits: Int = 1000
     @State private var showNoCreditsAlert = false
     @State private var showNoAdsAvailableAlert = false
-    let DISTANCE = CLLocationDistance(2000)
+    private var rewardAd = RewardAdController()
+    let DISTANCE = CLLocationDistance(2500)
+    var signInWithAppleCoordinator = SignInWithAppleCoordinator()
     
     
     var body: some View {
@@ -48,57 +54,10 @@ struct ContentView: View {
                     mapTapped: $mapTapped,
                     showBrewPreview: $showBrewPreview
                 )
-                .onAppear(perform: {
-                    fetchCoffeeShops()
-                })
-                if showUserLocationButton {
-                    GeometryReader { geo in
-                        Button(action: {
-                            centeredOnUser = true
-                        }) {
-                            Image(systemName: "location.square.fill")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                            
-                                .imageScale(.large)
-                                .background(Color.black.opacity(0.75))
-                        }
-                        .position(x: geo.size.width - 50, y: geo.size.height / 4)
-                    }
-                }
-                
-            }
-            .alert(isPresented: $showNoCreditsAlert) {
-                Alert(
-                    title: Text("No Credits Left"),
-                    message: Text("You have no credits left. Would you like to watch an ad to earn more?"),
-                    primaryButton: .default(Text("Watch Ad")) {
-                        // Assuming rewardAds is an instance of RewardAdController
-                        let adsShown = rewardAds.show()
-                        if adsShown {
-                            userCredits += 1
-                        } else {
-                            // If there are no ads available, show the alert
-                            showNoAdsAvailableAlert = true
-                        }
-                    },
-                    secondaryButton: .cancel(Text("Cancel"))
-                )
-            }
-            .alert(isPresented: $showNoAdsAvailableAlert) {
-                Alert(
-                    title: Text("No Ads Available"),
-                    message: Text("There are currently no ads available. Please try again later."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-            
-            .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
-                .relativeBottom(0.17), //Floor
-                .relative(0.55), // Mid swipe
-                .relativeTop(0.95) //Top full swipe
-            ], headerContent: { // the top portion
-                HStack {
+                //                .onAppear(perform: {
+                //                    fetchCoffeeShops()
+                //                })
+                GeometryReader { geo in
                     Button(action: {
                         
                         //TODO: Work on adding a credit system to incentives users to watch ads
@@ -110,35 +69,132 @@ struct ContentView: View {
                         }
                         
                     }) {
-                        Text("Search Area")
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 70)
+                        Text("Search this area")
+                            .font(.system(size: 20, weight: .bold))
+                            .frame(width: geo.size.width/2.5, height: geo.size.width/50)
+                            .padding()
                             .font(.title3)
-                            .foregroundColor(Color(UIColor.secondaryLabel))
-                            .foregroundColor(.white)
-                            .background(.secondary)
-                            .cornerRadius(40)
+                            .foregroundColor(.black)
+                            .background(.white)
                     }
+                    .cornerRadius(10)
+                    .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
+                    .shadow(radius: 50)
+                }
+                //                .padding()
+                
+                if showUserLocationButton {
+                    GeometryReader { geo in
+                        Button(action: {
+                            centeredOnUser = true
+                        }) {
+                            Image(systemName: "location")
+                                .resizable()
+                            
+                                .frame(width: 30, height: 30)
+                                .imageScale(.large)
+                                .background(Color.white)
+                                .shadow(radius: 10)
+                        }
+                        .offset(CGSize(width: geo.size.width*0.75, height: geo.size.width/5.5))
+                    }
+                }
+                
+            }
+            .alert(isPresented: $showNoAdsAvailableAlert) {
+                Alert(
+                    title: Text("No Ads Available"),
+                    message: Text("There are currently no ads available. Please try again later."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            
+            .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
+                .relativeBottom(0.20), //Floor
+                .relative(0.70), // Mid swipe
+                .relativeTop(0.95) //Top full swipe
+            ], headerContent: { // the top portion
+                HStack {
                     Text("Credits: \(userCredits)")
+                        .padding()
                     
+                    Spacer()
+                    
+                    Button(action: {
+                        if user.isLoggedIn {
+                            // Perform action when user is logged in
+                            //TODO: Create the sheeet that gives the user account
+                        } else {
+                            signInWithAppleCoordinator.startSignInWithAppleFlow()
+                        }
+                    }) {
+                        if !user.isLoggedIn {
+                            // Assuming you have user.profilePicture as UIImage
+                            Image(systemName: "person.crop.circle.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .clipShape(Circle())
+                                .padding()
+                        } else {
+                            Text(String(user.firstName.prefix(1)))
+                                .foregroundColor(.white)
+                                .font(.system(size: 30, weight: .bold))
+                                .frame(width: 30, height: 30)
+                                .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                .clipShape(Circle())
+                            
+                        }
+                    }
                 }
             }) {
+                
+                Divider()
+                
                 if selectedCoffeeShop != nil && showBrewPreview {
-                    BrewPreviewList(coffeeShops: $coffeeShops, selectedCoffeeShop: $selectedCoffeeShop, showBrewPreview: $showBrewPreview)
+                    
+                    HStack(alignment: .firstTextBaseline) {
+                        Text("\(coffeeShops.count) Cafes In Map")
+                            .padding()
+                        Spacer()
+                    }
+                    
+                    BrewPreviewList(coffeeShops: $coffeeShops,
+                                    selectedCoffeeShop: $selectedCoffeeShop,
+                                    showBrewPreview: $showBrewPreview)
                 }
                 AdBannerView()
                     .frame(width: 320, height: 50)
-                
+                //TODO: Make this button work ; just not now
+                                Button(action: {
+                                    rewardAd.requestIDFA()
+                                    let adsShown = rewardAds.show()
+                                    if adsShown {
+                                        userCredits += 1
+                                    } else {
+                                        // If there are no ads available, show the alert
+                                        showNoAdsAvailableAlert = true
+                                    }
+                                }) {
+                                    Text("Watch Ads")
+                                        .padding(.vertical, 10)
+                                        .padding(.horizontal, 70)
+                                        .font(.title3)
+                                        .foregroundColor(Color(UIColor.secondaryLabel))
+                                        .foregroundColor(.white)
+                                        .background(.secondary)
+                                        .cornerRadius(40)
+                                }
                 
             }
             .enableAppleScrollBehavior()
             .enableBackgroundBlur()
             .backgroundBlurMaterial(.systemDark)
-            
             .onAppear {
                 locationManager.requestLocationAccess()
+                rewardAd.loadRewardedAd()
+                
             }
-
+            
             .edgesIgnoringSafeArea(.top)
             
             .tabItem {
@@ -180,8 +236,24 @@ struct ContentView: View {
             }
         }
     }
+    
+    func performSignInWithApple() {
+        // Create an instance of ASAuthorizationAppleIDProvider
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        
+        // Create an instance of ASAuthorizationRequest
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email] // Customize the requested scopes if needed
+        
+        // Create an instance of ASAuthorizationController
+        let controller = ASAuthorizationController(authorizationRequests: [request])
+        controller.delegate = signInWithAppleCoordinator // Set the delegate to handle authorization callbacks
+        controller.presentationContextProvider = signInWithAppleCoordinator
+        controller.performRequests() // Initiate the sign-in flow
+    }
 }
-struct ContentView_Preview: PreviewProvider {
+
+struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }

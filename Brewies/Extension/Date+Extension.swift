@@ -25,6 +25,14 @@ extension Date {
         return calendar.date(from: timeComponents)
     }
     
+    static func fromTime(_ time: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HHmm"
+        return formatter.date(from: time)
+    }
+    
+    
+    
     static func startOfDay(of date: Date) -> Date {
         return Calendar.current.startOfDay(for: date)
     }

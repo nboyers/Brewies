@@ -13,7 +13,7 @@ class YelpAPI {
     
     // Add excluded chain names here
     private lazy var chainCompanyNames: Set<String> = [
-        "Starbucks", "Peets", "Coffee Bean","pizza",
+        "Starbucks", "Starbucks Coffee", "Peets", "Coffee Bean","pizza",
         "McDonald's", "Tim Hortons", "Dunkin'",
         "Krispy Kreme", "First Watch", "Caribou Coffee",
         "Dutch Bros. Coffee", "Gloria Jean's", "The Human Bean", "Tully's Coffee",
@@ -68,13 +68,13 @@ class YelpAPI {
         ]
         
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
-            print(response)
+           
             switch response.result {
             case .success(let yelpResponse):
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
                 completion(coffeeShops)
             case .failure(let error):
-                print()
+        
                 print("Error fetching coffee shops: \(error.localizedDescription)")
                 completion([])
             }
@@ -83,7 +83,7 @@ class YelpAPI {
     
     func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
         var coffeeShops: [CoffeeShop] = []
-        print("BUS: \(businesses)")
+       
         for business in businesses where !isExcludedChain(name: business.name) {
             var coffeeShop = CoffeeShop(
                 id: business.id,
@@ -104,6 +104,7 @@ class YelpAPI {
                 transactions: business.transactions,
                 hours:  business.hours
             )
+            print(coffeeShop)
             
             if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
                 coffeeShop.isFavorite = true
@@ -124,7 +125,6 @@ class YelpAPI {
         AF.request(url, headers: headers).responseDecodable(of: YelpBusiness.self) { response in
             switch response.result {
             case .success(let yelpBusiness):
-                print(response)
                 completion(yelpBusiness)
             case .failure(let error):
                 print("Error fetching coffee shop details: \(error.localizedDescription)")

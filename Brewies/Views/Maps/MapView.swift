@@ -23,7 +23,7 @@ struct MapView: UIViewRepresentable {
     @Binding var mapTapped: Bool
     @Binding var showBrewPreview: Bool
     
-    let DISTANCE = CLLocationDistance(2000)
+    let DISTANCE = CLLocationDistance(2500)
     
     // Creates the coordinator for the MapView
     func makeCoordinator() -> Coordinator {
