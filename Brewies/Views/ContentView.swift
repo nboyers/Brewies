@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var showAlert = false
     @State private var selectedCoffeeShop: CoffeeShop?
     @State private var centeredOnUser = false
-    @State private var mapView = MKMapView()
+//    @State private var mapView = MKMapView()
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
@@ -46,7 +46,7 @@ struct ContentView: View {
                     coffeeShops: $coffeeShops,
                     selectedCoffeeShop: $selectedCoffeeShop,
                     centeredOnUser: $centeredOnUser,
-                    mapView: $mapView,
+//                    mapView: $mapView,
                     userHasMoved: $userHasMoved,
                     visibleRegionCenter: $visibleRegionCenter,
                     showUserLocationButton: $showUserLocationButton,
@@ -54,9 +54,9 @@ struct ContentView: View {
                     mapTapped: $mapTapped,
                     showBrewPreview: $showBrewPreview
                 )
-                //                .onAppear(perform: {
-                //                    fetchCoffeeShops()
-                //                })
+                .onAppear(perform: {
+                    fetchCoffeeShops()
+                })
                 GeometryReader { geo in
                     Button(action: {
                         
@@ -165,25 +165,18 @@ struct ContentView: View {
                 AdBannerView()
                     .frame(width: 320, height: 50)
                 //TODO: Make this button work ; just not now
-                                Button(action: {
-                                    rewardAd.requestIDFA()
-                                    let adsShown = rewardAds.show()
-                                    if adsShown {
-                                        userCredits += 1
-                                    } else {
-                                        // If there are no ads available, show the alert
-                                        showNoAdsAvailableAlert = true
-                                    }
-                                }) {
-                                    Text("Watch Ads")
-                                        .padding(.vertical, 10)
-                                        .padding(.horizontal, 70)
-                                        .font(.title3)
-                                        .foregroundColor(Color(UIColor.secondaryLabel))
-                                        .foregroundColor(.white)
-                                        .background(.secondary)
-                                        .cornerRadius(40)
-                                }
+                Button(action: {
+                    handleRewardAd()
+                }) {
+                    Text("Watch Ads")
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 70)
+                        .font(.title3)
+                        .foregroundColor(Color(UIColor.secondaryLabel))
+                        .foregroundColor(.white)
+                        .background(.secondary)
+                        .cornerRadius(40)
+                }
                 
             }
             .enableAppleScrollBehavior()
@@ -214,44 +207,65 @@ struct ContentView: View {
     
     //MARK: Func to retrieve the cafe's from the APIs
     private func fetchCoffeeShops() {
-        guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
-            showAlert = true
-            return
-        }
-        
-        if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate) {
-            self.coffeeShops = cachedCoffeeShops
-            self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
-            showBrewPreview = true
-        } else {
-            let yelpAPI = YelpAPI()
-            yelpAPI.fetchIndependentCoffeeShops(
-                latitude: centerCoordinate.latitude,
-                longitude: centerCoordinate.longitude
-            ) { coffeeShops in
-                self.coffeeShops = coffeeShops
-                self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
-                showBrewPreview = true
-                UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
+        // Moved the check if shops are in cache and API call to a background thread
+        DispatchQueue.global(qos: .background).async {
+            guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
+                DispatchQueue.main.async {
+                    showAlert = true
+                }
+                return
+            }
+            
+            if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate) {
+                DispatchQueue.main.async {
+                    self.coffeeShops = cachedCoffeeShops
+                    self.selectedCoffeeShop = cachedCoffeeShops.first
+                    showBrewPreview = true
+                }
+            } else {
+                let yelpAPI = YelpAPI()
+                yelpAPI.fetchIndependentCoffeeShops(
+                    latitude: centerCoordinate.latitude,
+                    longitude: centerCoordinate.longitude
+                ) { coffeeShops in
+                    DispatchQueue.main.async {
+                        self.coffeeShops = coffeeShops
+                        self.selectedCoffeeShop = coffeeShops.first
+                        showBrewPreview = true
+                    }
+                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
+                }
             }
         }
     }
-    
-    func performSignInWithApple() {
-        // Create an instance of ASAuthorizationAppleIDProvider
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        
-        // Create an instance of ASAuthorizationRequest
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email] // Customize the requested scopes if needed
-        
-        // Create an instance of ASAuthorizationController
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = signInWithAppleCoordinator // Set the delegate to handle authorization callbacks
-        controller.presentationContextProvider = signInWithAppleCoordinator
-        controller.performRequests() // Initiate the sign-in flow
+    private func handleRewardAd() {
+        rewardAd.requestIDFA()
+        let adsShown = rewardAds.show()
+        if adsShown {
+            userCredits += 1
+        } else {
+            // If there are no ads available, show the alert
+            showNoAdsAvailableAlert = true
+        }
     }
 }
+    
+//
+//    func performSignInWithApple() {
+//        // Create an instance of ASAuthorizationAppleIDProvider
+//        let appleIDProvider = ASAuthorizationAppleIDProvider()
+//
+//        // Create an instance of ASAuthorizationRequest
+//        let request = appleIDProvider.createRequest()
+//        request.requestedScopes = [.fullName, .email] // Customize the requested scopes if needed
+//
+//        // Create an instance of ASAuthorizationController
+//        let controller = ASAuthorizationController(authorizationRequests: [request])
+//        controller.delegate = signInWithAppleCoordinator // Set the delegate to handle authorization callbacks
+//        controller.presentationContextProvider = signInWithAppleCoordinator
+//        controller.performRequests() // Initiate the sign-in flow
+//    }
+//}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

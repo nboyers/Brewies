@@ -16,7 +16,12 @@ struct FavoritesView: View {
                 VStack(spacing: 16) {
                     ForEach(coffeeShopData.favoriteShops, id: \.id) { coffeeShop in
                         NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
-                            BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showPreview)
+                            VStack {
+                                BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showPreview)
+                                
+                                AdBannerView()
+                                    .frame(width: 320, height: 50)
+                            }
                         }
                     }
                 }

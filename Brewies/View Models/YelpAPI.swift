@@ -40,17 +40,17 @@ class YelpAPI {
         "Paul Bassett", "Bo's Coffee", "Zarraffas Coffee", "Blue Bottle Coffee", "Philz Coffee",
         "Hudsons Coffee", "Java House", "Vida e Caffè", "Blenz Coffee", "Dôme", "Coffee#1",
         "Figaro Coffee", "Cafe Barbera", "AMT Coffee", "Ya Kun Kaya Toast", "Drunkin'", "Krispy Kreme Doughnuts"
-        ,"Joffrey’s Coffee & Tea Company","Mega Play", "RaceTrac"
+        ,"Joffrey’s Coffee & Tea Company", "Mega Play", "RaceTrac", "Speedway", "Gas station", "IHOP", "Sheetz", "Ciro's Pizza", "Waffle House"
     ]
     
     
     
     func fetchIndependentCoffeeShops(
-        term: String = "local coffee shop",
+        term: String = "coffee house",
         latitude: Double,
         longitude: Double,
         radius: Int = 7000,
-        categories: String = "coffee,coffeeroasteries,coffeeshops",
+        categories: String = "coffee roasteries, coffee shops, coffee house, coffee cafe",
         sort_by: String = "distance",
         completion: @escaping ([CoffeeShop]) -> Void
     ) {

@@ -38,6 +38,7 @@
 		FF8E43852A33D51800CEC800 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43842A33D51800CEC800 /* User.swift */; };
 		FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43912A34F5C100CEC800 /* PhotosView.swift */; };
 		FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43942A34F9B500CEC800 /* SmallMap.swift */; };
+		FF8E43982A37BED500CEC800 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43972A37BED500CEC800 /* RatingView.swift */; };
 		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
 		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
@@ -94,6 +95,7 @@
 		FF8E43842A33D51800CEC800 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FF8E43912A34F5C100CEC800 /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
 		FF8E43942A34F9B500CEC800 /* SmallMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallMap.swift; sourceTree = "<group>"; };
+		FF8E43972A37BED500CEC800 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -229,7 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				FF8E43932A34F99C00CEC800 /* Maps */,
-				FF8E43422A339E8D00CEC800 /* Misc */,
+				FF8E43962A37BEBB00CEC800 /* Supporting Views */,
 				FF8E43412A339E6700CEC800 /* Monetization */,
 				FF8E433E2A339D9E00CEC800 /* Account */,
 				FF77393B2A1318B3007B603F /* BrewViews */,
@@ -260,7 +262,6 @@
 				FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */,
 				FF0946E12A0EE7C300F705CB /* FavoriteView.swift */,
 				FF7739382A1316D2007B603F /* BrewDetailView.swift */,
-				FF8E43912A34F5C100CEC800 /* PhotosView.swift */,
 			);
 			path = BrewViews;
 			sourceTree = "<group>";
@@ -281,14 +282,6 @@
 			path = Monetization;
 			sourceTree = "<group>";
 		};
-		FF8E43422A339E8D00CEC800 /* Misc */ = {
-			isa = PBXGroup;
-			children = (
-				FFB360CE2A26B09F0099017F /* SafariView.swift */,
-			);
-			path = Misc;
-			sourceTree = "<group>";
-		};
 		FF8E43812A33CE5300CEC800 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,6 +297,16 @@
 				FF8E43942A34F9B500CEC800 /* SmallMap.swift */,
 			);
 			path = Maps;
+			sourceTree = "<group>";
+		};
+		FF8E43962A37BEBB00CEC800 /* Supporting Views */ = {
+			isa = PBXGroup;
+			children = (
+				FF8E43912A34F5C100CEC800 /* PhotosView.swift */,
+				FFB360CE2A26B09F0099017F /* SafariView.swift */,
+				FF8E43972A37BED500CEC800 /* RatingView.swift */,
+			);
+			path = "Supporting Views";
 			sourceTree = "<group>";
 		};
 		FFB360D42A26C91F0099017F /* Frameworks */ = {
@@ -471,6 +474,7 @@
 				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
 				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
+				FF8E43982A37BED500CEC800 /* RatingView.swift in Sources */,
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
 				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
 				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,

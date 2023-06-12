@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CoffeeShop: Identifiable, Equatable, Codable {
+struct CoffeeShop: Identifiable, Equatable, Codable, Hashable {
     let id: String
     let name: String
     let latitude: Double
@@ -46,5 +46,8 @@ struct CoffeeShop: Identifiable, Equatable, Codable {
 extension CoffeeShop {
     static func ==(lhs: CoffeeShop, rhs: CoffeeShop) -> Bool {
         lhs.id == rhs.id
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
