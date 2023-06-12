@@ -8,8 +8,6 @@ Brewies is currently in development and is not yet available for download. We ar
 - Search for coffee shops near your current location or any other location
 - View detailed information about each coffee shop, including ratings, reviews, and photos
 - Save your favorite coffee shops and quickly access them later
-- Add your own ratings and reviews for coffee shops
-
 
 ## Roadmap
 - Integration with social media to share your favorite coffee shops with friends
