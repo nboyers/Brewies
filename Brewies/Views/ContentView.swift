@@ -21,7 +21,6 @@ struct ContentView: View {
     @State private var showAlert = false
     @State private var selectedCoffeeShop: CoffeeShop?
     @State private var centeredOnUser = false
-//    @State private var mapView = MKMapView()
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
@@ -33,6 +32,8 @@ struct ContentView: View {
     @State private var userCredits: Int = 1000
     @State private var showNoCreditsAlert = false
     @State private var showNoAdsAvailableAlert = false
+    @State private var showNoCoffeeShopsAlert = false
+
     private var rewardAd = RewardAdController()
     let DISTANCE = CLLocationDistance(2500)
     var signInWithAppleCoordinator = SignInWithAppleCoordinator()
@@ -46,7 +47,6 @@ struct ContentView: View {
                     coffeeShops: $coffeeShops,
                     selectedCoffeeShop: $selectedCoffeeShop,
                     centeredOnUser: $centeredOnUser,
-//                    mapView: $mapView,
                     userHasMoved: $userHasMoved,
                     visibleRegionCenter: $visibleRegionCenter,
                     showUserLocationButton: $showUserLocationButton,
@@ -57,6 +57,7 @@ struct ContentView: View {
                 .onAppear(perform: {
                     fetchCoffeeShops()
                 })
+                
                 GeometryReader { geo in
                     Button(action: {
                         
@@ -108,6 +109,14 @@ struct ContentView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
+            .alert(isPresented: $showNoCoffeeShopsAlert) {
+                Alert(
+                    title: Text("No Coffee Shops Found"),
+                    message: Text("We could not find any coffee shops in your area."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+
             
             .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
                 .relativeBottom(0.20), //Floor
@@ -207,37 +216,38 @@ struct ContentView: View {
     
     //MARK: Func to retrieve the cafe's from the APIs
     private func fetchCoffeeShops() {
-        // Moved the check if shops are in cache and API call to a background thread
-        DispatchQueue.global(qos: .background).async {
-            guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
-                DispatchQueue.main.async {
-                    showAlert = true
-                }
-                return
-            }
-            
-            if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate) {
-                DispatchQueue.main.async {
-                    self.coffeeShops = cachedCoffeeShops
-                    self.selectedCoffeeShop = cachedCoffeeShops.first
-                    showBrewPreview = true
-                }
-            } else {
-                let yelpAPI = YelpAPI()
+        guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
+            showAlert = true
+            return
+        }
+        
+        if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate) {
+            self.coffeeShops = cachedCoffeeShops
+            self.selectedCoffeeShop = cachedCoffeeShops.first
+            showBrewPreview = true
+        } else {
+            let yelpAPI = YelpAPI()
+            DispatchQueue.global(qos: .background).async {
                 yelpAPI.fetchIndependentCoffeeShops(
                     latitude: centerCoordinate.latitude,
                     longitude: centerCoordinate.longitude
                 ) { coffeeShops in
                     DispatchQueue.main.async {
-                        self.coffeeShops = coffeeShops
-                        self.selectedCoffeeShop = coffeeShops.first
-                        showBrewPreview = true
+                        if coffeeShops.isEmpty {
+                            self.showNoCoffeeShopsAlert = true
+                        } else {
+                            self.coffeeShops = coffeeShops
+                            self.selectedCoffeeShop = coffeeShops.first
+                            showBrewPreview = true
+                            UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
+                        }
                     }
-                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
                 }
             }
         }
     }
+
+
     private func handleRewardAd() {
         rewardAd.requestIDFA()
         let adsShown = rewardAds.show()
@@ -267,9 +277,9 @@ struct ContentView: View {
 //    }
 //}
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//    }
+//}
+//

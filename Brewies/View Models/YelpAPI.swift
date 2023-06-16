@@ -50,7 +50,7 @@ class YelpAPI {
         latitude: Double,
         longitude: Double,
         radius: Int = 7000,
-        categories: String = "coffee roasteries, coffee shops, coffee house, coffee cafe",
+        categories: String = "coffeeroasteries, coffeeshops, coffeehouse, coffeecafe",
         sort_by: String = "distance",
         completion: @escaping ([CoffeeShop]) -> Void
     ) {
@@ -72,6 +72,7 @@ class YelpAPI {
             switch response.result {
             case .success(let yelpResponse):
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
+                print(coffeeShops)
                 completion(coffeeShops)
             case .failure(let error):
         

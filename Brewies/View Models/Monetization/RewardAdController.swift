@@ -44,7 +44,7 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     func loadRewardedAd() {
         let request = GADRequest()
 
-        GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD,
+        GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY,
                            request: request,
                            completionHandler: { [self] ad, error in
             if let error = error {
@@ -52,8 +52,8 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
                 return
             }
             rewardedAd = ad
-            print("Rewarded ad loaded.")
             rewardedAd?.fullScreenContentDelegate = self
+            print("Rewarded ad loaded.")
         }
         )
     }
