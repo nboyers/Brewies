@@ -171,6 +171,7 @@ struct BrewPreview: View {
             .fullScreenCover(isPresented: $isDetailShowing) {
                 BrewDetailView(coffeeShop: coffeeShop)
             }
+            
             .onTapGesture {
                 isDetailShowing = true
             }

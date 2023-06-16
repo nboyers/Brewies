@@ -15,7 +15,7 @@ import AuthenticationServices
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
     @ObservedObject var user = User()
-    
+
     private var rewardAds = RewardAdController()
     @State private var coffeeShops: [CoffeeShop] = []
     @State private var showAlert = false
@@ -33,11 +33,14 @@ struct ContentView: View {
     @State private var showNoCreditsAlert = false
     @State private var showNoAdsAvailableAlert = false
     @State private var showNoCoffeeShopsAlert = false
-
+    @State private var showingUserProfile = false
+    
     private var rewardAd = RewardAdController()
     let DISTANCE = CLLocationDistance(2500)
-    var signInWithAppleCoordinator = SignInWithAppleCoordinator()
-    
+
+    let signInCoordinator = SignInWithAppleCoordinator()
+
+
     
     var body: some View {
         TabView {
@@ -54,14 +57,14 @@ struct ContentView: View {
                     mapTapped: $mapTapped,
                     showBrewPreview: $showBrewPreview
                 )
-                .onAppear(perform: {
+                .onAppear {
+                    locationManager.requestLocationAccess()
+                    rewardAd.loadRewardedAd()
                     fetchCoffeeShops()
-                })
+                }
                 
                 GeometryReader { geo in
                     Button(action: {
-                        
-                        //TODO: Work on adding a credit system to incentives users to watch ads
                         if userCredits > 0 {
                             fetchCoffeeShops()
                             userCredits -= 1
@@ -82,7 +85,6 @@ struct ContentView: View {
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                     .shadow(radius: 50)
                 }
-                //                .padding()
                 
                 if showUserLocationButton {
                     GeometryReader { geo in
@@ -116,8 +118,8 @@ struct ContentView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
-
             
+            //MARK: BREW PREVIEW
             .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
                 .relativeBottom(0.20), //Floor
                 .relative(0.70), // Mid swipe
@@ -125,25 +127,21 @@ struct ContentView: View {
             ], headerContent: { // the top portion
                 HStack {
                     Text("Credits: \(userCredits)")
-                        .padding()
+                        .padding(5)
                     
                     Spacer()
                     
                     Button(action: {
-                        if user.isLoggedIn {
-                            // Perform action when user is logged in
-                            //TODO: Create the sheeet that gives the user account
-                        } else {
-                            signInWithAppleCoordinator.startSignInWithAppleFlow()
-                        }
+                        showingUserProfile = true
                     }) {
                         if !user.isLoggedIn {
-                            // Assuming you have user.profilePicture as UIImage
+            
                             Image(systemName: "person.crop.circle.fill")
                                 .resizable()
+                                .foregroundColor(Color.accentColor)
                                 .frame(width: 30, height: 30)
                                 .clipShape(Circle())
-                                .padding()
+                                .padding(5)
                         } else {
                             Text(String(user.firstName.prefix(1)))
                                 .foregroundColor(.white)
@@ -151,9 +149,8 @@ struct ContentView: View {
                                 .frame(width: 30, height: 30)
                                 .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
                                 .clipShape(Circle())
-                            
                         }
-                    }
+                    }.padding(10)
                 }
             }) {
                 
@@ -191,12 +188,45 @@ struct ContentView: View {
             .enableAppleScrollBehavior()
             .enableBackgroundBlur()
             .backgroundBlurMaterial(.systemDark)
-            .onAppear {
-                locationManager.requestLocationAccess()
-                rewardAd.loadRewardedAd()
-                
-            }
             
+            //MARK: User Profile
+            .sheet(isPresented: $showingUserProfile) {
+                GeometryReader { geo in
+                    VStack {
+                        HStack() {
+                            Button(action: {
+                                print("TODO: Handle settings button")
+                            }) {
+                                Image(systemName: "gear")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.primary)
+                                    .padding()
+                            }
+                            Spacer()
+                            
+                            Button(action: {
+                                showingUserProfile = false
+                            }) {
+                                Image(systemName: "x.circle.fill")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.primary)
+                                    .padding()
+                            }
+                        }
+                        Spacer()
+                        SignInWithAppleButton(action: {
+                            signInCoordinator.startSignInWithAppleFlow()
+                        }, label: "Sign in with Apple")
+                        .frame(width: 280, height: 45)
+                        .padding(.top, 50)
+                    }
+                }
+                
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.medium, .large])
+            } //end user sheet
             .edgesIgnoringSafeArea(.top)
             
             .tabItem {
@@ -213,8 +243,7 @@ struct ContentView: View {
     }
     
     
-    
-    //MARK: Func to retrieve the cafe's from the APIs
+    // MARK: FUNCTIONS
     private func fetchCoffeeShops() {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
@@ -246,8 +275,8 @@ struct ContentView: View {
             }
         }
     }
-
-
+    
+    
     private func handleRewardAd() {
         rewardAd.requestIDFA()
         let adsShown = rewardAds.show()
@@ -259,27 +288,3 @@ struct ContentView: View {
         }
     }
 }
-    
-//
-//    func performSignInWithApple() {
-//        // Create an instance of ASAuthorizationAppleIDProvider
-//        let appleIDProvider = ASAuthorizationAppleIDProvider()
-//
-//        // Create an instance of ASAuthorizationRequest
-//        let request = appleIDProvider.createRequest()
-//        request.requestedScopes = [.fullName, .email] // Customize the requested scopes if needed
-//
-//        // Create an instance of ASAuthorizationController
-//        let controller = ASAuthorizationController(authorizationRequests: [request])
-//        controller.delegate = signInWithAppleCoordinator // Set the delegate to handle authorization callbacks
-//        controller.presentationContextProvider = signInWithAppleCoordinator
-//        controller.performRequests() // Initiate the sign-in flow
-//    }
-//}
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}
-//

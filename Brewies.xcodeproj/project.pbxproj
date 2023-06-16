@@ -31,7 +31,6 @@
 		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
-		FF8E43402A339DB100CEC800 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E433F2A339DB100CEC800 /* SignInWithAppleButton.swift */; };
 		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
 		FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */; };
 		FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */; };
@@ -43,6 +42,8 @@
 		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
+		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
+		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,7 +89,6 @@
 		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
 		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
-		FF8E433F2A339DB100CEC800 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
 		FF8E43462A339FA700CEC800 /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardAdController.swift; sourceTree = "<group>"; };
 		FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Extension.swift"; sourceTree = "<group>"; };
 		FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
@@ -98,6 +98,8 @@
 		FF8E43972A37BED500CEC800 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
+		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,7 +271,8 @@
 		FF8E433E2A339D9E00CEC800 /* Account */ = {
 			isa = PBXGroup;
 			children = (
-				FF8E433F2A339DB100CEC800 /* SignInWithAppleButton.swift */,
+				FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */,
+				FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -471,6 +474,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */,
 				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
 				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
@@ -490,9 +494,9 @@
 				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
 				FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */,
 				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
+				FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */,
 				FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */,
 				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
-				FF8E43402A339DB100CEC800 /* SignInWithAppleButton.swift in Sources */,
 				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,
 				FF8E43852A33D51800CEC800 /* User.swift in Sources */,
 			);

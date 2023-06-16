@@ -68,14 +68,12 @@ class YelpAPI {
         ]
         
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
-           
             switch response.result {
             case .success(let yelpResponse):
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
-                print(coffeeShops)
+            
                 completion(coffeeShops)
             case .failure(let error):
-        
                 print("Error fetching coffee shops: \(error.localizedDescription)")
                 completion([])
             }
@@ -105,8 +103,6 @@ class YelpAPI {
                 transactions: business.transactions,
                 hours:  business.hours
             )
-            print(coffeeShop)
-            
             if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
                 coffeeShop.isFavorite = true
                 favoriteCoffeeShops.append(coffeeShop)

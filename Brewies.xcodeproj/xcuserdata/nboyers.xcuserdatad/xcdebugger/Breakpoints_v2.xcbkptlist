@@ -68,5 +68,69 @@
             landmarkType = "0">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CEA2141B-9DF9-4D54-8ED0-1774A3156294"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/Views/ContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
+            landmarkName = "handleRewardAd()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "CEA2141B-9DF9-4D54-8ED0-1774A3156294 - 36ea04770f53d401"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.ContentView.handleRewardAd() -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "253"
+                  endingLineNumber = "253"
+                  offsetFromSymbolStart = "104">
+               </Location>
+               <Location
+                  uuid = "CEA2141B-9DF9-4D54-8ED0-1774A3156294 - 36ea04770f53d460"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.ContentView.handleRewardAd() -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "252"
+                  endingLineNumber = "252"
+                  offsetFromSymbolStart = "104">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9D21D260-96EB-4B20-AEB4-48EA94C0BB47"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Monetization/RewardAdController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "show()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

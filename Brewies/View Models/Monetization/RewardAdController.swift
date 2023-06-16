@@ -12,9 +12,9 @@ import AppTrackingTransparency
 import AdSupport
 
 class RewardAdController: UIViewController, GADFullScreenContentDelegate {
-
+    
     private var rewardedAd: GADRewardedAd?
-
+    
     func requestIDFA() {
         ATTrackingManager.requestTrackingAuthorization { [weak self] status in
             switch status {
@@ -40,10 +40,10 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
             self?.loadRewardedAd()
         }
     }
-
+    
     func loadRewardedAd() {
         let request = GADRequest()
-
+        
         GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY,
                            request: request,
                            completionHandler: { [self] ad, error in
@@ -57,28 +57,26 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
         }
         )
     }
-
+    
     func show() -> Bool {
         if let ad = rewardedAd {
-            ad.present(fromRootViewController: self) {
-                _ = ad.adReward
-            }
+            ad.present(fromRootViewController: self) {}
         } else {
             return false
         }
         return true
     }
-
+    
     //// Tells the delegate that the ad failed to present full screen content.
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         print("Ad did fail to present full screen content.")
     }
-
+    
     /// Tells the delegate that the ad will present full screen content.
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("Ad will present full screen content.")
     }
-
+    
     /// Tells the delegate that the ad dismissed full screen content.
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("Ad did dismiss full screen content.")
