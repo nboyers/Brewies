@@ -62,7 +62,7 @@ struct ContentView: View {
                 )
                 .onAppear {
                     locationManager.requestLocationAccess()
-                    rewardAd.loadRewardedAd()
+                    rewardAd.requestIDFA()
                     fetchCoffeeShops()
                 }
                 
@@ -108,6 +108,7 @@ struct ContentView: View {
                 }
                 
             }
+            //MARK: ALERTS
             .alert(isPresented: $showNoAdsAvailableAlert) {
                 Alert(
                     title: Text("No Ads Available"),
@@ -122,6 +123,7 @@ struct ContentView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
+
             
             //MARK: BREW PREVIEW
             .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
@@ -264,17 +266,21 @@ struct ContentView: View {
                 latitude: centerCoordinate.latitude,
                 longitude: centerCoordinate.longitude
             ) { coffeeShops in
-                self.coffeeShops = coffeeShops
-                self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
-                showBrewPreview = true
-                UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
+                if coffeeShops.isEmpty {
+                    self.showNoCoffeeShopsAlert = true
+                } else {
+                    self.coffeeShops = coffeeShops
+                    self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
+                    showBrewPreview = true
+                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
+                }
             }
         }
     }
+
     
     
     private func handleRewardAd() {
-        rewardAd.requestIDFA()
         if let viewController = rootViewController {
             rewardAd.present(from: viewController)
             userCredits += 1

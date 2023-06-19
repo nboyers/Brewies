@@ -40,17 +40,24 @@ class YelpAPI {
         "Paul Bassett", "Bo's Coffee", "Zarraffas Coffee", "Blue Bottle Coffee", "Philz Coffee",
         "Hudsons Coffee", "Java House", "Vida e Caffè", "Blenz Coffee", "Dôme", "Coffee#1",
         "Figaro Coffee", "Cafe Barbera", "AMT Coffee", "Ya Kun Kaya Toast", "Drunkin'", "Krispy Kreme Doughnuts"
-        ,"Joffrey’s Coffee & Tea Company", "Mega Play", "RaceTrac", "Speedway", "Gas station", "IHOP", "Sheetz", "Ciro's Pizza", "Waffle House"
+        ,"Joffrey’s Coffee & Tea Company", "Mega Play", "RaceTrac", "Speedway", "Gas station", "IHOP", "Sheetz", "Ciro's Pizza", "Waffle House","Peet's Coffee"
+    ]
+    private lazy var undesiredCatagories : Set<String> = [ "wine_bars", "bars", "pizza",
+                                                           "servicestations","hotdogs","burgers",
+                                                           "donuts",
+                                                           "caribbean","seafood","irish_pubs",
+                                                           "sandwiches","tradamerican","italian"
+                                                           ,"desserts","vapeshops","salad","newamerican"
     ]
     
-    
+    //"bagels","juicebars",
     
     func fetchIndependentCoffeeShops(
-        term: String = "local coffee shops",
+        term: String = "coffee shop",
         latitude: Double,
         longitude: Double,
         radius: Int = 7000,
-        categories: String = "coffeeroasteries,coffeeshops,coffeehouse,coffeecafe",
+        categories: String = "localcoffeeshop",
         sort_by: String = "distance",
         completion: @escaping ([CoffeeShop]) -> Void
     ) {
@@ -66,13 +73,12 @@ class YelpAPI {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(apiKey)"
         ]
-
+        
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
             switch response.result {
             case .success(let yelpResponse):
-                print(response.response?.statusCode ?? "FAILED")
+                print(yelpResponse)
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
-
                 completion(coffeeShops)
             case .failure(let error):
                 print("Error fetching coffee shops: \(error.localizedDescription)")
@@ -81,9 +87,9 @@ class YelpAPI {
         }
     }
     
-    func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
+    private func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
         var coffeeShops: [CoffeeShop] = []
-        for business in businesses where !isExcludedChain(name: business.name) {
+        for business in businesses where !isExcludedChain(name: business.name, categories: business.categories) {
             var coffeeShop = CoffeeShop(
                 id: business.id,
                 name: business.name,
@@ -107,7 +113,6 @@ class YelpAPI {
                 coffeeShop.isFavorite = true
                 favoriteCoffeeShops.append(coffeeShop)
             }
-            
             coffeeShops.append(coffeeShop)
         }
         return coffeeShops
@@ -129,12 +134,15 @@ class YelpAPI {
         }
     }
     
-    func isExcludedChain(name: String) -> Bool {
+    func isExcludedChain(name: String, categories: [Category]) -> Bool {
         for chain in chainCompanyNames {
-            if name.contains(chain) {
-                return true
-            }
+            if name.lowercased().contains(chain.lowercased()) { return true }
+        }
+        for category in categories {
+            if undesiredCatagories.contains(category.alias) { return true }
         }
         return false
     }
+    
+    
 }

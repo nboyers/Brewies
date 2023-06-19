@@ -32,7 +32,7 @@ final class BrewiesTests: XCTestCase {
     
     func testFetchIndependentCoffeeShops() {
         let expectation = XCTestExpectation(description: "Fetch independent coffee shops")
-
+        
         yelpAPI.fetchIndependentCoffeeShops(
             latitude: 27.814343,
             longitude: -82.780275
@@ -40,7 +40,7 @@ final class BrewiesTests: XCTestCase {
             XCTAssertFalse(coffeeShops.isEmpty)
             expectation.fulfill()
         }
-
+        
         wait(for: [expectation], timeout: 10.0)
     }
 }

@@ -10,12 +10,13 @@ import GoogleMobileAds
 
 @main
 struct BrewiesApp: App {
+    private var rewardAd = RewardAdController()
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .onAppear {
                 GADMobileAds.sharedInstance().start(completionHandler: nil)
-                  
+                rewardAd.requestIDFA()
             }
         }
     }

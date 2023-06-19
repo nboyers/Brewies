@@ -47,32 +47,21 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
         GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD, //FIXME: Change this to the live version once ready to ship
                            request: request,
                            completionHandler: { [self] ad, error in
-            if let error = error {
-                print("Failed to load rewarded ad with error: \(error.localizedDescription)")
+            if error != nil {
                 return
             }
             rewardedAd = ad
             rewardedAd?.fullScreenContentDelegate = self
-            print("Rewarded ad loaded.")
-        }
-        )
+        })
     }
     
-    func present(from viewController: UIViewController) {
+    func present(from viewController: UIViewController)  {
         if let ad = rewardedAd {
             ad.present(fromRootViewController: viewController, userDidEarnRewardHandler: { })
         } else {
-            print("Tried to show rewarded ad before it was loaded.")
+            loadRewardedAd()
         }
-    }
-    
-    func show() -> Bool {
-        if let ad = rewardedAd {
-            ad.present(fromRootViewController: self) {}
-        } else {
-            return false
-        }
-        return true
+      
     }
     
     //// Tells the delegate that the ad failed to present full screen content.

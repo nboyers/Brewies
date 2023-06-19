@@ -78,8 +78,8 @@
             filePath = "Brewies/Views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "handleRewardAd()"
             landmarkType = "7">
             <Locations>
@@ -114,22 +114,6 @@
                   offsetFromSymbolStart = "104">
                </Location>
             </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9D21D260-96EB-4B20-AEB4-48EA94C0BB47"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Brewies/View Models/Monetization/RewardAdController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "show()"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -174,10 +158,73 @@
             filePath = "Brewies/View Models/YelpAPI.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "parseCoffeeShops(businesses:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "90953205-9DD5-4431-9236-9E7DE679740A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/YelpAPI.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "fetchIndependentCoffeeShops(term:latitude:longitude:radius:categories:sort_by:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "90953205-9DD5-4431-9236-9E7DE679740A - ba153173dae65fd0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.YelpAPI.fetchIndependentCoffeeShops(term: Swift.String, latitude: Swift.Double, longitude: Swift.Double, radius: Swift.Int, categories: Swift.String, sort_by: Swift.String, completion: (Swift.Array&lt;Brewies.CoffeeShop&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/YelpAPI.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "70"
+                  endingLineNumber = "70"
+                  offsetFromSymbolStart = "1168">
+               </Location>
+               <Location
+                  uuid = "90953205-9DD5-4431-9236-9E7DE679740A - 77773fbfc6826568"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Brewies.YelpResponse, Alamofire.AFError&gt;) -&gt; () in Brewies.YelpAPI.fetchIndependentCoffeeShops(term: Swift.String, latitude: Swift.Double, longitude: Swift.Double, radius: Swift.Int, categories: Swift.String, sort_by: Swift.String, completion: (Swift.Array&lt;Brewies.CoffeeShop&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/YelpAPI.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "360">
+               </Location>
+               <Location
+                  uuid = "90953205-9DD5-4431-9236-9E7DE679740A - 77773fbfc6826568"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Brewies.YelpResponse, Alamofire.AFError&gt;) -&gt; () in Brewies.YelpAPI.fetchIndependentCoffeeShops(term: Swift.String, latitude: Swift.Double, longitude: Swift.Double, radius: Swift.Int, categories: Swift.String, sort_by: Swift.String, completion: (Swift.Array&lt;Brewies.CoffeeShop&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/YelpAPI.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "71"
+                  endingLineNumber = "71"
+                  offsetFromSymbolStart = "324">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
