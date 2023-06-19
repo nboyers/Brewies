@@ -19,6 +19,11 @@ class User: ObservableObject {
     @Published var profileImage: Image?
     @Published var favorites: [CoffeeShop] = []
     @Published var pastOrders: [Order] = []
+    @Published var credits: Int {
+           didSet {
+               UserDefaults.standard.set(self.credits, forKey: "UserCredits")
+           }
+       }
     
     init(isLoggedIn: Bool = false, userID: String = "", firstName: String = "", lastName: String = "", email: String = "", profileImage: Image? = nil) {
         self.isLoggedIn = isLoggedIn
@@ -27,6 +32,7 @@ class User: ObservableObject {
         self.lastName = lastName
         self.email = email
         self.profileImage = profileImage
+        self.credits = UserDefaults.standard.integer(forKey: "UserCredits")
     }
 }
 

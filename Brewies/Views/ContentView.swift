@@ -15,6 +15,7 @@ import AuthenticationServices
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
     @ObservedObject var user = User()
+    @Environment(\.rootViewController) private var rootViewController: UIViewController?
 
     private var rewardAds = RewardAdController()
     @State private var coffeeShops: [CoffeeShop] = []
@@ -29,7 +30,8 @@ struct ContentView: View {
     @State private var mapTapped = false
     @State private var showBrewPreview = false
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
-    @State private var userCredits: Int = 1000
+    @State private var userCredits: Int = 10
+    @State private var mapView = MKMapView()
     @State private var showNoCreditsAlert = false
     @State private var showNoAdsAvailableAlert = false
     @State private var showNoCoffeeShopsAlert = false
@@ -50,6 +52,7 @@ struct ContentView: View {
                     coffeeShops: $coffeeShops,
                     selectedCoffeeShop: $selectedCoffeeShop,
                     centeredOnUser: $centeredOnUser,
+                    mapView: $mapView,
                     userHasMoved: $userHasMoved,
                     visibleRegionCenter: $visibleRegionCenter,
                     showUserLocationButton: $showUserLocationButton,
@@ -70,6 +73,7 @@ struct ContentView: View {
                             userCredits -= 1
                         } else {
                             showNoCreditsAlert = true
+                            
                         }
                         
                     }) {
@@ -252,26 +256,18 @@ struct ContentView: View {
         
         if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate) {
             self.coffeeShops = cachedCoffeeShops
-            self.selectedCoffeeShop = cachedCoffeeShops.first
+            self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
             showBrewPreview = true
         } else {
             let yelpAPI = YelpAPI()
-            DispatchQueue.global(qos: .background).async {
-                yelpAPI.fetchIndependentCoffeeShops(
-                    latitude: centerCoordinate.latitude,
-                    longitude: centerCoordinate.longitude
-                ) { coffeeShops in
-                    DispatchQueue.main.async {
-                        if coffeeShops.isEmpty {
-                            self.showNoCoffeeShopsAlert = true
-                        } else {
-                            self.coffeeShops = coffeeShops
-                            self.selectedCoffeeShop = coffeeShops.first
-                            showBrewPreview = true
-                            UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
-                        }
-                    }
-                }
+            yelpAPI.fetchIndependentCoffeeShops(
+                latitude: centerCoordinate.latitude,
+                longitude: centerCoordinate.longitude
+            ) { coffeeShops in
+                self.coffeeShops = coffeeShops
+                self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
+                showBrewPreview = true
+                UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
             }
         }
     }
@@ -279,11 +275,11 @@ struct ContentView: View {
     
     private func handleRewardAd() {
         rewardAd.requestIDFA()
-        let adsShown = rewardAds.show()
-        if adsShown {
+        if let viewController = rootViewController {
+            rewardAd.present(from: viewController)
             userCredits += 1
         } else {
-            // If there are no ads available, show the alert
+            // If there is no root view controller available, show an alert
             showNoAdsAvailableAlert = true
         }
     }

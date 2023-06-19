@@ -46,11 +46,11 @@ class YelpAPI {
     
     
     func fetchIndependentCoffeeShops(
-        term: String = "coffee house",
+        term: String = "local coffee shops",
         latitude: Double,
         longitude: Double,
         radius: Int = 7000,
-        categories: String = "coffeeroasteries, coffeeshops, coffeehouse, coffeecafe",
+        categories: String = "coffeeroasteries,coffeeshops,coffeehouse,coffeecafe",
         sort_by: String = "distance",
         completion: @escaping ([CoffeeShop]) -> Void
     ) {
@@ -66,12 +66,13 @@ class YelpAPI {
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(apiKey)"
         ]
-        
+
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
             switch response.result {
             case .success(let yelpResponse):
+                print(response.response?.statusCode ?? "FAILED")
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
-            
+
                 completion(coffeeShops)
             case .failure(let error):
                 print("Error fetching coffee shops: \(error.localizedDescription)")
@@ -82,7 +83,6 @@ class YelpAPI {
     
     func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
         var coffeeShops: [CoffeeShop] = []
-       
         for business in businesses where !isExcludedChain(name: business.name) {
             var coffeeShop = CoffeeShop(
                 id: business.id,
