@@ -29,7 +29,9 @@ struct MapView: UIViewRepresentable {
     @Binding var isAnnotationSelected: Bool
     @Binding var mapTapped: Bool
     @Binding var showBrewPreview: Bool
-    
+    @Binding var searchedLocation: CLLocationCoordinate2D?
+    @Binding var searchQuery: String
+
     let DISTANCE = CLLocationDistance(2500)
     
     // Creates the coordinator for the MapView
@@ -46,6 +48,7 @@ struct MapView: UIViewRepresentable {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.mapTapped))
         tapRecognizer.delegate = context.coordinator as? UIGestureRecognizerDelegate
         mapView.addGestureRecognizer(tapRecognizer)
+    
         
         DispatchQueue.main.async {
             self.setRegion = { region in
@@ -74,6 +77,20 @@ struct MapView: UIViewRepresentable {
                 self.locationManager.initialRegionSet = true
             }
         }
+        // Update for searched location
+        // Update for searched location
+        if let searchedLocation = searchedLocation {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = searchedLocation
+            annotation.title = searchQuery
+            DispatchQueue.main.async {
+                mapView.addAnnotation(annotation)
+                self.setRegion(to: searchedLocation, on: mapView)
+                self.searchedLocation = nil // Reset to allow for new searches
+            }
+        }
+
+
         
         // Center map on user if requested
         if centeredOnUser {

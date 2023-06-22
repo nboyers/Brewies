@@ -13,7 +13,7 @@ class YelpAPI {
     
     // Add excluded chain names here
     private lazy var chainCompanyNames: Set<String> = [
-        "Starbucks", "Starbucks Coffee", "Peets", "Coffee Bean","pizza",
+        "Starbucks", "Starbucks Coffee", "Peets", "Coffee Bean",
         "McDonald's", "Tim Hortons", "Dunkin'",
         "Krispy Kreme", "First Watch", "Caribou Coffee",
         "Dutch Bros. Coffee", "Gloria Jean's", "The Human Bean", "Tully's Coffee",
@@ -44,13 +44,11 @@ class YelpAPI {
     ]
     private lazy var undesiredCatagories : Set<String> = [ "wine_bars", "bars", "pizza",
                                                            "servicestations","hotdogs","burgers",
-                                                           "donuts",
-                                                           "caribbean","seafood","irish_pubs",
-                                                           "sandwiches","tradamerican","italian"
-                                                           ,"desserts","vapeshops","salad","newamerican"
+                                                           "donuts","caribbean","seafood",
+                                                           "irish_pubs", "sandwiches","tradamerican",
+                                                           "italian","desserts","vapeshops",
+                                                           "salad","newamerican"
     ]
-    
-    //"bagels","juicebars",
     
     func fetchIndependentCoffeeShops(
         term: String = "coffee shop",

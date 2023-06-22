@@ -78,8 +78,8 @@
             filePath = "Brewies/Views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
+            startingLineNumber = "337"
+            endingLineNumber = "337"
             landmarkName = "handleRewardAd()"
             landmarkType = "7">
             <Locations>
@@ -126,8 +126,8 @@
             filePath = "Brewies/Views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -142,8 +142,8 @@
             filePath = "Brewies/Views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "72"
-            endingLineNumber = "72"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "Brewies/View Models/YelpAPI.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "parseCoffeeShops(businesses:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "Brewies/View Models/YelpAPI.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
             landmarkName = "fetchIndependentCoffeeShops(term:latitude:longitude:radius:categories:sort_by:completion:)"
             landmarkType = "7">
             <Locations>
@@ -223,6 +223,54 @@
                   startingLineNumber = "71"
                   endingLineNumber = "71"
                   offsetFromSymbolStart = "324">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8902334E-2B24-444F-8310-8D32A91F1F3E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/Views/ContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "8902334E-2B24-444F-8310-8D32A91F1F3E - 66419a9f9418fc3a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.textFieldStyle&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.TextFieldStyle&gt;(&#x3c4;_1_0) -&gt; some&gt;&gt;.0, SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt; in closure #4 () -&gt; Swift.Optional&lt;SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.textFieldStyle&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.TextFieldStyle&gt;(&#x3c4;_1_0) -&gt; some&gt;&gt;.0, SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt;&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.tabItem&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(() -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.tabItem&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(() -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0)&gt; in Brewies.ContentView.body.getter : some"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "1060">
+               </Location>
+               <Location
+                  uuid = "8902334E-2B24-444F-8310-8D32A91F1F3E - 66419a9f9418fc3a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 () -&gt; () in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.textFieldStyle&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.TextFieldStyle&gt;(&#x3c4;_1_0) -&gt; some&gt;&gt;.0, SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt; in closure #4 () -&gt; Swift.Optional&lt;SwiftUI.HStack&lt;SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.textFieldStyle&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.TextFieldStyle&gt;(&#x3c4;_1_0) -&gt; some&gt;&gt;.0, SwiftUI.Spacer, &lt;&lt;opaque return type of SwiftUI.View.padding(CoreGraphics.CGFloat) -&gt; some&gt;&gt;.0)&gt;&gt;&gt; in closure #1 () -&gt; SwiftUI.TupleView&lt;(&lt;&lt;opaque return type of SwiftUI.View.tabItem&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(() -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0, &lt;&lt;opaque return type of SwiftUI.View.tabItem&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(() -&gt; &#x3c4;_1_0) -&gt; some&gt;&gt;.0)&gt; in Brewies.ContentView.body.getter : some"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/ContentView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "167"
+                  endingLineNumber = "167"
+                  offsetFromSymbolStart = "1084">
                </Location>
             </Locations>
          </BreakpointContent>

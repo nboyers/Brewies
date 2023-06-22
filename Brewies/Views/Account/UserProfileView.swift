@@ -32,10 +32,3 @@ struct UserProfileView: View {
         .padding()
     }
 }
-
-////
-////struct UserProfileView_Previews: PreviewProvider {
-////    static var previews: some View {
-////        UserProfileView()
-////    }
-////}

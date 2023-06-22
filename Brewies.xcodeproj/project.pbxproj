@@ -41,6 +41,8 @@
 		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
 		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
+		FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = FFC5D12C2A44E608007D9F52 /* Introspect */; };
+		FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
 		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
 		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
@@ -99,6 +101,7 @@
 		FF8E43972A37BED500CEC800 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
+		FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompleter.swift; sourceTree = "<group>"; };
 		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
 		FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerKey.swift; sourceTree = "<group>"; };
@@ -111,6 +114,7 @@
 			files = (
 				FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */,
 				FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */,
+				FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */,
 				FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */,
 				FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */,
 			);
@@ -291,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
+				FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -351,6 +356,7 @@
 				FF5377A62A0B1E5E0038E5E7 /* Kingfisher */,
 				FFCB2A562A2141E00051B957 /* BottomSheet */,
 				FFB360CC2A26A5830099017F /* GoogleMobileAds */,
+				FFC5D12C2A44E608007D9F52 /* Introspect */,
 			);
 			productName = Brewies;
 			productReference = FF3FF28E29EA0D2300510FCD /* Brewies.app */;
@@ -433,6 +439,7 @@
 				FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 				FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = FF3FF28F29EA0D2300510FCD /* Products */;
 			projectDirPath = "";
@@ -495,6 +502,7 @@
 				FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */,
 				FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */,
 				FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */,
+				FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */,
 				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
 				FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */,
 				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
@@ -904,6 +912,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.2;
+			};
+		};
 		FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/lucaszischka/BottomSheet";
@@ -939,6 +955,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
 			productName = GoogleMobileAds;
+		};
+		FFC5D12C2A44E608007D9F52 /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
 		};
 		FFCB2A562A2141E00051B957 /* BottomSheet */ = {
 			isa = XCSwiftPackageProductDependency;

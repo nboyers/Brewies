@@ -10,13 +10,15 @@ import CoreLocation
 import MapKit
 import BottomSheet
 import AuthenticationServices
+import Introspect
 
 
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
+    
     @ObservedObject var user = User()
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
-
+    
     private var rewardAds = RewardAdController()
     @State private var coffeeShops: [CoffeeShop] = []
     @State private var showAlert = false
@@ -36,13 +38,18 @@ struct ContentView: View {
     @State private var showNoAdsAvailableAlert = false
     @State private var showNoCoffeeShopsAlert = false
     @State private var showingUserProfile = false
+    @State var searchedLocation: CLLocationCoordinate2D?
+
+    @State private var searchQuery: String = ""
+    @State private var searchResults: [MKMapItem] = []
+    @State private var isSearching = false
+    @FocusState var isInputActive: Bool
     
     private var rewardAd = RewardAdController()
     let DISTANCE = CLLocationDistance(2500)
-
+    
     let signInCoordinator = SignInWithAppleCoordinator()
-
-
+    
     
     var body: some View {
         TabView {
@@ -58,7 +65,10 @@ struct ContentView: View {
                     showUserLocationButton: $showUserLocationButton,
                     isAnnotationSelected: $isAnnotationSelected,
                     mapTapped: $mapTapped,
-                    showBrewPreview: $showBrewPreview
+                    showBrewPreview: $showBrewPreview,
+                    searchedLocation: $searchedLocation,
+                    searchQuery: $searchQuery
+                   
                 )
                 .onAppear {
                     locationManager.requestLocationAccess()
@@ -95,19 +105,20 @@ struct ContentView: View {
                         Button(action: {
                             centeredOnUser = true
                         }) {
-                            Image(systemName: "location")
+                            Image(systemName: "location.circle.fill")
                                 .resizable()
-                            
-                                .frame(width: 30, height: 30)
-                                .imageScale(.large)
-                                .background(Color.white)
-                                .shadow(radius: 10)
+                                .frame(width: 40, height: 40)
+                                .foregroundColor(Color.primary)
+                                .background(
+                                  Circle()
+                                    .fill(Color.accentColor)
+                                )
                         }
-                        .offset(CGSize(width: geo.size.width*0.75, height: geo.size.width/5.5))
+                        .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
                     }
                 }
-                
             }
+            
             //MARK: ALERTS
             .alert(isPresented: $showNoAdsAvailableAlert) {
                 Alert(
@@ -123,7 +134,7 @@ struct ContentView: View {
                     dismissButton: .default(Text("OK"))
                 )
             }
-
+            
             
             //MARK: BREW PREVIEW
             .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
@@ -132,64 +143,88 @@ struct ContentView: View {
                 .relativeTop(0.95) //Top full swipe
             ], headerContent: { // the top portion
                 HStack {
-                    Text("Credits: \(userCredits)")
-                        .padding(5)
+                    TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
+                        if isEditing {
+                            isSearching = true
+                            bottomSheetPosition = .relative(0.70)
+                        }
+                    }, onCommit: {
+                        searchLocation(for: searchQuery)
+                    })
+                    .padding(.horizontal)
+                    .focused($isInputActive)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
                     
                     Spacer()
-                    
+                    //MARK: Cancel Button
                     Button(action: {
-                        showingUserProfile = true
-                    }) {
-                        if !user.isLoggedIn {
-            
-                            Image(systemName: "person.crop.circle.fill")
-                                .resizable()
-                                .foregroundColor(Color.accentColor)
-                                .frame(width: 30, height: 30)
-                                .clipShape(Circle())
-                                .padding(5)
+                        if isSearching {
+                            searchQuery = ""
+                            isInputActive = false
+                            isSearching = false
+                            bottomSheetPosition = .relativeBottom(0.20)
+                            
                         } else {
-                            Text(String(user.firstName.prefix(1)))
-                                .foregroundColor(.white)
-                                .font(.system(size: 30, weight: .bold))
-                                .frame(width: 30, height: 30)
-                                .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
-                                .clipShape(Circle())
+                            bottomSheetPosition = .relativeBottom(0.20)
+                            showingUserProfile = true
+                        }
+                    }) {
+                        if !isSearching {
+                            if !user.isLoggedIn {
+                                Image(systemName: "person.crop.circle.fill")
+                                    .resizable()
+                                    .foregroundColor(Color.accentColor)
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                                    .padding(5)
+                            } else {
+                                Text(String(user.firstName.prefix(1)))
+                                    .foregroundColor(.white)
+                                    .font(.system(size: 30, weight: .bold))
+                                    .frame(width: 30, height: 30)
+                                    .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                    .clipShape(Circle())
+                            }
+                        } else {
+                            Text("Cancel")
+                                .foregroundColor(Color.accentColor)
+                                .padding(5)
                         }
                     }.padding(10)
                 }
             }) {
-                
-                Divider()
-                
-                if selectedCoffeeShop != nil && showBrewPreview {
+                ScrollView {
+                    Divider()
                     
-                    HStack(alignment: .firstTextBaseline) {
-                        Text("\(coffeeShops.count) Cafes In Map")
-                            .padding()
-                        Spacer()
+                    if selectedCoffeeShop != nil && showBrewPreview {
+                        
+                        HStack(alignment: .firstTextBaseline) {
+                            Text("\(coffeeShops.count) Cafes In Map")
+                                .padding()
+                            Spacer()
+                        }
+                        
+                        BrewPreviewList(coffeeShops: $coffeeShops,
+                                        selectedCoffeeShop: $selectedCoffeeShop,
+                                        showBrewPreview: $showBrewPreview)
                     }
+                    AdBannerView()
+                        .frame(width: 320, height: 50)
                     
-                    BrewPreviewList(coffeeShops: $coffeeShops,
-                                    selectedCoffeeShop: $selectedCoffeeShop,
-                                    showBrewPreview: $showBrewPreview)
+                    Button(action: {
+                        handleRewardAd()
+                    }) {
+                        Text("Watch Ads")
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 70)
+                            .font(.title3)
+                            .foregroundColor(Color(UIColor.secondaryLabel))
+                            .foregroundColor(.white)
+                            .background(.secondary)
+                            .cornerRadius(40)
+                    }
                 }
-                AdBannerView()
-                    .frame(width: 320, height: 50)
-                //TODO: Make this button work ; just not now
-                Button(action: {
-                    handleRewardAd()
-                }) {
-                    Text("Watch Ads")
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 70)
-                        .font(.title3)
-                        .foregroundColor(Color(UIColor.secondaryLabel))
-                        .foregroundColor(.white)
-                        .background(.secondary)
-                        .cornerRadius(40)
-                }
-                
             }
             .enableAppleScrollBehavior()
             .enableBackgroundBlur()
@@ -213,6 +248,9 @@ struct ContentView: View {
                             
                             Button(action: {
                                 showingUserProfile = false
+                                
+                                
+                                
                             }) {
                                 Image(systemName: "x.circle.fill")
                                     .resizable()
@@ -230,8 +268,8 @@ struct ContentView: View {
                     }
                 }
                 
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.medium, .large])
             } //end user sheet
             .edgesIgnoringSafeArea(.top)
             
@@ -277,9 +315,25 @@ struct ContentView: View {
             }
         }
     }
+    // Function to search for a location by address
+    func searchLocation(for address: String) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(address) { (placemarks, error) in
+            guard error == nil else {
+                print("Geocoding error: \(error!.localizedDescription)")
+                return
+            }
+            guard let placemark = placemarks?.first, let location = placemark.location else {
+                print("No placemark found for address: \(address)")
+                return
+            }
 
-    
-    
+            DispatchQueue.main.async {
+                self.searchedLocation = location.coordinate
+            }
+        }
+    }
+
     private func handleRewardAd() {
         if let viewController = rootViewController {
             rewardAd.present(from: viewController)
