@@ -21,19 +21,28 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
             case .authorized:
                 // Tracking authorization dialog was shown
                 // and permission was granted
-                print(ASIdentifierManager.shared().advertisingIdentifier)
+                self?.loadRewardedAd()
+                break
+                
             case .denied:
                 // Tracking authorization dialog was
                 // shown and permission was denied
+                self?.loadRewardedAd()
                 break
+                
             case .notDetermined:
                 // Tracking authorization dialog has not yet been presented
+                self?.loadRewardedAd()
                 break
+                
             case .restricted:
                 // The device is not eligible for tracking
+                self?.loadRewardedAd()
                 break
+                
             @unknown default:
                 // A new case was added that we need to handle
+                self?.loadRewardedAd()
                 break
             }
             // Call `loadRewardedAd()` after getting IDFA status
@@ -44,7 +53,7 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     func loadRewardedAd() {
         let request = GADRequest()
         
-        GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD, //FIXME: Change this to the live version once ready to ship
+        GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY, //FIXME: Change this to the live version once ready to ship
                            request: request,
                            completionHandler: { [self] ad, error in
             if error != nil {
@@ -52,6 +61,8 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
             }
             rewardedAd = ad
             rewardedAd?.fullScreenContentDelegate = self
+            print("New Ad loaded")
+            
         })
     }
     

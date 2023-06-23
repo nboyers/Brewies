@@ -21,8 +21,8 @@ struct BrewDetailView: View {
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.0) // Starting position for bottomSheet
     var body: some View {
         GeometryReader { geo in
-        ScrollView {
-
+            ScrollView {
+                
                 VStack(alignment: .leading) {
                     ZStack(alignment: .topLeading) {
                         //MARK: Header image
@@ -152,12 +152,12 @@ struct BrewDetailView: View {
                                             .fixedSize(horizontal: false, vertical: true)
                                         
                                         Spacer()
-                                
+                                        
                                         Image(systemName: "doc.on.doc.fill")
                                             .resizable()
                                             .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
                                             .foregroundColor(Color.accentColor)
-                                 
+                                        
                                     }
                                 }
                                 .padding()
@@ -173,7 +173,7 @@ struct BrewDetailView: View {
                                             .padding([.leading, .trailing, .bottom])
                                             .lineLimit(2)
                                         Spacer()
-                                          
+                                        
                                         Image(systemName: "location.circle")
                                             .resizable()
                                             .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
@@ -185,11 +185,11 @@ struct BrewDetailView: View {
                             .background(.bar)
                             .frame(width: geo.size.width, height: geo.size.height*0.40)
                             .cornerRadius(15)
-                        
+                            
                         }
                         
                         //MARK: DETAILS
-                      
+                        
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Details")
@@ -203,7 +203,7 @@ struct BrewDetailView: View {
                             
                             VStack(alignment: .leading) {
                                 // Hours
-                                Text("is Open: \(coffeeShop.transactions.formatted())")
+                                Text("is Open: ")
                                     .fixedSize(horizontal: false, vertical: true)
                                     .bold()
                                     .lineLimit(2)
@@ -211,26 +211,23 @@ struct BrewDetailView: View {
                                 Divider()
                                 
                                 // Phone
-
-                                    Button(action: {
-                                        callCoffeeShop()
-                                    }) {
-                                        HStack {
-                                            VStack(alignment: .leading) {
-                                                Text("Call")
-                                                    .bold()
-                                                Text(coffeeShop.displayPhone)
-                                            }
-                                            Spacer()
-                                             
-                                            Image(systemName: "phone.connection")
-                                                .resizable()
-                                                .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
-                                                .foregroundColor(Color.accentColor)
-                                        }
+                                
+                                Button(action: {
+                                    callCoffeeShop()
+                                }) {
+                                    HStack {
+                                        Text(coffeeShop.displayPhone)
+                                        
+                                        Spacer()
+                                        
+                                        Image(systemName: "phone.connection")
+                                            .resizable()
+                                            .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
+                                            .foregroundColor(Color.accentColor)
                                     }
-                                    .padding()
-                             
+                                }
+                                .padding()
+                                
                                 Divider()
                                 
                                 // Website
@@ -243,7 +240,7 @@ struct BrewDetailView: View {
                                                 .bold()
                                         }
                                         Spacer()
-                                           
+                                        
                                         Image(systemName: "arrow.up.right.square")
                                             .resizable()
                                             .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
@@ -261,17 +258,17 @@ struct BrewDetailView: View {
                             .background(.bar)
                             .cornerRadius(15)
                             .frame(width: geo.size.width, height: geo.size.height*0.25)
-
-      
+                            
+                            
                         }
-          
-                        }
+                        
                     }
                 }
-                    .fullScreenCover(isPresented: $showSafariView) {
-                        if let url = URL(string: coffeeShop.url) {
-                            SafariView(url: url)
-                        }
+            }
+            .fullScreenCover(isPresented: $showSafariView) {
+                if let url = URL(string: coffeeShop.url) {
+                    SafariView(url: url)
+                }
             }
             
             .navigationBarItems(trailing: closeButton)

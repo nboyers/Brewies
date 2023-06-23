@@ -226,11 +226,10 @@
 		FF3FF2C629EA0F0800510FCD /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				FF5BC28C2A4521DB00759BFA /* Maps */,
+				FF5BC28B2A4521CD00759BFA /* Networking */,
 				FF8E43812A33CE5300CEC800 /* Coordinators */,
 				FFB360D52A26D5730099017F /* Monetization */,
-				FF3FF2C729EA0F2600510FCD /* LocationManager.swift */,
-				FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */,
-				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -238,12 +237,12 @@
 		FF3FF2CB29EA107700510FCD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
 				FF8E43932A34F99C00CEC800 /* Maps */,
 				FF8E43962A37BEBB00CEC800 /* Supporting Views */,
 				FF8E43412A339E6700CEC800 /* Monetization */,
 				FF8E433E2A339D9E00CEC800 /* Account */,
 				FF77393B2A1318B3007B603F /* BrewViews */,
-				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -262,6 +261,22 @@
 				FF3FF2D229EA183900510FCD /* Secrets.swift */,
 			);
 			path = Misc;
+			sourceTree = "<group>";
+		};
+		FF5BC28B2A4521CD00759BFA /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		FF5BC28C2A4521DB00759BFA /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2C729EA0F2600510FCD /* LocationManager.swift */,
+			);
+			path = Maps;
 			sourceTree = "<group>";
 		};
 		FF77393B2A1318B3007B603F /* BrewViews */ = {
@@ -294,6 +309,7 @@
 		FF8E43812A33CE5300CEC800 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
+				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
 				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
 				FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */,
 			);

@@ -39,6 +39,8 @@ struct ContentView: View {
     @State private var showNoCoffeeShopsAlert = false
     @State private var showingUserProfile = false
     @State var searchedLocation: CLLocationCoordinate2D?
+    @State private var selectedRadiusIndex: Int = 0 // Default index to 0
+    private let radiusOptions = [7000, 16000, 32000, 64000] // Radius in meters
 
     @State private var searchQuery: String = ""
     @State private var searchResults: [MKMapItem] = []
@@ -72,8 +74,10 @@ struct ContentView: View {
                 )
                 .onAppear {
                     locationManager.requestLocationAccess()
-                    rewardAd.requestIDFA()
-                    fetchCoffeeShops()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        rewardAd.requestIDFA()
+                        fetchCoffeeShops()
+                    }
                 }
                 
                 GeometryReader { geo in
@@ -142,56 +146,81 @@ struct ContentView: View {
                 .relative(0.70), // Mid swipe
                 .relativeTop(0.95) //Top full swipe
             ], headerContent: { // the top portion
-                HStack {
-                    TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
-                        if isEditing {
-                            isSearching = true
-                            bottomSheetPosition = .relative(0.70)
-                        }
-                    }, onCommit: {
-                        searchLocation(for: searchQuery)
-                    })
-                    .padding(.horizontal)
-                    .focused($isInputActive)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    
-                    
-                    Spacer()
-                    //MARK: Cancel Button
-                    Button(action: {
-                        if isSearching {
-                            searchQuery = ""
-                            isInputActive = false
-                            isSearching = false
-                            bottomSheetPosition = .relativeBottom(0.20)
-                            
-                        } else {
-                            bottomSheetPosition = .relativeBottom(0.20)
-                            showingUserProfile = true
-                        }
-                    }) {
-                        if !isSearching {
-                            if !user.isLoggedIn {
-                                Image(systemName: "person.crop.circle.fill")
-                                    .resizable()
-                                    .foregroundColor(Color.accentColor)
-                                    .frame(width: 30, height: 30)
-                                    .clipShape(Circle())
-                                    .padding(5)
-                            } else {
-                                Text(String(user.firstName.prefix(1)))
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 30, weight: .bold))
-                                    .frame(width: 30, height: 30)
-                                    .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
-                                    .clipShape(Circle())
+                VStack {
+                    HStack {
+                        TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
+                            if isEditing {
+                                isSearching = true
+                                bottomSheetPosition = .relative(0.70)
                             }
-                        } else {
-                            Text("Cancel")
-                                .foregroundColor(Color.accentColor)
-                                .padding(5)
+                        }, onCommit: {
+                            searchLocation(for: searchQuery)
+                        })
+                        .padding(.horizontal)
+                        .focused($isInputActive)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
+                        
+                        Spacer()
+                        //MARK: Cancel Button
+                        Button(action: {
+                            if isSearching {
+                                searchQuery = ""
+                                isInputActive = false
+                                isSearching = false
+                                bottomSheetPosition = .relativeBottom(0.20)
+                                
+                            } else {
+                                bottomSheetPosition = .relativeBottom(0.20)
+                                showingUserProfile = true
+                            }
+                        }) {
+                            if !isSearching {
+                                if !user.isLoggedIn {
+                                    Image(systemName: "person.crop.circle.fill")
+                                        .resizable()
+                                        .foregroundColor(Color.accentColor)
+                                        .frame(width: 30, height: 30)
+                                        .clipShape(Circle())
+                                        .padding(5)
+                                } else {
+                                    Text(String(user.firstName.prefix(1)))
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 30, weight: .bold))
+                                        .frame(width: 30, height: 30)
+                                        .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                        .clipShape(Circle())
+                                }
+                            } else {
+                                Text("Cancel")
+                                    .foregroundColor(Color.accentColor)
+                                    .padding(5)
+                            }
                         }
-                    }.padding(10)
+                    }
+                    HStack {
+                        Picker("Search Radius", selection: $selectedRadiusIndex) {
+                            ForEach(radiusOptions.indices, id: \.self) { index in
+                                Text("\(self.convertMetersToMiles(meters: self.radiusOptions[index])) miles")
+                                    .tag(index)
+                                
+                                   
+                            }
+                        }
+                        .labelsHidden()
+                        .minimumScaleFactor(0.5)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(width: 110, height: 20)
+                        .padding(5)
+                        .accentColor(Color.black)
+                        .background(!user.isSubscribed ? Color.white : Color.gray) // Change background color based on the subscription status
+                        .cornerRadius(20)
+                        .disabled(user.isSubscribed)  // Disables the picker if the user is not subscribed
+                        Spacer()
+
+                        
+                    }.padding()
                 }
             }) {
                 ScrollView {
@@ -211,19 +240,6 @@ struct ContentView: View {
                     }
                     AdBannerView()
                         .frame(width: 320, height: 50)
-                    
-                    Button(action: {
-                        handleRewardAd()
-                    }) {
-                        Text("Watch Ads")
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 70)
-                            .font(.title3)
-                            .foregroundColor(Color(UIColor.secondaryLabel))
-                            .foregroundColor(.white)
-                            .background(.secondary)
-                            .cornerRadius(40)
-                    }
                 }
             }
             .enableAppleScrollBehavior()
@@ -293,8 +309,9 @@ struct ContentView: View {
             showAlert = true
             return
         }
+        let selectedRadius = CLLocationDistance(radiusOptions[selectedRadiusIndex]) // Using the selected radius
         
-        if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate) {
+        if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
             self.coffeeShops = cachedCoffeeShops
             self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
             showBrewPreview = true
@@ -302,7 +319,8 @@ struct ContentView: View {
             let yelpAPI = YelpAPI()
             yelpAPI.fetchIndependentCoffeeShops(
                 latitude: centerCoordinate.latitude,
-                longitude: centerCoordinate.longitude
+                longitude: centerCoordinate.longitude,
+                radius: Int(selectedRadius) // Using the selected radius
             ) { coffeeShops in
                 if coffeeShops.isEmpty {
                     self.showNoCoffeeShopsAlert = true
@@ -310,11 +328,12 @@ struct ContentView: View {
                     self.coffeeShops = coffeeShops
                     self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
                     showBrewPreview = true
-                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate)
+                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
                 }
             }
         }
     }
+
     // Function to search for a location by address
     func searchLocation(for address: String) {
         let geocoder = CLGeocoder()
@@ -333,7 +352,12 @@ struct ContentView: View {
             }
         }
     }
+    
+   private  func convertMetersToMiles(meters: Int) -> Int {
+        return Int(round(Double(meters) * 0.000621371))
+    }
 
+    
     private func handleRewardAd() {
         if let viewController = rootViewController {
             rewardAd.present(from: viewController)

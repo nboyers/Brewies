@@ -47,7 +47,7 @@ class YelpAPI {
                                                            "donuts","caribbean","seafood",
                                                            "irish_pubs", "sandwiches","tradamerican",
                                                            "italian","desserts","vapeshops",
-                                                           "salad","newamerican"
+                                                           "salad","newamerican","breakfast_brunch"
     ]
     
     func fetchIndependentCoffeeShops(
