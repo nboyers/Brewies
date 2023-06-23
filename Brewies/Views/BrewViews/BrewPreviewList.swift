@@ -41,6 +41,7 @@ struct BrewPreview: View {
     let coffeeShop: CoffeeShop
     @Binding var showBrewPreview: Bool
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
+ 
     
     @State private var isDetailShowing: Bool = false
     
@@ -87,7 +88,6 @@ struct BrewPreview: View {
                 }
             }
         }
-
         return false
     }
 

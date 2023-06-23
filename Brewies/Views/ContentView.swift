@@ -16,8 +16,11 @@ import Introspect
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
     
-    @ObservedObject var user = User()
+    @StateObject var user = User()
+    @ObservedObject var yelpParams =  YelpSearchParams()
+    
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
+    
     
     private var rewardAds = RewardAdController()
     @State private var coffeeShops: [CoffeeShop] = []
@@ -38,10 +41,13 @@ struct ContentView: View {
     @State private var showNoAdsAvailableAlert = false
     @State private var showNoCoffeeShopsAlert = false
     @State private var showingUserProfile = false
+    @State private var showingFilterView = false
+    
+    
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var selectedRadiusIndex: Int = 0 // Default index to 0
     private let radiusOptions = [7000, 16000, 32000, 64000] // Radius in meters
-
+    
     @State private var searchQuery: String = ""
     @State private var searchResults: [MKMapItem] = []
     @State private var isSearching = false
@@ -70,7 +76,7 @@ struct ContentView: View {
                     showBrewPreview: $showBrewPreview,
                     searchedLocation: $searchedLocation,
                     searchQuery: $searchQuery
-                   
+                    
                 )
                 .onAppear {
                     locationManager.requestLocationAccess()
@@ -78,6 +84,10 @@ struct ContentView: View {
                         rewardAd.requestIDFA()
                         fetchCoffeeShops()
                     }
+                }
+                .sheet(isPresented: $showingFilterView) {
+                    FiltersView(yelpParams: yelpParams)
+                        .environmentObject(user)
                 }
                 
                 GeometryReader { geo in
@@ -109,13 +119,13 @@ struct ContentView: View {
                         Button(action: {
                             centeredOnUser = true
                         }) {
-                            Image(systemName: "location.circle.fill")
+                            Image(systemName: "location.square.fill")
                                 .resizable()
                                 .frame(width: 40, height: 40)
                                 .foregroundColor(Color.primary)
                                 .background(
-                                  Circle()
-                                    .fill(Color.accentColor)
+                                    Rectangle()
+                                        .fill(Color.accentColor)
                                 )
                         }
                         .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
@@ -148,6 +158,18 @@ struct ContentView: View {
             ], headerContent: { // the top portion
                 VStack {
                     HStack {
+                        Button(action: {
+                            showingFilterView = true
+                        }) {
+                            Image(systemName: "ellipsis.circle")
+                                .resizable()
+                                .foregroundColor(Color.accentColor)
+                                .frame(width: 30, height: 30)
+                                .clipShape(Circle())
+                        }
+                        .padding(5)
+                        
+                        
                         TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
                             if isEditing {
                                 isSearching = true
@@ -156,13 +178,13 @@ struct ContentView: View {
                         }, onCommit: {
                             searchLocation(for: searchQuery)
                         })
-                        .padding(.horizontal)
+                        .padding()
                         .focused($isInputActive)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .frame(width: 270, height: 20)
                         
                         
-                        Spacer()
-                        //MARK: Cancel Button
+                        //MARK: Profile / Cancel Button
                         Button(action: {
                             if isSearching {
                                 searchQuery = ""
@@ -182,7 +204,7 @@ struct ContentView: View {
                                         .foregroundColor(Color.accentColor)
                                         .frame(width: 30, height: 30)
                                         .clipShape(Circle())
-                                        .padding(5)
+                                        .padding(.horizontal)
                                 } else {
                                     Text(String(user.firstName.prefix(1)))
                                         .foregroundColor(.white)
@@ -190,37 +212,15 @@ struct ContentView: View {
                                         .frame(width: 30, height: 30)
                                         .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
                                         .clipShape(Circle())
+                                        .padding(.horizontal)
                                 }
                             } else {
                                 Text("Cancel")
                                     .foregroundColor(Color.accentColor)
-                                    .padding(5)
+                                    .padding(.horizontal)
                             }
                         }
                     }
-                    HStack {
-                        Picker("Search Radius", selection: $selectedRadiusIndex) {
-                            ForEach(radiusOptions.indices, id: \.self) { index in
-                                Text("\(self.convertMetersToMiles(meters: self.radiusOptions[index])) miles")
-                                    .tag(index)
-                                
-                                   
-                            }
-                        }
-                        .labelsHidden()
-                        .minimumScaleFactor(0.5)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .pickerStyle(MenuPickerStyle())
-                        .frame(width: 110, height: 20)
-                        .padding(5)
-                        .accentColor(Color.black)
-                        .background(!user.isSubscribed ? Color.white : Color.gray) // Change background color based on the subscription status
-                        .cornerRadius(20)
-                        .disabled(user.isSubscribed)  // Disables the picker if the user is not subscribed
-                        Spacer()
-
-                        
-                    }.padding()
                 }
             }) {
                 ScrollView {
@@ -230,7 +230,7 @@ struct ContentView: View {
                         
                         HStack(alignment: .firstTextBaseline) {
                             Text("\(coffeeShops.count) Cafes In Map")
-                                .padding()
+                                .padding(.horizontal)
                             Spacer()
                         }
                         
@@ -287,6 +287,8 @@ struct ContentView: View {
                 .presentationDragIndicator(.visible)
                 .presentationDetents([.medium, .large])
             } //end user sheet
+            
+            
             .edgesIgnoringSafeArea(.top)
             
             .tabItem {
@@ -309,7 +311,8 @@ struct ContentView: View {
             showAlert = true
             return
         }
-        let selectedRadius = CLLocationDistance(radiusOptions[selectedRadiusIndex]) // Using the selected radius
+        let selectedRadius = CLLocationDistance(yelpParams.radius) // Using the selected radius
+        
         
         if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
             self.coffeeShops = cachedCoffeeShops
@@ -333,7 +336,7 @@ struct ContentView: View {
             }
         }
     }
-
+    
     // Function to search for a location by address
     func searchLocation(for address: String) {
         let geocoder = CLGeocoder()
@@ -346,17 +349,17 @@ struct ContentView: View {
                 print("No placemark found for address: \(address)")
                 return
             }
-
+            
             DispatchQueue.main.async {
                 self.searchedLocation = location.coordinate
             }
         }
     }
     
-   private  func convertMetersToMiles(meters: Int) -> Int {
+    private  func convertMetersToMiles(meters: Int) -> Int {
         return Int(round(Double(meters) * 0.000621371))
     }
-
+    
     
     private func handleRewardAd() {
         if let viewController = rootViewController {

@@ -19,6 +19,8 @@ struct BrewDetailView: View {
     @State private var showSafariView = false
     @State private var showHoursSheet = false
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.0) // Starting position for bottomSheet
+    @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
+    
     var body: some View {
         GeometryReader { geo in
             ScrollView {
@@ -127,7 +129,7 @@ struct BrewDetailView: View {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Address")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                     .font(.title2)
                                     .bold()
                                     .padding(.horizontal)
@@ -147,8 +149,8 @@ struct BrewDetailView: View {
                                             .padding([.leading, .trailing, .bottom, .top])
                                             .lineLimit(2)
                                             .multilineTextAlignment(.leading)
-                                            .font(.headline)
-                                            .foregroundColor(.white)
+                                          
+                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                             .fixedSize(horizontal: false, vertical: true)
                                         
                                         Spacer()
@@ -168,14 +170,15 @@ struct BrewDetailView: View {
                                 }) {
                                     HStack {
                                         Text("Get Directions")
-                                            .foregroundColor(.white)
-                                            .font(.headline)
+                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                            
                                             .padding([.leading, .trailing, .bottom])
                                             .lineLimit(2)
                                         Spacer()
                                         
                                         Image(systemName: "location.circle")
                                             .resizable()
+                                            .foregroundColor(Color.accentColor)
                                             .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
                                         
                                     }
@@ -193,10 +196,10 @@ struct BrewDetailView: View {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Details")
-                                    .foregroundColor(.white)
                                     .font(.title2)
                                     .bold()
                                     .padding(.horizontal)
+                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                 Spacer()
                             }
                             
@@ -205,9 +208,10 @@ struct BrewDetailView: View {
                                 // Hours
                                 Text("is Open: ")
                                     .fixedSize(horizontal: false, vertical: true)
-                                    .bold()
+                                    
                                     .lineLimit(2)
                                     .padding()
+                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                 Divider()
                                 
                                 // Phone
@@ -217,7 +221,8 @@ struct BrewDetailView: View {
                                 }) {
                                     HStack {
                                         Text(coffeeShop.displayPhone)
-                                        
+                                            
+                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                         Spacer()
                                         
                                         Image(systemName: "phone.connection")
@@ -237,7 +242,8 @@ struct BrewDetailView: View {
                                     HStack {
                                         VStack(alignment: .leading) {
                                             Text("Website")
-                                                .bold()
+                                                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                               
                                         }
                                         Spacer()
                                         
@@ -247,6 +253,7 @@ struct BrewDetailView: View {
                                             .foregroundColor(Color.accentColor)
                                     }
                                 }
+                                
                                 .padding()
                                 
                                 
@@ -254,7 +261,7 @@ struct BrewDetailView: View {
                                 //TODO: Create this
                                 
                             }
-                            .foregroundColor(.white)
+                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                             .background(.bar)
                             .cornerRadius(15)
                             .frame(width: geo.size.width, height: geo.size.height*0.25)
