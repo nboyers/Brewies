@@ -156,8 +156,9 @@ struct ContentView: View {
                 .relative(0.70), // Mid swipe
                 .relativeTop(0.95) //Top full swipe
             ], headerContent: { // the top portion
-                VStack {
-                    HStack {
+                HStack {
+                    Spacer()
+                    HStack(alignment: .center, spacing: 10) {
                         Button(action: {
                             showingFilterView = true
                         }) {
@@ -166,8 +167,7 @@ struct ContentView: View {
                                 .foregroundColor(Color.accentColor)
                                 .frame(width: 30, height: 30)
                                 .clipShape(Circle())
-                        }
-                        .padding(5)
+                        }.padding(.horizontal)
                         
                         
                         TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
@@ -178,7 +178,6 @@ struct ContentView: View {
                         }, onCommit: {
                             searchLocation(for: searchQuery)
                         })
-                        .padding()
                         .focused($isInputActive)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .frame(width: 270, height: 20)
@@ -204,7 +203,7 @@ struct ContentView: View {
                                         .foregroundColor(Color.accentColor)
                                         .frame(width: 30, height: 30)
                                         .clipShape(Circle())
-                                        .padding(.horizontal)
+                                    
                                 } else {
                                     Text(String(user.firstName.prefix(1)))
                                         .foregroundColor(.white)
@@ -212,15 +211,16 @@ struct ContentView: View {
                                         .frame(width: 30, height: 30)
                                         .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
                                         .clipShape(Circle())
-                                        .padding(.horizontal)
+                                    
                                 }
                             } else {
                                 Text("Cancel")
                                     .foregroundColor(Color.accentColor)
-                                    .padding(.horizontal)
+                                
                             }
-                        }
-                    }
+                        }.padding(.horizontal)
+                    }.padding(.vertical)
+                    Spacer()
                 }
             }) {
                 ScrollView {

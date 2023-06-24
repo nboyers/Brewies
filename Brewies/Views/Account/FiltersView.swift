@@ -11,7 +11,7 @@ class YelpSearchParams: ObservableObject {
     @Published var radius: Int = 0
     @Published var businessType: String = "coffee" // This can be "coffee" or "brewery"
     @Published var sortBy: String = "distance" // This can be "distance", "best_match", "rating", "review_count"
-    @Published var price: String = "$" // This can be "$", "$$", "$$$", "$$$$"
+    @Published var price: [String] = ["$"] // This can be ["$"], ["$$"], ["$$$"], ["$$$$"], or any combination
 }
 
 struct FiltersView: View {
@@ -19,11 +19,13 @@ struct FiltersView: View {
     
     @ObservedObject var yelpParams: YelpSearchParams
     @EnvironmentObject var user: User
+    @Environment(\.colorScheme) var colorScheme
     
     var businessTypes = ["coffee", "brewery"]
     var sortByOptions = ["distance", "best_match", "rating", "review_count"]
     var priceOptions = ["$", "$$", "$$$", "$$$$"]
-    var unitOptions = ["miles", "kilometers"]
+    var unitOptions = [5000, 6000, 7000, 8000]
+    @State private var selectedOption: Int = 0
     
     var body: some View {
         VStack {
@@ -51,43 +53,79 @@ struct FiltersView: View {
                         .font(.title3)
                         .foregroundColor(.teal)
                 }
-            
             }
+            
             Spacer()
             Divider()
-            //MARK: Search Radius
-            Text("Search Radius")
-                .font(.largeTitle)
-                .bold()
-                .padding(.horizontal)
-            if user.isLoggedIn && user.isSubscribed {
-                
+            ScrollView {
+                VStack(alignment: .leading) {
+                    //MARK: Search Radius
+                    Text("Price")
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                    HStack(alignment: .center, spacing: 10) {
+                        Spacer()
+                        ForEach(priceOptions, id: \.self) { price in
+                            Button(action: {
+                                if let index = yelpParams.price.firstIndex(of: price) {
+                                    // If price is already selected, remove it from the array
+                                    yelpParams.price.remove(at: index)
+                                } else {
+                                    // If price is not selected, add it to the array
+                                    yelpParams.price.append(price)
+                                }
+                            }) {
+                                Text(price)
+                                    .frame(width: 80, height: 35)
+                                    .background(yelpParams.price.contains(price) ? Color.blue : Color.clear)
+                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                    .clipShape(Capsule())
+                                    .overlay(
+                                                 Capsule()
+                                                     .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: yelpParams.price.contains(price) ? 0 : 1) // Show border when the button is clear
+                                             )
+                                    .font(.body)
+
+                            }
+                        }.padding(.vertical)
+                        Spacer()
+                    }
+                    Divider()
+                    
+                    Text("Sort")
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                    
+                    Divider()
+                    
+                    Text("Search Radius")
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                    
+                    
+                    Divider()
+                    
+                    //MARK: Distance
+                    Text("Distance")
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
+                    
+                    
+                    VStack(alignment: .leading) {
+                        Divider()
+                        //MARK: Brew Type
+                        Text("Brew Type")
+                            .font(.title2)
+                            .bold()
+                            .padding(.horizontal)
+                        
+                    }
+                }
             }
-            Divider()
-            
-            //MARK: Distance
-            Text("Distance")
-                .font(.largeTitle)
-                .bold()
-                .padding(.horizontal)
-            if user.isLoggedIn && user.isSubscribed {
-                
-            }
-            Divider()
-            
-            //MARK: Brew Type
-            Text("Brew Type")
-                .font(.largeTitle)
-                .bold()
-                .padding(.horizontal)
-//            if user.isLoggedIn && user.isSubscribed {
-//
-//            }
         }
     }
-    
-    private  func convertMetersToMiles(meters: Int) -> Int {
-        return Int(round(Double(meters) * 0.000621371))
-    }
-    
 }

@@ -220,8 +220,7 @@ struct BrewDetailView: View {
                                     callCoffeeShop()
                                 }) {
                                     HStack {
-                                        Text(coffeeShop.displayPhone)
-                                            
+                                        Text(coffeeShop.displayPhone.isEmpty ? "No phone number available" : coffeeShop.displayPhone)
                                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                         Spacer()
                                         

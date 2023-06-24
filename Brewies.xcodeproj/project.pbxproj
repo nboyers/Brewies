@@ -31,6 +31,7 @@
 		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CC92A4624C5003894D9 /* FiltersView.swift */; };
+		FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
 		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
 		FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */; };
@@ -93,6 +94,7 @@
 		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
 		FF5A6CC92A4624C5003894D9 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
+		FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleButton.swift; sourceTree = "<group>"; };
 		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
 		FF8E43462A339FA700CEC800 /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardAdController.swift; sourceTree = "<group>"; };
 		FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Extension.swift"; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 				FF8E43912A34F5C100CEC800 /* PhotosView.swift */,
 				FFB360CE2A26B09F0099017F /* SafariView.swift */,
 				FF8E43972A37BED500CEC800 /* RatingView.swift */,
+				FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */,
 			);
 			path = "Supporting Views";
 			sourceTree = "<group>";
@@ -512,6 +515,7 @@
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
 				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
 				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
+				FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */,
 				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
 				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
 				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
