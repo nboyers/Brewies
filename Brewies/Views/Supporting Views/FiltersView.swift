@@ -88,11 +88,8 @@ struct FiltersView: View {
                     // Also reset the UI
                     selectedSort = ""
                     selectedBrew = ""
-                    
-                    // Reset the initial state
-                    initialState = [:]
-                    // Then reset the changes count
-                    applyChangesCount = 0
+                    // Update the initial state to match the reset parameters
+                    updateInitialState()
                 }) {
                     Text("Close")
                         .font(.system(size: 20, weight: .medium))
@@ -112,11 +109,8 @@ struct FiltersView: View {
                     // Also reset the UI
                     selectedSort = ""
                     selectedBrew = ""
-                    
-                    // Reset the initial state
-                    initialState = [:]
-                    // Then reset the changes count
-                    applyChangesCount = 0
+                    // Update the initial state to match the reset parameters
+                    updateInitialState()
                     
                 }) {
                     Text("Reset")
