@@ -46,7 +46,7 @@ struct ContentView: View {
     
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var selectedRadiusIndex: Int = 0 // Default index to 0
-    private let radiusOptions = [7000, 16000, 32000, 64000] // Radius in meters
+    private let radiusOptions = [8047, 16093, 24140, 32186] // Radius in meters
     
     @State private var searchQuery: String = ""
     @State private var searchResults: [MKMapItem] = []
@@ -80,10 +80,9 @@ struct ContentView: View {
                 )
                 .onAppear {
                     locationManager.requestLocationAccess()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                         rewardAd.requestIDFA()
                         fetchCoffeeShops()
-                    }
+            
                 }
                 .sheet(isPresented: $showingFilterView) {
                     FiltersView(yelpParams: yelpParams)
@@ -311,7 +310,7 @@ struct ContentView: View {
             showAlert = true
             return
         }
-        let selectedRadius = CLLocationDistance(yelpParams.radius) // Using the selected radius
+        let selectedRadius = CLLocationDistance(yelpParams.radiusInMeters) // Using the selected radius
         
         
         if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {

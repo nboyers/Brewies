@@ -78,12 +78,11 @@ struct MapView: UIViewRepresentable {
             }
         }
         // Update for searched location
-        // Update for searched location
         if let searchedLocation = searchedLocation {
             let annotation = MKPointAnnotation()
             annotation.coordinate = searchedLocation
             annotation.title = searchQuery
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 mapView.addAnnotation(annotation)
                 self.setRegion(to: searchedLocation, on: mapView)
                 self.searchedLocation = nil // Reset to allow for new searches
@@ -122,7 +121,7 @@ struct MapView: UIViewRepresentable {
         
         // Add annotations not in the existing set
         let annotationsToAdd = newAnnotations.subtracting(existingAnnotations)
-        DispatchQueue.main.async {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             mapView.addAnnotations(Array(annotationsToAdd))
         }
     }

@@ -298,7 +298,6 @@
 			children = (
 				FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */,
 				FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */,
-				FF5A6CC92A4624C5003894D9 /* FiltersView.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -333,6 +332,7 @@
 		FF8E43962A37BEBB00CEC800 /* Supporting Views */ = {
 			isa = PBXGroup;
 			children = (
+				FF5A6CC92A4624C5003894D9 /* FiltersView.swift */,
 				FF8E43912A34F5C100CEC800 /* PhotosView.swift */,
 				FFB360CE2A26B09F0099017F /* SafariView.swift */,
 				FF8E43972A37BED500CEC800 /* RatingView.swift */,
