@@ -5,14 +5,15 @@
 //  Created by Noah Boyers on 6/23/23.
 //
 
+//TODO: FIX THE RESET BUTTON Currently shows "Apply (3)" and needs to be "Apply"
 import SwiftUI
 
 class YelpSearchParams: ObservableObject {
     @Published var radiusInMeters: Int = 8047 // start with 5 miles in meters
     @Published var radiusUnit: String = "mi" // Default unit is miles now
-    @Published var businessType: String = "coffee"
-    @Published var sortBy: String = "distance"
-    @Published var price: [String] = ["$"]
+    @Published var businessType: String = ""
+    @Published var sortBy: String = ""
+    @Published var price: [String] = []
     
     func resetFilters() {
         self.radiusInMeters = 8047 // reset to 5 miles
@@ -20,7 +21,6 @@ class YelpSearchParams: ObservableObject {
         self.businessType = ""
         self.sortBy = ""
         self.price = []
-        
     }
 }
 
@@ -32,33 +32,67 @@ struct FiltersView: View {
     
     @EnvironmentObject var user: User
     
+    
     @State private var applyChangesCount: Int = 0
-    @State private var selectedSort: String = "Recommended"
+    @State private var selectedSort: String = ""
     @State private var selectedOption: Int = 0
     @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186]
-    @State private var selectedBrew = "local coffee"
+    @State private var selectedBrew = ""
     @State private var initialState: [String: Any] = [:]
     
+    
     let sortOptions = ["Recommended", "Distance", "Rating", "Review"]
-    let businessTypes = ["coffee", "brewery"]
     let apiSortOptions: [String: String] = ["Recommended": "best_match", "Distance": "distance", "Rating": "rating", "Review": "review_count"]
     let priceOptions = ["$", "$$", "$$$", "$$$$"]
     let brewType = ["Coffee Shops", "Breweries"]
     
     private func changesCount() -> Int {
         var changesCount = 0
+        if let initialPrice = initialState["price"] as? [String] {
+            let addedPrice = yelpParams.price.filter { !initialPrice.contains($0) }
+            let removedPrice = initialPrice.filter { !yelpParams.price.contains($0) }
+            changesCount += addedPrice.count + removedPrice.count
+        }
+        if initialState["sortBy"] as? String != yelpParams.sortBy { changesCount += 1 }
         if initialState["radiusInMeters"] as? Int != yelpParams.radiusInMeters { changesCount += 1 }
         if initialState["businessType"] as? String != yelpParams.businessType {changesCount += 1 }
-        if initialState["sortBy"] as? String != yelpParams.sortBy { changesCount += 1 } // WORKS
-        if initialState["price"] as? [String] != yelpParams.price { changesCount += 1 }
         return changesCount
     }
+    
+    private func updateInitialState() {
+        initialState["radiusInMeters"] = yelpParams.radiusInMeters
+        initialState["radiusUnit"] = yelpParams.radiusUnit
+        initialState["businessType"] = yelpParams.businessType
+        initialState["sortBy"] = yelpParams.sortBy
+        initialState["price"] = yelpParams.price
+    }
+    
+    private func priceButtonAction(price: String) {
+        if let index = yelpParams.price.firstIndex(of: price) {
+            // If price is already selected, remove it from the array
+            yelpParams.price.remove(at: index)
+        } else {
+            // If price is not selected, add it to the array
+            yelpParams.price.append(price)
+        }
+    }
+    
     
     var body: some View {
         VStack {
             HStack {
                 Button(action: {
-                    //TODO: Close this sheet
+                    self.presentationMode.wrappedValue.dismiss()
+                    // Reset the Settings Applied
+                    yelpParams.resetFilters()
+                    // Also reset the UI
+                    selectedSort = ""
+                    selectedBrew = ""
+                    
+                    // Reset the initial state
+                    initialState = [:]
+                    // Then reset the changes count
+                    applyChangesCount = 0
                 }) {
                     Text("Close")
                         .font(.system(size: 20, weight: .medium))
@@ -66,6 +100,7 @@ struct FiltersView: View {
                         .font(.title3)
                         .foregroundColor(.teal)
                 }
+                
                 Spacer()
                 Text("Filters")
                     .bold()
@@ -74,12 +109,15 @@ struct FiltersView: View {
                 Button(action: {
                     // Reset the Settings Applied
                     yelpParams.resetFilters()
-                    // Also reset the selectedSort state
-                    selectedSort = "Recommended"
+                    // Also reset the UI
+                    selectedSort = ""
+                    selectedBrew = ""
+                    
+                    // Reset the initial state
+                    initialState = [:]
                     // Then reset the changes count
                     applyChangesCount = 0
-                    // Return early to prevent updating changes count and initial state
-                    return
+                    
                 }) {
                     Text("Reset")
                         .font(.system(size: 20, weight: .medium))
@@ -100,14 +138,8 @@ struct FiltersView: View {
                         Spacer()
                         ForEach(priceOptions, id: \.self) { price in
                             Button(action: {
-                                if let index = yelpParams.price.firstIndex(of: price) {
-                                    // If price is already selected, remove it from the array
-                                    yelpParams.price.remove(at: index)
-                                } else {
-                                    // If price is not selected, add it to the array
-                                    yelpParams.price.append(price)
-                                }
-                            }) {
+                                priceButtonAction(price: price)
+                            }){
                                 Text(price)
                                     .frame(width: 80, height: 35)
                                     .background(yelpParams.price.contains(price) ? Color.blue : Color.clear)
@@ -137,16 +169,17 @@ struct FiltersView: View {
                                 Spacer()
                                 Button(action: {
                                     selectedSort = sortOption
-                                    
+                                    yelpParams.sortBy = apiSortOptions[selectedSort] ?? ""
                                 }) {
                                     Circle()
                                         .frame(width: 24, height: 24)
                                         .foregroundColor(selectedSort == sortOption ? .blue : .clear)
                                         .overlay(
                                             Capsule()
-                                                .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: yelpParams.sortBy.contains(sortOption) ? 0 : 1)
+                                                .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedSort == sortOption ? 0 : 1)
                                         )
                                 }
+                                
                             }.padding(.horizontal)
                         }
                     }
@@ -190,14 +223,15 @@ struct FiltersView: View {
                                         .font(.body)
                                     Spacer()
                                     Button(action: {
-                                        selectedBrew  = brewOption
+                                        selectedBrew = brewOption
+                                        yelpParams.businessType = selectedBrew
                                     }) {
                                         Circle()
                                             .frame(width: 24, height: 24)
                                             .foregroundColor(selectedBrew == brewOption ? .blue : .clear)
                                             .overlay(
                                                 Capsule()
-                                                    .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: yelpParams.businessType.contains(brewOption) ? 0 : 1) // Show border when the button is clear
+                                                    .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedBrew == brewOption ? 0 : 1)
                                             )
                                     }
                                 }
@@ -215,29 +249,27 @@ struct FiltersView: View {
                     }
                 }
             }
+            .onAppear {
+                updateInitialState()
+            }
         }
         HStack(alignment: .center) {
             Spacer()
-                .frame(width: 25) // Adjust the width as desired
+                .frame(width: 25)
+            
             GeometryReader { geo in
-                Button(action: {
-                    // Apply changes
-                    initialState["radiusInMeters"] = yelpParams.radiusInMeters
-                    initialState["radiusUnit"] = yelpParams.radiusUnit
-                    initialState["businessType"] = yelpParams.businessType
-                    initialState["sortBy"] = yelpParams.sortBy
-                    initialState["price"] = yelpParams.price
-                }) {
-                    let changesCount = self.changesCount()
-                    Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
-
-                        .frame(width: geo.size.width, height: 50)
-                        
-                        .background(.red)
-                        .foregroundColor(.white)
-                }
-                .cornerRadius(15)
-            }
+                  Button(action: {
+                      // Apply changes
+                      updateInitialState()
+                  }) {
+                      let changesCount = self.changesCount()
+                      Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
+                          .frame(width: geo.size.width, height: 50)
+                          .background(.red)
+                          .foregroundColor(.white)
+                  }
+                  .cornerRadius(15)
+              }
             Spacer()
                 .frame(width: 25)
         }
