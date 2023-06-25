@@ -227,10 +227,14 @@ struct ContentView: View {
                     
                     if selectedCoffeeShop != nil && showBrewPreview {
                         
-                        HStack(alignment: .firstTextBaseline) {
-                            Text("\(coffeeShops.count) Cafes In Map")
-                                .padding(.horizontal)
-                            Spacer()
+                        HStack() {
+                            GeometryReader { geo in
+                                Text("\(coffeeShops.count) Cafes In Map")
+                                    .padding(.horizontal, geo.size.width*0.07)
+                            }
+                                Spacer()
+                      
+       
                         }
                         
                         BrewPreviewList(coffeeShops: $coffeeShops,
