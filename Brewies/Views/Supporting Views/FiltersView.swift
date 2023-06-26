@@ -5,7 +5,7 @@
 //  Created by Noah Boyers on 6/23/23.
 //
 
-//TODO: FIX THE RESET BUTTON Currently shows "Apply (3)" and needs to be "Apply"
+
 import SwiftUI
 
 class YelpSearchParams: ObservableObject {

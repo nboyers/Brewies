@@ -81,8 +81,6 @@ struct ContentView: View {
                 .onAppear {
                     locationManager.requestLocationAccess()
                         rewardAd.requestIDFA()
-                        fetchCoffeeShops()
-            
                 }
                 .sheet(isPresented: $showingFilterView) {
                     FiltersView(yelpParams: yelpParams)

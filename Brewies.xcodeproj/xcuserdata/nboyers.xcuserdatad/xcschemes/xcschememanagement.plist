@@ -7,7 +7,7 @@
 		<key>Brewies.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<key>Playground (Playground) 1.xcscheme</key>
 		<dict>
@@ -35,14 +35,14 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>5</integer>
+			<integer>2</integer>
 		</dict>
 		<key>Promises (Playground) 2.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-			<integer>6</integer>
+			<integer>3</integer>
 		</dict>
 		<key>Promises (Playground).xcscheme</key>
 		<dict>
@@ -50,6 +50,24 @@
 			<false/>
 			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>FF3FF28D29EA0D2300510FCD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FF3FF29E29EA0D2600510FCD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FF3FF2A829EA0D2600510FCD</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
