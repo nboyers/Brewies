@@ -20,25 +20,35 @@ class User: ObservableObject {
     @Published var favorites: [CoffeeShop] = []
     @Published var pastOrders: [Order] = []
     @Published var credits: Int {
-           didSet {
-               UserDefaults.standard.set(self.credits, forKey: "UserCredits")
-           }
-       }
+            didSet {
+                UserDefaults.standard.set(self.credits, forKey: "UserCredits")
+            }
+        }
+     
     
     @Published var isSubscribed: Bool  
     
     init(isLoggedIn: Bool = false, userID: String = "", firstName: String = "", lastName: String = "", email: String = "", profileImage: Image? = nil, isSubscribed: Bool = false) {
-        self.isLoggedIn = isLoggedIn
-        self.userID = userID
-        self.firstName = firstName
-        self.lastName = lastName
-        self.email = email
-        self.profileImage = profileImage
-        self.credits = UserDefaults.standard.integer(forKey: "UserCredits")
-        self.isSubscribed = isSubscribed // And this line
-    }
-}
-
+         self.isLoggedIn = isLoggedIn
+         self.userID = userID
+         self.firstName = firstName
+         self.lastName = lastName
+         self.email = email
+         self.profileImage = profileImage
+         
+         // Check if the user is new
+         if UserDefaults.standard.object(forKey: "isNewUser") == nil {
+             // The user is new, so give them 1 credit
+             self.credits = 1
+             UserDefaults.standard.set(false, forKey: "isNewUser")
+         } else {
+             // The user is not new, so get their credits from UserDefaults
+             self.credits = UserDefaults.standard.integer(forKey: "UserCredits")
+         }
+         
+         self.isSubscribed = isSubscribed
+     }
+ }
 
 struct Order: Identifiable, Codable {
     let id: String
