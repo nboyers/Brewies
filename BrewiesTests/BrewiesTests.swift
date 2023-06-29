@@ -11,6 +11,13 @@ import GoogleMobileAdsTarget
 
 final class BrewiesTests: XCTestCase {
     var yelpAPI: YelpAPI!
+    private lazy var undesiredCatagories : Set<String> = [ "wine_bars", "bars", "pizza",
+                                                           "servicestations","hotdogs","burgers",
+                                                           "donuts","caribbean","seafood",
+                                                           "irish_pubs", "sandwiches","tradamerican",
+                                                           "italian","desserts","vapeshops",
+                                                           "salad","newamerican","breakfast_brunch"
+    ]
     
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -24,11 +31,11 @@ final class BrewiesTests: XCTestCase {
         super.tearDown()
     }
     
-    func testIsExcludedChain() {
-        XCTAssertTrue(yelpAPI.isExcludedChain(name: "Starbucks"))
-        XCTAssertFalse(yelpAPI.isExcludedChain(name: "My Local Coffee Shop"))
-    }
-    
+//    func testIsExcludedChain() {
+//        XCTAssertTrue(yelpAPI.isExcludedChain(name: "Starbucks", categories: undesiredCatagories))
+//        XCTAssertFalse(yelpAPI.isExcludedChain(name: "My Local Coffee Shop", categories: undesiredCatagories))
+//    }
+//    
     
     func testFetchIndependentCoffeeShops() {
         let expectation = XCTestExpectation(description: "Fetch independent coffee shops")

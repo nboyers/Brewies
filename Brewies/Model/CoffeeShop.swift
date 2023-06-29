@@ -27,7 +27,7 @@ struct CoffeeShop: Identifiable, Equatable, Codable, Hashable {
     let url: String
     let transactions: [String]
     let hours: [YelpHours]?
-    
+    let isClosed: Bool
     var isFavorite: Bool? = false
     var lastAccessDate: Date? = Date()
     

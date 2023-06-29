@@ -29,7 +29,7 @@ struct FiltersView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var yelpParams: YelpSearchParams
-    
+    @ObservedObject var contentVM = ContentViewModel()
     @EnvironmentObject var user: User
     
     
@@ -252,18 +252,25 @@ struct FiltersView: View {
                 .frame(width: 25)
             
             GeometryReader { geo in
-                  Button(action: {
-                      // Apply changes
-                      updateInitialState()
-                  }) {
-                      let changesCount = self.changesCount()
-                      Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
-                          .frame(width: geo.size.width, height: 50)
-                          .background(.red)
-                          .foregroundColor(.white)
-                  }
-                  .cornerRadius(15)
-              }
+                Button(action: {
+                    // Apply changes
+                    updateInitialState()
+                    
+                    // Make API Call
+                    contentVM.fetchCoffeeShops(yelpParams: yelpParams) 
+                    
+                    //Close View
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    let changesCount = self.changesCount()
+                    Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
+                        .frame(width: geo.size.width, height: 50)
+                        .background(.red)
+                        .foregroundColor(.white)
+                }
+
+                .cornerRadius(15)
+            }
             Spacer()
                 .frame(width: 25)
         }

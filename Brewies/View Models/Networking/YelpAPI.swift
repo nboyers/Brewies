@@ -105,7 +105,8 @@ class YelpAPI {
                 displayPhone: business.displayPhone,
                 url: business.url,
                 transactions: business.transactions,
-                hours:  business.hours
+                hours:  business.hours,
+                isClosed: business.isClosed
             )
             if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
                 coffeeShop.isFavorite = true

@@ -31,7 +31,7 @@ struct MapView: UIViewRepresentable {
     @Binding var showBrewPreview: Bool
     @Binding var searchedLocation: CLLocationCoordinate2D?
     @Binding var searchQuery: String
-
+    
     let DISTANCE = CLLocationDistance(2500)
     
     // Creates the coordinator for the MapView
@@ -48,7 +48,7 @@ struct MapView: UIViewRepresentable {
         let tapRecognizer = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.mapTapped))
         tapRecognizer.delegate = context.coordinator as? UIGestureRecognizerDelegate
         mapView.addGestureRecognizer(tapRecognizer)
-    
+        
         
         DispatchQueue.main.async {
             self.setRegion = { region in
@@ -88,8 +88,8 @@ struct MapView: UIViewRepresentable {
                 self.searchedLocation = nil // Reset to allow for new searches
             }
         }
-
-
+        
+        
         
         // Center map on user if requested
         if centeredOnUser {
@@ -133,7 +133,7 @@ struct MapView: UIViewRepresentable {
         annotation.title = coffeeShop.name
         return annotation
     }
-   
+    
     // Sets the initial region of the MKMapView based on the user's location
     func setInitialRegion(for mapView: MKMapView) {
         guard let userLocation = locationManager.userLocation else { return }

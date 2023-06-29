@@ -12,7 +12,6 @@ import BottomSheet
 import AuthenticationServices
 import Introspect
 
-
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
     

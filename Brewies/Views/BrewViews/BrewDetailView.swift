@@ -149,7 +149,7 @@ struct BrewDetailView: View {
                                             .padding([.leading, .trailing, .bottom, .top])
                                             .lineLimit(2)
                                             .multilineTextAlignment(.leading)
-                                          
+                                        
                                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                             .fixedSize(horizontal: false, vertical: true)
                                         
@@ -171,7 +171,7 @@ struct BrewDetailView: View {
                                     HStack {
                                         Text("Get Directions")
                                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                            
+                                        
                                             .padding([.leading, .trailing, .bottom])
                                             .lineLimit(2)
                                         Spacer()
@@ -205,13 +205,21 @@ struct BrewDetailView: View {
                             
                             
                             VStack(alignment: .leading) {
-                                // Hours
-                                Text("is Open: ")
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    
-                                    .lineLimit(2)
-                                    .padding()
-                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+//                                //MARK: Hours are currently out of Service
+//                                HStack(alignment: .firstTextBaseline){
+//                                    VStack(alignment: .leading) {
+//                                        Text("\(coffeeShop.name) is: ")
+//                                        Text(coffeeShop.hours?.first?.isOpenNow ?? false ? "open" : "closed")
+//                                            .bold()
+//                                            .foregroundColor(coffeeShop.hours?.first?.isOpenNow ?? false ? .green : .red)
+//                                    }
+//                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+//                                    .fixedSize(horizontal: false, vertical: true)
+//                                    .lineLimit(2)
+//                                    .padding()
+//                                    Spacer()
+//                                }
+    
                                 Divider()
                                 
                                 // Phone
@@ -242,7 +250,7 @@ struct BrewDetailView: View {
                                         VStack(alignment: .leading) {
                                             Text("Website")
                                                 .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                               
+                                            
                                         }
                                         Spacer()
                                         
@@ -320,8 +328,8 @@ struct BrewDetailView: View {
         }
     }
     private func formattedHours(_ hours: YelpOpenHours) -> String {
-        let startHour = timeFormat(hours.start)
-        let endHour = timeFormat(hours.end)
+        let startHour = timeFormat(hours.start )
+        let endHour = timeFormat(hours.end )
         return "\(startHour) - \(endHour)"
     }
     

@@ -8,6 +8,24 @@
 import Foundation
 
 extension Date {
+    private static let formatter = ISO8601DateFormatter()
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let string = try container.decode(String.self)
+        guard let date = Date.formatter.date(from: string) else {
+            throw DecodingError.dataCorruptedError(in: container,
+                                                   debugDescription: "Invalid date: " + string)
+        }
+        self = date
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        let string = Date.formatter.string(from: self)
+        try container.encode(string)
+    }
+    
     static func fromString(_ string: String, date: Date) -> Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = "HHmm"
