@@ -158,13 +158,13 @@ struct BrewPreview: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    Text(coffeeShop.displayPhone)
+                    Text(coffeeShop.displayPhone.isEmpty ? "Phone number Unavailable" : coffeeShop.displayPhone)
                         .font(.caption)
                         .foregroundColor(.gray)
-                    
-                    Text(!coffeeShop.isClosed ? "OPEN" : "CLOSED")
-                        .font(.caption)
-                        .foregroundColor(!coffeeShop.isClosed ? .green : .red)
+                    //MARK: Currently Broken will come back once it is not
+//                    Text(!coffeeShop.isClosed ? "OPEN" : "CLOSED")
+//                        .font(.caption)
+//                        .foregroundColor(!coffeeShop.isClosed ? .green : .red)
 
                 }
                 

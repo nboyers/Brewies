@@ -29,9 +29,8 @@ struct FiltersView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var yelpParams: YelpSearchParams
-    @ObservedObject var contentVM = ContentViewModel()
     @EnvironmentObject var user: User
-    
+    @ObservedObject private var contentVM = ContentViewModel()
     
     @State private var applyChangesCount: Int = 0
     @State private var selectedSort: String = ""
@@ -257,7 +256,7 @@ struct FiltersView: View {
                     updateInitialState()
                     
                     // Make API Call
-                    contentVM.fetchCoffeeShops(yelpParams: yelpParams) 
+                    contentVM.fetchCoffeeShops(using: yelpParams)
                     
                     //Close View
                     self.presentationMode.wrappedValue.dismiss()

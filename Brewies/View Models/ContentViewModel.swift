@@ -2,7 +2,7 @@
 //  ContentViewModel.swift
 //  Brewies
 //
-//  Created by Noah Boyers on 6/28/23.
+//  Created by Noah Boyers on 6/29/23.
 //
 
 import Foundation
@@ -18,19 +18,20 @@ class ContentViewModel: ObservableObject {
     @Published var showBrewPreview = false
     @Published var searchQuery: String = ""
     @Published var showNoCoffeeShopsAlert = false
+    @Published var showNoAdsAvailableAlert = false
     
     @ObservedObject private var locationManager = LocationManager()
     
     var visibleRegionCenter: CLLocationCoordinate2D?
     
     
-    func fetchCoffeeShops(yelpParams: YelpSearchParams?) {
+    func fetchCoffeeShops(using: YelpSearchParams?) {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
             return
         }
         
-        let selectedRadius = CLLocationDistance(yelpParams?.radiusInMeters ?? 8047) // Using the selected radius
+        let selectedRadius = CLLocationDistance(using?.radiusInMeters ?? 4828) // Free gets 3 mile radius
         
         if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
             self.coffeeShops = cachedCoffeeShops
@@ -38,11 +39,11 @@ class ContentViewModel: ObservableObject {
             showBrewPreview = true
         } else {
             let yelpAPI = YelpAPI()
-            yelpAPI.fetchIndependentCoffeeShops(
+            yelpAPI.fetchIndependentCoffeeShops (
                 latitude: centerCoordinate.latitude,
                 longitude: centerCoordinate.longitude,
-                radius: Int(selectedRadius), 
-                sort_by: yelpParams?.sortBy ?? ""
+                radius: Int(selectedRadius),
+                sort_by: using?.sortBy ?? "best_match"
             ) { coffeeShops in
                 if coffeeShops.isEmpty {
                     self.showNoCoffeeShopsAlert = true

@@ -14,6 +14,7 @@ import Introspect
 
 struct ContentView: View {
     @ObservedObject private var locationManager = LocationManager()
+    @ObservedObject private var contentVM = ContentViewModel()
     
     @StateObject var user = User()
     @ObservedObject var yelpParams =  YelpSearchParams()
@@ -22,23 +23,19 @@ struct ContentView: View {
     
     
     private var rewardAds = RewardAdController()
-    @State private var coffeeShops: [CoffeeShop] = []
-    @State private var showAlert = false
-    @State private var selectedCoffeeShop: CoffeeShop?
-    @State private var centeredOnUser = false
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
+
+    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
+    @State private var userCredits: Int = 10
+    @State private var mapView = MKMapView()
+    @State private var showAlert = false
+    @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
     @State private var showUserLocationButton = false
     @State private var isAnnotationSelected = false
     @State private var mapTapped = false
-    @State private var showBrewPreview = false
-    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
-    @State private var userCredits: Int = 10
-    @State private var mapView = MKMapView()
     @State private var showNoCreditsAlert = false
-    @State private var showNoAdsAvailableAlert = false
-    @State private var showNoCoffeeShopsAlert = false
     @State private var showingUserProfile = false
     @State private var showingFilterView = false
     
@@ -63,8 +60,8 @@ struct ContentView: View {
             ZStack {
                 MapView(
                     locationManager: locationManager,
-                    coffeeShops: $coffeeShops,
-                    selectedCoffeeShop: $selectedCoffeeShop,
+                    coffeeShops: $contentVM.coffeeShops,
+                    selectedCoffeeShop: $contentVM.selectedCoffeeShop,
                     centeredOnUser: $centeredOnUser,
                     mapView: $mapView,
                     userHasMoved: $userHasMoved,
@@ -72,7 +69,7 @@ struct ContentView: View {
                     showUserLocationButton: $showUserLocationButton,
                     isAnnotationSelected: $isAnnotationSelected,
                     mapTapped: $mapTapped,
-                    showBrewPreview: $showBrewPreview,
+                    showBrewPreview: $contentVM.showBrewPreview,
                     searchedLocation: $searchedLocation,
                     searchQuery: $searchQuery
                     
@@ -89,7 +86,7 @@ struct ContentView: View {
                 GeometryReader { geo in
                     Button(action: {
                         if userCredits > 0 {
-                            fetchCoffeeShops()
+                            contentVM.fetchCoffeeShops(using: nil)
                             userCredits -= 1
                         } else {
                             showNoCreditsAlert = true
@@ -130,14 +127,14 @@ struct ContentView: View {
             }
             
             //MARK: ALERTS
-            .alert(isPresented: $showNoAdsAvailableAlert) {
+            .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
                 Alert(
                     title: Text("No Ads Available"),
                     message: Text("There are currently no ads available. Please try again later."),
                     dismissButton: .default(Text("OK"))
                 )
             }
-            .alert(isPresented: $showNoCoffeeShopsAlert) {
+            .alert(isPresented: $contentVM.showNoCoffeeShopsAlert) {
                 Alert(
                     title: Text("No Coffee Shops Found"),
                     message: Text("We could not find any coffee shops in your area."),
@@ -222,11 +219,11 @@ struct ContentView: View {
                 ScrollView {
                     Divider()
                     
-                    if selectedCoffeeShop != nil && showBrewPreview {
+                    if contentVM.selectedCoffeeShop != nil && contentVM.showBrewPreview {
                         
                         HStack() {
                             GeometryReader { geo in
-                                Text("\(coffeeShops.count) Cafes In Map")
+                                Text("\(contentVM.coffeeShops.count) Cafes In Map")
                                     .padding(.horizontal, geo.size.width*0.07)
                             }
                                 Spacer()
@@ -234,9 +231,9 @@ struct ContentView: View {
        
                         }
                         
-                        BrewPreviewList(coffeeShops: $coffeeShops,
-                                        selectedCoffeeShop: $selectedCoffeeShop,
-                                        showBrewPreview: $showBrewPreview)
+                        BrewPreviewList(coffeeShops: $contentVM.coffeeShops,
+                                        selectedCoffeeShop: $contentVM.selectedCoffeeShop,
+                                        showBrewPreview: $contentVM.showBrewPreview)
                     }
                     AdBannerView()
                         .frame(width: 320, height: 50)
@@ -296,7 +293,7 @@ struct ContentView: View {
                 Text("Map")
             }
             
-            FavoritesView(showPreview: $showBrewPreview)
+            FavoritesView(showPreview: $contentVM.showBrewPreview)
                 .tabItem {
                     Image(systemName: "star.fill")
                     Text("Favorites")
@@ -305,37 +302,6 @@ struct ContentView: View {
     }
     
     
-    // MARK: FUNCTIONS
-    private func fetchCoffeeShops() {
-        guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
-            showAlert = true
-            return
-        }
-        let selectedRadius = CLLocationDistance(yelpParams.radiusInMeters) // Using the selected radius
-        
-        
-        if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
-            self.coffeeShops = cachedCoffeeShops
-            self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
-            showBrewPreview = true
-        } else {
-            let yelpAPI = YelpAPI()
-            yelpAPI.fetchIndependentCoffeeShops(
-                latitude: centerCoordinate.latitude,
-                longitude: centerCoordinate.longitude,
-                radius: Int(selectedRadius) // Using the selected radius
-            ) { coffeeShops in
-                if coffeeShops.isEmpty {
-                    self.showNoCoffeeShopsAlert = true
-                } else {
-                    self.coffeeShops = coffeeShops
-                    self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
-                    showBrewPreview = true
-                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
-                }
-            }
-        }
-    }
     
     // Function to search for a location by address
     func searchLocation(for address: String) {
@@ -361,13 +327,13 @@ struct ContentView: View {
     }
     
     
-    private func handleRewardAd() {
-        if let viewController = rootViewController {
-            rewardAd.present(from: viewController)
-            userCredits += 1
-        } else {
-            // If there is no root view controller available, show an alert
-            showNoAdsAvailableAlert = true
-        }
-    }
+//    private func handleRewardAd() {
+//        if let viewController = rootViewController {
+//            rewardAd.present(from: viewController)
+//            userCredits += 1
+//        } else {
+//            // If there is no root view controller available, show an alert
+//            showNoAdsAvailableAlert = true
+//        }
+//    }
 }

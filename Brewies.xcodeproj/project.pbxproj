@@ -14,7 +14,6 @@
 		FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */; };
 		FF1B5F2C2A2FFAE7000B6D6F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */; };
 		FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2F263B2A256EB5000D922E /* Date+Extension.swift */; };
-		FF305D542A4CE6BB0041544F /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF305D532A4CE6BB0041544F /* ContentViewModel.swift */; };
 		FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */; };
 		FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29329EA0D2300510FCD /* ContentView.swift */; };
 		FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29529EA0D2600510FCD /* Assets.xcassets */; };
@@ -29,6 +28,7 @@
 		FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2CE29EA11E700510FCD /* MapView.swift */; };
 		FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2D229EA183900510FCD /* Secrets.swift */; };
 		FF3FF2D529EA1C0300510FCD /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF2D429EA1C0300510FCD /* readme.md */; };
+		FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */; };
 		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CC92A4624C5003894D9 /* FiltersView.swift */; };
@@ -75,7 +75,6 @@
 		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
 		FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpResponse.swift; sourceTree = "<group>"; };
 		FF2F263B2A256EB5000D922E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		FF305D532A4CE6BB0041544F /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		FF3FF28E29EA0D2300510FCD /* Brewies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brewies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesApp.swift; sourceTree = "<group>"; };
 		FF3FF29329EA0D2300510FCD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -94,6 +93,7 @@
 		FF3FF2CE29EA11E700510FCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		FF3FF2D229EA183900510FCD /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
 		FF5A6CC92A4624C5003894D9 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleButton.swift; sourceTree = "<group>"; };
@@ -236,7 +236,7 @@
 				FF5BC28B2A4521CD00759BFA /* Networking */,
 				FF8E43812A33CE5300CEC800 /* Coordinators */,
 				FFB360D52A26D5730099017F /* Monetization */,
-				FF305D532A4CE6BB0041544F /* ContentViewModel.swift */,
+				FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -523,7 +523,7 @@
 				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
 				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
 				FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */,
-				FF305D542A4CE6BB0041544F /* ContentViewModel.swift in Sources */,
+				FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */,
 				FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */,
 				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,
 				FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */,

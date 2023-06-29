@@ -36,7 +36,7 @@ class YelpAPI {
         "Mugg & Bean", "Illy Caffè", "Robin's Donuts", "The Coffee House", "Café Café",
         "Cofix", "Aroma Espresso Bar", "Coffee Fellows", "Wayne's Coffee", "Jamaica Blue",
         "Esquires", "Coffee Republic", "Coffine Gurunaru", "Pacific Coffee", "Caffè Ritazza",
-        "Baker's Dozen Donuts", "Coffee Time", "Coffee World", "Muzz Buzz", "%Arabica",
+        "Baker's Dozen Donuts", "Coffee Time", "Coffee World", "Muzz Buzz", "Arabica",
         "Paul Bassett", "Bo's Coffee", "Zarraffas Coffee", "Blue Bottle Coffee", "Philz Coffee",
         "Hudsons Coffee", "Java House", "Vida e Caffè", "Blenz Coffee", "Dôme", "Coffee#1",
         "Figaro Coffee", "Cafe Barbera", "AMT Coffee", "Ya Kun Kaya Toast", "Drunkin'", "Krispy Kreme Doughnuts"
@@ -50,7 +50,7 @@ class YelpAPI {
                                                            "salad","newamerican","breakfast_brunch"
     ]
     
-    func fetchIndependentCoffeeShops(
+    func fetchIndependentCoffeeShops (
         term: String = "coffee shop",
         latitude: Double,
         longitude: Double,
@@ -73,13 +73,15 @@ class YelpAPI {
         ]
         
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
+            print(response)
             switch response.result {
             case .success(let yelpResponse):
-                print(yelpResponse)
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
                 completion(coffeeShops)
+                
             case .failure(let error):
                 print("Error fetching coffee shops: \(error.localizedDescription)")
+                print("Full response: \(response)")
                 completion([])
             }
         }
