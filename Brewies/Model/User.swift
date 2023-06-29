@@ -16,6 +16,7 @@ class User: ObservableObject {
     @Published var firstName: String
     @Published var lastName: String
     @Published var email: String
+    @Published var isSubscribed: Bool
     @Published var profileImage: Image?
     @Published var favorites: [CoffeeShop] = []
     @Published var pastOrders: [Order] = []
@@ -26,7 +27,7 @@ class User: ObservableObject {
         }
      
     
-    @Published var isSubscribed: Bool  
+
     
     init(isLoggedIn: Bool = false, userID: String = "", firstName: String = "", lastName: String = "", email: String = "", profileImage: Image? = nil, isSubscribed: Bool = false) {
          self.isLoggedIn = isLoggedIn
@@ -50,6 +51,7 @@ class User: ObservableObject {
      }
  }
 
+//This will be used in a later date 
 struct Order: Identifiable, Codable {
     let id: String
     let coffeeShop: CoffeeShop
