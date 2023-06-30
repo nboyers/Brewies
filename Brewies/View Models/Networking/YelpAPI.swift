@@ -47,20 +47,22 @@ class YelpAPI {
                                                            "donuts","caribbean","seafood",
                                                            "irish_pubs", "sandwiches","tradamerican",
                                                            "italian","desserts","vapeshops",
-                                                           "salad","newamerican","breakfast_brunch"
+                                                           "salad","newamerican","breakfast_brunch","icecream",
+                                                           "grocery","intlgrocery"
     ]
     
     func fetchIndependentCoffeeShops (
         term: String = "coffee shop",
         latitude: Double,
         longitude: Double,
-        radius: Int = 7000,
+        radius: Int = 5000,
         categories: String = "localcoffeeshop",
-        sort_by: String = "distance",
+        sort_by: String = "best_match",
+        pricing: [Int]? = nil,
         completion: @escaping ([CoffeeShop]) -> Void
     ) {
         let url = "https://api.yelp.com/v3/businesses/search"
-        let parameters: [String: Any] = [
+        var parameters: [String: Any] = [
             "term": term,
             "latitude": latitude,
             "longitude": longitude,
@@ -68,6 +70,12 @@ class YelpAPI {
             "categories": categories,
             "sort_by": sort_by
         ]
+        
+        if let pricing = pricing {
+            let priceParameter = pricing.map { String($0) }.joined(separator: ",")
+            parameters["price"] = priceParameter
+        }
+
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(apiKey)"
         ]
@@ -78,14 +86,13 @@ class YelpAPI {
             case .success(let yelpResponse):
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
                 completion(coffeeShops)
-                
             case .failure(let error):
                 print("Error fetching coffee shops: \(error.localizedDescription)")
-                print("Full response: \(response)")
                 completion([])
             }
         }
     }
+
     
     private func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
         var coffeeShops: [CoffeeShop] = []
@@ -108,7 +115,8 @@ class YelpAPI {
                 url: business.url,
                 transactions: business.transactions,
                 hours:  business.hours,
-                isClosed: business.isClosed
+                isClosed: business.isClosed,
+                price: business.price
             )
             if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
                 coffeeShop.isFavorite = true
@@ -139,6 +147,7 @@ class YelpAPI {
         for chain in chainCompanyNames {
             if name.lowercased().contains(chain.lowercased()) { return true }
         }
+        
         for category in categories {
             if undesiredCatagories.contains(category.alias) { return true }
         }

@@ -30,6 +30,7 @@ struct CoffeeShop: Identifiable, Equatable, Codable, Hashable {
     let isClosed: Bool
     var isFavorite: Bool? = false
     var lastAccessDate: Date? = Date()
+    var price: String?
     
     var address: String {
         return "\(address1 ?? ""), \(city), \(state) \(zipCode ?? "")"

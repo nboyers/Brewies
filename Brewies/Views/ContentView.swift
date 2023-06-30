@@ -13,14 +13,14 @@ import AuthenticationServices
 import Introspect
 
 struct ContentView: View {
-    @ObservedObject private var locationManager = LocationManager()
+//    @ObservedObject private var locationManager = LocationManager()
     @ObservedObject private var contentVM = ContentViewModel()
     
     @StateObject var user = User()
     @ObservedObject var yelpParams =  YelpSearchParams()
     
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
-    
+    @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     
     private var rewardAds = RewardAdController()
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
@@ -38,17 +38,17 @@ struct ContentView: View {
     @State private var showNoCreditsAlert = false
     @State private var showingUserProfile = false
     @State private var showingFilterView = false
-    
+    @State private var shouldSearchInArea = false
     
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var selectedRadiusIndex: Int = 0 // Default index to 0
     private let radiusOptions = [8047, 16093, 24140, 32186] // Radius in meters
     
     @State private var searchQuery: String = ""
-    @State private var searchResults: [MKMapItem] = []
+//    @State private var searchResults: [MKMapItem] = []
     @State private var isSearching = false
     @FocusState var isInputActive: Bool
-    
+
     private var rewardAd = RewardAdController()
     let DISTANCE = CLLocationDistance(2500)
     
@@ -59,7 +59,7 @@ struct ContentView: View {
         TabView {
             ZStack {
                 MapView(
-                    locationManager: locationManager,
+                    locationManager: contentVM.locationManager,
                     coffeeShops: $contentVM.coffeeShops,
                     selectedCoffeeShop: $contentVM.selectedCoffeeShop,
                     centeredOnUser: $centeredOnUser,
@@ -71,12 +71,13 @@ struct ContentView: View {
                     mapTapped: $mapTapped,
                     showBrewPreview: $contentVM.showBrewPreview,
                     searchedLocation: $searchedLocation,
-                    searchQuery: $searchQuery
-                    
+                    searchQuery: $searchQuery,
+                    shouldSearchInArea: $shouldSearchInArea
                 )
                 .onAppear {
-                    locationManager.requestLocationAccess()
-                        rewardAd.requestIDFA()
+                    contentVM.locationManager.requestLocationAccess()
+                    rewardAd.requestIDFA()
+                    print(contentVM.coffeeShops)
                 }
                 .sheet(isPresented: $showingFilterView) {
                     FiltersView(yelpParams: yelpParams)
@@ -86,13 +87,12 @@ struct ContentView: View {
                 GeometryReader { geo in
                     Button(action: {
                         if userCredits > 0 {
-                            contentVM.fetchCoffeeShops(using: nil)
+                            contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
+                        
                             userCredits -= 1
                         } else {
                             showNoCreditsAlert = true
-                            
                         }
-                        
                     }) {
                         Text("Search this area")
                             .font(.system(size: 20, weight: .bold))

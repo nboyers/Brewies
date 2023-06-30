@@ -19,19 +19,17 @@ class ContentViewModel: ObservableObject {
     @Published var searchQuery: String = ""
     @Published var showNoCoffeeShopsAlert = false
     @Published var showNoAdsAvailableAlert = false
+
     
-    @ObservedObject private var locationManager = LocationManager()
+    @ObservedObject var locationManager = LocationManager()
     
-    var visibleRegionCenter: CLLocationCoordinate2D?
-    
-    
-    func fetchCoffeeShops(using: YelpSearchParams?) {
+    func fetchCoffeeShops(using: YelpSearchParams?, visibleRegionCenter: CLLocationCoordinate2D?) {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
             return
         }
         
-        let selectedRadius = CLLocationDistance(using?.radiusInMeters ?? 4828) // Free gets 3 mile radius
+        let selectedRadius = CLLocationDistance(using?.radiusInMeters ?? 5000) // Free gets 3 mile radius
         
         if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
             self.coffeeShops = cachedCoffeeShops
@@ -43,7 +41,8 @@ class ContentViewModel: ObservableObject {
                 latitude: centerCoordinate.latitude,
                 longitude: centerCoordinate.longitude,
                 radius: Int(selectedRadius),
-                sort_by: using?.sortBy ?? "best_match"
+                sort_by: using?.sortBy ?? "best_match",
+                pricing: using?.priceForAPI
             ) { coffeeShops in
                 if coffeeShops.isEmpty {
                     self.showNoCoffeeShopsAlert = true

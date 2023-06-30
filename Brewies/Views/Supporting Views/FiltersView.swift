@@ -14,6 +14,7 @@ class YelpSearchParams: ObservableObject {
     @Published var businessType: String = ""
     @Published var sortBy: String = ""
     @Published var price: [String] = []
+    @Published var priceForAPI: [Int] = []
     
     func resetFilters() {
         self.radiusInMeters = 8047 // reset to 5 miles
@@ -38,7 +39,7 @@ struct FiltersView: View {
     @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186]
     @State private var selectedBrew = ""
     @State private var initialState: [String: Any] = [:]
-    
+   
     
     let sortOptions = ["Recommended", "Distance", "Rating", "Review"]
     let apiSortOptions: [String: String] = ["Recommended": "best_match", "Distance": "distance", "Rating": "rating", "Review": "review_count"]
@@ -47,11 +48,11 @@ struct FiltersView: View {
     
     private func changesCount() -> Int {
         var changesCount = 0
-        if let initialPrice = initialState["price"] as? [String] {
-            let addedPrice = yelpParams.price.filter { !initialPrice.contains($0) }
-            let removedPrice = initialPrice.filter { !yelpParams.price.contains($0) }
-            changesCount += addedPrice.count + removedPrice.count
-        }
+        if let initialPrice = initialState["price"] as? [Int] { // Notice the change here
+               let addedPrice = yelpParams.priceForAPI.filter { !initialPrice.contains($0) }
+               let removedPrice = initialPrice.filter { !yelpParams.priceForAPI.contains($0) }
+               changesCount += addedPrice.count + removedPrice.count
+           }
         if initialState["sortBy"] as? String != yelpParams.sortBy { changesCount += 1 }
         if initialState["radiusInMeters"] as? Int != yelpParams.radiusInMeters { changesCount += 1 }
         if initialState["businessType"] as? String != yelpParams.businessType {changesCount += 1 }
@@ -68,13 +69,16 @@ struct FiltersView: View {
     
     private func priceButtonAction(price: String) {
         if let index = yelpParams.price.firstIndex(of: price) {
-            // If price is already selected, remove it from the array
+            // If price is already selected, remove it from both the price arrays
             yelpParams.price.remove(at: index)
+            yelpParams.priceForAPI.remove(at: index)
         } else {
-            // If price is not selected, add it to the array
+            // If price is not selected, add it to both the price arrays
             yelpParams.price.append(price)
+            yelpParams.priceForAPI.append(price.count)
         }
     }
+
     
     
     var body: some View {
@@ -256,7 +260,10 @@ struct FiltersView: View {
                     updateInitialState()
                     
                     // Make API Call
-                    contentVM.fetchCoffeeShops(using: yelpParams)
+                    contentVM.fetchCoffeeShops(using: yelpParams, visibleRegionCenter: nil)
+                    
+                    //Reset back to default
+                    yelpParams.resetFilters()
                     
                     //Close View
                     self.presentationMode.wrappedValue.dismiss()

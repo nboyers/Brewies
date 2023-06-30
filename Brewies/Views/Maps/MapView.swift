@@ -31,6 +31,7 @@ struct MapView: UIViewRepresentable {
     @Binding var showBrewPreview: Bool
     @Binding var searchedLocation: CLLocationCoordinate2D?
     @Binding var searchQuery: String
+    @Binding var shouldSearchInArea: Bool
     
     let DISTANCE = CLLocationDistance(2500)
     
@@ -84,10 +85,11 @@ struct MapView: UIViewRepresentable {
             annotation.title = searchQuery
             DispatchQueue.main.async {
                 mapView.addAnnotation(annotation)
-                self.setRegion(to: searchedLocation, on: mapView)
+                self.setRegion?(MKCoordinateRegion(center: searchedLocation, latitudinalMeters: DISTANCE, longitudinalMeters: DISTANCE)) // Update here
                 self.searchedLocation = nil // Reset to allow for new searches
             }
         }
+        
         
         
         
@@ -149,21 +151,20 @@ struct MapView: UIViewRepresentable {
             self.parent = parent
         }
         
-        // Handles the tap gesture on the map
         @objc func mapTapped() {
             parent.mapTapped = true
         }
         
-        // Updates the visible region of the map and related properties
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
             parent.visibleRegionCenter = mapView.centerCoordinate
             let userLocation = parent.locationManager.userLocation?.coordinate
             let distanceFromUser = mapView.centerCoordinate.distance(from: userLocation)
             parent.userHasMoved = distanceFromUser > parent.DISTANCE / 2
             parent.showUserLocationButton = parent.userHasMoved
+            // Signal that the user has moved the map and might want to search in this area
+            parent.shouldSearchInArea = true
         }
         
-        // Handles the selection of an annotation on the map
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
             if let coffeeShop = parent.coffeeShops.first(where: { $0.latitude == view.annotation?.coordinate.latitude && $0.longitude == view.annotation?.coordinate.longitude }) {
                 parent.selectedCoffeeShop = coffeeShop

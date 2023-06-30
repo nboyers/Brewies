@@ -205,20 +205,17 @@ struct BrewDetailView: View {
                             
                             
                             VStack(alignment: .leading) {
-//                                //MARK: Hours are currently out of Service
-//                                HStack(alignment: .firstTextBaseline){
-//                                    VStack(alignment: .leading) {
-//                                        Text("\(coffeeShop.name) is: ")
-//                                        Text(coffeeShop.hours?.first?.isOpenNow ?? false ? "open" : "closed")
-//                                            .bold()
-//                                            .foregroundColor(coffeeShop.hours?.first?.isOpenNow ?? false ? .green : .red)
-//                                    }
-//                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-//                                    .fixedSize(horizontal: false, vertical: true)
-//                                    .lineLimit(2)
-//                                    .padding()
-//                                    Spacer()
-//                                }
+                                //MARK: Hours are currently out of Service
+                                HStack(alignment: .firstTextBaseline){
+                                    VStack(alignment: .leading) {
+                                        Text("Price \(coffeeShop.price ?? "is not listed")")
+                                    }
+                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .padding()
+                                    Spacer()
+                                }
     
                                 Divider()
                                 
