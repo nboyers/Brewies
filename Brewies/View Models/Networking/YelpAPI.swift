@@ -42,13 +42,14 @@ class YelpAPI {
         "Figaro Coffee", "Cafe Barbera", "AMT Coffee", "Ya Kun Kaya Toast", "Drunkin'", "Krispy Kreme Doughnuts"
         ,"Joffrey’s Coffee & Tea Company", "Mega Play", "RaceTrac", "Speedway", "Gas station", "IHOP", "Sheetz", "Ciro's Pizza", "Waffle House","Peet's Coffee"
     ]
-    private lazy var undesiredCatagories : Set<String> = [ "wine_bars", "bars", "pizza",
-                                                           "servicestations","hotdogs","burgers",
-                                                           "donuts","caribbean","seafood",
-                                                           "irish_pubs", "sandwiches","tradamerican",
-                                                           "italian","desserts","vapeshops",
-                                                           "salad","newamerican","breakfast_brunch","icecream",
-                                                           "grocery","intlgrocery"
+    private lazy var undesiredCatagories : Set<String> = [
+        "wine_bars", "bars", "pizza",
+        "servicestations","hotdogs","burgers",
+        "donuts","caribbean","seafood",
+        "irish_pubs", "sandwiches","tradamerican",
+        "italian","desserts","vapeshops",
+        "salad","newamerican","breakfast_brunch","icecream",
+        "grocery","intlgrocery"
     ]
     
     func fetchIndependentCoffeeShops (
@@ -56,8 +57,8 @@ class YelpAPI {
         latitude: Double,
         longitude: Double,
         radius: Int = 5000,
-        categories: String = "localcoffeeshop",
-        sort_by: String = "best_match",
+        categories: String = "coffeeshop",
+        sort_by: String = "distance",
         pricing: [Int]? = nil,
         completion: @escaping ([CoffeeShop]) -> Void
     ) {
@@ -75,7 +76,7 @@ class YelpAPI {
             let priceParameter = pricing.map { String($0) }.joined(separator: ",")
             parameters["price"] = priceParameter
         }
-
+        
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(apiKey)"
         ]
@@ -92,7 +93,7 @@ class YelpAPI {
             }
         }
     }
-
+    
     
     private func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
         var coffeeShops: [CoffeeShop] = []

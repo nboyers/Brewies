@@ -7,21 +7,23 @@
 
 
 import SwiftUI
+import MapKit
 
 class YelpSearchParams: ObservableObject {
-    @Published var radiusInMeters: Int = 8047 // start with 5 miles in meters
+    @Published var radiusInMeters: Int = 5000 // start with 5 miles in meters
     @Published var radiusUnit: String = "mi" // Default unit is miles now
-    @Published var businessType: String = ""
-    @Published var sortBy: String = ""
+    @Published var businessType: String = "coffeeshop"
+    @Published var sortBy: String = "distance"
     @Published var price: [String] = []
     @Published var priceForAPI: [Int] = []
     
     func resetFilters() {
-        self.radiusInMeters = 8047 // reset to 5 miles
+        self.radiusInMeters = 5000 // reset to 5 miles
         self.radiusUnit = "mi"
         self.businessType = ""
-        self.sortBy = ""
+        self.sortBy = "distance"
         self.price = []
+        
     }
 }
 
@@ -32,6 +34,7 @@ struct FiltersView: View {
     @ObservedObject var yelpParams: YelpSearchParams
     @EnvironmentObject var user: User
     @ObservedObject private var contentVM = ContentViewModel()
+    @State private var featureLocked: Bool = true
     
     @State private var applyChangesCount: Int = 0
     @State private var selectedSort: String = ""
@@ -39,7 +42,7 @@ struct FiltersView: View {
     @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186]
     @State private var selectedBrew = ""
     @State private var initialState: [String: Any] = [:]
-   
+    var visibleRegionCenter: CLLocationCoordinate2D?
     
     let sortOptions = ["Recommended", "Distance", "Rating", "Review"]
     let apiSortOptions: [String: String] = ["Recommended": "best_match", "Distance": "distance", "Rating": "rating", "Review": "review_count"]
@@ -49,10 +52,10 @@ struct FiltersView: View {
     private func changesCount() -> Int {
         var changesCount = 0
         if let initialPrice = initialState["price"] as? [Int] { // Notice the change here
-               let addedPrice = yelpParams.priceForAPI.filter { !initialPrice.contains($0) }
-               let removedPrice = initialPrice.filter { !yelpParams.priceForAPI.contains($0) }
-               changesCount += addedPrice.count + removedPrice.count
-           }
+            let addedPrice = yelpParams.priceForAPI.filter { !initialPrice.contains($0) }
+            let removedPrice = initialPrice.filter { !yelpParams.priceForAPI.contains($0) }
+            changesCount += addedPrice.count + removedPrice.count
+        }
         if initialState["sortBy"] as? String != yelpParams.sortBy { changesCount += 1 }
         if initialState["radiusInMeters"] as? Int != yelpParams.radiusInMeters { changesCount += 1 }
         if initialState["businessType"] as? String != yelpParams.businessType {changesCount += 1 }
@@ -78,7 +81,7 @@ struct FiltersView: View {
             yelpParams.priceForAPI.append(price.count)
         }
     }
-
+    
     
     
     var body: some View {
@@ -112,6 +115,7 @@ struct FiltersView: View {
                     // Also reset the UI
                     selectedSort = ""
                     selectedBrew = ""
+                    
                     // Update the initial state to match the reset parameters
                     updateInitialState()
                     
@@ -123,6 +127,7 @@ struct FiltersView: View {
                         .foregroundColor(.teal)
                 }
             }
+            
             Divider()
             ScrollView {
                 VStack(alignment: .leading) {
@@ -148,7 +153,7 @@ struct FiltersView: View {
                                     )
                                     .font(.body)
                                 
-                            }
+                            }.disabled(featureLocked)
                         }.padding(.vertical)
                         Spacer()
                     }
@@ -179,7 +184,7 @@ struct FiltersView: View {
                                 
                             }.padding(.horizontal)
                         }
-                    }
+                    }.disabled(featureLocked)
                     Divider()
                     
                     VStack(alignment: .leading) {
@@ -203,53 +208,70 @@ struct FiltersView: View {
                             }
                         ), label: { Text(yelpParams.radiusUnit == "km" ? "Metric" : "Imperial") })
                         .padding(.horizontal)
-                    }
+                    }.disabled(featureLocked)
                     
                     
-                    VStack(alignment: .leading) {
-                        Divider()
-                        //MARK: Brew Type
-                        Text("Business Category")
-                            .font(.title2)
-                            .bold()
-                            .padding(.horizontal)
-                        VStack(alignment: .leading) {
-                            ForEach(brewType, id: \.self) { brewOption in
-                                HStack {
-                                    Text(brewOption)
-                                        .font(.body)
-                                    Spacer()
-                                    Button(action: {
-                                        selectedBrew = brewOption
-                                        yelpParams.businessType = selectedBrew
-                                    }) {
-                                        Circle()
-                                            .frame(width: 24, height: 24)
-                                            .foregroundColor(selectedBrew == brewOption ? .blue : .clear)
-                                            .overlay(
-                                                Capsule()
-                                                    .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedBrew == brewOption ? 0 : 1)
-                                            )
+                    VStack {
+                        ZStack {
+                            VStack(alignment: .leading) {
+                                Divider()
+                                //MARK: Brew Type
+                                Text("Business Category")
+                                    .font(.title2)
+                                    .bold()
+                                    .padding(.horizontal)
+                                VStack(alignment: .leading) {
+                                    ForEach(brewType, id: \.self) { brewOption in
+                                        HStack {
+                                            Text(brewOption)
+                                                .font(.body)
+                                            Spacer()
+                                            Button(action: {
+                                                selectedBrew = brewOption
+                                                yelpParams.businessType = selectedBrew
+                                            }) {
+                                                Circle()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(selectedBrew == brewOption ? .blue : .clear)
+                                                    .overlay(
+                                                        Capsule()
+                                                            .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedBrew == brewOption ? 0 : 1)
+                                                    )
+                                            }
+                                        }
+                                        .padding(.horizontal)
                                     }
                                 }
-                                .padding(.horizontal)
                             }
+                            .disabled(true)
+                            .opacity(0.5) // This lowers the opacity, making it appear more "disabled"
+                            Spacer()
+                            Image(systemName: "lock.fill") // This overlays a lock icon
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 75, height: 75)
+                                .foregroundColor(.gray)
+                                .opacity(0.5) // This makes the lock icon semi-transparent
                         }
                     }
-                    .padding(.bottom)
-                    .onAppear {
-                        initialState["radiusInMeters"] = yelpParams.radiusInMeters
-                        initialState["radiusUnit"] = yelpParams.radiusUnit
-                        initialState["businessType"] = yelpParams.businessType
-                        initialState["sortBy"] = yelpParams.sortBy
-                        initialState["price"] = yelpParams.price
-                    }
+                    .disabled(featureLocked)
+                    
+                    
+                    
+                        .onAppear {
+                            initialState["radiusInMeters"] = yelpParams.radiusInMeters
+                            initialState["radiusUnit"] = yelpParams.radiusUnit
+                            initialState["businessType"] = yelpParams.businessType
+                            initialState["sortBy"] = yelpParams.sortBy
+                            initialState["price"] = yelpParams.price
+                        }
                 }
             }
-            .onAppear {
-                updateInitialState()
-            }
+            //            .onAppear {
+            //                updateInitialState()
+            //            }
         }
+        
         HStack(alignment: .center) {
             Spacer()
                 .frame(width: 25)
@@ -260,26 +282,37 @@ struct FiltersView: View {
                     updateInitialState()
                     
                     // Make API Call
-                    contentVM.fetchCoffeeShops(using: yelpParams, visibleRegionCenter: nil)
+                    contentVM.fetchCoffeeShops(using: yelpParams, visibleRegionCenter: visibleRegionCenter)
                     
                     //Reset back to default
                     yelpParams.resetFilters()
                     
+                    // Apply changes
+                    updateInitialState()
+                    
+                    //Reset Change counter
+                    applyChangesCount = 0
                     //Close View
-                    self.presentationMode.wrappedValue.dismiss()
+                    if applyChangesCount == 0 {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
                 }) {
-                    let changesCount = self.changesCount()
-                    Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
+                    Text("Featuress currently unavailable")
                         .frame(width: geo.size.width, height: 50)
                         .background(.red)
                         .foregroundColor(.white)
+                    //                    let changesCount = self.changesCount()
+                    //                    Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
+                    //                        .frame(width: geo.size.width, height: 50)
+                    //                        .background(.red)
+                    //                        .foregroundColor(.white)
                 }
-
+                
                 .cornerRadius(15)
             }
             Spacer()
                 .frame(width: 25)
-        }
-        .frame(maxHeight: 75)
+        }.disabled(featureLocked)
+            .frame(maxHeight: 75)
     }
 }

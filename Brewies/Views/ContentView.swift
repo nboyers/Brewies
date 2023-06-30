@@ -26,7 +26,7 @@ struct ContentView: View {
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
 
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
-    @State private var userCredits: Int = 10
+//    @State private var userCredits: Int = 10
     @State private var mapView = MKMapView()
     @State private var showAlert = false
     @State private var centeredOnUser = false
@@ -79,20 +79,16 @@ struct ContentView: View {
                     rewardAd.requestIDFA()
                     print(contentVM.coffeeShops)
                 }
+                
                 .sheet(isPresented: $showingFilterView) {
-                    FiltersView(yelpParams: yelpParams)
+                    FiltersView(yelpParams: yelpParams, visibleRegionCenter: visibleRegionCenter)
                         .environmentObject(user)
                 }
                 
                 GeometryReader { geo in
                     Button(action: {
-                        if userCredits > 0 {
-                            contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
-                        
-                            userCredits -= 1
-                        } else {
-                            showNoCreditsAlert = true
-                        }
+                        contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
+                       
                     }) {
                         Text("Search this area")
                             .font(.system(size: 20, weight: .bold))

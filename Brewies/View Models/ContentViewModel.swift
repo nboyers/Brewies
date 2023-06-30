@@ -19,7 +19,7 @@ class ContentViewModel: ObservableObject {
     @Published var searchQuery: String = ""
     @Published var showNoCoffeeShopsAlert = false
     @Published var showNoAdsAvailableAlert = false
-
+    @Published var  showNoCreditsAlert = false
     
     @ObservedObject var locationManager = LocationManager()
     
@@ -36,21 +36,24 @@ class ContentViewModel: ObservableObject {
             self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
             showBrewPreview = true
         } else {
+            deductUserCredit()
             let yelpAPI = YelpAPI()
             yelpAPI.fetchIndependentCoffeeShops (
                 latitude: centerCoordinate.latitude,
                 longitude: centerCoordinate.longitude,
                 radius: Int(selectedRadius),
-                sort_by: using?.sortBy ?? "best_match",
-                pricing: using?.priceForAPI
-            ) { coffeeShops in
+                sort_by: using?.sortBy ?? "distance",
+                pricing: using?.priceForAPI ?? nil
+            ){ [self] coffeeShops in
                 if coffeeShops.isEmpty {
                     self.showNoCoffeeShopsAlert = true
                 } else {
+                    print("\(String(describing: coffeeShops.first?.name))")
                     self.coffeeShops = coffeeShops
-                    self.selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
-                    self.showBrewPreview = true
-                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
+                    selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
+                    showBrewPreview = true
+                    
+                    //                    UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
                 }
             }
         }
@@ -62,7 +65,7 @@ class ContentViewModel: ObservableObject {
         if userCredits > 0 {
             userCredits -= 1
         } else {
-            showAlert = true
+            showNoCreditsAlert = true
         }
     }
 }
