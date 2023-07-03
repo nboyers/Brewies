@@ -9,26 +9,35 @@ import SwiftUI
 
 struct UserProfileView: View {
     @ObservedObject var user: User
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         VStack {
-            // Since firstName and lastName are not optionals, we don't need to check them with `if let`
-            Text("Name: \(user.firstName) \(user.lastName)")
-            
-            Button(action: {
-                // Code to sign out the user
-            }) {
-                Text("Sign Out")
-                    .font(.headline)
-                    .padding()
-                    .background(Color.red)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
+            VStack {
+                GeometryReader { geo in
+                    HStack {
+                        Text("\(user.firstName) \(user.lastName)")
+                            .lineLimit(1)
+                            .padding(.horizontal)
+                        
+                        Spacer()
+                            .frame(width: geo.size.width*0.75)
+                        
+                        Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "x.circle.fill")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.primary)
+                        }
+                        Spacer()
+                    }
+                    .padding([.top, .horizontal], 20)
+                }
+                Divider()
             }
-            .padding(.top, 50)
-            
             Spacer()
         }
-        .padding()
     }
 }

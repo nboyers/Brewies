@@ -13,10 +13,11 @@ import AuthenticationServices
 import Introspect
 
 struct ContentView: View {
-//    @ObservedObject private var locationManager = LocationManager()
+    //    @ObservedObject private var locationManager = LocationManager()
     @ObservedObject private var contentVM = ContentViewModel()
     
-    @StateObject var user = User()
+    @StateObject var user = User.shared
+    
     @ObservedObject var yelpParams =  YelpSearchParams()
     
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
@@ -24,11 +25,11 @@ struct ContentView: View {
     
     private var rewardAds = RewardAdController()
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
-
+    
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
-//    @State private var userCredits: Int = 10
     @State private var mapView = MKMapView()
     @State private var showAlert = false
+    
     @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
@@ -39,16 +40,17 @@ struct ContentView: View {
     @State private var showingUserProfile = false
     @State private var showingFilterView = false
     @State private var shouldSearchInArea = false
+    @State private var showSignUpWithApple = false
     
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var selectedRadiusIndex: Int = 0 // Default index to 0
     private let radiusOptions = [8047, 16093, 24140, 32186] // Radius in meters
     
     @State private var searchQuery: String = ""
-//    @State private var searchResults: [MKMapItem] = []
+    //    @State private var searchResults: [MKMapItem] = []
     @State private var isSearching = false
     @FocusState var isInputActive: Bool
-
+    
     private var rewardAd = RewardAdController()
     let DISTANCE = CLLocationDistance(2500)
     
@@ -86,21 +88,42 @@ struct ContentView: View {
                 }
                 
                 GeometryReader { geo in
-                    Button(action: {
-                        contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
-                       
-                    }) {
-                        Text("Search this area")
-                            .font(.system(size: 20, weight: .bold))
-                            .frame(width: geo.size.width/2.5, height: geo.size.width/50)
-                            .padding()
-                            .font(.title3)
-                            .foregroundColor(.black)
-                            .background(.white)
+                    VStack {
+                        Button(action: {
+                            // Check if the user has enough credits to perform a search
+                            if user.credits > 0 {
+                                // Deduct one credit
+                                user.credits -= 1
+                                
+                                // Perform the search
+                                contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
+                            } else {
+                                // If the user does not have enough credits, display an alert
+                                showNoCreditsAlert = true
+                            }
+                        }) {
+                            Text("Search this area")
+                                .font(.system(size: 20, weight: .bold))
+                                .frame(width: geo.size.width/2.5, height: geo.size.width/50)
+                                .padding()
+                                .font(.title3)
+                                .foregroundColor(.black)
+                                .background(.white)
+                        }.cornerRadius(10)
+                            .shadow(radius: 50)
+                        
+                        
+                        Text("Credits: \(user.credits)")
+                            .padding(10)
+                            .frame(width: geo.size.width/3.5, height: geo.size.width/20)
+                            .background(.black)
+                            .font(.caption)
+                            .foregroundColor(Color.cyan)
+                            .cornerRadius(10)
+                            .shadow(radius: 50)
+                        
                     }
-                    .cornerRadius(10)
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
-                    .shadow(radius: 50)
                 }
                 
                 if showUserLocationButton {
@@ -121,12 +144,23 @@ struct ContentView: View {
                     }
                 }
             }
-            
+            .onAppear {
+                // Load user login status
+                let isLoggedIn = user.loadUserLoginStatus()
+                user.isLoggedIn = isLoggedIn
+            }
             //MARK: ALERTS
             .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
                 Alert(
                     title: Text("No Ads Available"),
                     message: Text("There are currently no ads available. Please try again later."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            .alert(isPresented: $showNoCreditsAlert) {
+                Alert(
+                    title: Text("Insufficient Credits"),
+                    message: Text("You don't have enough credits to perform a search."),
                     dismissButton: .default(Text("OK"))
                 )
             }
@@ -179,12 +213,17 @@ struct ContentView: View {
                                 isInputActive = false
                                 isSearching = false
                                 bottomSheetPosition = .relativeBottom(0.20)
-                                
                             } else {
                                 bottomSheetPosition = .relativeBottom(0.20)
-                                showingUserProfile = true
+                                if user.isLoggedIn {
+                                    // If user is logged in, show user profile view
+                                    showingUserProfile = true
+                                } else {
+                                    showSignUpWithApple = true
+                                }
                             }
-                        }) {
+                        })
+                        {
                             if !isSearching {
                                 if !user.isLoggedIn {
                                     Image(systemName: "person.crop.circle.fill")
@@ -222,9 +261,9 @@ struct ContentView: View {
                                 Text("\(contentVM.coffeeShops.count) Cafes In Map")
                                     .padding(.horizontal, geo.size.width*0.07)
                             }
-                                Spacer()
-                      
-       
+                            Spacer()
+                            
+                            
                         }
                         
                         BrewPreviewList(coffeeShops: $contentVM.coffeeShops,
@@ -240,7 +279,7 @@ struct ContentView: View {
             .backgroundBlurMaterial(.systemDark)
             
             //MARK: User Profile
-            .sheet(isPresented: $showingUserProfile) {
+            .sheet(isPresented: $showSignUpWithApple) {
                 GeometryReader { geo in
                     VStack {
                         HStack() {
@@ -256,10 +295,7 @@ struct ContentView: View {
                             Spacer()
                             
                             Button(action: {
-                                showingUserProfile = false
-                                
-                                
-                                
+                                showSignUpWithApple = false
                             }) {
                                 Image(systemName: "x.circle.fill")
                                     .resizable()
@@ -281,6 +317,12 @@ struct ContentView: View {
                 .presentationDetents([.medium, .large])
             } //end user sheet
             
+            .sheet(isPresented: $showingUserProfile) {
+                UserProfileView(user: user)
+                
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.medium, .large])
+            }
             
             .edgesIgnoringSafeArea(.top)
             
@@ -316,20 +358,14 @@ struct ContentView: View {
                 self.searchedLocation = location.coordinate
             }
         }
-    }
-    
-    private  func convertMetersToMiles(meters: Int) -> Int {
-        return Int(round(Double(meters) * 0.000621371))
-    }
-    
-    
-//    private func handleRewardAd() {
-//        if let viewController = rootViewController {
-//            rewardAd.present(from: viewController)
-//            userCredits += 1
-//        } else {
-//            // If there is no root view controller available, show an alert
-//            showNoAdsAvailableAlert = true
-//        }
-//    }
+    }    
+    //    private func handleRewardAd() {
+    //        if let viewController = rootViewController {
+    //            rewardAd.present(from: viewController)
+    //            userCredits += 1
+    //        } else {
+    //            // If there is no root view controller available, show an alert
+    //            showNoAdsAvailableAlert = true
+    //        }
+    //    }
 }

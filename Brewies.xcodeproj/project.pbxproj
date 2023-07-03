@@ -47,6 +47,8 @@
 		FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = FFC5D12C2A44E608007D9F52 /* Introspect */; };
 		FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
+		FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF424912A528A640088AC1D /* StoreKitManager.swift */; };
+		FFF424942A528B0D0088AC1D /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFF424932A528B0D0088AC1D /* Property List.plist */; };
 		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
 		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
 		FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */; };
@@ -108,6 +110,9 @@
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
 		FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompleter.swift; sourceTree = "<group>"; };
+		FFF424902A5289720088AC1D /* BrewiesStore.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BrewiesStore.storekit; sourceTree = "<group>"; };
+		FFF424912A528A640088AC1D /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		FFF424932A528B0D0088AC1D /* Property List.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
 		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
 		FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerKey.swift; sourceTree = "<group>"; };
@@ -157,6 +162,7 @@
 		FF3FF28529EA0D2300510FCD = {
 			isa = PBXGroup;
 			children = (
+				FFF424902A5289720088AC1D /* BrewiesStore.storekit */,
 				FF3FF29029EA0D2300510FCD /* Brewies */,
 				FF3FF2A229EA0D2600510FCD /* BrewiesTests */,
 				FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */,
@@ -181,6 +187,7 @@
 				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
 				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
 				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
+				FFF424932A528B0D0088AC1D /* Property List.plist */,
 				FF2F263A2A256E9C000D922E /* Extension */,
 				FF3FF2D729EA1C3D00510FCD /* Misc */,
 				FF3FF2D629EA1C1A00510FCD /* Supporting Assets */,
@@ -319,6 +326,7 @@
 				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
 				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
 				FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */,
+				FFF424912A528A640088AC1D /* StoreKitManager.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -484,6 +492,7 @@
 			files = (
 				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
 				FF3FF2D529EA1C0300510FCD /* readme.md in Resources */,
+				FFF424942A528B0D0088AC1D /* Property List.plist in Resources */,
 				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -518,6 +527,7 @@
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
 				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
 				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
+				FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */,
 				FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */,
 				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
 				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
@@ -700,6 +710,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Brewies/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Brewies;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Brewies requires access to your location to find nearby coffee shops";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -747,6 +759,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Brewies/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Brewies;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Brewies requires access to your location to find nearby coffee shops";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;

@@ -38,6 +38,9 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
                 self.user.firstName = fullName?.givenName ?? ""
                 self.user.lastName = fullName?.familyName ?? ""
                 self.user.email = email?.lowercased() ?? ""
+                self.user.syncCredits()
+                // Sign in successful
+                self.user.saveUserLoginStatus()
             }
         }
     }
