@@ -10,10 +10,10 @@ import AuthenticationServices
 
 class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
     var user: User
-       
+    
     override init() { // Initialize without User object
-           self.user = User.shared // Use singleton instance
-       }
+        self.user = User.shared // Use singleton instance
+    }
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         let window = UIApplication.shared.connectedScenes
@@ -63,5 +63,10 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
+        // Sync the credits
+        user.syncCredits()
+        
+        // Save the login status
+        user.saveUserLoginStatus()
     }
 }

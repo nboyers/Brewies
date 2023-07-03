@@ -13,47 +13,22 @@ import AdSupport
 
 class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     
-    private var rewardedAd: GADRewardedAd?
+    var rewardedAd: GADRewardedAd?
+    var onUserDidEarnReward: (() -> Void)?
+    var onAdDidDismissFullScreenContent: (() -> Void)?
     
     func requestIDFA() {
-        ATTrackingManager.requestTrackingAuthorization { [weak self] status in
-            switch status {
-            case .authorized:
-                // Tracking authorization dialog was shown
-                // and permission was granted
-                self?.loadRewardedAd()
-                break
-                
-            case .denied:
-                // Tracking authorization dialog was
-                // shown and permission was denied
-                self?.loadRewardedAd()
-                break
-                
-            case .notDetermined:
-                // Tracking authorization dialog has not yet been presented
-                self?.loadRewardedAd()
-                break
-                
-            case .restricted:
-                // The device is not eligible for tracking
-                self?.loadRewardedAd()
-                break
-                
-            @unknown default:
-                // A new case was added that we need to handle
-                self?.loadRewardedAd()
-                break
-            }
-            // Call `loadRewardedAd()` after getting IDFA status
+        ATTrackingManager.requestTrackingAuthorization { [weak self] _ in
             self?.loadRewardedAd()
         }
     }
+
+
     
     func loadRewardedAd() {
         let request = GADRequest()
         
-        GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY, //FIXME: Change this to the live version once ready to ship
+        GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD, //FIXME: Change this to the live version once ready to ship
                            request: request,
                            completionHandler: { [self] ad, error in
             if error != nil {
@@ -68,17 +43,25 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     
     func present(from viewController: UIViewController)  {
         if let ad = rewardedAd {
-            ad.present(fromRootViewController: viewController, userDidEarnRewardHandler: { })
+            ad.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [weak self] in
+                // When the ad completes, call the callback function
+                self?.onUserDidEarnReward?()
+                
+                // Increment the user's credits by one
+                User.shared.credits += 1
+            })
         } else {
             loadRewardedAd()
         }
-      
     }
+
     
     //// Tells the delegate that the ad failed to present full screen content.
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         print("Ad did fail to present full screen content.")
+        loadRewardedAd()  // Reload a new ad
     }
+
     
     /// Tells the delegate that the ad will present full screen content.
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
@@ -88,5 +71,6 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     /// Tells the delegate that the ad dismissed full screen content.
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("Ad did dismiss full screen content.")
+        onAdDidDismissFullScreenContent?()
     }
 }

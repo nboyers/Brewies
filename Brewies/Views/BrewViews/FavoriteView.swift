@@ -18,7 +18,6 @@ struct FavoritesView: View {
                         NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
                             VStack {
                                 BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showPreview)
-                                
                                 AdBannerView()
                                     .frame(width: 320, height: 50)
                             }

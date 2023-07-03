@@ -58,8 +58,6 @@ struct BrewDetailView: View {
                                 .shadow(color: .black, radius: 3, x: 0, y: 0)
                             
                             RatingView(rating: coffeeShop.rating)
-                            
-                            
                         }
                     }
                     
@@ -216,7 +214,7 @@ struct BrewDetailView: View {
                                     .padding()
                                     Spacer()
                                 }
-    
+                                
                                 Divider()
                                 
                                 // Phone

@@ -67,7 +67,9 @@ class User: ObservableObject {
         self.isLoggedIn = false
         // Also update UserDefaults
         UserDefaults.standard.set(false, forKey: "isLoggedIn")
+        
     }
+    
     func syncCredits() {
         let guestCredits = UserDefaults.standard.integer(forKey: "UserCredits_Guest")
         let userCredits = UserDefaults.standard.integer(forKey: "UserCredits_\(userID)")

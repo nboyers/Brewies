@@ -16,12 +16,12 @@ struct ContentView: View {
     //    @ObservedObject private var locationManager = LocationManager()
     @ObservedObject private var contentVM = ContentViewModel()
     
-    @StateObject var user = User.shared
     
     @ObservedObject var yelpParams =  YelpSearchParams()
     
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
+    @EnvironmentObject var user: User
     
     private var rewardAds = RewardAdController()
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
@@ -78,8 +78,9 @@ struct ContentView: View {
                 )
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
-                    rewardAd.requestIDFA()
-                    print(contentVM.coffeeShops)
+                    // Load user login status
+                    let isLoggedIn = user.loadUserLoginStatus()
+                    user.isLoggedIn = isLoggedIn
                 }
                 
                 .sheet(isPresented: $showingFilterView) {
@@ -144,11 +145,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .onAppear {
-                // Load user login status
-                let isLoggedIn = user.loadUserLoginStatus()
-                user.isLoggedIn = isLoggedIn
-            }
+            
             //MARK: ALERTS
             .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
                 Alert(
@@ -272,6 +269,27 @@ struct ContentView: View {
                     }
                     AdBannerView()
                         .frame(width: 320, height: 50)
+                    Button(action: {
+                        // Your action to handle the ad goes here
+                        self.contentVM.handleRewardAd()
+                    }) {
+                        HStack(spacing: 10) {
+                            Image(systemName: "video.fill")
+                                .resizable()
+                                .scaledToFit() // Maintain aspect ratio
+                                .frame(width: 20, height: 20) // Specify the size of the image
+                                .foregroundColor(.white) // Color of the star
+                                .padding(5) // Add some padding to give the image more room
+                                .background(Color.blue) // Background color of the circle
+                                .clipShape(Circle()) // Make the background a circle
+                            Text("Watch Ads for Credits")
+                                .font(.headline)
+                        }
+                        .padding()
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    }
                 }
             }
             .enableAppleScrollBehavior()
@@ -318,8 +336,7 @@ struct ContentView: View {
             } //end user sheet
             
             .sheet(isPresented: $showingUserProfile) {
-                UserProfileView(user: user)
-                
+                UserProfileView(user: user, contentViewModel: contentVM)
                     .presentationDragIndicator(.visible)
                     .presentationDetents([.medium, .large])
             }
@@ -358,14 +375,5 @@ struct ContentView: View {
                 self.searchedLocation = location.coordinate
             }
         }
-    }    
-    //    private func handleRewardAd() {
-    //        if let viewController = rootViewController {
-    //            rewardAd.present(from: viewController)
-    //            userCredits += 1
-    //        } else {
-    //            // If there is no root view controller available, show an alert
-    //            showNoAdsAvailableAlert = true
-    //        }
-    //    }
+    }
 }

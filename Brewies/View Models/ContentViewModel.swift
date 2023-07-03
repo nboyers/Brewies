@@ -22,7 +22,20 @@ class ContentViewModel: ObservableObject {
     @Published var  showNoCreditsAlert = false
     
     @ObservedObject var locationManager = LocationManager()
+    var rewardAdController = RewardAdController()
     
+    init() {
+        rewardAdController.onUserDidEarnReward = { [weak self] in
+            self?.userCredits += 1
+            // You should persist this increment of credits to your storage
+        }
+        rewardAdController.requestIDFA()
+        rewardAdController.onAdDidDismissFullScreenContent = { [weak self] in
+            // handle ad being dismissed here, update your UI as needed
+            self?.showAlert = true
+        }
+        
+    }
     func fetchCoffeeShops(using: YelpSearchParams?, visibleRegionCenter: CLLocationCoordinate2D?) {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
@@ -59,6 +72,19 @@ class ContentViewModel: ObservableObject {
         }
     }
     
+    func handleRewardAd() {
+        if let viewController = UIApplication.shared.windows.first?.rootViewController {
+            rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: {
+                // This code will be called when the ad completes
+                // Add credit to the user
+                User.shared.credits += 1
+                // You should persist this increment of credits to your storage
+            })
+        } else {
+            // If there is no root view controller available, show an alert
+            showNoAdsAvailableAlert = true
+        }
+    }
     
     
     func deductUserCredit() {

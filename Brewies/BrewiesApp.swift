@@ -15,9 +15,9 @@ struct BrewiesApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(User.shared)
                 .onAppear {
                 GADMobileAds.sharedInstance().start(completionHandler: nil)
-                rewardAd.requestIDFA()
             }
         }
     }
