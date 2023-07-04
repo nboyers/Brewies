@@ -15,21 +15,18 @@ import Introspect
 struct ContentView: View {
     //    @ObservedObject private var locationManager = LocationManager()
     @ObservedObject private var contentVM = ContentViewModel()
-    
-    
     @ObservedObject var yelpParams =  YelpSearchParams()
+    private var rewardAd = RewardAdController()
     
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     @EnvironmentObject var user: User
     
-    private var rewardAds = RewardAdController()
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
-    
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
     @State private var mapView = MKMapView()
-    @State private var showAlert = false
     
+    @State private var showAlert = false
     @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
@@ -43,15 +40,11 @@ struct ContentView: View {
     @State private var showSignUpWithApple = false
     
     @State var searchedLocation: CLLocationCoordinate2D?
-    @State private var selectedRadiusIndex: Int = 0 // Default index to 0
-    private let radiusOptions = [8047, 16093, 24140, 32186] // Radius in meters
-    
     @State private var searchQuery: String = ""
-    //    @State private var searchResults: [MKMapItem] = []
     @State private var isSearching = false
-    @FocusState var isInputActive: Bool
     
-    private var rewardAd = RewardAdController()
+    @FocusState var isInputActive: Bool
+   
     let DISTANCE = CLLocationDistance(2500)
     
     let signInCoordinator = SignInWithAppleCoordinator()
