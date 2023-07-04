@@ -13,7 +13,6 @@ import AuthenticationServices
 import Introspect
 
 struct ContentView: View {
-    //    @ObservedObject private var locationManager = LocationManager()
     @ObservedObject private var contentVM = ContentViewModel()
     @ObservedObject var yelpParams =  YelpSearchParams()
     private var rewardAd = RewardAdController()
