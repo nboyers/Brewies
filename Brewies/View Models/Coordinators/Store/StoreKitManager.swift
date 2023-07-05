@@ -11,17 +11,37 @@ public enum StoreError: Error {
     case failedVerification
 }
 
+//alias
+typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo //The Product.SubscriptionInfo.RenewalInfo provides information about the next subscription renewal period.
+typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState // the renewal states of auto-renewable subscriptions.
+
+
+
 class StoreKitManager: ObservableObject {
-    // if there are multiple product types - create multiple variable for each .consumable, .nonconsumable, .autoRenewable, .nonRenewable.
     @Published var storeProducts: [Product] = []
     @Published var purchasedCourses : [Product] = []
     
-    var updateListenerTask: Task<Void, Error>? = nil
+    @Published private(set) var subscriptions: [Product] = []
+    @Published private(set) var purchasedSubscriptions: [Product] = []
+    @Published private(set) var subscriptionGroupStatus: RenewalState?
+    
+    
+    var updateListenerTask : Task<Void, Error>? = nil
     
     //maintain a plist of products
     private let productDict: [String : String]
+    private let subscriptionsDict: [String : String]
+    
     init() {
         //check the path for the plist
+        
+        if let slistPath = Bundle.main.path(forResource: "SubscriptionsList", ofType: "plist"),
+           let plist = FileManager.default.contents(atPath: slistPath) {
+            subscriptionsDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String : String]) ?? [:]
+        } else {
+            subscriptionsDict = [:]
+        }
+        
         if let plistPath = Bundle.main.path(forResource: "ProductList", ofType: "plist"),
            //get the list of products
            let plist = FileManager.default.contents(atPath: plistPath) {
@@ -29,6 +49,7 @@ class StoreKitManager: ObservableObject {
         } else {
             productDict = [:]
         }
+        
         
         //Start a transaction listener as close to the app launch as possible so you don't miss any transaction
         updateListenerTask = listenForTransactions()
@@ -75,7 +96,9 @@ class StoreKitManager: ObservableObject {
             //using the Product static method products to retrieve the list of products
             storeProducts = try await Product.products(for: productDict.values)
             
-            // iterate the "type" if there are multiple product types.
+            // request from the app store using the product ids from list
+            subscriptions = try await Product.products(for: subscriptionsDict.values)
+            print(subscriptions)
         } catch {
             print("Failed - error retrieving products \(error)")
         }
@@ -103,13 +126,23 @@ class StoreKitManager: ObservableObject {
         //iterate through all the user's purchased products
         for await result in Transaction.currentEntitlements {
             do {
+                
                 //again check if transaction is verified
                 let transaction = try checkVerified(result)
                 // since we only have one type of producttype - .nonconsumables -- check if any storeProducts matches the transaction.productID then add to the purchasedCourses
                 if let course = storeProducts.first(where: { $0.id == transaction.productID}) {
                     purchasedCourses.append(course)
                 }
-                
+                switch transaction.productType {
+                case .autoRenewable:
+                    if let subscription = subscriptions.first(where: {$0.id == transaction.productID}) {
+                        purchasedSubscriptions.append(subscription)
+                    }
+                default:
+                    break
+                }
+                //Always finish a transaction.
+                await transaction.finish()
             } catch {
                 //storekit has a transaction that fails verification, don't delvier content to the user
                 print("Transaction failed verification")
@@ -140,6 +173,7 @@ class StoreKitManager: ObservableObject {
             return transaction
         case .userCancelled, .pending:
             return nil
+            
         default:
             return nil
         }
@@ -151,6 +185,4 @@ class StoreKitManager: ObservableObject {
         //as we only have one product type grouping .nonconsumable - we check if it belongs to the purchasedCourses which ran init()
         return purchasedCourses.contains(product)
     }
-    
-    
 }

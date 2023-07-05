@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/lucaszischka/BottomSheet",
       "state" : {
-        "revision" : "4c9ef84552712e0117c37d4893270fdc28fb9288",
-        "version" : "3.1.0"
+        "revision" : "720ddbd1371fef2a09cc1ab65fc503df37767f9c",
+        "version" : "3.1.1"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleUtilities.git",
       "state" : {
-        "revision" : "871d43135925cde39ef7421d8723ce47edfdcc39",
-        "version" : "7.11.1"
+        "revision" : "58d03d22beae762eaddbd30cb5a61af90d4b309f",
+        "version" : "7.11.3"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
-        "revision" : "e27a803aeef35b59faa9f1e3ea63620f4ccd2552",
-        "version" : "10.6.0"
+        "revision" : "a6e24f2167295d95371bfc3049e47381a73a9e43",
+        "version" : "10.7.0"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
-        "revision" : "56065b729481abce73fe606e218024bc77d055cd",
-        "version" : "0.6.2"
+        "revision" : "8bf15ad33a529359200bd419a72ca2dda841089b",
+        "version" : "0.8.0"
       }
     }
   ],

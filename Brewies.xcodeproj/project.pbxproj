@@ -14,6 +14,13 @@
 		FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */; };
 		FF1B5F2C2A2FFAE7000B6D6F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */; };
 		FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2F263B2A256EB5000D922E /* Date+Extension.swift */; };
+		FF3637A42A55C56C00A33899 /* Brewies Storefront.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF3637A32A55C56C00A33899 /* Brewies Storefront.storekit */; };
+		FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637A52A55C68A00A33899 /* ProductList.plist */; };
+		FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */; };
+		FF3637B12A55FD0500A33899 /* SubscriptionsList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */; };
+		FF3637B32A5604DF00A33899 /* product.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF3637B22A5604DF00A33899 /* product.storekit */; };
+		FF3637B52A560AB800A33899 /* ProductStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637B42A560AB800A33899 /* ProductStoreView.swift */; };
+		FF3637B72A560E2A00A33899 /* TestStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637B62A560E2A00A33899 /* TestStore.swift */; };
 		FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */; };
 		FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29329EA0D2300510FCD /* ContentView.swift */; };
 		FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29529EA0D2600510FCD /* Assets.xcassets */; };
@@ -48,7 +55,6 @@
 		FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
 		FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF424912A528A640088AC1D /* StoreKitManager.swift */; };
-		FFF424942A528B0D0088AC1D /* Property List.plist in Resources */ = {isa = PBXBuildFile; fileRef = FFF424932A528B0D0088AC1D /* Property List.plist */; };
 		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
 		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
 		FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */; };
@@ -77,6 +83,13 @@
 		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
 		FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpResponse.swift; sourceTree = "<group>"; };
 		FF2F263B2A256EB5000D922E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		FF3637A32A55C56C00A33899 /* Brewies Storefront.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Brewies Storefront.storekit"; sourceTree = "<group>"; };
+		FF3637A52A55C68A00A33899 /* ProductList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductList.plist; sourceTree = "<group>"; };
+		FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
+		FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubscriptionsList.plist; sourceTree = "<group>"; };
+		FF3637B22A5604DF00A33899 /* product.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = product.storekit; sourceTree = "<group>"; };
+		FF3637B42A560AB800A33899 /* ProductStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductStoreView.swift; sourceTree = "<group>"; };
+		FF3637B62A560E2A00A33899 /* TestStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestStore.swift; sourceTree = "<group>"; };
 		FF3FF28E29EA0D2300510FCD /* Brewies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brewies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesApp.swift; sourceTree = "<group>"; };
 		FF3FF29329EA0D2300510FCD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -110,9 +123,7 @@
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
 		FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompleter.swift; sourceTree = "<group>"; };
-		FFF424902A5289720088AC1D /* BrewiesStore.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = BrewiesStore.storekit; sourceTree = "<group>"; };
 		FFF424912A528A640088AC1D /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
-		FFF424932A528B0D0088AC1D /* Property List.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Property List.plist"; sourceTree = "<group>"; };
 		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
 		FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerKey.swift; sourceTree = "<group>"; };
@@ -159,10 +170,28 @@
 			path = Extension;
 			sourceTree = "<group>";
 		};
+		FF3637A92A55C9ED00A33899 /* StoreView */ = {
+			isa = PBXGroup;
+			children = (
+				FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */,
+				FF3637B42A560AB800A33899 /* ProductStoreView.swift */,
+				FF3637B62A560E2A00A33899 /* TestStore.swift */,
+			);
+			path = StoreView;
+			sourceTree = "<group>";
+		};
+		FF3637AD2A55CAAC00A33899 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				FFF424912A528A640088AC1D /* StoreKitManager.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
 		FF3FF28529EA0D2300510FCD = {
 			isa = PBXGroup;
 			children = (
-				FFF424902A5289720088AC1D /* BrewiesStore.storekit */,
+				FF3637B22A5604DF00A33899 /* product.storekit */,
 				FF3FF29029EA0D2300510FCD /* Brewies */,
 				FF3FF2A229EA0D2600510FCD /* BrewiesTests */,
 				FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */,
@@ -184,17 +213,19 @@
 		FF3FF29029EA0D2300510FCD /* Brewies */ = {
 			isa = PBXGroup;
 			children = (
+				FF3637A32A55C56C00A33899 /* Brewies Storefront.storekit */,
 				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
 				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
 				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
-				FFF424932A528B0D0088AC1D /* Property List.plist */,
+				FF3637A52A55C68A00A33899 /* ProductList.plist */,
+				FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */,
+				FF3FF2C229EA0EC100510FCD /* Info.plist */,
 				FF2F263A2A256E9C000D922E /* Extension */,
 				FF3FF2D729EA1C3D00510FCD /* Misc */,
 				FF3FF2D629EA1C1A00510FCD /* Supporting Assets */,
 				FF3FF2C329EA0EE100510FCD /* Model */,
 				FF3FF2C629EA0F0800510FCD /* View Models */,
 				FF3FF2CB29EA107700510FCD /* Views */,
-				FF3FF2C229EA0EC100510FCD /* Info.plist */,
 				FF3FF29829EA0D2600510FCD /* Preview Content */,
 			);
 			path = Brewies;
@@ -243,7 +274,6 @@
 				FF5BC28B2A4521CD00759BFA /* Networking */,
 				FF8E43812A33CE5300CEC800 /* Coordinators */,
 				FFB360D52A26D5730099017F /* Monetization */,
-				FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -252,6 +282,7 @@
 			isa = PBXGroup;
 			children = (
 				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
+				FF3637A92A55C9ED00A33899 /* StoreView */,
 				FF8E43932A34F99C00CEC800 /* Maps */,
 				FF8E43962A37BEBB00CEC800 /* Supporting Views */,
 				FF8E43412A339E6700CEC800 /* Monetization */,
@@ -323,10 +354,11 @@
 		FF8E43812A33CE5300CEC800 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
+				FF3637AD2A55CAAC00A33899 /* Store */,
 				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
+				FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */,
 				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
 				FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */,
-				FFF424912A528A640088AC1D /* StoreKitManager.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -490,10 +522,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF3637B32A5604DF00A33899 /* product.storekit in Resources */,
+				FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */,
 				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
 				FF3FF2D529EA1C0300510FCD /* readme.md in Resources */,
-				FFF424942A528B0D0088AC1D /* Property List.plist in Resources */,
+				FF3637A42A55C56C00A33899 /* Brewies Storefront.storekit in Resources */,
 				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
+				FF3637B12A55FD0500A33899 /* SubscriptionsList.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,8 +555,10 @@
 			files = (
 				FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */,
 				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
+				FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */,
 				FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */,
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
+				FF3637B52A560AB800A33899 /* ProductStoreView.swift in Sources */,
 				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
 				FF8E43982A37BED500CEC800 /* RatingView.swift in Sources */,
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
@@ -535,6 +572,7 @@
 				FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */,
 				FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */,
 				FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */,
+				FF3637B72A560E2A00A33899 /* TestStore.swift in Sources */,
 				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,
 				FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */,
 				FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */,
