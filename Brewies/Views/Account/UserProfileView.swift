@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct UserProfileView: View {
-    @ObservedObject var user: User
+    @ObservedObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var showFavorites = false
     @ObservedObject var contentViewModel: ContentViewModel
 
-    init(user: User, contentViewModel: ContentViewModel) {
-        self.user = user
+    init(userViewModel: UserViewModel, contentViewModel: ContentViewModel) {
+        self.userViewModel = userViewModel
         self.contentViewModel = contentViewModel
     }
 
@@ -22,16 +22,15 @@ struct UserProfileView: View {
         VStack {
             VStack {
                 HStack {
-                    Text(String(user.firstName.prefix(1)))
+                    Text(String(userViewModel.user.firstName.prefix(1)))
                         .foregroundColor(.white)
                         .font(.system(size: 30, weight: .bold))
                         .frame(width: 30, height: 30)
                         .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
                         .clipShape(Circle())
-                    Text("Henry Smith")
+                    Text("\(userViewModel.user.firstName) \(userViewModel.user.lastName)")
                     
                     Spacer()
-                    
                     
                     Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
@@ -47,9 +46,6 @@ struct UserProfileView: View {
             Divider()
             
             VStack {
-                // Store
-                
-                
                 // Favorites
                 Button(action: {
                     self.showFavorites = true

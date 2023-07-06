@@ -19,8 +19,9 @@ typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState // the r
 
 class StoreKitManager: ObservableObject {
     @Published var storeProducts: [Product] = []
-    @Published var purchasedCourses : [Product] = []
     
+    @Published var purchasedCourses : [Product] = []
+    @Published var isAdRemovalPurchased: Bool = false
     @Published private(set) var subscriptions: [Product] = []
     @Published private(set) var purchasedSubscriptions: [Product] = []
     @Published private(set) var subscriptionGroupStatus: RenewalState?
@@ -31,6 +32,8 @@ class StoreKitManager: ObservableObject {
     //maintain a plist of products
     private let productDict: [String : String]
     private let subscriptionsDict: [String : String]
+    let adRemovalProductId = "com.nobosoftware.removeAds"
+    let creditsProductId = "com.nobosoftware.BuyableRequests"
     
     init() {
         //check the path for the plist
@@ -68,6 +71,16 @@ class StoreKitManager: ObservableObject {
         updateListenerTask?.cancel()
     }
     
+    
+    func checkIfAdsRemoved() async {
+        for product in storeProducts {
+            if product.id == adRemovalProductId {
+                isAdRemovalPurchased = (try? await isPurchased(product)) ?? false
+            }
+            break
+        }
+    }
+    
     //listen for transactions - start this early in the app
     func listenForTransactions() -> Task<Void, Error> {
         return Task.detached {
@@ -98,7 +111,6 @@ class StoreKitManager: ObservableObject {
             
             // request from the app store using the product ids from list
             subscriptions = try await Product.products(for: subscriptionsDict.values)
-            print(subscriptions)
         } catch {
             print("Failed - error retrieving products \(error)")
         }
@@ -123,32 +135,41 @@ class StoreKitManager: ObservableObject {
     func updateCustomerProductStatus() async {
         var purchasedCourses: [Product] = []
         
-        //iterate through all the user's purchased products
+        // iterate through all the user's purchased products
         for await result in Transaction.currentEntitlements {
             do {
-                
-                //again check if transaction is verified
+                // check if transaction is verified
                 let transaction = try checkVerified(result)
-                // since we only have one type of producttype - .nonconsumables -- check if any storeProducts matches the transaction.productID then add to the purchasedCourses
-                if let course = storeProducts.first(where: { $0.id == transaction.productID}) {
+                
+                if transaction.productID == adRemovalProductId {
+                    isAdRemovalPurchased = true
+                } else if transaction.productID == creditsProductId {
+                    let currentCredits = UserDefaults.standard.integer(forKey: "credits")
+                    UserDefaults.standard.setValue(currentCredits + 5, forKey: "credits")
+                }
+                
+                if let course = storeProducts.first(where: { $0.id == transaction.productID }) {
                     purchasedCourses.append(course)
                 }
+                
                 switch transaction.productType {
                 case .autoRenewable:
                     if let subscription = subscriptions.first(where: {$0.id == transaction.productID}) {
                         purchasedSubscriptions.append(subscription)
                     }
+                    
                 default:
                     break
                 }
-                //Always finish a transaction.
+                
+                // Always finish a transaction.
                 await transaction.finish()
             } catch {
-                //storekit has a transaction that fails verification, don't delvier content to the user
+                // storekit has a transaction that fails verification, don't deliver content to the user
                 print("Transaction failed verification")
             }
             
-            //finally assign the purchased products
+            // finally assign the purchased products
             self.purchasedCourses = purchasedCourses
         }
     }
@@ -179,7 +200,6 @@ class StoreKitManager: ObservableObject {
         }
         
     }
-    
     //check if product has already been purchased
     func isPurchased(_ product: Product) async throws -> Bool {
         //as we only have one product type grouping .nonconsumable - we check if it belongs to the purchasedCourses which ran init()

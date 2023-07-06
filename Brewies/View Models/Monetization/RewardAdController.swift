@@ -48,7 +48,7 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
                 self?.onUserDidEarnReward?()
                 
                 // Increment the user's credits by one
-                User.shared.credits += 1
+                UserViewModel.shared.user.credits += 1
             })
         } else {
             loadRewardedAd()

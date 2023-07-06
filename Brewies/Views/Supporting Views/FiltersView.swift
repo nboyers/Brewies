@@ -32,7 +32,7 @@ struct FiltersView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var yelpParams: YelpSearchParams
-    @EnvironmentObject var user: User
+    @EnvironmentObject var user: UserViewModel
     @ObservedObject private var contentVM = ContentViewModel()
     @State private var featureLocked: Bool = true
     
@@ -297,7 +297,7 @@ struct FiltersView: View {
                         self.presentationMode.wrappedValue.dismiss()
                     }
                 }) {
-                    Text("Featuress currently unavailable")
+                    Text("Features currently unavailable")
                         .frame(width: geo.size.width, height: 50)
                         .background(.red)
                         .foregroundColor(.white)
@@ -312,7 +312,7 @@ struct FiltersView: View {
             }
             Spacer()
                 .frame(width: 25)
-        }.disabled(featureLocked)
+        }.disabled(true)
             .frame(maxHeight: 75)
     }
 }

@@ -9,10 +9,10 @@ import Foundation
 import AuthenticationServices
 
 class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-    var user: User
+    var userViewModel: UserViewModel
     
     override init() { // Initialize without User object
-        self.user = User.shared // Use singleton instance
+        self.userViewModel = UserViewModel.shared // Use singleton instance
     }
     
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
@@ -33,14 +33,14 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
             let email = appleIDCredential.email
             // Here you update your User object with data from Apple ID
             DispatchQueue.main.async {
-                self.user.isLoggedIn = true
-                self.user.userID = userIdentifier.lowercased()
-                self.user.firstName = fullName?.givenName ?? ""
-                self.user.lastName = fullName?.familyName ?? ""
-                self.user.email = email?.lowercased() ?? ""
-                self.user.syncCredits()
+                self.userViewModel.user.isLoggedIn = true
+                self.userViewModel.user.userID = userIdentifier.lowercased()
+                self.userViewModel.user.firstName = fullName?.givenName ?? ""
+                self.userViewModel.user.lastName = fullName?.familyName ?? ""
+                self.userViewModel.user.email = email?.lowercased() ?? ""
+                self.userViewModel.syncCredits()
                 // Sign in successful
-                self.user.saveUserLoginStatus()
+                self.userViewModel.saveUserLoginStatus()
             }
         }
     }
@@ -63,10 +63,11 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
+        
         // Sync the credits
-        user.syncCredits()
+        userViewModel.syncCredits()
         
         // Save the login status
-        user.saveUserLoginStatus()
+        userViewModel.saveUserLoginStatus()
     }
 }

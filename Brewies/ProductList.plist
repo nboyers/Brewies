@@ -4,11 +4,7 @@
 <dict>
 	<key>Remove Ads</key>
 	<string>com.nobosoftware.removeAds</string>
-	<key>New item</key>
-	<string></string>
-	<key>New item - 2</key>
-	<string></string>
-	<key>New item - 3</key>
-	<string></string>
+	<key>Buyable Requests</key>
+	<string>com.nobosoftware.BuyableRequests</string>
 </dict>
 </plist>

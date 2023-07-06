@@ -12,7 +12,9 @@ struct BrewPreviewList: View {
     @Binding var coffeeShops: [CoffeeShop]
     @Binding var selectedCoffeeShop: CoffeeShop?
     @Binding var showBrewPreview: Bool
+    @State var showStorefront = false
     
+    @ObservedObject var userViewModel = UserViewModel.shared
     
     var body: some View {
         ScrollViewReader { scrollView in
@@ -42,6 +44,7 @@ struct BrewPreview: View {
     let coffeeShop: CoffeeShop
     @Binding var showBrewPreview: Bool
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
+    @ObservedObject var userViewModel = UserViewModel.shared
     
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     
@@ -49,7 +52,7 @@ struct BrewPreview: View {
     
     
     var isFavorite: Bool {
-        coffeeShopData.favoriteShops.contains(coffeeShop)
+        userViewModel.user.favorites.contains(coffeeShop)
     }
     
     //    var isOpen: Bool {
@@ -94,6 +97,7 @@ struct BrewPreview: View {
     //        return false
     //    }
     
+    @State var showStorefront = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -172,6 +176,11 @@ struct BrewPreview: View {
                 BrewDetailView(coffeeShop: coffeeShop)
             }
             
+            .sheet(isPresented: $showStorefront) {
+                StorefrontView()
+
+            }
+            
             .onTapGesture {
                 isDetailShowing = true
             }
@@ -182,11 +191,16 @@ struct BrewPreview: View {
         .cornerRadius(8)
         .shadow(radius: 4)
     }
+    
     private func toggleFavorite() {
-        if isFavorite {
-            coffeeShopData.removeFromFavorites(coffeeShop)
+        if userViewModel.user.isSubscribed {
+            if isFavorite {
+                userViewModel.removeFromFavorites(coffeeShop)
+            } else {
+                userViewModel.addToFavorites(coffeeShop)
+            }
         } else {
-            coffeeShopData.addToFavorites(coffeeShop)
+            showStorefront = true
         }
     }
 }

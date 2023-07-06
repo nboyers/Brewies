@@ -19,8 +19,9 @@ struct ContentView: View {
     
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
-    @EnvironmentObject var user: User
     
+    @EnvironmentObject var userVM: UserViewModel
+    @ObservedObject var storeKit = StoreKitManager()
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
     @State private var mapView = MKMapView()
@@ -37,13 +38,13 @@ struct ContentView: View {
     @State private var showingFilterView = false
     @State private var shouldSearchInArea = false
     @State private var showSignUpWithApple = false
-    
+    @State private var showingStorefront = false
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
     
     @FocusState var isInputActive: Bool
-   
+    
     let DISTANCE = CLLocationDistance(2500)
     
     let signInCoordinator = SignInWithAppleCoordinator()
@@ -68,25 +69,39 @@ struct ContentView: View {
                     searchQuery: $searchQuery,
                     shouldSearchInArea: $shouldSearchInArea
                 )
+                .alert(isPresented: $contentVM.showNoCoffeeShopsAlert) {
+                    Alert(
+                        title: Text("No Coffee Shops Found"),
+                        message: Text("We could not find any coffee shops in your area."),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
+                .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
+                    Alert(
+                        title: Text("No Ads Available"),
+                        message: Text("There are currently no ads available. Please try again later."),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
                     // Load user login status
-                    let isLoggedIn = user.loadUserLoginStatus()
-                    user.isLoggedIn = isLoggedIn
+                    let isLoggedIn = userVM.loadUserLoginStatus()
+                    userVM.user.isLoggedIn = isLoggedIn
                 }
                 
                 .sheet(isPresented: $showingFilterView) {
                     FiltersView(yelpParams: yelpParams, visibleRegionCenter: visibleRegionCenter)
-                        .environmentObject(user)
+                        .environmentObject(userVM)
                 }
                 
                 GeometryReader { geo in
                     VStack {
                         Button(action: {
                             // Check if the user has enough credits to perform a search
-                            if user.credits > 0 {
+                            if userVM.user.credits > 0 {
                                 // Deduct one credit
-                                user.credits -= 1
+                                userVM.user.credits -= 1
                                 
                                 // Perform the search
                                 contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
@@ -102,19 +117,33 @@ struct ContentView: View {
                                 .font(.title3)
                                 .foregroundColor(.black)
                                 .background(.white)
-                        }.cornerRadius(10)
-                            .shadow(radius: 50)
+                        }
+                        .cornerRadius(10)
+                        .shadow(radius: 50)
+                        
+                        Button(action: {
+                            if userVM.user.credits == 0 {
+                                showingStorefront = true
+                            }
+                        }) {
+                            Text("Credits: \(userVM.user.credits)")
+                                .padding(10)
+                                .frame(width: geo.size.width/3.5, height: geo.size.width/20)
+                                .background(.black)
+                                .font(.caption)
+                                .foregroundColor(Color.cyan)
+                                .cornerRadius(10)
+                                .shadow(radius: 50)
+                        }
                         
                         
-                        Text("Credits: \(user.credits)")
-                            .padding(10)
-                            .frame(width: geo.size.width/3.5, height: geo.size.width/20)
-                            .background(.black)
-                            .font(.caption)
-                            .foregroundColor(Color.cyan)
-                            .cornerRadius(10)
-                            .shadow(radius: 50)
-                        
+                    }            //MARK: ALERTS
+                    .alert(isPresented: $showNoCreditsAlert) {
+                        Alert(
+                            title: Text("Insufficient Credits"),
+                            message: Text("Watch an ad or click the credits to buy more from the store."),
+                            dismissButton: .default(Text("OK"))
+                        )
                     }
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                 }
@@ -137,31 +166,6 @@ struct ContentView: View {
                     }
                 }
             }
-            
-            //MARK: ALERTS
-            .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
-                Alert(
-                    title: Text("No Ads Available"),
-                    message: Text("There are currently no ads available. Please try again later."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-            .alert(isPresented: $showNoCreditsAlert) {
-                Alert(
-                    title: Text("Insufficient Credits"),
-                    message: Text("You don't have enough credits to perform a search."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-            .alert(isPresented: $contentVM.showNoCoffeeShopsAlert) {
-                Alert(
-                    title: Text("No Coffee Shops Found"),
-                    message: Text("We could not find any coffee shops in your area."),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
-            
-            
             //MARK: BREW PREVIEW
             .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
                 .relativeBottom(0.20), //Floor
@@ -204,7 +208,7 @@ struct ContentView: View {
                                 bottomSheetPosition = .relativeBottom(0.20)
                             } else {
                                 bottomSheetPosition = .relativeBottom(0.20)
-                                if user.isLoggedIn {
+                                if userVM.user.isLoggedIn {
                                     // If user is logged in, show user profile view
                                     showingUserProfile = true
                                 } else {
@@ -214,7 +218,7 @@ struct ContentView: View {
                         })
                         {
                             if !isSearching {
-                                if !user.isLoggedIn {
+                                if !userVM.user.isLoggedIn {
                                     Image(systemName: "person.crop.circle.fill")
                                         .resizable()
                                         .foregroundColor(Color.accentColor)
@@ -222,7 +226,7 @@ struct ContentView: View {
                                         .clipShape(Circle())
                                     
                                 } else {
-                                    Text(String(user.firstName.prefix(1)))
+                                    Text(String(userVM.user.firstName.prefix(1)))
                                         .foregroundColor(.white)
                                         .font(.system(size: 30, weight: .bold))
                                         .frame(width: 30, height: 30)
@@ -259,8 +263,11 @@ struct ContentView: View {
                                         selectedCoffeeShop: $contentVM.selectedCoffeeShop,
                                         showBrewPreview: $contentVM.showBrewPreview)
                     }
-                    AdBannerView()
-                        .frame(width: 320, height: 50)
+                    if !userVM.user.isSubscribed || !storeKit.isAdRemovalPurchased {
+                        AdBannerView()
+                            .frame(width: 320, height: 50)
+                    }
+                    
                     Button(action: {
                         // Your action to handle the ad goes here
                         self.contentVM.handleRewardAd()
@@ -327,14 +334,18 @@ struct ContentView: View {
                 .presentationDetents([.medium, .large])
             } //end user sheet
             
+            .sheet(isPresented: $showingStorefront) {
+                StorefrontView()
+
+            }
+            
             .sheet(isPresented: $showingUserProfile) {
-                UserProfileView(user: user, contentViewModel: contentVM)
+                UserProfileView(userViewModel: userVM, contentViewModel: contentVM)
                     .presentationDragIndicator(.visible)
                     .presentationDetents([.medium, .large])
             }
             
             .edgesIgnoringSafeArea(.top)
-            
             .tabItem {
                 Image(systemName: "map")
                 Text("Map")
