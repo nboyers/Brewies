@@ -508,8 +508,8 @@
             filePath = "Brewies/Views/BrewViews/BrewDetailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -556,8 +556,8 @@
             filePath = "Brewies/Views/BrewViews/BrewDetailView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
             landmarkName = "body"
             landmarkType = "24">
          </BreakpointContent>
@@ -606,159 +606,6 @@
                   startingLineNumber = "192"
                   endingLineNumber = "192"
                   offsetFromSymbolStart = "40">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Brewies/View Models/Account/UserViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "14"
-            endingLineNumber = "14"
-            landmarkName = "UserViewModel"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 6f58b0f8834b7223"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "property wrapper backing initializer of Brewies.UserViewModel.user : Brewies.User"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "32">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 8efde14e3c7483d5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.user.getter : Brewies.User"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "304">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 29144540576193e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.user.setter : Brewies.User"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "156">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - f5d4c940f206b7d8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.user.modify : Brewies.User"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "0">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 7f4c925ba7b3f5e9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.user.modify : Brewies.User with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "20">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - dde97087f4d059f6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.$user.getter : Combine.Published&lt;Brewies.User&gt;.Publisher"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "96">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 225b0d36e8a858a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.$user.setter : Combine.Published&lt;Brewies.User&gt;.Publisher"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "216">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 7224c07290bc5c6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.$user.modify : Combine.Published&lt;Brewies.User&gt;.Publisher"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/%3Ccompiler-generated%3E"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0"
-                  offsetFromSymbolStart = "56">
-               </Location>
-               <Location
-                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - fdc2bc198bddaf7c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Brewies.UserViewModel.$user.modify : Combine.Published&lt;Brewies.User&gt;.Publisher with unmangled suffix &quot;.resume.0&quot;"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "24">
                </Location>
             </Locations>
          </BreakpointContent>

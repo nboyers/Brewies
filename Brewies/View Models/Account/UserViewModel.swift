@@ -14,7 +14,6 @@ class UserViewModel: ObservableObject {
     @Published var user: User
     @Published var profileImage: Image?
     
-    
     init() {
         let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
         let userID = UserDefaults.standard.string(forKey: "userID") ?? ""
@@ -22,18 +21,33 @@ class UserViewModel: ObservableObject {
         let credits = UserDefaults.standard.integer(forKey: key)
         
         self.user = User(isLoggedIn: isLoggedIn, userID: userID, firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: credits)
+        loadUserDetails()
     }
 
-    
+
+
     func saveUserLoginStatus() {
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         UserDefaults.standard.set(user.userID, forKey: "userID")
+        saveUserDetails()
     }
 
-    
     func loadUserLoginStatus() -> Bool {
         return UserDefaults.standard.bool(forKey: "isLoggedIn")
     }
+    
+    func saveUserDetails() {
+        UserDefaults.standard.set(user.firstName, forKey: "UserFirstName")
+        UserDefaults.standard.set(user.lastName, forKey: "UserLastName")
+    }
+    
+    func loadUserDetails() {
+        let firstName = UserDefaults.standard.string(forKey: "UserFirstName") ?? ""
+        let lastName = UserDefaults.standard.string(forKey: "UserLastName") ?? ""
+        user.firstName = firstName
+        user.lastName = lastName
+    }
+
     
     func signOut() {
         self.user.firstName = ""
@@ -43,7 +57,6 @@ class UserViewModel: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "userID")
     }
 
-    
     func syncCredits() {
         let guestCredits = UserDefaults.standard.integer(forKey: "UserCredits_Guest")
         let userCredits = UserDefaults.standard.integer(forKey: "UserCredits_\(self.user.userID)")
@@ -64,7 +77,7 @@ class UserViewModel: ObservableObject {
     
     func subtractCredits(_ amount: Int) {
         self.user.credits -= amount
-        let key = user.isLoggedIn ? "UserCredits_\(user.userID)" : "UserCredits_Guest"
+        let key = user.isLoggedIn ? "UserCredits_\(self.user.userID)" : "UserCredits_Guest"
         UserDefaults.standard.set(self.user.credits, forKey: key)
     }
     

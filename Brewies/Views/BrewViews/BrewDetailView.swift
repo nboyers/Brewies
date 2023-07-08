@@ -259,9 +259,6 @@ struct BrewDetailView: View {
                                 .padding()
                                 
                                 
-                                // Mobile Oder
-                                //TODO: Create this
-                                
                             }
                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                             .background(.bar)
