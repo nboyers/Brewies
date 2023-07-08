@@ -12,6 +12,11 @@ import BottomSheet
 import AuthenticationServices
 import Introspect
 
+
+//FIXME: THe cancel button UI
+//FIXME: Credits button is broken (Not pulling up sheet)
+//FIXME: Website Button in preview is broken
+
 struct ContentView: View {
     @ObservedObject private var contentVM = ContentViewModel()
     @ObservedObject var yelpParams =  YelpSearchParams()
@@ -85,9 +90,8 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
-                    // Load user login status
-                    let isLoggedIn = userVM.loadUserLoginStatus()
-                    userVM.user.isLoggedIn = isLoggedIn
+    
+                    
                 }
                 
                 .sheet(isPresented: $showingFilterView) {
@@ -100,9 +104,6 @@ struct ContentView: View {
                         Button(action: {
                             // Check if the user has enough credits to perform a search
                             if userVM.user.credits > 0 {
-                                // Deduct one credit
-                                userVM.user.credits -= 1
-                                
                                 // Perform the search
                                 contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
                             } else {
@@ -122,13 +123,11 @@ struct ContentView: View {
                         .shadow(radius: 50)
                         
                         Button(action: {
-                            if userVM.user.credits == 0 {
-                                showingStorefront = true
-                            }
+                            showingStorefront = true
                         }) {
-                            Text("Credits: \(userVM.user.credits)")
+                            Text("Discover Credits: \(userVM.user.credits)")
                                 .padding(10)
-                                .frame(width: geo.size.width/3.5, height: geo.size.width/20)
+                                .frame(width: geo.size.width/3, height: geo.size.width/15)
                                 .background(.black)
                                 .font(.caption)
                                 .foregroundColor(Color.cyan)
@@ -137,7 +136,12 @@ struct ContentView: View {
                         }
                         
                         
-                    }            //MARK: ALERTS
+                    }
+                    .sheet(isPresented: $showingStorefront) {
+                        StorefrontView()
+                    }
+                    
+                    //MARK: ALERTS
                     .alert(isPresented: $showNoCreditsAlert) {
                         Alert(
                             title: Text("Insufficient Credits"),
@@ -263,7 +267,7 @@ struct ContentView: View {
                                         selectedCoffeeShop: $contentVM.selectedCoffeeShop,
                                         showBrewPreview: $contentVM.showBrewPreview)
                     }
-                    if !userVM.user.isSubscribed || !storeKit.isAdRemovalPurchased {
+                    if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
                         AdBannerView()
                             .frame(width: 320, height: 50)
                     }
@@ -334,11 +338,6 @@ struct ContentView: View {
                 .presentationDetents([.medium, .large])
             } //end user sheet
             
-            .sheet(isPresented: $showingStorefront) {
-                StorefrontView()
-
-            }
-            
             .sheet(isPresented: $showingUserProfile) {
                 UserProfileView(userViewModel: userVM, contentViewModel: contentVM)
                     .presentationDragIndicator(.visible)
@@ -358,8 +357,6 @@ struct ContentView: View {
                 }
         }
     }
-    
-    
     
     // Function to search for a location by address
     func searchLocation(for address: String) {

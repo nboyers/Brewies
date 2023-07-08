@@ -13,6 +13,7 @@ import AdSupport
 
 class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     
+    var userVM = UserViewModel.shared
     var rewardedAd: GADRewardedAd?
     var onUserDidEarnReward: (() -> Void)?
     var onAdDidDismissFullScreenContent: (() -> Void)?
@@ -22,8 +23,8 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
             self?.loadRewardedAd()
         }
     }
-
-
+    
+    
     
     func loadRewardedAd() {
         let request = GADRequest()
@@ -48,20 +49,20 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
                 self?.onUserDidEarnReward?()
                 
                 // Increment the user's credits by one
-                UserViewModel.shared.user.credits += 1
+                self?.userVM.addCredits(1)
             })
         } else {
             loadRewardedAd()
         }
     }
-
+    
     
     //// Tells the delegate that the ad failed to present full screen content.
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         print("Ad did fail to present full screen content.")
         loadRewardedAd()  // Reload a new ad
     }
-
+    
     
     /// Tells the delegate that the ad will present full screen content.
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {

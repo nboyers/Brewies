@@ -15,21 +15,21 @@ class UserViewModel: ObservableObject {
     @Published var profileImage: Image?
     
     
-    init(user: User = User(isLoggedIn: false, userID: "", firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: 0)) {
-        self.user = user
+    init() {
+        let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        let userID = UserDefaults.standard.string(forKey: "userID") ?? ""
+        let key = isLoggedIn ? "UserCredits_\(userID)" : "UserCredits_Guest"
+        let credits = UserDefaults.standard.integer(forKey: key)
         
-        let key = user.isLoggedIn ? "UserCredits_\(user.userID)" : "UserCredits_Guest"
-        if UserDefaults.standard.object(forKey: "isNewUser") == nil && user.isLoggedIn {
-            self.user.credits = 1
-            UserDefaults.standard.set(false, forKey: "isNewUser")
-        } else {
-            self.user.credits = UserDefaults.standard.integer(forKey: key)
-        }
+        self.user = User(isLoggedIn: isLoggedIn, userID: userID, firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: credits)
     }
+
     
     func saveUserLoginStatus() {
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
+        UserDefaults.standard.set(user.userID, forKey: "userID")
     }
+
     
     func loadUserLoginStatus() -> Bool {
         return UserDefaults.standard.bool(forKey: "isLoggedIn")
@@ -40,7 +40,9 @@ class UserViewModel: ObservableObject {
         self.user.lastName = ""
         self.user.isLoggedIn = false
         UserDefaults.standard.set(false, forKey: "isLoggedIn")
+        UserDefaults.standard.removeObject(forKey: "userID")
     }
+
     
     func syncCredits() {
         let guestCredits = UserDefaults.standard.integer(forKey: "UserCredits_Guest")
@@ -53,6 +55,17 @@ class UserViewModel: ObservableObject {
     
     func addOrder(order: Order) {
         self.user.pastOrders.append(order)
+    }
+    func addCredits(_ amount: Int) {
+        self.user.credits += amount
+        let key = user.isLoggedIn ? "UserCredits_\(user.userID)" : "UserCredits_Guest"
+        UserDefaults.standard.set(self.user.credits, forKey: key)
+    }
+    
+    func subtractCredits(_ amount: Int) {
+        self.user.credits -= amount
+        let key = user.isLoggedIn ? "UserCredits_\(user.userID)" : "UserCredits_Guest"
+        UserDefaults.standard.set(self.user.credits, forKey: key)
     }
     
     func addToFavorites(_ coffeeShop: CoffeeShop) {

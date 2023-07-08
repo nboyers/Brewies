@@ -26,7 +26,7 @@ class StoreKitManager: ObservableObject {
     @Published private(set) var purchasedSubscriptions: [Product] = []
     @Published private(set) var subscriptionGroupStatus: RenewalState?
     
-    
+    var userViewModel = UserViewModel.shared
     var updateListenerTask : Task<Void, Error>? = nil
     
     //maintain a plist of products
@@ -143,9 +143,6 @@ class StoreKitManager: ObservableObject {
                 
                 if transaction.productID == adRemovalProductId {
                     isAdRemovalPurchased = true
-                } else if transaction.productID == creditsProductId {
-                    let currentCredits = UserDefaults.standard.integer(forKey: "credits")
-                    UserDefaults.standard.setValue(currentCredits + 5, forKey: "credits")
                 }
                 
                 if let course = storeProducts.first(where: { $0.id == transaction.productID }) {
@@ -174,6 +171,7 @@ class StoreKitManager: ObservableObject {
         }
     }
     
+    
     // call the product purchase and returns an optional transaction
     func purchase(_ product: Product) async throws -> Transaction? {
         //make a purchase request - optional parameters available
@@ -185,6 +183,12 @@ class StoreKitManager: ObservableObject {
             //Transaction will be verified for automatically using JWT(jwsRepresentation) - we can check the result
             let transaction = try checkVerified(verificationResult)
             
+            if product.id == creditsProductId {
+                DispatchQueue.main.async {
+                    self.userViewModel.addCredits(5)
+                    self.userViewModel.syncCredits()
+                }
+            }
             //the transaction is verified, deliver the content to the user
             await updateCustomerProductStatus()
             

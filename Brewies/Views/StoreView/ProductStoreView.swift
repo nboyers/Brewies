@@ -24,7 +24,6 @@ struct ProductStoreView: View {
                         // purchase this product
                         Task {
                             try await storeKit.purchase(product)
-                                   await storeKit.checkIfAdsRemoved()
                         }
                     }) {
                         CourseItem(storeKit: storeKit, product: product)
@@ -46,7 +45,7 @@ struct ProductStoreView: View {
                 Spacer()
             }
         }
-        .padding() 
+        .padding()
     }
 }
 

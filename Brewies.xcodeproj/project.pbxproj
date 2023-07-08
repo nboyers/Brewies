@@ -43,7 +43,6 @@
 		FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
 		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
-		FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */; };
 		FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */; };
 		FF8E43852A33D51800CEC800 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43842A33D51800CEC800 /* User.swift */; };
 		FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43912A34F5C100CEC800 /* PhotosView.swift */; };
@@ -116,7 +115,6 @@
 		FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleButton.swift; sourceTree = "<group>"; };
 		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
 		FF8E43462A339FA700CEC800 /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardAdController.swift; sourceTree = "<group>"; };
-		FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ContentView+Extension.swift"; sourceTree = "<group>"; };
 		FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
 		FF8E43842A33D51800CEC800 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FF8E43912A34F5C100CEC800 /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
@@ -167,7 +165,6 @@
 			isa = PBXGroup;
 			children = (
 				FF2F263B2A256EB5000D922E /* Date+Extension.swift */,
-				FF8E437F2A33CCE000CEC800 /* ContentView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -272,11 +269,11 @@
 		FF3FF2C629EA0F0800510FCD /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				FFBFFD212A598EA2004576EC /* Account */,
 				FF5BC28C2A4521DB00759BFA /* Maps */,
 				FF5BC28B2A4521CD00759BFA /* Networking */,
 				FF8E43812A33CE5300CEC800 /* Coordinators */,
 				FFB360D52A26D5730099017F /* Monetization */,
-				FF3637B82A5749F800A33899 /* UserViewModel.swift */,
 			);
 			path = "View Models";
 			sourceTree = "<group>";
@@ -284,7 +281,7 @@
 		FF3FF2CB29EA107700510FCD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
+				FFBFFD232A598F25004576EC /* Main */,
 				FF3637A92A55C9ED00A33899 /* StoreView */,
 				FF8E43932A34F99C00CEC800 /* Maps */,
 				FF8E43962A37BEBB00CEC800 /* Supporting Views */,
@@ -322,6 +319,7 @@
 		FF5BC28C2A4521DB00759BFA /* Maps */ = {
 			isa = PBXGroup;
 			children = (
+				FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */,
 				FF3FF2C729EA0F2600510FCD /* LocationManager.swift */,
 			);
 			path = Maps;
@@ -357,11 +355,7 @@
 		FF8E43812A33CE5300CEC800 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				FF3637AD2A55CAAC00A33899 /* Store */,
-				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
 				FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */,
-				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
-				FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -397,10 +391,37 @@
 		FFB360D52A26D5730099017F /* Monetization */ = {
 			isa = PBXGroup;
 			children = (
+				FFBFFD222A598ED5004576EC /* Admob */,
+				FF3637AD2A55CAAC00A33899 /* Store */,
+			);
+			path = Monetization;
+			sourceTree = "<group>";
+		};
+		FFBFFD212A598EA2004576EC /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
+				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
+				FF3637B82A5749F800A33899 /* UserViewModel.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		FFBFFD222A598ED5004576EC /* Admob */ = {
+			isa = PBXGroup;
+			children = (
 				FF8E43462A339FA700CEC800 /* RewardAdController.swift */,
 				FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */,
 			);
-			path = Monetization;
+			path = Admob;
+			sourceTree = "<group>";
+		};
+		FFBFFD232A598F25004576EC /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
+			);
+			path = Main;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -572,7 +593,6 @@
 				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
 				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
 				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
-				FF8E43802A33CCE000CEC800 /* ContentView+Extension.swift in Sources */,
 				FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */,
 				FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */,
 				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,

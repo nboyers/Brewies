@@ -157,8 +157,8 @@
             filePath = "Brewies/View Models/Monetization/RewardAdController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "44"
-            endingLineNumber = "44"
+            startingLineNumber = "45"
+            endingLineNumber = "45"
             landmarkName = "present(from:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -285,8 +285,8 @@
             filePath = "Brewies/Views/ContentView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "107"
+            endingLineNumber = "107"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -334,6 +334,431 @@
                   startingLineNumber = "102"
                   endingLineNumber = "102"
                   offsetFromSymbolStart = "160">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1AF7A634-E15C-46E1-A690-39D69F6932E5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/Views/ContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E725D217-3525-4BB9-99B3-AF7B50BE4452"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Coordinators/ContentViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "handleRewardAd()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F163CDA2-299F-43A3-ABE7-34D290BB9594"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Coordinators/Store/StoreKitManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "149"
+            endingLineNumber = "149"
+            landmarkName = "updateCustomerProductStatus()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "07DD182C-7F81-4128-9BA3-E769FA30BA6E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Coordinators/Store/StoreKitManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
+            landmarkName = "updateCustomerProductStatus()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "07DD182C-7F81-4128-9BA3-E769FA30BA6E - 5a77b1fe261b3d94"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.StoreKitManager.updateCustomerProductStatus() async -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Coordinators/Store/StoreKitManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "156"
+                  endingLineNumber = "156"
+                  offsetFromSymbolStart = "64">
+               </Location>
+               <Location
+                  uuid = "07DD182C-7F81-4128-9BA3-E769FA30BA6E - 425305c648e523f8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(1) suspend resume partial function for Brewies.StoreKitManager.updateCustomerProductStatus() async -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Coordinators/Store/StoreKitManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "135"
+                  endingLineNumber = "135"
+                  offsetFromSymbolStart = "84">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B19CBCC-550F-48B1-B77C-98F27A8AEEB6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Coordinators/Store/StoreKitManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "updateCustomerProductStatus()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9B19CBCC-550F-48B1-B77C-98F27A8AEEB6 - c1440fef0066013"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Brewies.StoreKitManager.updateCustomerProductStatus() async -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Coordinators/Store/StoreKitManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
+                  offsetFromSymbolStart = "336">
+               </Location>
+               <Location
+                  uuid = "9B19CBCC-550F-48B1-B77C-98F27A8AEEB6 - b7d58f169ba0a015"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(5) suspend resume partial function for Brewies.StoreKitManager.updateCustomerProductStatus() async -&gt; ()"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Coordinators/Store/StoreKitManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "144"
+                  endingLineNumber = "144"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1EBD97C0-6820-4C36-949D-68FD117D91D9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Coordinators/Store/StoreKitManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "142"
+            endingLineNumber = "142"
+            landmarkName = "updateCustomerProductStatus()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "99AD3340-7E57-4957-B57F-EF8B4D52A095"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/Views/BrewViews/BrewDetailView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "277"
+            endingLineNumber = "277"
+            landmarkName = "body"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "99AD3340-7E57-4957-B57F-EF8B4D52A095 - e1ceb2be97da7b0f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SwiftUI.GeometryProxy) -&gt; &lt;&lt;opaque return type of SwiftUI.View.navigationBarItems&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(trailing: &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in Brewies.BrewDetailView.body.getter : some"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/BrewViews/BrewDetailView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "285"
+                  endingLineNumber = "285"
+                  offsetFromSymbolStart = "1628">
+               </Location>
+               <Location
+                  uuid = "99AD3340-7E57-4957-B57F-EF8B4D52A095 - e1ceb2be97da7be8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (SwiftUI.GeometryProxy) -&gt; &lt;&lt;opaque return type of SwiftUI.View.navigationBarItems&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(trailing: &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in Brewies.BrewDetailView.body.getter : some"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/BrewViews/BrewDetailView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "286"
+                  endingLineNumber = "286"
+                  offsetFromSymbolStart = "824">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D5EDF555-E397-47C6-A3D9-0E5DA9F95DB1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/Views/BrewViews/BrewDetailView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "276"
+            endingLineNumber = "276"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6ED99AEE-06F7-435E-A162-3A679D04C1AA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Monetization/Store/StoreKitManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "purchase(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6ED99AEE-06F7-435E-A162-3A679D04C1AA - 22267758691de968"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(3) suspend resume partial function for Brewies.StoreKitManager.purchase(StoreKit.Product) async throws -&gt; Swift.Optional&lt;StoreKit.Transaction&gt;"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Monetization/Store/StoreKitManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "408">
+               </Location>
+               <Location
+                  uuid = "6ED99AEE-06F7-435E-A162-3A679D04C1AA - cdb4d0b04f134206"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "(4) await resume partial function for Brewies.StoreKitManager.purchase(StoreKit.Product) async throws -&gt; Swift.Optional&lt;StoreKit.Transaction&gt;"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Monetization/Store/StoreKitManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "40">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Account/UserViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "UserViewModel"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 6f58b0f8834b7223"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "property wrapper backing initializer of Brewies.UserViewModel.user : Brewies.User"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "32">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 8efde14e3c7483d5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.user.getter : Brewies.User"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "304">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 29144540576193e9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.user.setter : Brewies.User"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "156">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - f5d4c940f206b7d8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.user.modify : Brewies.User"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 7f4c925ba7b3f5e9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.user.modify : Brewies.User with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - dde97087f4d059f6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.$user.getter : Combine.Published&lt;Brewies.User&gt;.Publisher"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "96">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 225b0d36e8a858a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.$user.setter : Combine.Published&lt;Brewies.User&gt;.Publisher"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - 7224c07290bc5c6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.$user.modify : Combine.Published&lt;Brewies.User&gt;.Publisher"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "56">
+               </Location>
+               <Location
+                  uuid = "47BC2F77-4E4A-4415-9B0C-F6E4430C7328 - fdc2bc198bddaf7c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Brewies.UserViewModel.$user.modify : Combine.Published&lt;Brewies.User&gt;.Publisher with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "Brewies"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Account/UserViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "14"
+                  endingLineNumber = "14"
+                  offsetFromSymbolStart = "24">
                </Location>
             </Locations>
          </BreakpointContent>

@@ -19,14 +19,14 @@ class ContentViewModel: ObservableObject {
     @Published var showNoCoffeeShopsAlert = false
     @Published var showNoAdsAvailableAlert = false
     @Published var  showNoCreditsAlert = false
-
+    
     @ObservedObject var userViewModel = UserViewModel.shared
     @ObservedObject var locationManager = LocationManager()
     var rewardAdController = RewardAdController()
     
     init() {
         rewardAdController.onUserDidEarnReward = { [weak self] in
-            self?.userViewModel.user.credits += 1
+            self?.userViewModel.addCredits(1)
             self?.userViewModel.syncCredits()
         }
         rewardAdController.requestIDFA()
@@ -36,15 +36,15 @@ class ContentViewModel: ObservableObject {
         }
         
     }
-
+    
     func fetchCoffeeShops(using: YelpSearchParams?, visibleRegionCenter: CLLocationCoordinate2D?) {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
             return
         }
-
+        
         let selectedRadius = CLLocationDistance(using?.radiusInMeters ?? 5000) // Free gets 3 mile radius
-
+        
         if userViewModel.user.isSubscribed {
             if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
                 self.coffeeShops = cachedCoffeeShops
@@ -53,8 +53,6 @@ class ContentViewModel: ObservableObject {
                 return
             }
         }
-
-        deductUserCredit()
         let yelpAPI = YelpAPI()
         yelpAPI.fetchIndependentCoffeeShops (
             latitude: centerCoordinate.latitude,
@@ -63,6 +61,7 @@ class ContentViewModel: ObservableObject {
             sort_by: using?.sortBy ?? "distance",
             pricing: using?.priceForAPI ?? nil
         ){ [self] coffeeShops in
+            deductUserCredit() // If they make a request, they get deducted
             if coffeeShops.isEmpty {
                 self.showNoCoffeeShopsAlert = true
             } else {
@@ -70,20 +69,20 @@ class ContentViewModel: ObservableObject {
                 selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
                 showBrewPreview = true
                 
-                // The below line should only be uncommented if you want to cache the results for subscribed users
+                // cache the results for subscribed users
                 UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
             }
         }
     }
-
     
-
+    
+    
     func handleRewardAd() {
         if let viewController = UIApplication.shared.windows.first?.rootViewController {
             rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: {
                 // This code will be called when the ad completes
                 // Add credit to the user
-                self.userViewModel.user.credits += 1
+                self.userViewModel.addCredits(1)
                 self.userViewModel.syncCredits()
             })
         } else {
@@ -94,8 +93,7 @@ class ContentViewModel: ObservableObject {
     
     func deductUserCredit() {
         if userViewModel.user.credits > 0 {
-            userViewModel.user.credits -= 1
-            userViewModel.syncCredits()
+            userViewModel.subtractCredits(1)
         } else {
             showNoCreditsAlert = true
         }

@@ -82,7 +82,6 @@ class YelpAPI {
         ]
         
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
-            print(response)
             switch response.result {
             case .success(let yelpResponse):
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
