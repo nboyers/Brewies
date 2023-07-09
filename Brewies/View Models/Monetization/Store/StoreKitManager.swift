@@ -35,6 +35,30 @@ class StoreKitManager: ObservableObject {
     let adRemovalProductId = "com.nobosoftware.removeAds"
     let creditsProductId = "com.nobosoftware.BuyableRequests"
     
+    
+    //Subscription Types
+    let yearlyID = "com.nobosoftware.yearlySubcription"
+    let semiYearlyID = "com.nobosoftware.biannualTier"
+    let monthlyID = "com.nobosoftware.monthlyTier"
+    
+    @Sendable func getCreditsForSubscription(_ productId: String) {
+        switch productId {
+        case monthlyID:
+            userViewModel.addCredits(15)
+            break
+        case semiYearlyID:
+            userViewModel.addCredits(90)
+           break
+        case yearlyID:
+            userViewModel.addCredits(180)
+        break
+        case creditsProductId:
+            userViewModel.addCredits(5)
+        default:
+          break
+        }
+    }
+    
     init() {
         //check the path for the plist
         
@@ -183,12 +207,24 @@ class StoreKitManager: ObservableObject {
             //Transaction will be verified for automatically using JWT(jwsRepresentation) - we can check the result
             let transaction = try checkVerified(verificationResult)
             
-            if product.id == creditsProductId {
-                DispatchQueue.main.async {
-                    self.userViewModel.addCredits(5)
-                    self.userViewModel.syncCredits()
-                }
-            }
+            DispatchQueue.main.async {
+                  switch product.id {
+                  case self.creditsProductId:
+                      self.getCreditsForSubscription(product.id)
+                      break
+                  case self.yearlyID:
+                      self.getCreditsForSubscription(product.id)
+                  case self.semiYearlyID:
+                      self.getCreditsForSubscription(product.id)
+                      break
+                  case self.monthlyID:
+                      self.getCreditsForSubscription(product.id)
+                      break
+                  default:
+                      break
+                  }
+              }
+            
             //the transaction is verified, deliver the content to the user
             await updateCustomerProductStatus()
             
@@ -196,13 +232,13 @@ class StoreKitManager: ObservableObject {
             await transaction.finish()
             
             return transaction
+            
         case .userCancelled, .pending:
             return nil
             
         default:
             return nil
         }
-        
     }
     //check if product has already been purchased
     func isPurchased(_ product: Product) async throws -> Bool {

@@ -124,15 +124,17 @@ struct ContentView: View {
                         
                         Button(action: {
                             showingStorefront = true
-                        }) {
+                        }) {//width: geo.size.width/3, height: geo.size.width/15)
                             Text("Discover Credits: \(userVM.user.credits)")
-                                .padding(10)
-                                .frame(width: geo.size.width/3, height: geo.size.width/15)
+                                .frame(minWidth: geo.size.width/3, idealWidth: geo.size.width/3, maxWidth: geo.size.width/3 + CGFloat(5 * String(userVM.user.credits).count), minHeight:geo.size.width/20, idealHeight: geo.size.width/20, maxHeight: geo.size.width/20)
+                                .padding(5)
                                 .background(.black)
                                 .font(.caption)
                                 .foregroundColor(Color.cyan)
                                 .cornerRadius(10)
                                 .shadow(radius: 50)
+                                .minimumScaleFactor(0.5)
+
                         }
                         
                         

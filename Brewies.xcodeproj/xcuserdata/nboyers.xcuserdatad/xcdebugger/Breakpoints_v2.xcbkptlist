@@ -562,53 +562,5 @@
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6ED99AEE-06F7-435E-A162-3A679D04C1AA"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Brewies/View Models/Monetization/Store/StoreKitManager.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
-            landmarkName = "purchase(_:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6ED99AEE-06F7-435E-A162-3A679D04C1AA - 22267758691de968"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Brewies.StoreKitManager.purchase(StoreKit.Product) async throws -&gt; Swift.Optional&lt;StoreKit.Transaction&gt;"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Monetization/Store/StoreKitManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "192"
-                  endingLineNumber = "192"
-                  offsetFromSymbolStart = "408">
-               </Location>
-               <Location
-                  uuid = "6ED99AEE-06F7-435E-A162-3A679D04C1AA - cdb4d0b04f134206"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) await resume partial function for Brewies.StoreKitManager.purchase(StoreKit.Product) async throws -&gt; Swift.Optional&lt;StoreKit.Transaction&gt;"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/View%20Models/Monetization/Store/StoreKitManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "192"
-                  endingLineNumber = "192"
-                  offsetFromSymbolStart = "40">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
