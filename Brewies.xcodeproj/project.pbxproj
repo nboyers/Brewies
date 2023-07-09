@@ -56,6 +56,7 @@
 		FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = FFC5D12C2A44E608007D9F52 /* Introspect */; };
 		FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
+		FFD6F86F2A5B50A600575585 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD6F86E2A5B50A600575585 /* ShareSheet.swift */; };
 		FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF424912A528A640088AC1D /* StoreKitManager.swift */; };
 		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
 		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
@@ -127,6 +128,7 @@
 		FFBFFD272A59D28D004576EC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompleter.swift; sourceTree = "<group>"; };
+		FFD6F86E2A5B50A600575585 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		FFF424912A528A640088AC1D /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
@@ -342,10 +344,9 @@
 		FF8E433E2A339D9E00CEC800 /* Account */ = {
 			isa = PBXGroup;
 			children = (
-				FFBFFD292A59D297004576EC /* Design */,
 				FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */,
-				FFBFFD272A59D28D004576EC /* SettingsView.swift */,
-				FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */,
+				FFD6F86C2A5B466400575585 /* Settings */,
+				FFBFFD292A59D297004576EC /* Design */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -436,6 +437,24 @@
 				FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */,
 			);
 			path = Design;
+			sourceTree = "<group>";
+		};
+		FFD6F86C2A5B466400575585 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FFD6F86D2A5B509700575585 /* Helper */,
+				FFBFFD272A59D28D004576EC /* SettingsView.swift */,
+				FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		FFD6F86D2A5B509700575585 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				FFD6F86E2A5B50A600575585 /* ShareSheet.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -622,6 +641,7 @@
 				FF3637BB2A57521400A33899 /* StorefrontView.swift in Sources */,
 				FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */,
 				FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */,
+				FFD6F86F2A5B50A600575585 /* ShareSheet.swift in Sources */,
 				FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */,
 				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
 				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,

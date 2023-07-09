@@ -258,13 +258,13 @@ struct FiltersView: View {
                     
                     
                     
-                        .onAppear {
-                            initialState["radiusInMeters"] = yelpParams.radiusInMeters
-                            initialState["radiusUnit"] = yelpParams.radiusUnit
-                            initialState["businessType"] = yelpParams.businessType
-                            initialState["sortBy"] = yelpParams.sortBy
-                            initialState["price"] = yelpParams.price
-                        }
+                    .onAppear {
+                        initialState["radiusInMeters"] = yelpParams.radiusInMeters
+                        initialState["radiusUnit"] = yelpParams.radiusUnit
+                        initialState["businessType"] = yelpParams.businessType
+                        initialState["sortBy"] = yelpParams.sortBy
+                        initialState["price"] = yelpParams.price
+                    }
                 }
             }
             //            .onAppear {

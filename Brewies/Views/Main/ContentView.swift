@@ -301,41 +301,46 @@ struct ContentView: View {
             
             //MARK: User Profile
             .sheet(isPresented: $showSignUpWithApple) {
-                GeometryReader { geo in
-                    VStack {
-                        HStack() {
-                            Button(action: {
-                                print("TODO: Handle settings button")
-                            }) {
-                                Image(systemName: "gear")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(.primary)
-                                    .padding()
-                            }
-                            Spacer()
-                            
-                            Button(action: {
-                                showSignUpWithApple = false
-                            }) {
-                                Image(systemName: "x.circle.fill")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(.primary)
-                                    .padding()
-                            }
+                        if userVM.user.isLoggedIn {
+                            UserProfileView(userViewModel: userVM, contentViewModel: contentVM)
+                                .presentationDetents([.medium])
+                        } else {
+                            GeometryReader { geo in
+                                VStack {
+                                    HStack() {
+                                        Button(action: {
+                                            print("TODO: Handle settings button")
+                                        }) {
+                                            Image(systemName: "gear")
+                                                .resizable()
+                                                .frame(width: 25, height: 25)
+                                                .foregroundColor(.primary)
+                                                .padding()
+                                        }
+                                        Spacer()
+                                        
+                                        Button(action: {
+                                            showSignUpWithApple = false
+                                        }) {
+                                            Image(systemName: "x.circle.fill")
+                                                .resizable()
+                                                .frame(width: 25, height: 25)
+                                                .foregroundColor(.primary)
+                                                .padding()
+                                        }
+                                    }
+                                    Spacer()
+                                    SignInWithAppleButton(action: {
+                                        signInCoordinator.startSignInWithAppleFlow()
+                                    }, label: "Sign in with Apple")
+                                    .frame(width: 280, height: 45)
+                                    .padding(.top, 50)
                         }
-                        Spacer()
-                        SignInWithAppleButton(action: {
-                            signInCoordinator.startSignInWithAppleFlow()
-                        }, label: "Sign in with Apple")
-                        .frame(width: 280, height: 45)
-                        .padding(.top, 50)
                     }
+                            
+                            .presentationDragIndicator(.visible)
+                            .presentationDetents([.medium, .large])
                 }
-                
-                .presentationDragIndicator(.visible)
-                .presentationDetents([.medium, .large])
             } //end user sheet
             
             .sheet(isPresented: $showingUserProfile) {

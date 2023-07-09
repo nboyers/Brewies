@@ -13,20 +13,20 @@ struct EditProfileView: View {
     @State private var lastName: String = ""
     @State private var isLoading = false
 
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     var body: some View {
         ZStack {
             Form {
-                Section(header: Text("First Name")) {
+                Section(header: Text("Name")) {
                     TextField("First Name", text: $firstName)
-                }
-                
-                Section(header: Text("Last Name")) {
                     TextField("Last Name", text: $lastName)
                 }
                 
                 Section {
                     Button(action: {
                         saveChanges()
+                        self.presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Save Changes")
                     }
@@ -35,14 +35,15 @@ struct EditProfileView: View {
             .onAppear(perform: loadUserData)
             .navigationTitle("Edit Profile")
          
-            
             if isLoading {
                 ProgressView()
                     .scaleEffect(2)
                     .progressViewStyle(CircularProgressViewStyle(tint: .blue))
             }
+       
         }
     }
+
     
     func loadUserData() {
         firstName = userViewModel.user.firstName
