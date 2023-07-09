@@ -166,7 +166,7 @@ struct BrewPreview: View {
                     }
                     .foregroundColor(.gray)
                     .font(.caption)
-                    Text(coffeeShop.displayPhone.isEmpty ? "Phone number Unavailable" : coffeeShop.displayPhone)
+                    Text(coffeeShop.displayPhone.isEmpty ? "Phone number unavailable" : coffeeShop.displayPhone)
                         .font(.caption)
                         .foregroundColor(.gray)
                 }
