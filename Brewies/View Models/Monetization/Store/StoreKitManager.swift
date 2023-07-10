@@ -112,10 +112,11 @@ class StoreKitManager: ObservableObject {
         for product in storeProducts {
             if product.id == adRemovalProductId {
                 isAdRemovalPurchased = (try? await isPurchased(product)) ?? false
+                break
             }
-            break
         }
     }
+
     
     //listen for transactions - start this early in the app
     func listenForTransactions() -> Task<Void, Error> {
@@ -185,10 +186,20 @@ class StoreKitManager: ObservableObject {
                     purchasedCourses.append(course)
                 }
                 
+                
                 switch transaction.productType {
                 case .autoRenewable:
                     if let subscription = subscriptions.first(where: {$0.id == transaction.productID}) {
                         purchasedSubscriptions.append(subscription)
+                    }
+                    if UserDefaults.standard.bool(forKey: "isSubscribed") {
+                        if let product = storeProducts.first(where: { $0.id == yearlyID }) {
+                            purchasedCourses.append(product)
+                        } else if let product = storeProducts.first(where: { $0.id == semiYearlyID }) {
+                            purchasedCourses.append(product)
+                        } else if let product = storeProducts.first(where: { $0.id == monthlyID }) {
+                            purchasedCourses.append(product)
+                        }
                     }
                     
                 default:
@@ -218,7 +229,9 @@ class StoreKitManager: ObservableObject {
         case .success(let verificationResult):
             //Transaction will be verified for automatically using JWT(jwsRepresentation) - we can check the result
             let transaction = try checkVerified(verificationResult)
-            
+            if product.id == yearlyID || product.id == semiYearlyID || product.id == monthlyID {
+                 UserDefaults.standard.set(true, forKey: "isSubscribed")
+             }
             DispatchQueue.main.async {
                   switch product.id {
                   case self.creditsProductId:

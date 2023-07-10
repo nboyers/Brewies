@@ -89,7 +89,7 @@ struct SubscriptionView: View {
                             .font(.caption)
                     }
                 }
-            }
+            }  .onAppear(perform: setup)
         } else {
             VStack {
                 Text("Please sign in to view.")
@@ -99,10 +99,14 @@ struct SubscriptionView: View {
                 .frame(width: 280, height: 45)
                 .padding(.top, 50)
             }
-            
         }
     }
-    
+
+    func setup() {
+          Task {
+              await storeVM.updateCustomerProductStatus()
+          }
+      }
     
     func buy(product: Product) async {
         do {

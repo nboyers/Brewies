@@ -10,22 +10,18 @@ import SwiftUI
 import MapKit
 
 class YelpSearchParams: ObservableObject {
+    // Actual state
     @Published var radiusInMeters: Int = 5000 // start with 5 miles in meters
     @Published var radiusUnit: String = "mi" // Default unit is miles now
     @Published var businessType: String = "coffee shop"
     @Published var sortBy: String = "distance"
     @Published var price: [String] = []
     @Published var priceForAPI: [Int] = []
-    
     func resetFilters() {
-        self.radiusInMeters = 5000 // reset to 3^ish miles
-        self.radiusUnit = "mi"
-        self.businessType = "coffee shop"
-        self.sortBy = "distance"
-        self.price = []
         
     }
 }
+
 
 struct FiltersView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -34,9 +30,9 @@ struct FiltersView: View {
     @ObservedObject var yelpParams: YelpSearchParams
     @EnvironmentObject var userVM: UserViewModel
     @ObservedObject private var contentVM = ContentViewModel()
-    @State private var featureLocked: Bool = true
-    
+ 
     @State private var applyChangesCount: Int = 0
+    
     @State private var selectedSort: String = ""
     @State private var selectedOption: Int = 0
     @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186]
@@ -68,6 +64,7 @@ struct FiltersView: View {
         initialState["businessType"] = yelpParams.businessType
         initialState["sortBy"] = yelpParams.sortBy
         initialState["price"] = yelpParams.price
+        print(yelpParams.radiusInMeters)
     }
     
     private func priceButtonAction(price: String) {
@@ -80,7 +77,10 @@ struct FiltersView: View {
             yelpParams.price.append(price)
             yelpParams.priceForAPI.append(price.count)
         }
+        // Reflect changes in initialState
+        updateInitialState()
     }
+    
     
     
     
@@ -196,6 +196,7 @@ struct FiltersView: View {
                         Picker("Search Radius", selection: $yelpParams.radiusInMeters) {
                             ForEach(radiusOptionsInMeters, id: \.self) { unit in
                                 Text("\(yelpParams.radiusUnit == "km" ? Double(unit)/1000.0 : Double(unit)/1609.34, specifier: "%.2f") \(yelpParams.radiusUnit)").tag(unit)
+                              
                             }
                         }.pickerStyle(SegmentedPickerStyle())
                             .padding(.horizontal)
@@ -217,7 +218,7 @@ struct FiltersView: View {
                                 Divider()
                                 //MARK: Brew Type
                                 Text("Currently Unavailable")
-//                                Text("Business Category")
+                                //                                Text("Business Category")
                                     .font(.title2)
                                     .bold()
                                     .padding(.horizontal)
@@ -244,7 +245,7 @@ struct FiltersView: View {
                                     }
                                 }
                             }
-                           
+                            
                             .opacity(0.5) // This lowers the opacity, making it appear more "disabled"
                             Spacer()
                             Image(systemName: "lock.fill") // This overlays a lock icon
@@ -255,9 +256,6 @@ struct FiltersView: View {
                                 .opacity(0.5) // This makes the lock icon semi-transparent
                         }
                     }
-                    
-                    
-                    
                     .onAppear {
                         initialState["radiusInMeters"] = yelpParams.radiusInMeters
                         initialState["radiusUnit"] = yelpParams.radiusUnit
@@ -275,15 +273,8 @@ struct FiltersView: View {
             
             GeometryReader { geo in
                 Button(action: {
-                    // Apply changes
-                    updateInitialState()
-                    
-                    //Reset Change counter
-                    applyChangesCount = 0
-                    //Close View
-                    if applyChangesCount == 0 {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
+                    // Close the view
+                    self.presentationMode.wrappedValue.dismiss()
                 }) {
                     let changesCount = self.changesCount()
                     Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
@@ -291,7 +282,6 @@ struct FiltersView: View {
                         .background(.red)
                         .foregroundColor(.white)
                 }
-                
                 .cornerRadius(15)
             }
             Spacer()

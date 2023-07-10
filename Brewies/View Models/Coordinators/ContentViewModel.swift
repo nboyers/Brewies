@@ -22,8 +22,10 @@ class ContentViewModel: ObservableObject {
     
     @ObservedObject var userViewModel = UserViewModel.shared
     @ObservedObject var locationManager = LocationManager()
-    let yelpParams = YelpSearchParams()
-    var rewardAdController = RewardAdController()
+    @ObservedObject var yelpParams = YelpSearchParams()
+    
+    private var rewardAdController = RewardAdController()
+    
     
     init() {
         rewardAdController.onUserDidEarnReward = { [weak self] in
@@ -46,9 +48,11 @@ class ContentViewModel: ObservableObject {
         let yelpAPI = YelpAPI()
         let selectedRadius = CLLocationDistance(yelpParams.radiusInMeters) // Free gets 3 mile radius
         
+        print(yelpParams.radiusInMeters)
         //This is where the app is not extendin the
         if userViewModel.user.isSubscribed {
-            if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request 
+            if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request
+                print("GREATER THAN 3 MILES ACHIEVED")
                 yelpAPI.fetchIndependentCoffeeShops(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
                     deductUserCredit() // If they make a request, they get deducted
                     if coffeeShops.isEmpty {

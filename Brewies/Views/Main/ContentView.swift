@@ -90,6 +90,7 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
+
                 }
                 
                 .sheet(isPresented: $showingFilterView) {

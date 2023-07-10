@@ -29,6 +29,8 @@ class UserViewModel: ObservableObject {
     func saveUserLoginStatus() {
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         UserDefaults.standard.set(user.userID, forKey: "userID")
+        UserDefaults.standard.set(user.isSubscribed, forKey: "isSubscribed") // Save isSubscribed status to UserDefaults
+        
         saveUserDetails()
     }
 
@@ -44,6 +46,7 @@ class UserViewModel: ObservableObject {
     func loadUserDetails() {
         let firstName = UserDefaults.standard.string(forKey: "UserFirstName") ?? ""
         let lastName = UserDefaults.standard.string(forKey: "UserLastName") ?? ""
+        user.isSubscribed = UserDefaults.standard.bool(forKey: "isSubscribed")
         user.firstName = firstName
         user.lastName = lastName
     }
@@ -80,6 +83,21 @@ class UserViewModel: ObservableObject {
         let key = user.isLoggedIn ? "UserCredits_\(self.user.userID)" : "UserCredits_Guest"
         UserDefaults.standard.set(self.user.credits, forKey: key)
     }
+    
+    func subscribe() {
+        // Subscription logic here...
+        // Once the subscription is successful:
+        self.user.isSubscribed = true
+        UserDefaults.standard.set(true, forKey: "isSubscribed")
+    }
+
+    func unsubscribe() {
+        // Unsubscription logic here...
+        // Once the unsubscription is successful:
+        self.user.isSubscribed = false
+        UserDefaults.standard.set(false, forKey: "isSubscribed")
+    }
+
     
     func addToFavorites(_ coffeeShop: CoffeeShop) {
         user.favorites.append(coffeeShop)

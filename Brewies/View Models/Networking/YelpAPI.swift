@@ -7,10 +7,11 @@
 import Foundation
 import Alamofire
 
-class YelpAPI {
+class YelpAPI : ObservableObject {
     private let apiKey = Secrets.yelpApiKey
     var favoriteCoffeeShops: [CoffeeShop] = []
     var yelpParam = YelpSearchParams()
+    
     // Add excluded chain names here
     private lazy var chainCompanyNames: Set<String> = [
         "Starbucks", "Starbucks Coffee", "Peets", "Coffee Bean",
@@ -68,6 +69,7 @@ class YelpAPI {
             "sort_by": yelpParam.sortBy
         ]
         
+        print("YELPAPI: \(yelpParam.radiusInMeters)")
         if let pricing = pricing {
             let priceParameter = pricing.map { String($0) }.joined(separator: ",")
             parameters["price"] = priceParameter
