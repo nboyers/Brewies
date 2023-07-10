@@ -45,7 +45,7 @@ class StoreKitManager: ObservableObject {
         let defaults = UserDefaults.standard
 
         // Check if user has already received credits for this purchase
-        if defaults.bool(forKey: productId) {
+        if defaults.bool(forKey: productId) && productId != creditsProductId {
             print("User has already received credits for this purchase")
             return
         }
@@ -232,6 +232,7 @@ class StoreKitManager: ObservableObject {
             if product.id == yearlyID || product.id == semiYearlyID || product.id == monthlyID {
                  UserDefaults.standard.set(true, forKey: "isSubscribed")
              }
+            
             DispatchQueue.main.async {
                   switch product.id {
                   case self.creditsProductId:
