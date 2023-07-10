@@ -22,6 +22,7 @@ class ContentViewModel: ObservableObject {
     
     @ObservedObject var userViewModel = UserViewModel.shared
     @ObservedObject var locationManager = LocationManager()
+    let yelpParams = YelpSearchParams()
     var rewardAdController = RewardAdController()
     
     init() {
@@ -37,15 +38,33 @@ class ContentViewModel: ObservableObject {
         
     }
     
-    func fetchCoffeeShops(using: YelpSearchParams?, visibleRegionCenter: CLLocationCoordinate2D?) {
+    func fetchCoffeeShops(visibleRegionCenter: CLLocationCoordinate2D?) {
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
             return
         }
+        let yelpAPI = YelpAPI()
+        let selectedRadius = CLLocationDistance(yelpParams.radiusInMeters) // Free gets 3 mile radius
         
-        let selectedRadius = CLLocationDistance(using?.radiusInMeters ?? 5000) // Free gets 3 mile radius
-        
+        //This is where the app is not extendin the
         if userViewModel.user.isSubscribed {
+            if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request 
+                yelpAPI.fetchIndependentCoffeeShops(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
+                    deductUserCredit() // If they make a request, they get deducted
+                    if coffeeShops.isEmpty {
+                        self.showNoCoffeeShopsAlert = true
+                    } else {
+                        self.coffeeShops = coffeeShops
+                        selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
+                        showBrewPreview = true
+                        
+                        // cache the results for subscribed users
+                        UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
+                    }
+                }
+                return
+            }
+            
             if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
                 self.coffeeShops = cachedCoffeeShops
                 self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
@@ -53,14 +72,8 @@ class ContentViewModel: ObservableObject {
                 return
             }
         }
-        let yelpAPI = YelpAPI()
-        yelpAPI.fetchIndependentCoffeeShops (
-            latitude: centerCoordinate.latitude,
-            longitude: centerCoordinate.longitude,
-            radius: Int(selectedRadius),
-            sort_by: using?.sortBy ?? "distance",
-            pricing: using?.priceForAPI ?? nil
-        ){ [self] coffeeShops in
+        
+        yelpAPI.fetchIndependentCoffeeShops(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
             deductUserCredit() // If they make a request, they get deducted
             if coffeeShops.isEmpty {
                 self.showNoCoffeeShopsAlert = true
@@ -90,7 +103,6 @@ class ContentViewModel: ObservableObject {
             showNoAdsAvailableAlert = true
         }
     }
-    
     func deductUserCredit() {
         if userViewModel.user.credits > 0 {
             userViewModel.subtractCredits(1)

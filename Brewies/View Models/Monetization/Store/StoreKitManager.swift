@@ -42,22 +42,34 @@ class StoreKitManager: ObservableObject {
     let monthlyID = "com.nobosoftware.monthlyTier"
     
     @Sendable func getCreditsForSubscription(_ productId: String) {
+        let defaults = UserDefaults.standard
+
+        // Check if user has already received credits for this purchase
+        if defaults.bool(forKey: productId) {
+            print("User has already received credits for this purchase")
+            return
+        }
+
         switch productId {
         case monthlyID:
             userViewModel.addCredits(15)
             break
         case semiYearlyID:
             userViewModel.addCredits(90)
-           break
+            break
         case yearlyID:
             userViewModel.addCredits(180)
-        break
+            break
         case creditsProductId:
             userViewModel.addCredits(5)
         default:
-          break
+            break
         }
+
+        // Save that user has received credits for this purchase
+        defaults.set(true, forKey: productId)
     }
+
     
     init() {
         //check the path for the plist

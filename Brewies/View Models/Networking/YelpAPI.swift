@@ -10,7 +10,7 @@ import Alamofire
 class YelpAPI {
     private let apiKey = Secrets.yelpApiKey
     var favoriteCoffeeShops: [CoffeeShop] = []
-    
+    var yelpParam = YelpSearchParams()
     // Add excluded chain names here
     private lazy var chainCompanyNames: Set<String> = [
         "Starbucks", "Starbucks Coffee", "Peets", "Coffee Bean",
@@ -53,23 +53,19 @@ class YelpAPI {
     ]
     
     func fetchIndependentCoffeeShops (
-        term: String = "coffee shop",
         latitude: Double,
         longitude: Double,
-        radius: Int = 5000,
-        categories: String = "coffeeshop",
-        sort_by: String = "distance",
         pricing: [Int]? = nil,
         completion: @escaping ([CoffeeShop]) -> Void
     ) {
         let url = "https://api.yelp.com/v3/businesses/search"
         var parameters: [String: Any] = [
-            "term": term,
+            "term": yelpParam.businessType,
             "latitude": latitude,
             "longitude": longitude,
-            "radius": radius,
-            "categories": categories,
-            "sort_by": sort_by
+            "radius": yelpParam.radiusInMeters,
+            "categories": yelpParam.businessType,
+            "sort_by": yelpParam.sortBy
         ]
         
         if let pricing = pricing {

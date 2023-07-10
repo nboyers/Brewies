@@ -90,8 +90,6 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
-    
-                    
                 }
                 
                 .sheet(isPresented: $showingFilterView) {
@@ -105,7 +103,7 @@ struct ContentView: View {
                             // Check if the user has enough credits to perform a search
                             if userVM.user.credits > 0 {
                                 // Perform the search
-                                contentVM.fetchCoffeeShops(using: nil, visibleRegionCenter: visibleRegionCenter)
+                                contentVM.fetchCoffeeShops(visibleRegionCenter: visibleRegionCenter)
                             } else {
                                 // If the user does not have enough credits, display an alert
                                 showNoCreditsAlert = true

@@ -11,7 +11,7 @@ import MapKit
 class UserCache {
     static let shared = UserCache()
     private let calendar = Calendar.current
-    private let cachePeriodInDays = 30
+    private let cachePeriodInDays = 1
     
     private init() {}
     
@@ -45,7 +45,7 @@ class UserCache {
          let daysPassed = calendar.dateComponents([.day], from: cacheDate, to: Date()).day ?? 0
 
          if daysPassed >= cachePeriodInDays {
-             // Cache is older than 30 days, clear it
+             // Cache is older than 1 days, clear it
              UserDefaults.standard.removeObject(forKey: key)
              UserDefaults.standard.removeObject(forKey: dateKey)
              return nil

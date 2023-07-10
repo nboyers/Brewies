@@ -12,15 +12,15 @@ import MapKit
 class YelpSearchParams: ObservableObject {
     @Published var radiusInMeters: Int = 5000 // start with 5 miles in meters
     @Published var radiusUnit: String = "mi" // Default unit is miles now
-    @Published var businessType: String = "coffeeshop"
+    @Published var businessType: String = "coffee shop"
     @Published var sortBy: String = "distance"
     @Published var price: [String] = []
     @Published var priceForAPI: [Int] = []
     
     func resetFilters() {
-        self.radiusInMeters = 5000 // reset to 5 miles
+        self.radiusInMeters = 5000 // reset to 3^ish miles
         self.radiusUnit = "mi"
-        self.businessType = ""
+        self.businessType = "coffee shop"
         self.sortBy = "distance"
         self.price = []
         
@@ -32,7 +32,7 @@ struct FiltersView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @ObservedObject var yelpParams: YelpSearchParams
-    @EnvironmentObject var user: UserViewModel
+    @EnvironmentObject var userVM: UserViewModel
     @ObservedObject private var contentVM = ContentViewModel()
     @State private var featureLocked: Bool = true
     
@@ -51,7 +51,7 @@ struct FiltersView: View {
     
     private func changesCount() -> Int {
         var changesCount = 0
-        if let initialPrice = initialState["price"] as? [Int] { // Notice the change here
+        if let initialPrice = initialState["price"] as? [Int] {
             let addedPrice = yelpParams.priceForAPI.filter { !initialPrice.contains($0) }
             let removedPrice = initialPrice.filter { !yelpParams.priceForAPI.contains($0) }
             changesCount += addedPrice.count + removedPrice.count
@@ -153,7 +153,7 @@ struct FiltersView: View {
                                     )
                                     .font(.body)
                                 
-                            }.disabled(featureLocked)
+                            }.disabled(!userVM.user.isSubscribed)
                         }.padding(.vertical)
                         Spacer()
                     }
@@ -184,7 +184,7 @@ struct FiltersView: View {
                                 
                             }.padding(.horizontal)
                         }
-                    }.disabled(featureLocked)
+                    }.disabled(!userVM.user.isSubscribed)
                     Divider()
                     
                     VStack(alignment: .leading) {
@@ -208,7 +208,7 @@ struct FiltersView: View {
                             }
                         ), label: { Text(yelpParams.radiusUnit == "km" ? "Metric" : "Imperial") })
                         .padding(.horizontal)
-                    }.disabled(featureLocked)
+                    }.disabled(!userVM.user.isSubscribed)
                     
                     
                     VStack {
@@ -216,7 +216,8 @@ struct FiltersView: View {
                             VStack(alignment: .leading) {
                                 Divider()
                                 //MARK: Brew Type
-                                Text("Business Category")
+                                Text("Currently Unavailable")
+//                                Text("Business Category")
                                     .font(.title2)
                                     .bold()
                                     .padding(.horizontal)
@@ -243,7 +244,7 @@ struct FiltersView: View {
                                     }
                                 }
                             }
-                            .disabled(true)
+                           
                             .opacity(0.5) // This lowers the opacity, making it appear more "disabled"
                             Spacer()
                             Image(systemName: "lock.fill") // This overlays a lock icon
@@ -254,7 +255,6 @@ struct FiltersView: View {
                                 .opacity(0.5) // This makes the lock icon semi-transparent
                         }
                     }
-                    .disabled(featureLocked)
                     
                     
                     
@@ -267,9 +267,6 @@ struct FiltersView: View {
                     }
                 }
             }
-            //            .onAppear {
-            //                updateInitialState()
-            //            }
         }
         
         HStack(alignment: .center) {
@@ -281,15 +278,6 @@ struct FiltersView: View {
                     // Apply changes
                     updateInitialState()
                     
-                    // Make API Call
-                    contentVM.fetchCoffeeShops(using: yelpParams, visibleRegionCenter: visibleRegionCenter)
-                    
-                    //Reset back to default
-                    yelpParams.resetFilters()
-                    
-                    // Apply changes
-                    updateInitialState()
-                    
                     //Reset Change counter
                     applyChangesCount = 0
                     //Close View
@@ -297,22 +285,18 @@ struct FiltersView: View {
                         self.presentationMode.wrappedValue.dismiss()
                     }
                 }) {
-                    Text("Features currently unavailable")
+                    let changesCount = self.changesCount()
+                    Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
                         .frame(width: geo.size.width, height: 50)
                         .background(.red)
                         .foregroundColor(.white)
-                    //                    let changesCount = self.changesCount()
-                    //                    Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
-                    //                        .frame(width: geo.size.width, height: 50)
-                    //                        .background(.red)
-                    //                        .foregroundColor(.white)
                 }
                 
                 .cornerRadius(15)
             }
             Spacer()
                 .frame(width: 25)
-        }.disabled(true)
+        }.disabled(!userVM.user.isSubscribed)
             .frame(maxHeight: 75)
     }
 }
