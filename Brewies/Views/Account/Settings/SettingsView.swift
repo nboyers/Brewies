@@ -24,18 +24,19 @@ struct SettingsView: View {
                         .font(.largeTitle)
                     Spacer()
                 }
-                
-                // NavigationLink to EditProfileView
-                NavigationLink(destination: EditProfileView()) {
-                    Text("Edit Profile")
-                        .padding()
-                        .font(.title2)
-                        .frame(maxWidth: .infinity)
+                if userViewModel.user.isLoggedIn {
+                    // NavigationLink to EditProfileView
+                    NavigationLink(destination: EditProfileView()) {
+                        Text("Edit Profile")
+                            .padding()
+                            .font(.title2)
+                            .frame(maxWidth: .infinity)
+                    }
+                    
+                    .padding(.horizontal)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
                 }
-                .padding(.horizontal)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-                
                 NavigationLink(destination: StorefrontView()) {
                     HStack {
                         Text("In-App Store")
@@ -71,23 +72,25 @@ struct SettingsView: View {
                 .padding(.horizontal)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(10)
-
+                
                 Spacer()
-                Button(action: {
+                if userViewModel.user.isLoggedIn {
+                    Button(action: {
                         userViewModel.signOut()
-                       self.presentationMode.wrappedValue.dismiss()
-                }) {
-                    HStack {
-                        Text("Sign Out")
-                            .foregroundColor(.red)
-                            .padding()
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        HStack {
+                            Text("Sign Out")
+                                .foregroundColor(.red)
+                                .padding()
+                                .font(.title2)
+                                .frame(maxWidth: .infinity)
+                        }
                     }
+                    .padding(.horizontal)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
                 }
-                .padding(.horizontal)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
             }
             .padding()
             .navigationBarHidden(true)
@@ -100,7 +103,6 @@ struct SettingsView: View {
     }
     
     private func shareApp() {
-        let appURL = URL(string: "https://apps.apple.com/us/app/brewies/id6450864433")!
         showShareSheet = true
     }
     

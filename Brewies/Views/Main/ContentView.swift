@@ -240,8 +240,11 @@ struct ContentView: View {
                                     
                                 }
                             } else {
-                                Text("Cancel")
-                                    .foregroundColor(Color.accentColor)
+                                Image(systemName: "x.circle.fill")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.primary)
+                                    .padding()
                                 
                             }
                         }.padding(.horizontal)
