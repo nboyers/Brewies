@@ -29,7 +29,7 @@ struct FiltersView: View {
     
     @ObservedObject var yelpParams: YelpSearchParams
     @EnvironmentObject var userVM: UserViewModel
-    @ObservedObject private var contentVM = ContentViewModel()
+    @ObservedObject var contentVM: ContentViewModel
  
     @State private var applyChangesCount: Int = 0
     
@@ -273,6 +273,7 @@ struct FiltersView: View {
             
             GeometryReader { geo in
                 Button(action: {
+                    updateInitialState()
                     // Close the view
                     self.presentationMode.wrappedValue.dismiss()
                 }) {

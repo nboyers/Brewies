@@ -18,15 +18,17 @@ import Introspect
 //FIXME: Website Button in preview is broken
 
 struct ContentView: View {
-    @ObservedObject private var contentVM = ContentViewModel()
-    @ObservedObject var yelpParams =  YelpSearchParams()
+    @ObservedObject var storeKit = StoreKitManager()
+    
     private var rewardAd = RewardAdController()
     
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     
     @EnvironmentObject var userVM: UserViewModel
-    @ObservedObject var storeKit = StoreKitManager()
+    @EnvironmentObject var yelpParams: YelpSearchParams
+    @EnvironmentObject var contentVM: ContentViewModel
+
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
     @State private var mapView = MKMapView()
@@ -94,7 +96,7 @@ struct ContentView: View {
                 }
                 
                 .sheet(isPresented: $showingFilterView) {
-                    FiltersView(yelpParams: yelpParams, visibleRegionCenter: visibleRegionCenter)
+                    FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
                         .environmentObject(userVM)
                 }
                 

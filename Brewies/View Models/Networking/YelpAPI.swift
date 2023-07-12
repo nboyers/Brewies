@@ -10,7 +10,25 @@ import Alamofire
 class YelpAPI : ObservableObject {
     private let apiKey = Secrets.yelpApiKey
     var favoriteCoffeeShops: [CoffeeShop] = []
-    var yelpParam = YelpSearchParams()
+    @Published var yelpParam = YelpSearchParams() { didSet { updateParams() } }
+    
+    init(yelpParams: YelpSearchParams) {
+        self.yelpParam = yelpParams
+    }
+    
+    var radiusInMeters: Int = 5000
+    var businessType: String = "coffee shop"
+    var sortBy: String = "distance"
+    var price: [String] = []
+    var priceForAPI: [Int] = []
+    
+    private func updateParams() {
+        radiusInMeters = yelpParam.radiusInMeters
+        businessType = yelpParam.businessType
+        sortBy = yelpParam.sortBy
+        priceForAPI = yelpParam.priceForAPI
+    }
+    
     
     // Add excluded chain names here
     private lazy var chainCompanyNames: Set<String> = [
@@ -43,6 +61,7 @@ class YelpAPI : ObservableObject {
         "Figaro Coffee", "Cafe Barbera", "AMT Coffee", "Ya Kun Kaya Toast", "Drunkin'", "Krispy Kreme Doughnuts"
         ,"Joffrey’s Coffee & Tea Company", "Mega Play", "RaceTrac", "Speedway", "Gas station", "IHOP", "Sheetz", "Ciro's Pizza", "Waffle House","Peet's Coffee"
     ]
+    
     private lazy var undesiredCatagories : Set<String> = [
         "wine_bars", "bars", "pizza",
         "servicestations","hotdogs","burgers",
@@ -64,9 +83,9 @@ class YelpAPI : ObservableObject {
             "term": yelpParam.businessType,
             "latitude": latitude,
             "longitude": longitude,
-            "radius": yelpParam.radiusInMeters,
-            "categories": yelpParam.businessType,
-            "sort_by": yelpParam.sortBy
+            "radius": radiusInMeters,
+            "categories": businessType,
+            "sort_by": sortBy
         ]
         
         print("YELPAPI: \(yelpParam.radiusInMeters)")
