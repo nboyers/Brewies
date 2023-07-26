@@ -9,7 +9,15 @@ import SwiftUI
 
 struct FavoritesView: View {
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
+    @ObservedObject var storeKit = StoreKitManager()
+    
     @Binding var showPreview: Bool
+   
+    @EnvironmentObject var userVM: UserViewModel
+
+    @State private var showRemovalConfirmationAlert = false
+    @State private var toRemoveCoffeeShop: CoffeeShop?
+
     var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
@@ -18,8 +26,19 @@ struct FavoritesView: View {
                         NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
                             VStack {
                                 BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showPreview)
-                                AdBannerView()
-                                    .frame(width: 320, height: 50)
+                                if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
+                                    AdBannerView()
+                                        .frame(width: 320, height: 50)
+                                }
+                            }
+                        }
+                        .contextMenu {
+                            Button(action: {
+                                toRemoveCoffeeShop = coffeeShop
+                                showRemovalConfirmationAlert = true
+                            }) {
+                                Text("Remove from favorites")
+                                Image(systemName: "trash")
                             }
                         }
                     }
@@ -27,7 +46,16 @@ struct FavoritesView: View {
                 .padding(.all, 16)
             }
             .navigationTitle("Favorites")
+            .alert(isPresented: $showRemovalConfirmationAlert) {
+                Alert(title: Text("Remove from favorites"),
+                      message: Text("Are you sure you want to remove this coffee shop from your favorites?"),
+                      primaryButton: .destructive(Text("Remove")) {
+                        if let toRemove = toRemoveCoffeeShop {
+                            coffeeShopData.removeFromFavorites(toRemove)
+                        }
+                      },
+                      secondaryButton: .cancel())
+            }
         }
     }
 }
-

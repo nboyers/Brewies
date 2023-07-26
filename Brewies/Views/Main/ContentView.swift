@@ -12,9 +12,6 @@ import BottomSheet
 import AuthenticationServices
 import Introspect
 
-
-//FIXME: THe cancel button UI
-//FIXME: Credits button is broken (Not pulling up sheet)
 //FIXME: Website Button in preview is broken
 
 struct ContentView: View {
@@ -55,7 +52,6 @@ struct ContentView: View {
     let DISTANCE = CLLocationDistance(2500)
     
     let signInCoordinator = SignInWithAppleCoordinator()
-    
     
     var body: some View {
         TabView {
@@ -362,6 +358,7 @@ struct ContentView: View {
             }
             
             FavoritesView(showPreview: $contentVM.showBrewPreview)
+                .environmentObject(userVM)
                 .tabItem {
                     Image(systemName: "star.fill")
                     Text("Favorites")

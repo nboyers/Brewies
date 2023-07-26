@@ -49,56 +49,10 @@ struct BrewPreview: View {
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     
     @State private var isDetailShowing: Bool = false
-    
-    
-    var isFavorite: Bool {
-        userViewModel.user.favorites.contains(coffeeShop)
-    }
-    
-    //    var isOpen: Bool {
-    //        guard let todayDay = Calendar.current.dateComponents([.weekday], from: Date()).weekday, todayDay >= 1, todayDay <= 7 else {
-    //            // If we can't get the current day, return false
-    //            return false
-    //        }
-    //        // Adjust the index to match the Calendar API where Sunday = 1
-    //        let todayIndex = todayDay == 1 ? 6 : todayDay - 2
-    //
-    //        let currentTime = Calendar.current.dateComponents([.hour, .minute], from: Date())
-    //
-    //        // Find the open hours for today
-    //        for hours in coffeeShop.hours ?? [] {
-    //            for openHours in hours.open {
-    //                if openHours.day == todayIndex {
-    //                    guard let startTime = Date.fromTime(openHours.start),
-    //                          let endTime = Date.fromTime(openHours.end) else {
-    //                        return false
-    //                    }
-    //
-    //                    let startComponents = Calendar.current.dateComponents([.hour, .minute], from: startTime)
-    //                    let endComponents = Calendar.current.dateComponents([.hour, .minute], from: endTime)
-    //
-    //                    if let startHour = startComponents.hour, let startMinute = startComponents.minute,
-    //                       let endHour = endComponents.hour, let endMinute = endComponents.minute,
-    //                       let currentHour = currentTime.hour, let currentMinute = currentTime.minute {
-    //                        if startHour < endHour || (startHour == endHour && startMinute <= endMinute) {
-    //                            return currentHour > startHour && currentHour < endHour
-    //                                || (currentHour == startHour && currentMinute >= startMinute)
-    //                                || (currentHour == endHour && currentMinute <= endMinute)
-    //                        } else { // for cases where the shop is open overnight
-    //                            return currentHour > startHour
-    //                                || (currentHour == startHour && currentMinute >= startMinute)
-    //                                || currentHour < endHour
-    //                                || (currentHour == endHour && currentMinute <= endMinute)
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        return false
-    //    }
-    
     @State var showStorefront = false
     
+    var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
+
     var body: some View {
         VStack(alignment: .leading) {
             GeometryReader { geo in
@@ -137,8 +91,6 @@ struct BrewPreview: View {
                         }
                     }
                 }
-                
-                
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Spacer()
@@ -196,8 +148,10 @@ struct BrewPreview: View {
         if userViewModel.user.isSubscribed {
             if isFavorite {
                 userViewModel.removeFromFavorites(coffeeShop)
+                coffeeShopData.removeFromFavorites(coffeeShop)
             } else {
                 userViewModel.addToFavorites(coffeeShop)
+                coffeeShopData.addToFavorites(coffeeShop)
             }
         } else {
             showStorefront = true

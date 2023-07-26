@@ -24,8 +24,6 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
         }
     }
     
-    
-    
     func loadRewardedAd() {
         let request = GADRequest()
         
@@ -37,8 +35,6 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
             }
             rewardedAd = ad
             rewardedAd?.fullScreenContentDelegate = self
-            print("New Ad loaded")
-            
         })
     }
     
@@ -59,19 +55,16 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     
     //// Tells the delegate that the ad failed to present full screen content.
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        print("Ad did fail to present full screen content.")
         loadRewardedAd()  // Reload a new ad
     }
     
     
     /// Tells the delegate that the ad will present full screen content.
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("Ad will present full screen content.")
     }
     
     /// Tells the delegate that the ad dismissed full screen content.
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("Ad did dismiss full screen content.")
         onAdDidDismissFullScreenContent?()
     }
 }

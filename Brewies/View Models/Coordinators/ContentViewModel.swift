@@ -36,7 +36,6 @@ class ContentViewModel: ObservableObject {
         }
         rewardAdController.requestIDFA()
         rewardAdController.onAdDidDismissFullScreenContent = { [weak self] in
-            // handle ad being dismissed here, update your UI as needed
             self?.showAlert = true
         }
         
@@ -51,7 +50,7 @@ class ContentViewModel: ObservableObject {
         
         let selectedRadius = CLLocationDistance(yelpParams.radiusInMeters) // Free gets 3 mile radius
         
-        print(yelpParams.radiusInMeters)
+     
         //This is where the app is not extendin the
         if userViewModel.user.isSubscribed {
             if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request

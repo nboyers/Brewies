@@ -25,6 +25,7 @@ class CoffeeShopData: ObservableObject {
     func addToFavorites(_ coffeeShop: CoffeeShop) {
         if !favoriteShops.contains(coffeeShop) {
             favoriteShops.append(coffeeShop)
+            
         }
         if let index = cachedShops.firstIndex(of: coffeeShop) {
             cachedShops.remove(at: index)
@@ -47,7 +48,7 @@ class CoffeeShopData: ObservableObject {
     
     private func removeExpiredCachedShops() {
         let currentDate = Date()
-        cachedShops.removeAll(where: { Calendar.current.date(byAdding: .hour, value: 72, to: $0.lastAccessDate ?? Date.now)! < currentDate })
+        cachedShops.removeAll(where: { Calendar.current.date(byAdding: .month, value: 6, to: $0.lastAccessDate ?? Date.now)! < currentDate })
     }
     
     private func saveFavoriteShops() {

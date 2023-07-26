@@ -88,7 +88,6 @@ class YelpAPI : ObservableObject {
             "sort_by": sortBy
         ]
         
-        print("YELPAPI: \(yelpParam.radiusInMeters)")
         if let pricing = pricing {
             let priceParameter = pricing.map { String($0) }.joined(separator: ",")
             parameters["price"] = priceParameter
@@ -103,8 +102,7 @@ class YelpAPI : ObservableObject {
             case .success(let yelpResponse):
                 let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
                 completion(coffeeShops)
-            case .failure(let error):
-                print("Error fetching coffee shops: \(error.localizedDescription)")
+            case .failure(_):
                 completion([])
             }
         }
