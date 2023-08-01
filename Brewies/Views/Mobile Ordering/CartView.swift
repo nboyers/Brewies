@@ -71,13 +71,18 @@ struct CartView: View {
             }) {
                 HStack {
                     Spacer()
-                    Text("Pay with Apple")
+                    Text("Buy with")
+                        .font(.title)
+                    Image(systemName: "apple.logo")
+                        .font(.title)
+                    Text("Pay")
+                        .font(.title)
                     Spacer()
                 }
                 .padding()
                 .background(Color.black)
                 .foregroundColor(.white)
-                .cornerRadius(8)
+                .cornerRadius(100)
             }
             .padding([.top, .bottom, .leading, .trailing])
         }
@@ -120,8 +125,7 @@ struct CartView_Previews: PreviewProvider {
                     ModifierOption(name: "Caramel", price: 0.5)
                 ], singleSelection: false)
             ]
-        ))
-    ]
+        ))]
     
     static var previews: some View {
         NavigationView {
