@@ -10,26 +10,108 @@ import SwiftUI
 struct MenuView: View {
     @State private var selectedOrder: CoffeeOrder?
     @State private var isSheetPresented: Bool = false
-    @State private var cartItems: [CoffeeMenuItem] = []
+    @State private var cartItems: [CoffeeOrder] = []
     @State private var totalPrice: Double = 0.00
     @State private var totalQuantity: Int = 0
     let BUTTON_WIDTH = 300.0
+    
     let menuItems: [CoffeeMenuItem] = [
-        CoffeeMenuItem(name: "Espresso", price: 2.50, category: "Espresso"),
-        CoffeeMenuItem(name: "Latte", price: 3.50, category: "Espresso"),
-        CoffeeMenuItem(name: "Cappuccino", price: 3.00, category: "Espresso"),
-        CoffeeMenuItem(name: "Blueberry Muffin", price: 2.50, category: "Pastries"),
-        CoffeeMenuItem(name: "Croissant", price: 2.75, category: "Pastries"),
-        CoffeeMenuItem(name: "Drip Coffee", price: 2.75, category: "Coffee & Tea"),
-        CoffeeMenuItem(name: "Green Tea", price: 2.75, category: "Coffee & Tea"),
-        CoffeeMenuItem(name: "Cold Brew", price: 2.75, category: "Coffee & Tea"),
-        CoffeeMenuItem(name: "Black Tea", price: 2.75, category: "Coffee & Tea")
+        CoffeeMenuItem(name: "Espresso", price: 2.50, category: "Espresso",
+                       modifiers: [
+                           ModifierType(title: "Size", options: [
+                               ModifierOption(name: "Regular", price: 0.0)
+                           ], singleSelection: true),
+                           ModifierType(title: "Additives", options: [
+                               ModifierOption(name: "Extra Shot", price: 1.99)
+                           ], singleSelection: false)
+                       ]),
+
+        CoffeeMenuItem(name: "Latte", price: 3.50, category: "Espresso",
+                       modifiers: [
+                           ModifierType(title: "Size", options: [
+                               ModifierOption(name: "Small", price: 0.0),
+                               ModifierOption(name: "Medium", price: 0.5),
+                               ModifierOption(name: "Large", price: 1.0)
+                           ], singleSelection: true),
+                           ModifierType(title: "Additives", options: [
+                               ModifierOption(name: "Vanilla", price: 0.0),
+                               ModifierOption(name: "Chocolate", price: 0.0),
+                               ModifierOption(name: "Caramel", price: 0.5)
+                           ], singleSelection: false)
+                       ]),
+
+        CoffeeMenuItem(name: "Cappuccino", price: 3.00, category: "Espresso",
+                       modifiers: [
+                           ModifierType(title: "Size", options: [
+                               ModifierOption(name: "Regular", price: 0.0)
+                           ], singleSelection: true),
+                           ModifierType(title: "Additives", options: [
+                               ModifierOption(name: "Cinnamon", price: 0.0),
+                               ModifierOption(name: "Chocolate Powder", price: 0.5)
+                           ], singleSelection: false)
+                       ]),
+
+        CoffeeMenuItem(name: "Blueberry Muffin", price: 2.50, category: "Pastries", modifiers: []),
+
+        CoffeeMenuItem(name: "Croissant", price: 2.75, category: "Pastries",
+                       modifiers: [
+                           ModifierType(title: "Additives", options: [
+                               ModifierOption(name: "Jam", price: 0.0),
+                               ModifierOption(name: "Butter", price: 0.0)
+                           ], singleSelection: false)
+                       ]),
+
+        CoffeeMenuItem(name: "Drip Coffee", price: 2.75, category: "Coffee & Tea",
+                       modifiers: [
+                           ModifierType(title: "Size", options: [
+                               ModifierOption(name: "Small", price: 0.0),
+                               ModifierOption(name: "Medium", price: 0.5),
+                               ModifierOption(name: "Large", price: 1.0)
+                           ], singleSelection: true)
+                       ]),
+
+        CoffeeMenuItem(name: "Green Tea", price: 2.75, category: "Coffee & Tea",
+                       modifiers: [
+                           ModifierType(title: "Size", options: [
+                               ModifierOption(name: "Regular", price: 0.0)
+                           ], singleSelection: true),
+                           ModifierType(title: "Additives", options: [
+                               ModifierOption(name: "Honey", price: 0.0),
+                               ModifierOption(name: "Lemon", price: 0.0)
+                           ], singleSelection: false)
+                       ]),
+
+        CoffeeMenuItem(name: "Cold Brew", price: 2.75, category: "Coffee & Tea",
+                       modifiers: [
+                           ModifierType(title: "Size", options: [
+                               ModifierOption(name: "Medium", price: 0.5),
+                               ModifierOption(name: "Large", price: 1.0)
+                           ], singleSelection: true),
+                           ModifierType(title: "Additives", options: [
+                               ModifierOption(name: "Ice", price: 0.0),
+                               ModifierOption(name: "Milk", price: 0.5)
+                           ], singleSelection: false)
+                       ]),
+
+        CoffeeMenuItem(name: "Black Tea", price: 2.75, category: "Coffee & Tea",
+                       modifiers: [
+                           ModifierType(title: "Size", options: [
+                               ModifierOption(name: "Regular", price: 0.0)
+                           ], singleSelection: true),
+                           ModifierType(title: "Additives", options: [
+                               ModifierOption(name: "Milk", price: 0.5)
+                           ], singleSelection: false)
+                       ])
     ]
-    init(cartItems: [CoffeeMenuItem] = [], totalPrice: Double = 0.00, totalQuantity: Int = 0) {
+
+
+    init(cartItems: [CoffeeOrder] = [], totalPrice: Double = 0.00, totalQuantity: Int = 0) {
         _cartItems = State(initialValue: cartItems)
         _totalPrice = State(initialValue: totalPrice)
         _totalQuantity = State(initialValue: totalQuantity)
     }
+    
+
     
     var body: some View {
         NavigationView {
@@ -109,7 +191,6 @@ struct MenuView: View {
                                 .padding(.leading)
                         }
                     }
-                    
                     .frame(width: BUTTON_WIDTH)
                     .padding()
                     .background(Color.red)
@@ -127,22 +208,39 @@ struct MenuView: View {
     }
     
     // Add item to cart function (you can modify this to fit your needs)
-    func addToCart(item: CoffeeMenuItem) {
-        cartItems.append(item)
-        totalPrice += item.price
-        totalQuantity += 1
+    func addToCart(order: CoffeeOrder) {
+        cartItems.append(order)
+        totalPrice += order.item.price * Double(order.quantity)
+        totalQuantity += order.quantity
     }
     
 }
 
-//struct MenuView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MenuView(cartItems: [CoffeeMenuItem(name: "Latte", price: 3.50, category: "Espresso")], totalPrice: 3.50, totalQuantity: 1)
-//    }
-//}
-//
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuView()
+        MenuView(cartItems: [
+            CoffeeOrder(
+                item: CoffeeMenuItem(name: "Latte", price: 3.50, category: "Espresso",
+                                      modifiers: [
+                                          ModifierType(title: "Size", options: [
+                                              ModifierOption(name: "Small", price: 0.0),
+                                              ModifierOption(name: "Medium", price: 0.5),
+                                              ModifierOption(name: "Large", price: 1.0)
+                                          ], singleSelection: true),
+                                          ModifierType(title: "Additives", options: [
+                                              ModifierOption(name: "Vanilla", price: 0.0),
+                                              ModifierOption(name: "Chocolate", price: 0.0),
+                                              ModifierOption(name: "Caramel", price: 0.5)
+                                          ], singleSelection: false)
+                                      ])
+            )
+        ], totalPrice: 23.34, totalQuantity: 4)
     }
 }
+
+
+//struct MenuView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MenuView()
+//    }
+//}

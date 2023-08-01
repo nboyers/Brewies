@@ -7,16 +7,25 @@
 
 import SwiftUI
 
+// Stub for MultipleSelectionList
 struct MultipleSelectionList: View {
     var title: String
     var items: [String]
     @Binding var selection: [String]
     
     var body: some View {
-        ForEach(items, id: \.self) { item in
+        List(items, id: \.self) { item in
             Toggle(item, isOn: Binding(
-                get: { self.selection.contains(item) },
-                set: { if $0 { self.selection.append(item) } else { self.selection.removeAll { $0 == item } } }
+                get: {
+                    self.selection.contains(item)
+                },
+                set: { (newValue) in
+                    if newValue {
+                        self.selection.append(item)
+                    } else {
+                        self.selection.removeAll(where: { $0 == item })
+                    }
+                }
             ))
         }
     }
