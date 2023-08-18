@@ -11,6 +11,7 @@ struct CoffeeOrder {
     var item: CoffeeMenuItem
     var selectedModifiers: [String: String] = [:] // e.g. ["Size": "Medium", "Hot/Iced": "Hot"]
     var quantity: Int = 1
+    var taxRate: Double = 0
 }
 
 struct CoffeeMenuItem: Identifiable {
