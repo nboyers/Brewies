@@ -44,7 +44,6 @@
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CC92A4624C5003894D9 /* FiltersView.swift */; };
 		FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */; };
-		FF63D33E2A8028F4001D122E /* StripePaymentSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FF63D33D2A8028F4001D122E /* StripePaymentSheet */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
 		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
 		FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */; };
@@ -60,6 +59,10 @@
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
 		FFBFFD282A59D28D004576EC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD272A59D28D004576EC /* SettingsView.swift */; };
 		FFBFFD2D2A59DCD9004576EC /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */; };
+		FFC575CC2A9C2549008EB5E2 /* ApplePay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */; };
+		FFC575CE2A9C258A008EB5E2 /* ApplyPayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */; };
+		FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */; };
+		FFC575DB2A9C273E008EB5E2 /* BackendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */; };
 		FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = FFC5D12C2A44E608007D9F52 /* Introspect */; };
 		FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
@@ -140,6 +143,10 @@
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
 		FFBFFD272A59D28D004576EC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePay.swift; sourceTree = "<group>"; };
+		FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPayModel.swift; sourceTree = "<group>"; };
+		FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentButton.swift; sourceTree = "<group>"; };
+		FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendModel.swift; sourceTree = "<group>"; };
 		FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompleter.swift; sourceTree = "<group>"; };
 		FFD6F86E2A5B50A600575585 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		FFF424912A528A640088AC1D /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
@@ -157,7 +164,6 @@
 				FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */,
 				FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */,
 				FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */,
-				FF63D33E2A8028F4001D122E /* StripePaymentSheet in Frameworks */,
 				FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -184,6 +190,7 @@
 		FF149FEB2A6EC7F1008D44CE /* Mobile Ordering */ = {
 			isa = PBXGroup;
 			children = (
+				FFC575CA2A9C2534008EB5E2 /* Payment Methods */,
 				FFB0A0E42A6F113E003E79E4 /* Styling */,
 				FF149FEC2A6EC8AA008D44CE /* MenuView.swift */,
 				FFB0A0ED2A6F11F5003E79E4 /* CartView.swift */,
@@ -328,6 +335,7 @@
 		FF3FF2D629EA1C1A00510FCD /* Supporting Assets */ = {
 			isa = PBXGroup;
 			children = (
+				FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */,
 			);
 			path = "Supporting Assets";
 			sourceTree = "<group>";
@@ -420,6 +428,8 @@
 			isa = PBXGroup;
 			children = (
 				FFB0A0E92A6F119A003E79E4 /* CoffeeOrder.swift */,
+				FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */,
+				FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */,
 			);
 			path = "Mobile Order Models";
 			sourceTree = "<group>";
@@ -483,6 +493,14 @@
 			path = Design;
 			sourceTree = "<group>";
 		};
+		FFC575CA2A9C2534008EB5E2 /* Payment Methods */ = {
+			isa = PBXGroup;
+			children = (
+				FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */,
+			);
+			path = "Payment Methods";
+			sourceTree = "<group>";
+		};
 		FFD6F86C2A5B466400575585 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -523,7 +541,6 @@
 				FFCB2A562A2141E00051B957 /* BottomSheet */,
 				FFB360CC2A26A5830099017F /* GoogleMobileAds */,
 				FFC5D12C2A44E608007D9F52 /* Introspect */,
-				FF63D33D2A8028F4001D122E /* StripePaymentSheet */,
 			);
 			productName = Brewies;
 			productReference = FF3FF28E29EA0D2300510FCD /* Brewies.app */;
@@ -607,7 +624,6 @@
 				FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 				FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
-				FF63D33C2A8028F4001D122E /* XCRemoteSwiftPackageReference "stripe-ios-spm" */,
 			);
 			productRefGroup = FF3FF28F29EA0D2300510FCD /* Products */;
 			projectDirPath = "";
@@ -658,6 +674,7 @@
 			files = (
 				FFBFFD282A59D28D004576EC /* SettingsView.swift in Sources */,
 				FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */,
+				FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */,
 				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
 				FF149FED2A6EC8AA008D44CE /* MenuView.swift in Sources */,
 				FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */,
@@ -665,12 +682,14 @@
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
 				FF3637B52A560AB800A33899 /* ProductStoreView.swift in Sources */,
 				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
+				FFC575CC2A9C2549008EB5E2 /* ApplePay.swift in Sources */,
 				FF8E43982A37BED500CEC800 /* RatingView.swift in Sources */,
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
 				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
 				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
 				FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */,
 				FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */,
+				FFC575CE2A9C258A008EB5E2 /* ApplyPayModel.swift in Sources */,
 				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
 				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
 				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
@@ -698,6 +717,7 @@
 				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
 				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,
 				FF3637B92A5749F800A33899 /* UserViewModel.swift in Sources */,
+				FFC575DB2A9C273E008EB5E2 /* BackendModel.swift in Sources */,
 				FF8E43852A33D51800CEC800 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1096,14 +1116,6 @@
 				minimumVersion = 7.0.0;
 			};
 		};
-		FF63D33C2A8028F4001D122E /* XCRemoteSwiftPackageReference "stripe-ios-spm" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/stripe/stripe-ios-spm";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 23.0.0;
-			};
-		};
 		FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
@@ -1150,11 +1162,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		FF63D33D2A8028F4001D122E /* StripePaymentSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = FF63D33C2A8028F4001D122E /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
-			productName = StripePaymentSheet;
 		};
 		FFB360CC2A26A5830099017F /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;

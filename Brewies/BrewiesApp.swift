@@ -13,11 +13,12 @@ struct BrewiesApp: App {
     private var rewardAd = RewardAdController()
     let yelpParams = YelpSearchParams()
     let contentViewModel: ContentViewModel
-
+    
+    
     init() {
         self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
     }
-
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

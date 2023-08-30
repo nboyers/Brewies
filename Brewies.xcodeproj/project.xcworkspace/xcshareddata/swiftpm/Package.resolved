@@ -64,15 +64,6 @@
       }
     },
     {
-      "identity" : "stripe-ios-spm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/stripe/stripe-ios-spm",
-      "state" : {
-        "revision" : "e90fc876c57e16363f1450bc703941993301ef60",
-        "version" : "23.12.0"
-      }
-    },
-    {
       "identity" : "swift-package-manager-google-mobile-ads",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
