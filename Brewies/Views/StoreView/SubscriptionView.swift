@@ -43,7 +43,7 @@ struct SubscriptionView: View {
                     
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
-                        Text("15/90/180 discover credits welcome bonus")
+                        Text("25/40/50 discover credits welcome bonus")
                     }
                     
                     HStack {
@@ -53,6 +53,10 @@ struct SubscriptionView: View {
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                         Text("More Filtering Options")
+                    }
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                        Text("20 Favorite's Slots")
                     }
                     
                 }

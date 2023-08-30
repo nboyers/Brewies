@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>Annual Subscription</key>
-	<string>com.nobosoftware.yearlySubcription</string>
+	<string>com.nobos.AnnualBrewies</string>
 	<key>Biannual Subscription</key>
-	<string>com.nobosoftware.biannualTier</string>
+	<string>com.nobos.BiannualBrewies</string>
 	<key>Monthly Subscription</key>
-	<string>com.nobosoftware.monthlyTier</string>
+	<string>com.nobos.Brewies</string>
 </dict>
 </plist>

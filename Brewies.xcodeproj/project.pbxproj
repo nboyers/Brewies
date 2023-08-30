@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF063BAB2A9FEC3800F3AA0B /* Brewies Storefront.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF063BAA2A9FEC3800F3AA0B /* Brewies Storefront.storekit */; };
 		FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946DF2A0EE49100F705CB /* UserCache.swift */; };
 		FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E12A0EE7C300F705CB /* FavoriteView.swift */; };
 		FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */; };
@@ -17,7 +18,6 @@
 		FF2467832A78824500B04BBE /* FoodDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2467822A78824500B04BBE /* FoodDetailView.swift */; };
 		FF2467852A78881600B04BBE /* CoffeeModiferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2467842A78881600B04BBE /* CoffeeModiferView.swift */; };
 		FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2F263B2A256EB5000D922E /* Date+Extension.swift */; };
-		FF3637A42A55C56C00A33899 /* Brewies Storefront.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF3637A32A55C56C00A33899 /* Brewies Storefront.storekit */; };
 		FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637A52A55C68A00A33899 /* ProductList.plist */; };
 		FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */; };
 		FF3637B12A55FD0500A33899 /* SubscriptionsList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */; };
@@ -91,6 +91,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FF063BAA2A9FEC3800F3AA0B /* Brewies Storefront.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Brewies Storefront.storekit"; sourceTree = "<group>"; };
 		FF0946DF2A0EE49100F705CB /* UserCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCache.swift; sourceTree = "<group>"; };
 		FF0946E12A0EE7C300F705CB /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
@@ -99,7 +100,6 @@
 		FF2467822A78824500B04BBE /* FoodDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDetailView.swift; sourceTree = "<group>"; };
 		FF2467842A78881600B04BBE /* CoffeeModiferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeModiferView.swift; sourceTree = "<group>"; };
 		FF2F263B2A256EB5000D922E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		FF3637A32A55C56C00A33899 /* Brewies Storefront.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Brewies Storefront.storekit"; sourceTree = "<group>"; };
 		FF3637A52A55C68A00A33899 /* ProductList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductList.plist; sourceTree = "<group>"; };
 		FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
 		FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubscriptionsList.plist; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 		FF3FF29029EA0D2300510FCD /* Brewies */ = {
 			isa = PBXGroup;
 			children = (
-				FF3637A32A55C56C00A33899 /* Brewies Storefront.storekit */,
+				FF063BAA2A9FEC3800F3AA0B /* Brewies Storefront.storekit */,
 				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
 				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
 				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
@@ -642,10 +642,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF3637B32A5604DF00A33899 /* product.storekit in Resources */,
+				FF063BAB2A9FEC3800F3AA0B /* Brewies Storefront.storekit in Resources */,
 				FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */,
 				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
 				FF3FF2D529EA1C0300510FCD /* readme.md in Resources */,
-				FF3637A42A55C56C00A33899 /* Brewies Storefront.storekit in Resources */,
 				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
 				FF3637B12A55FD0500A33899 /* SubscriptionsList.plist in Resources */,
 			);

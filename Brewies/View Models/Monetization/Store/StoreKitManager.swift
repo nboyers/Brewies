@@ -34,12 +34,12 @@ class StoreKitManager: ObservableObject {
     private let subscriptionsDict: [String : String]
     let adRemovalProductId = "com.nobosoftware.removeAds"
     let creditsProductId = "com.nobosoftware.BuyableRequests"
-    
+    let favoritesSLotId = "com.nobosoftware.FavoriteSlot"
     
     //Subscription Types
-    let yearlyID = "com.nobosoftware.yearlySubcription"
-    let semiYearlyID = "com.nobosoftware.biannualTier"
-    let monthlyID = "com.nobosoftware.monthlyTier"
+    let yearlyID = "com.nobos.AnnualBrewies"
+    let semiYearlyID = "com.nobos.BiannualBrewies"
+    let monthlyID = "com.nobosoftware.Brewies"
     
     @Sendable func getCreditsForSubscription(_ productId: String) {
         let defaults = UserDefaults.standard
@@ -52,13 +52,13 @@ class StoreKitManager: ObservableObject {
 
         switch productId {
         case monthlyID:
-            userViewModel.addCredits(15)
+            userViewModel.addCredits(25)
             break
         case semiYearlyID:
-            userViewModel.addCredits(90)
+            userViewModel.addCredits(40)
             break
         case yearlyID:
-            userViewModel.addCredits(180)
+            userViewModel.addCredits(50)
             break
         case creditsProductId:
             userViewModel.addCredits(5)
