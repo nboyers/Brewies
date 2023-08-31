@@ -51,6 +51,8 @@ struct BrewPreview: View {
     
     @State private var isDetailShowing: Bool = false
     @State var showStorefront = false
+    @State private var favoriteSlotsUsed = 0
+    
     
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
     
@@ -182,16 +184,21 @@ struct BrewPreview: View {
     }
     
     private func toggleFavorite() {
-        if userViewModel.user.isSubscribed {
-            if isFavorite {
-                userViewModel.removeFromFavorites(coffeeShop)
-                coffeeShopData.removeFromFavorites(coffeeShop)
-            } else {
-                userViewModel.addToFavorites(coffeeShop)
-                coffeeShopData.addToFavorites(coffeeShop)
-            }
+        if isFavorite {
+            userViewModel.removeFromFavorites(coffeeShop)
+            coffeeShopData.removeFromFavorites(coffeeShop)
+            // Decrement favoriteSlotsUsed
+            favoriteSlotsUsed -= 1
         } else {
-            showStorefront = true
+            // Check if adding a new favorite would exceed the maximum allowed
+            if coffeeShopData.addToFavorites(coffeeShop) {
+                userViewModel.addToFavorites(coffeeShop)
+                
+                // Increment favoriteSlotsUsed
+                favoriteSlotsUsed += 1
+            } else {
+                // Show an alert or some message to indicate that the maximum number of favorites has been reached
+            }
         }
     }
 }

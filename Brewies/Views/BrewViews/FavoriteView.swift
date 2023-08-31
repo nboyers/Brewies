@@ -24,33 +24,29 @@ struct FavoritesView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 16) {
-                    
-                    if favoriteSlots < 20 {
-                        VStack {
-                            Text("Ads Watched: \(adsWatched)/5")
-                            
-                            ProgressView(value: Float(adsWatched), total: 5.0)
-                                .progressViewStyle(LinearProgressViewStyle())
-                            
-                            Button("Watch Ad to Unlock Favorite Slot") {
-                                // AdMob logic to show ad
-                                // On ad completion, increment adsWatched
-                                adsWatched += 1
-                            }
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 16) {
+//                        Text("(\(coffeeShopData.favoriteShops.count)/\(coffeeShopData.maxFavoriteSlots) slots)")
+//                            .font(.headline)
+//                            .padding(.bottom, 10)
+                    VStack {
+                        Text("Ads Watched: \(adsWatched)/5")
+                        
+                        ProgressView(value: Float(adsWatched), total: 5.0)
+                            .progressViewStyle(LinearProgressViewStyle())
+                        
+                        Button("Watch Ad to Unlock Favorite Slot") {
+                            // AdMob logic to show ad
+                            // On ad completion, increment adsWatched
+                            adsWatched += 1
                         }
-                    } else {
-                        Text("Maximum slots reached: 20")
                     }
-                    ForEach(coffeeShopData.favoriteShops.prefix(favoriteSlots), id: \.id) { coffeeShop in
+                    
+                        ForEach(coffeeShopData.favoriteShops.prefix(coffeeShopData.maxFavoriteSlots), id: \.id) { coffeeShop in
+
                         NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
                             VStack {
                                 BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showPreview)
-                                if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
-                                    AdBannerView()
-                                        .frame(width: 320, height: 50)
-                                }
                             }
                         }
                         .contextMenu {
@@ -63,19 +59,21 @@ struct FavoritesView: View {
                             }
                         }
                     }
+                    if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
+                        AdBannerView()
+                            .frame(width: 320, height: 50)
+                    }
                 }
                 .padding(.all, 16)
                 .onChange(of: adsWatched) { newValue in
                     if newValue >= 5 {
-                        favoriteSlots += 1
+                        coffeeShopData.maxFavoriteSlots += 1  // Update the maxFavoriteSlots
                         adsWatched = 0
                     }
-                    if favoriteSlots > 20 {
-                        favoriteSlots = 20
-                    }
                 }
+                
             }
-            .navigationTitle("Favorites")
+            .navigationTitle("Favorites - \(coffeeShopData.favoriteShops.count)/\(coffeeShopData.maxFavoriteSlots) slots")
             .alert(isPresented: $showRemovalConfirmationAlert) {
                 Alert(title: Text("Remove from favorites"),
                       message: Text("Are you sure you want to remove this coffee shop from your favorites?"),

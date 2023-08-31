@@ -18,15 +18,6 @@ struct SubscriptionView: View {
     var body: some View {
         if userVM.user.isLoggedIn {
             VStack {
-                Image(systemName: "photo")
-                    .resizable()
-                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 50, height: 50)
-                    .clipped()
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                
                 Text("Brewies+")
                     .bold()
                     .font(.largeTitle)
@@ -46,10 +37,6 @@ struct SubscriptionView: View {
                         Text("25/40/50 discover credits welcome bonus")
                     }
                     
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("Ability to favorite to save your credits")
-                    }
                     HStack {
                         Image(systemName: "checkmark.circle.fill")
                         Text("More Filtering Options")

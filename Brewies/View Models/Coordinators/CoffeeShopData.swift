@@ -15,22 +15,36 @@ class CoffeeShopData: ObservableObject {
             saveFavoriteShops()
         }
     }
+    
+    @Published var maxFavoriteSlots: Int = 0 {
+        didSet {
+            UserDefaults.standard.set(maxFavoriteSlots, forKey: "MaxFavoriteSlots")
+        }
+    }
+    
     @Published var cachedShops: [CoffeeShop] = []
+
+    var numberOfFavoriteShops: Int {
+        return favoriteShops.count
+    }
+
     
     init() {
         // Load from UserDefaults when the app starts
         loadFavoriteShops()
+        loadMaxFavoriteSlots()
     }
     
-    func addToFavorites(_ coffeeShop: CoffeeShop) {
+    func addToFavorites(_ coffeeShop: CoffeeShop) -> Bool {
+        if favoriteShops.count >= maxFavoriteSlots {
+            return false
+        }
+        
         if !favoriteShops.contains(coffeeShop) {
             favoriteShops.append(coffeeShop)
-            
-        }
-        if let index = cachedShops.firstIndex(of: coffeeShop) {
-            cachedShops.remove(at: index)
         }
         removeExpiredCachedShops()
+        return true
     }
     
     func removeFromFavorites(_ coffeeShop: CoffeeShop) {
@@ -64,6 +78,11 @@ class CoffeeShopData: ObservableObject {
             if let loadedShops = try? decoder.decode([CoffeeShop].self, from: savedShops) {
                 favoriteShops = loadedShops
             }
+        }
+    }
+    private func loadMaxFavoriteSlots() {
+        if let savedMaxFavoriteSlots = UserDefaults.standard.value(forKey: "MaxFavoriteSlots") as? Int {
+            maxFavoriteSlots = savedMaxFavoriteSlots
         }
     }
 }
