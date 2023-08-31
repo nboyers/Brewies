@@ -111,13 +111,16 @@ class StoreKitManager: ObservableObject {
     func checkIfAdsRemoved() async {
         for product in storeProducts {
             if product.id == adRemovalProductId {
-                isAdRemovalPurchased = (try? await isPurchased(product)) ?? false
+                DispatchQueue.main.async {
+                    Task {
+                        self.isAdRemovalPurchased = (try? await self.isPurchased(product)) ?? false
+                    }
+                }
                 break
             }
         }
     }
-
-    
+  
     //listen for transactions - start this early in the app
     func listenForTransactions() -> Task<Void, Error> {
         return Task.detached {
