@@ -36,7 +36,7 @@ struct FavoritesView: View {
                             .progressViewStyle(LinearProgressViewStyle())
                         
                         Button("Watch Ad to Unlock Favorite Slot") {
-                            // AdMob logic to show ad
+                            //TODO: AdMob logic to show ad
                             // On ad completion, increment adsWatched
                             adsWatched += 1
                         }

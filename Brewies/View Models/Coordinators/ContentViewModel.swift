@@ -62,9 +62,6 @@ class ContentViewModel: ObservableObject {
                         self.coffeeShops = coffeeShops
                         selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
                         showBrewPreview = true
-
-                        // cache the results for subscribed users
-                        UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
                     }
                 }
                 return
@@ -86,15 +83,12 @@ class ContentViewModel: ObservableObject {
                 self.coffeeShops = coffeeShops
                 selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
                 showBrewPreview = true
-                
-                // cache the results for subscribed users
-                UserCache.shared.cacheCoffeeShops(coffeeShops, for: centerCoordinate, radius: selectedRadius)
             }
         }
     }
     
     
-    
+    //FIXME: ADD THE SWITCH LOGIC FOR CREDITS vs Favorites Slots
     func handleRewardAd() {
         if let viewController = UIApplication.shared.windows.first?.rootViewController {
             rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: {
