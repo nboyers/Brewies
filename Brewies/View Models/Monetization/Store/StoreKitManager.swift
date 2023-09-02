@@ -28,52 +28,23 @@ class StoreKitManager: ObservableObject {
     
     var userViewModel = UserViewModel.shared
     var updateListenerTask : Task<Void, Error>? = nil
+    // Subscription slots
+    let subscriptionSlots = 20
     
     //maintain a plist of products
     private let productDict: [String : String]
     private let subscriptionsDict: [String : String]
     let adRemovalProductId = "com.nobosoftware.removeAds"
     let creditsProductId = "com.nobosoftware.BuyableRequests"
-    let favoritesSLotId = "com.nobosoftware.FavoriteSlot"
+    let favoritesSlotId = "com.nobosoftware.FavoriteSlot"
     
     //Subscription Types
     let yearlyID = "com.nobos.AnnualBrewies"
     let semiYearlyID = "com.nobos.BiannualBrewies"
     let monthlyID = "com.nobosoftware.Brewies"
     
-    @Sendable func getCreditsForSubscription(_ productId: String) {
-        let defaults = UserDefaults.standard
-
-        // Check if user has already received credits for this purchase
-        if defaults.bool(forKey: productId) && productId != creditsProductId {
-            print("User has already received credits for this purchase")
-            return
-        }
-
-        switch productId {
-        case monthlyID:
-            userViewModel.addCredits(25)
-            break
-        case semiYearlyID:
-            userViewModel.addCredits(40)
-            break
-        case yearlyID:
-            userViewModel.addCredits(50)
-            break
-        case creditsProductId:
-            userViewModel.addCredits(5)
-        default:
-            break
-        }
-
-        // Save that user has received credits for this purchase
-        defaults.set(true, forKey: productId)
-    }
-
-    
     init() {
         //check the path for the plist
-        
         if let slistPath = Bundle.main.path(forResource: "SubscriptionsList", ofType: "plist"),
            let plist = FileManager.default.contents(atPath: slistPath) {
             subscriptionsDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String : String]) ?? [:]
@@ -89,13 +60,15 @@ class StoreKitManager: ObservableObject {
             productDict = [:]
         }
         
-        
+    
         //Start a transaction listener as close to the app launch as possible so you don't miss any transaction
         updateListenerTask = listenForTransactions()
         
         //create async operation
         Task {
             await requestProducts()
+            
+    
             
             //deliver the products that the customer purchased
             await updateCustomerProductStatus()
@@ -120,8 +93,60 @@ class StoreKitManager: ObservableObject {
             }
         }
     }
-  
-    //listen for transactions - start this early in the app
+    
+    
+    @Sendable func getCreditsForSubscription(_ productId: String) {
+        let defaults = UserDefaults.standard
+        
+        // Retrieve the current subscription ID
+        let currentSubscriptionID = defaults.string(forKey: "CurrentSubscriptionID") ?? ""
+        
+        // Check if user has already received credits for this purchase
+        if defaults.bool(forKey: productId) && productId != creditsProductId {
+            print("User has already received credits for this purchase")
+            return
+        }
+        
+        // Determine if this is an upgrade
+        let isUpgrade = currentSubscriptionID != "" && currentSubscriptionID != productId
+        
+        switch productId {
+        case monthlyID:
+            userViewModel.addCredits(25)
+            if !isUpgrade {
+                CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+            }
+            break
+        case semiYearlyID:
+            userViewModel.addCredits(40)
+            if !isUpgrade {
+                CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+            }
+            break
+        case yearlyID:
+            userViewModel.addCredits(50)
+            if !isUpgrade {
+                CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+            }
+            break
+        case creditsProductId:
+            userViewModel.addCredits(5)
+            break
+        default:
+            break
+        }
+        
+        // Save that user has received credits for this purchase
+        defaults.set(true, forKey: productId)
+        
+        // Update the current subscription ID
+        defaults.set(productId, forKey: "CurrentSubscriptionID")
+    }
+
+    
+    
+    
+    //MARK: listen for transactions - start this early in the app
     func listenForTransactions() -> Task<Void, Error> {
         return Task.detached {
             //iterate through any transactions that don't come from a direct call to 'purchase()'
@@ -135,14 +160,15 @@ class StoreKitManager: ObservableObject {
                     //Always finish a transaction
                     await transaction.finish()
                 } catch {
-                    //storekit has a transaction that fails verification, don't delvier content to the user
+                    // StoreKit has a transaction that fails verification; don't deliver content to the user
                     print("Transaction failed verification")
                 }
             }
         }
     }
     
-    // request the products in the background
+    
+    //MARK: request the products in the background
     @MainActor
     func requestProducts() async {
         do {
@@ -157,7 +183,7 @@ class StoreKitManager: ObservableObject {
     }
     
     
-    //Generics - check the verificationResults
+    //MARK: Generics - check the verificationResults
     func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         //check if JWS passes the StoreKit verification
         switch result {
@@ -170,7 +196,7 @@ class StoreKitManager: ObservableObject {
         }
     }
     
-    // update the customers products
+    //MARK: Update the customers products
     @MainActor
     func updateCustomerProductStatus() async {
         var purchasedCourses: [Product] = []
@@ -204,10 +230,11 @@ class StoreKitManager: ObservableObject {
                             purchasedCourses.append(product)
                         }
                     }
-                    
                 default:
                     break
                 }
+                // finally assign the purchased products
+                self.purchasedCourses = purchasedCourses
                 
                 // Always finish a transaction.
                 await transaction.finish()
@@ -215,14 +242,12 @@ class StoreKitManager: ObservableObject {
                 // storekit has a transaction that fails verification, don't deliver content to the user
                 print("Transaction failed verification")
             }
-            
-            // finally assign the purchased products
-            self.purchasedCourses = purchasedCourses
         }
+        handleSubscriptionStatusChange()
     }
     
     
-    // call the product purchase and returns an optional transaction
+    //MARK: Purchase and returns an optional transaction
     func purchase(_ product: Product) async throws -> Transaction? {
         //make a purchase request - optional parameters available
         let result = try await product.purchase()
@@ -232,27 +257,27 @@ class StoreKitManager: ObservableObject {
         case .success(let verificationResult):
             //Transaction will be verified for automatically using JWT(jwsRepresentation) - we can check the result
             let transaction = try checkVerified(verificationResult)
-            if product.id == yearlyID || product.id == semiYearlyID || product.id == monthlyID {
-                 UserDefaults.standard.set(true, forKey: "isSubscribed")
-             }
             
             DispatchQueue.main.async {
-                  switch product.id {
-                  case self.creditsProductId:
-                      self.getCreditsForSubscription(product.id)
-                      break
-                  case self.yearlyID:
-                      self.getCreditsForSubscription(product.id)
-                  case self.semiYearlyID:
-                      self.getCreditsForSubscription(product.id)
-                      break
-                  case self.monthlyID:
-                      self.getCreditsForSubscription(product.id)
-                      break
-                  default:
-                      break
-                  }
-              }
+                switch product.id {
+                case self.creditsProductId:
+                    self.getCreditsForSubscription(product.id)
+                    break
+                case self.yearlyID:
+                    self.getCreditsForSubscription(product.id)
+                case self.semiYearlyID:
+                    self.getCreditsForSubscription(product.id)
+                    break
+                case self.monthlyID:
+                    self.getCreditsForSubscription(product.id)
+                    break
+                case self.favoritesSlotId:
+                    CoffeeShopData.shared.addFavoriteSlots(1)
+                    break
+                default:
+                    break
+                }
+            }
             
             //the transaction is verified, deliver the content to the user
             await updateCustomerProductStatus()
@@ -269,6 +294,31 @@ class StoreKitManager: ObservableObject {
             return nil
         }
     }
+    
+    
+    func handleSubscriptionStatusChange() {
+        // Retrieve the user's subscription status from UserDefaults
+        let defaults = UserDefaults.standard
+        let isSubscribed = defaults.bool(forKey: "isSubscribed")
+        
+        // Determine the new subscription status
+        let newIsSubscribed = purchasedSubscriptions.contains { product in
+            return product.id == yearlyID || product.id == semiYearlyID || product.id == monthlyID
+        }
+        
+        if isSubscribed && !newIsSubscribed {
+            // User was subscribed but is no longer. Remove slots.
+            CoffeeShopData.shared.removeSubscriptionSlots(self.subscriptionSlots)
+        } else if !isSubscribed && newIsSubscribed {
+            // User was not subscribed but now is. Add slots.
+            CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+        }
+        
+        // Update the subscription status in UserDefaults
+        defaults.set(newIsSubscribed, forKey: "isSubscribed")
+    }
+
+    
     //check if product has already been purchased
     func isPurchased(_ product: Product) async throws -> Bool {
         //as we only have one product type grouping .nonconsumable - we check if it belongs to the purchasedCourses which ran init()

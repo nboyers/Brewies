@@ -26,13 +26,10 @@ struct FavoritesView: View {
         NavigationView {
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 16) {
-//                        Text("(\(coffeeShopData.favoriteShops.count)/\(coffeeShopData.maxFavoriteSlots) slots)")
-//                            .font(.headline)
-//                            .padding(.bottom, 10)
                     VStack {
                         Text("Ads Watched: \(adsWatched)/5")
                         
-                        ProgressView(value: Float(adsWatched), total: 5.0)
+                        ProgressView(value: Float(adsWatched), total: 5)
                             .progressViewStyle(LinearProgressViewStyle())
                         
                         Button("Watch Ad to Unlock Favorite Slot") {

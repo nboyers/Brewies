@@ -11,6 +11,8 @@ struct BrewPreviewList: View {
     @Binding var coffeeShops: [CoffeeShop]
     @Binding var selectedCoffeeShop: CoffeeShop?
     @Binding var showBrewPreview: Bool
+    @State private var showAlert = false
+
     @State var showStorefront = false
     
     @ObservedObject var userViewModel = UserViewModel.shared
@@ -52,7 +54,8 @@ struct BrewPreview: View {
     @State private var isDetailShowing: Bool = false
     @State var showStorefront = false
     @State private var favoriteSlotsUsed = 0
-    
+    @State private var showAlert = false
+
     
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
     
@@ -102,6 +105,9 @@ struct BrewPreview: View {
                         Text(coffeeShop.name)
                             .font(.headline)
                             .foregroundColor(Color.black)
+                            .lineLimit(nil)  // Allows text to wrap to the next line
+                            .fixedSize(horizontal: false, vertical: true) // Properly wraps text inside a ScrollView
+
                         Spacer()
                         
                         Button(action: {
@@ -125,51 +131,61 @@ struct BrewPreview: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     Spacer()
-                    HStack { // Center the buttons to the middle
-                        Spacer()
-                        if coffeeShop.transactions.contains("delivery") || coffeeShop.transactions.contains("pickup") {
-                            Button(action: {
-                                // Stub functionality for mobile order
-                                print("Mobile Order UI")
-                                
-                            }) {
-                                Text("Mobile Order")
-                                    .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-                                    .font(.headline)
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .cornerRadius(10)
-                            }
-                        } else {
-                            Button(action: {
-                                // Stub functionality for calling
-                                print("Calling....")
-                                
-                            }) {
-                                HStack {
-                                    Image(systemName: "phone.circle")
-                                    Text("Call")
-                                }
-                                .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.black)
-                                .cornerRadius(10)
-                            }
-                        }
-                        Spacer()
-                    }
+//                      TODO: This will be a later update...maybe
+//                    HStack { // Center the buttons to the middle
+//                        Spacer()
+//                        if coffeeShop.transactions.contains("delivery") || coffeeShop.transactions.contains("pickup") {
+//                            Button(action: {
+//                                // Stub functionality for mobile order
+//                                print("Mobile Order UI")
+//
+//                            }) {
+//                                Text("Mobile Order")
+//                                    .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
+//                                    .font(.headline)
+//                                    .foregroundColor(.white)
+//                                    .padding()
+//                                    .background(Color.blue)
+//                                    .cornerRadius(10)
+//                            }
+//                        } else {
+//                            Button(action: {
+//                                // Stub functionality for calling
+//                                print("Calling....")
+//
+//                            }) {
+//                                HStack {
+//                                    Image(systemName: "phone.circle")
+//                                    Text("Call")
+//                                }
+//                                .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
+//                                .font(.headline)
+//                                .foregroundColor(.white)
+//                                .padding()
+//                                .background(Color.black)
+//                                .cornerRadius(10)
+//                            }
+//                        }
+//                        Spacer()
+//                    }
                 }
             }
             .fullScreenCover(isPresented: $isDetailShowing) {
                 BrewDetailView(coffeeShop: coffeeShop)
             }
-            
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("Maximum Favorites Reached"),
+                    message: Text("You've reached the maximum number of favorite slots. You can watch ads in the Favorites Tab to earn more slots, purchase more in the Store, or subscribe to get 20 slots included."),
+                    primaryButton: .default(Text("Go to Store"), action: {
+                        // Set the state variable to true, to show the StorefrontView
+                        showStorefront = true
+                    }),
+                    secondaryButton: .default(Text("OK"))
+                )
+            }
             .sheet(isPresented: $showStorefront) {
                 StorefrontView()
-                
             }
             
             .onTapGesture {
@@ -193,12 +209,12 @@ struct BrewPreview: View {
             // Check if adding a new favorite would exceed the maximum allowed
             if coffeeShopData.addToFavorites(coffeeShop) {
                 userViewModel.addToFavorites(coffeeShop)
-                
                 // Increment favoriteSlotsUsed
                 favoriteSlotsUsed += 1
             } else {
-                // Show an alert or some message to indicate that the maximum number of favorites has been reached
+                showAlert = true  // Show an alert
             }
         }
     }
+
 }

@@ -102,7 +102,10 @@ struct ContentView: View {
                             // Check if the user has enough credits to perform a search
                             if userVM.user.credits > 0 {
                                 // Perform the search
+                              
+            
                                 contentVM.fetchCoffeeShops(visibleRegionCenter: visibleRegionCenter)
+                                
                             } else {
                                 // If the user does not have enough credits, display an alert
                                 showNoCreditsAlert = true
@@ -121,7 +124,7 @@ struct ContentView: View {
                         
                         Button(action: {
                             showingStorefront = true
-                        }) {//width: geo.size.width/3, height: geo.size.width/15)
+                        }) {
                             Text("Discover Credits: \(userVM.user.credits)")
                                 .frame(minWidth: geo.size.width/3, idealWidth: geo.size.width/3, maxWidth: geo.size.width/3 + CGFloat(5 * String(userVM.user.credits).count), minHeight:geo.size.width/20, idealHeight: geo.size.width/20, maxHeight: geo.size.width/20)
                                 .padding(5)

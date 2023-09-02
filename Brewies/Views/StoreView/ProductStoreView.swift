@@ -27,7 +27,6 @@ struct ProductStoreView: View {
                         }
                     }) {
                         CourseItem(storeKit: storeKit, product: product)
-                        
                     }
                 }
             }

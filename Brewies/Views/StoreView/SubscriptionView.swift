@@ -45,7 +45,6 @@ struct SubscriptionView: View {
                         Image(systemName: "checkmark.circle.fill")
                         Text("20 Favorite's Slots")
                     }
-                    
                 }
                 .padding()
                 .background(colorScheme == .dark ? Color.black : Color.white)

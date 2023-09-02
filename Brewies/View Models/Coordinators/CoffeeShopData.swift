@@ -16,11 +16,16 @@ class CoffeeShopData: ObservableObject {
         }
     }
     
-    @Published var maxFavoriteSlots: Int = 0 {
+    @Published var maxFavoriteSlots: Int = UserDefaults.standard.integer(forKey: "MaxFavoriteSlots") {
         didSet {
+            print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
             UserDefaults.standard.set(maxFavoriteSlots, forKey: "MaxFavoriteSlots")
+            print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
         }
     }
+
+
+
     
     @Published var cachedShops: [CoffeeShop] = []
 
@@ -33,6 +38,7 @@ class CoffeeShopData: ObservableObject {
         // Load from UserDefaults when the app starts
         loadFavoriteShops()
         loadMaxFavoriteSlots()
+
     }
     
     func addToFavorites(_ coffeeShop: CoffeeShop) -> Bool {
@@ -85,4 +91,19 @@ class CoffeeShopData: ObservableObject {
             maxFavoriteSlots = savedMaxFavoriteSlots
         }
     }
+    
+    func addFavoriteSlots(_ slots: Int) {
+        DispatchQueue.main.async {
+            self.maxFavoriteSlots += slots
+        }
+        UserDefaults.standard.set(self.maxFavoriteSlots, forKey: "MaxFavoriteSlots")
+    }
+
+    func removeSubscriptionSlots(_ slots: Int) {
+        DispatchQueue.main.async {
+            self.maxFavoriteSlots = max(0, self.maxFavoriteSlots - slots)  // Ensure it doesn't go negative
+        }
+        UserDefaults.standard.set(self.maxFavoriteSlots, forKey: "MaxFavoriteSlots")
+    }
+
 }
