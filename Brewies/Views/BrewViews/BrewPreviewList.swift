@@ -7,6 +7,8 @@
 import SwiftUI
 import Kingfisher
 
+
+
 struct BrewPreviewList: View {
     @Binding var coffeeShops: [CoffeeShop]
     @Binding var selectedCoffeeShop: CoffeeShop?
@@ -48,14 +50,16 @@ struct BrewPreview: View {
     @Binding var showBrewPreview: Bool
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
     @ObservedObject var userViewModel = UserViewModel.shared
+    @EnvironmentObject var contentVM: ContentViewModel
     
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
+    @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
     
     @State private var isDetailShowing: Bool = false
     @State var showStorefront = false
     @State private var favoriteSlotsUsed = 0
     @State private var showAlert = false
-
+    @State private var showCustomAlertForFavorites = false
     
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
     
@@ -173,17 +177,6 @@ struct BrewPreview: View {
             .fullScreenCover(isPresented: $isDetailShowing) {
                 BrewDetailView(coffeeShop: coffeeShop)
             }
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Maximum Favorites Reached"),
-                    message: Text("You've reached the maximum number of favorite slots. You can watch ads in the Favorites Tab to earn more slots, purchase more in the Store, or subscribe to get 20 slots included."),
-                    primaryButton: .default(Text("Go to Store"), action: {
-                        // Set the state variable to true, to show the StorefrontView
-                        showStorefront = true
-                    }),
-                    secondaryButton: .default(Text("OK"))
-                )
-            }
             .sheet(isPresented: $showStorefront) {
                 StorefrontView()
             }
@@ -212,9 +205,9 @@ struct BrewPreview: View {
                 // Increment favoriteSlotsUsed
                 favoriteSlotsUsed += 1
             } else {
-                showAlert = true  // Show an alert
+                sharedAlertVM.currentAlertType = .maxFavoritesReached
+                sharedAlertVM.showCustomAlert = true
             }
         }
     }
-
 }

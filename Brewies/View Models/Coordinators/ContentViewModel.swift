@@ -19,7 +19,9 @@ class ContentViewModel: ObservableObject {
     @Published var showNoCoffeeShopsAlert = false
     @Published var showNoAdsAvailableAlert = false
     @Published var  showNoCreditsAlert = false
-    
+    @Published var adsWatched = 0
+    @Published var favoriteSlots = 0
+
     @ObservedObject var userViewModel = UserViewModel.shared
     @ObservedObject var locationManager = LocationManager()
     
@@ -47,10 +49,7 @@ class ContentViewModel: ObservableObject {
             return
         }
         let yelpAPI = YelpAPI(yelpParams: yelpParams)
-        
-        let selectedRadius = CLLocationDistance(yelpParams.radiusInMeters) // Free gets 3 mile radius
-        
-     
+    
         //This is where the app is not extendin the
         if userViewModel.user.isSubscribed {
             if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request
@@ -67,12 +66,12 @@ class ContentViewModel: ObservableObject {
                 return
             }
             
-            if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
-                self.coffeeShops = cachedCoffeeShops
-                self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
-                showBrewPreview = true
-                return
-            }
+//            if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
+//                self.coffeeShops = cachedCoffeeShops
+//                self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
+//                showBrewPreview = true
+//                return
+//            }
         }
         
         yelpAPI.fetchIndependentCoffeeShops(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
@@ -87,21 +86,34 @@ class ContentViewModel: ObservableObject {
         }
     }
     
-    
-    //FIXME: ADD THE SWITCH LOGIC FOR CREDITS vs Favorites Slots
-    func handleRewardAd() {
+    func handleRewardAd(reward: String) {
         if let viewController = UIApplication.shared.windows.first?.rootViewController {
-            rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: {
+            rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [self] in
                 // This code will be called when the ad completes
                 // Add credit to the user
-                self.userViewModel.addCredits(1)
-                self.userViewModel.syncCredits()
+                switch reward {
+                case "credits":
+                    userViewModel.addCredits(1)
+                    userViewModel.syncCredits()
+                    break
+                case "favorites":
+                    adsWatched += 1
+                    if adsWatched >= 3 {
+                        favoriteSlots += 1
+                        adsWatched = 0
+                    }
+                    break
+                default:
+                    break
+                }
+                    
             })
         } else {
             // If there is no root view controller available, show an alert
             showNoAdsAvailableAlert = true
         }
     }
+    
     func deductUserCredit() {
         if userViewModel.user.credits > 0 {
             userViewModel.subtractCredits(1)

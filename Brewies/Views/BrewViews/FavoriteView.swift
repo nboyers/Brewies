@@ -9,50 +9,47 @@ import SwiftUI
 
 
 struct FavoritesView: View {
+    @EnvironmentObject var contentVM: ContentViewModel
+    @EnvironmentObject var userVM: UserViewModel
+    
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
     @ObservedObject var storeKit = StoreKitManager()
     
     @Binding var showPreview: Bool
     
-    @EnvironmentObject var userVM: UserViewModel
-    
     @State private var showRemovalConfirmationAlert = false
     @State private var toRemoveCoffeeShop: CoffeeShop?
     
-    @State private var adsWatched = 0
-    @State private var favoriteSlots = 0
     
     var body: some View {
         NavigationView {
-                ScrollView(.vertical, showsIndicators: false) {
-                    VStack(spacing: 16) {
+            ScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 16) {
                     VStack {
-                        Text("Ads Watched: \(adsWatched)/5")
+                        Text("Ads Watched: \(contentVM.adsWatched)/3")
                         
-                        ProgressView(value: Float(adsWatched), total: 5)
+                        ProgressView(value: Float(contentVM.adsWatched), total: 5)
                             .progressViewStyle(LinearProgressViewStyle())
                         
                         Button("Watch Ad to Unlock Favorite Slot") {
-                            //TODO: AdMob logic to show ad
-                            // On ad completion, increment adsWatched
-                            adsWatched += 1
+                            contentVM.handleRewardAd(reward: "favorites")
                         }
                     }
                     
-                        ForEach(coffeeShopData.favoriteShops.prefix(coffeeShopData.maxFavoriteSlots), id: \.id) { coffeeShop in
-
+                    ForEach(coffeeShopData.favoriteShops.prefix(coffeeShopData.maxFavoriteSlots), id: \.id) { coffeeShop in
+                        
                         NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
                             VStack {
                                 BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showPreview)
                             }
-                        }
-                        .contextMenu {
-                            Button(action: {
-                                toRemoveCoffeeShop = coffeeShop
-                                showRemovalConfirmationAlert = true
-                            }) {
-                                Text("Remove from favorites")
-                                Image(systemName: "trash")
+                            .contextMenu {
+                                Button(action: {
+                                    toRemoveCoffeeShop = coffeeShop
+                                    showRemovalConfirmationAlert = true
+                                }) {
+                                    Text("Remove from favorites")
+                                    Image(systemName: "trash")
+                                }
                             }
                         }
                     }
@@ -62,10 +59,9 @@ struct FavoritesView: View {
                     }
                 }
                 .padding(.all, 16)
-                .onChange(of: adsWatched) { newValue in
-                    if newValue >= 5 {
+                .onChange(of: contentVM.adsWatched) { newValue in
+                    if newValue >= 3 {
                         coffeeShopData.maxFavoriteSlots += 1  // Update the maxFavoriteSlots
-                        adsWatched = 0
                     }
                 }
                 

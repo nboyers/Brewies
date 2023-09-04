@@ -12,8 +12,6 @@ import BottomSheet
 import AuthenticationServices
 import Introspect
 
-//FIXME: Website Button in preview is broken
-
 struct ContentView: View {
     @ObservedObject var storeKit = StoreKitManager()
     
@@ -25,7 +23,8 @@ struct ContentView: View {
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var yelpParams: YelpSearchParams
     @EnvironmentObject var contentVM: ContentViewModel
-
+    @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
+    
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
     @State private var mapView = MKMapView()
@@ -46,6 +45,11 @@ struct ContentView: View {
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
+    
+    
+    
+    
+    
     
     @FocusState var isInputActive: Bool
     
@@ -72,6 +76,135 @@ struct ContentView: View {
                     searchQuery: $searchQuery,
                     shouldSearchInArea: $shouldSearchInArea
                 )
+                //MARK: BREW PREVIEW
+                .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
+                    .relativeBottom(0.20), //Floor
+                    .relative(0.70), // Mid swipe
+                    .relativeTop(0.95) //Top full swipe
+                ], headerContent: { // the top portion
+                    HStack {
+                        Spacer()
+                        HStack(alignment: .center, spacing: 10) {
+                            Button(action: {
+                                showingFilterView = true
+                            }) {
+                                Image(systemName: "ellipsis.circle")
+                                    .resizable()
+                                    .foregroundColor(Color.accentColor)
+                                    .frame(width: 30, height: 30)
+                                    .clipShape(Circle())
+                            }.padding(.horizontal)
+                            
+                            
+                            TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
+                                if isEditing {
+                                    isSearching = true
+                                    bottomSheetPosition = .relative(0.70)
+                                }
+                            }, onCommit: {
+                                searchLocation(for: searchQuery)
+                            })
+                            .focused($isInputActive)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.horizontal)
+                            .foregroundColor(.primary) // Use primary color for text to adapt to light/dark mode
+
+                            //MARK: Profile / Cancel Button
+                            Button(action: {
+                                if isSearching {
+                                    searchQuery = ""
+                                    isInputActive = false
+                                    isSearching = false
+                                    bottomSheetPosition = .relativeBottom(0.20)
+                                } else {
+                                    bottomSheetPosition = .relativeBottom(0.20)
+                                    if userVM.user.isLoggedIn {
+                                        // If user is logged in, show user profile view
+                                        showingUserProfile = true
+                                    } else {
+                                        showSignUpWithApple = true
+                                    }
+                                }
+                            })
+                            {
+                                if !isSearching {
+                                    if !userVM.user.isLoggedIn {
+                                        Image(systemName: "person.crop.circle.fill")
+                                            .resizable()
+                                            .foregroundColor(Color.accentColor)
+                                            .frame(width: 30, height: 30)
+                                            .clipShape(Circle())
+                                        
+                                    } else {
+                                        Text(String(userVM.user.firstName.prefix(1)))
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 30, weight: .bold))
+                                            .frame(width: 30, height: 30)
+                                            .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                            .clipShape(Circle())
+                                        
+                                    }
+                                } else {
+                                    Image(systemName: "x.circle.fill")
+                                        .resizable()
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.primary)
+                                        .padding()
+                                    
+                                }
+                            }.padding(.horizontal)
+                        }.padding(.vertical)
+                        Spacer()
+                    }
+                }) {
+                    ScrollView {
+                        Divider()
+                        
+                        if contentVM.selectedCoffeeShop != nil && contentVM.showBrewPreview {
+                            
+                            HStack() {
+                                GeometryReader { geo in
+                                    Text("\(contentVM.coffeeShops.count) Cafes In Map")
+                                        .padding(.horizontal, geo.size.width*0.07)
+                                }
+                                Spacer()
+                            }
+                            
+                            BrewPreviewList(coffeeShops: $contentVM.coffeeShops,
+                                            selectedCoffeeShop: $contentVM.selectedCoffeeShop,
+                                            showBrewPreview: $contentVM.showBrewPreview)
+                        }
+                        if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
+                            AdBannerView()
+                                .frame(width: 320, height: 50)
+                        }
+                        
+                        Button(action: {
+                            // Your action to handle the ad goes here
+                            self.contentVM.handleRewardAd(reward: "credits")
+                        }) {
+                            HStack(spacing: 10) {
+                                Image(systemName: "video.fill")
+                                    .resizable()
+                                    .scaledToFit() // Maintain aspect ratio
+                                    .frame(width: 20, height: 20) // Specify the size of the image
+                                    .foregroundColor(.white) // Color of the star
+                                    .padding(5) // Add some padding to give the image more room
+                                    .background(Color.blue) // Background color of the circle
+                                    .clipShape(Circle()) // Make the background a circle
+                                Text("Watch Ads for Credits")
+                                    .font(.headline)
+                            }
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                        }
+                    }
+                }
+                .enableAppleScrollBehavior()
+                .enableBackgroundBlur()
+                .backgroundBlurMaterial(.systemDark)
                 .alert(isPresented: $contentVM.showNoCoffeeShopsAlert) {
                     Alert(
                         title: Text("No Coffee Shops Found"),
@@ -88,7 +221,7 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
-
+                    
                 }
                 
                 .sheet(isPresented: $showingFilterView) {
@@ -102,13 +235,11 @@ struct ContentView: View {
                             // Check if the user has enough credits to perform a search
                             if userVM.user.credits > 0 {
                                 // Perform the search
-                              
-            
                                 contentVM.fetchCoffeeShops(visibleRegionCenter: visibleRegionCenter)
                                 
                             } else {
-                                // If the user does not have enough credits, display an alert
-                                showNoCreditsAlert = true
+                                // When you want to show the "Insufficient Credits" alert
+                                sharedAlertVM.currentAlertType = .insufficientCredits
                             }
                         }) {
                             Text("Search this area")
@@ -134,22 +265,13 @@ struct ContentView: View {
                                 .cornerRadius(10)
                                 .shadow(radius: 50)
                                 .minimumScaleFactor(0.5)
-
+                            
                         }
                         
                         
                     }
                     .sheet(isPresented: $showingStorefront) {
                         StorefrontView()
-                    }
-                    
-                    //MARK: ALERTS
-                    .alert(isPresented: $showNoCreditsAlert) {
-                        Alert(
-                            title: Text("Insufficient Credits"),
-                            message: Text("Watch an ad or click the credits to buy more from the store."),
-                            dismissButton: .default(Text("OK"))
-                        )
                     }
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                 }
@@ -171,180 +293,73 @@ struct ContentView: View {
                         .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
                     }
                 }
-            }
-            //MARK: BREW PREVIEW
-            .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
-                .relativeBottom(0.20), //Floor
-                .relative(0.70), // Mid swipe
-                .relativeTop(0.95) //Top full swipe
-            ], headerContent: { // the top portion
-                HStack {
-                    Spacer()
-                    HStack(alignment: .center, spacing: 10) {
-                        Button(action: {
-                            showingFilterView = true
-                        }) {
-                            Image(systemName: "ellipsis.circle")
-                                .resizable()
-                                .foregroundColor(Color.accentColor)
-                                .frame(width: 30, height: 30)
-                                .clipShape(Circle())
-                        }.padding(.horizontal)
-                        
-                        
-                        TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
-                            if isEditing {
-                                isSearching = true
-                                bottomSheetPosition = .relative(0.70)
-                            }
-                        }, onCommit: {
-                            searchLocation(for: searchQuery)
-                        })
-                        .focused($isInputActive)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .frame(width: 270, height: 20)
-                        
-                        
-                        //MARK: Profile / Cancel Button
-                        Button(action: {
-                            if isSearching {
-                                searchQuery = ""
-                                isInputActive = false
-                                isSearching = false
-                                bottomSheetPosition = .relativeBottom(0.20)
-                            } else {
-                                bottomSheetPosition = .relativeBottom(0.20)
-                                if userVM.user.isLoggedIn {
-                                    // If user is logged in, show user profile view
-                                    showingUserProfile = true
-                                } else {
-                                    showSignUpWithApple = true
-                                }
-                            }
-                        })
-                        {
-                            if !isSearching {
-                                if !userVM.user.isLoggedIn {
-                                    Image(systemName: "person.crop.circle.fill")
-                                        .resizable()
-                                        .foregroundColor(Color.accentColor)
-                                        .frame(width: 30, height: 30)
-                                        .clipShape(Circle())
-                                    
-                                } else {
-                                    Text(String(userVM.user.firstName.prefix(1)))
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 30, weight: .bold))
-                                        .frame(width: 30, height: 30)
-                                        .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
-                                        .clipShape(Circle())
-                                    
-                                }
-                            } else {
-                                Image(systemName: "x.circle.fill")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(.primary)
-                                    .padding()
-                                
-                            }
-                        }.padding(.horizontal)
-                    }.padding(.vertical)
-                    Spacer()
-                }
-            }) {
-                ScrollView {
-                    Divider()
+                if let alertType = sharedAlertVM.currentAlertType {
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
                     
-                    if contentVM.selectedCoffeeShop != nil && contentVM.showBrewPreview {
-                        
-                        HStack() {
-                            GeometryReader { geo in
-                                Text("\(contentVM.coffeeShops.count) Cafes In Map")
-                                    .padding(.horizontal, geo.size.width*0.07)
-                            }
-                            Spacer()
-                            
-                            
+                    CustomAlertView(
+                        title: alertType == .maxFavoritesReached ? "Maximum Favorites Reached" : "Insufficient Credits",
+                        message: alertType == .maxFavoritesReached ? "Watch an ad to unlock more favorite slots or go to the store." : "Watch an ad or click the credits to buy more from the store.",
+                        goToStoreAction: {
+                            // Your action for going to the store
+                            showingStorefront = true
+                            sharedAlertVM.currentAlertType = nil
+                            sharedAlertVM.showCustomAlert = false
+                        },
+                        watchAdAction: {
+                            self.contentVM.handleRewardAd(reward: alertType == .maxFavoritesReached ? "favorites" : "credits")
+                            // Your action for watching an ad
+                            sharedAlertVM.currentAlertType = nil
+                            sharedAlertVM.showCustomAlert = false
+                        },
+                        dismissAction: {
+                            sharedAlertVM.currentAlertType = nil
+                            sharedAlertVM.showCustomAlert = false
                         }
-                        
-                        BrewPreviewList(coffeeShops: $contentVM.coffeeShops,
-                                        selectedCoffeeShop: $contentVM.selectedCoffeeShop,
-                                        showBrewPreview: $contentVM.showBrewPreview)
-                    }
-                    if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
-                        AdBannerView()
-                            .frame(width: 320, height: 50)
-                    }
-                    
-                    Button(action: {
-                        // Your action to handle the ad goes here
-                        self.contentVM.handleRewardAd()
-                    }) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "video.fill")
-                                .resizable()
-                                .scaledToFit() // Maintain aspect ratio
-                                .frame(width: 20, height: 20) // Specify the size of the image
-                                .foregroundColor(.white) // Color of the star
-                                .padding(5) // Add some padding to give the image more room
-                                .background(Color.blue) // Background color of the circle
-                                .clipShape(Circle()) // Make the background a circle
-                            Text("Watch Ads for Credits")
-                                .font(.headline)
-                        }
-                        .padding()
-                        .background(Color.green)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                    }
+                    )
                 }
             }
-            .enableAppleScrollBehavior()
-            .enableBackgroundBlur()
-            .backgroundBlurMaterial(.systemDark)
-            
             //MARK: User Profile
             .sheet(isPresented: $showSignUpWithApple) {
-                        if userVM.user.isLoggedIn {
-                            UserProfileView(userViewModel: userVM, contentViewModel: contentVM)
-                                .presentationDetents([.medium])
-                        } else {
-                            GeometryReader { geo in
-                                VStack {
-                                    HStack() {
-                                        Button(action: {
-                                            print("TODO: Handle settings button")
-                                        }) {
-                                            Image(systemName: "gear")
-                                                .resizable()
-                                                .frame(width: 25, height: 25)
-                                                .foregroundColor(.primary)
-                                                .padding()
-                                        }
-                                        Spacer()
-                                        
-                                        Button(action: {
-                                            showSignUpWithApple = false
-                                        }) {
-                                            Image(systemName: "x.circle.fill")
-                                                .resizable()
-                                                .frame(width: 25, height: 25)
-                                                .foregroundColor(.primary)
-                                                .padding()
-                                        }
-                                    }
-                                    Spacer()
-                                    SignInWithAppleButton(action: {
-                                        signInCoordinator.startSignInWithAppleFlow()
-                                    }, label: "Sign in with Apple")
-                                    .frame(width: 280, height: 45)
-                                    .padding(.top, 50)
+                if userVM.user.isLoggedIn {
+                    UserProfileView(userViewModel: userVM, contentViewModel: contentVM)
+                        .presentationDetents([.medium])
+                } else {
+                    GeometryReader { geo in
+                        VStack {
+                            HStack() {
+                                Button(action: {
+                                    print("TODO: Handle settings button")
+                                }) {
+                                    Image(systemName: "gear")
+                                        .resizable()
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.primary)
+                                        .padding()
+                                }
+                                Spacer()
+                                
+                                Button(action: {
+                                    showSignUpWithApple = false
+                                }) {
+                                    Image(systemName: "x.circle.fill")
+                                        .resizable()
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.primary)
+                                        .padding()
+                                }
+                            }
+                            Spacer()
+                            SignInWithAppleButton(action: {
+                                signInCoordinator.startSignInWithAppleFlow()
+                            }, label: "Sign in with Apple")
+                            .frame(width: 280, height: 45)
+                            .padding(.top, 50)
                         }
                     }
-                            
-                            .presentationDragIndicator(.visible)
-                            .presentationDetents([.medium, .large])
+                    
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.medium, .large])
                 }
             } //end user sheet
             

@@ -25,6 +25,7 @@ struct BrewiesApp: App {
                 .environmentObject(UserViewModel.shared)
                 .environmentObject(yelpParams)
                 .environmentObject(contentViewModel)
+                .environmentObject(SharedAlertViewModel())
                 .onAppear {
                     GADMobileAds.sharedInstance().start(completionHandler: nil)
                 }

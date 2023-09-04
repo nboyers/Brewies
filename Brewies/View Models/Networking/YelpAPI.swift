@@ -112,7 +112,7 @@ class YelpAPI : ObservableObject {
     private func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
         var coffeeShops: [CoffeeShop] = []
         for business in businesses where !isExcludedChain(name: business.name, categories: business.categories) {
-            var coffeeShop = CoffeeShop(
+            let coffeeShop = CoffeeShop(
                 id: business.id,
                 name: business.name,
                 latitude: business.coordinates.latitude,
@@ -133,10 +133,10 @@ class YelpAPI : ObservableObject {
                 isClosed: business.isClosed,
                 price: business.price
             )
-            if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
-                coffeeShop.isFavorite = true
-                favoriteCoffeeShops.append(coffeeShop)
-            }
+//            if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
+//                coffeeShop.isFavorite = true
+//                favoriteCoffeeShops.append(coffeeShop)
+//            }
             coffeeShops.append(coffeeShop)
         }
         return coffeeShops
