@@ -1,0 +1,148 @@
+{
+  "identifier" : "6903392F",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "1.29",
+      "familyShareable" : false,
+      "internalID" : "6450881136",
+      "localizations" : [
+        {
+          "description" : "Buy credits to find your next brew",
+          "displayName" : "5 Discover Credits ",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.nobosoftware.BuyableRequests",
+      "referenceName" : "Buyable Requests",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "0.79",
+      "familyShareable" : false,
+      "internalID" : "6463821463",
+      "localizations" : [
+        {
+          "description" : "Save your favorite coffee shop location.",
+          "displayName" : "Favorites Slot",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.nobosoftware.FavoriteSlot",
+      "referenceName" : "Favorites Slot",
+      "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "6450880828",
+      "localizations" : [
+        {
+          "description" : "Removes the ads from view",
+          "displayName" : "Remove Ads",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.nobosoftware.removeAds",
+      "referenceName" : "Remove Ads",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6450864433",
+    "_developerTeamID" : "JCL982F3T2",
+    "_lastSynchronizedDate" : 715190712.89706504
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21358212",
+      "localizations" : [
+
+      ],
+      "name" : "Brewies+",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "23.95",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6463821533",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "(12 months at $1.99/mo. Save 50%)",
+              "displayName" : "Annual Subscription ",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.nobos.AnnualBrewies",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Annual Subscription",
+          "subscriptionGroupID" : "21358212",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "19.49",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6463821535",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "(6 months at $3.25/mo. Save 20%)",
+              "displayName" : "Biannual Subscription",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.nobos.BiannualBrewies",
+          "recurringSubscriptionPeriod" : "P6M",
+          "referenceName" : "Biannual Subscription ",
+          "subscriptionGroupID" : "21358212",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6463821479",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Enhance your experience with Brewies+",
+              "displayName" : "Monthly Subscription ",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.nobos.Brewies",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly Subscription",
+          "subscriptionGroupID" : "21358212",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 2,
+    "minor" : 0
+  }
+}

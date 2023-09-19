@@ -13,7 +13,7 @@ struct BrewiesApp: App {
     private var rewardAd = RewardAdController()
     let yelpParams = YelpSearchParams()
     let contentViewModel: ContentViewModel
-    
+    var sharedViewModel = SharedViewModel()
     
     init() {
         self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
@@ -26,6 +26,7 @@ struct BrewiesApp: App {
                 .environmentObject(yelpParams)
                 .environmentObject(contentViewModel)
                 .environmentObject(SharedAlertViewModel())
+                .environmentObject(sharedViewModel)
                 .onAppear {
                     GADMobileAds.sharedInstance().start(completionHandler: nil)
                 }

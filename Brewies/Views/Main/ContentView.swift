@@ -19,6 +19,7 @@ struct ContentView: View {
     
     @Environment(\.rootViewController) private var rootViewController: UIViewController?
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
+    @EnvironmentObject var sharedVM: SharedViewModel
     
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var yelpParams: YelpSearchParams
@@ -26,7 +27,7 @@ struct ContentView: View {
     @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
     
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
-    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.20) // Starting position for bottomSheet
+//  eet
     @State private var mapView = MKMapView()
     
     @State private var showAlert = false
@@ -45,8 +46,8 @@ struct ContentView: View {
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
-    
-    
+   
+
     
     
     
@@ -60,24 +61,45 @@ struct ContentView: View {
     var body: some View {
         TabView {
             ZStack {
-                MapView(
-                    locationManager: contentVM.locationManager,
-                    coffeeShops: $contentVM.coffeeShops,
-                    selectedCoffeeShop: $contentVM.selectedCoffeeShop,
-                    centeredOnUser: $centeredOnUser,
-                    mapView: $mapView,
-                    userHasMoved: $userHasMoved,
-                    visibleRegionCenter: $visibleRegionCenter,
-                    showUserLocationButton: $showUserLocationButton,
-                    isAnnotationSelected: $isAnnotationSelected,
-                    mapTapped: $mapTapped,
-                    showBrewPreview: $contentVM.showBrewPreview,
-                    searchedLocation: $searchedLocation,
-                    searchQuery: $searchQuery,
-                    shouldSearchInArea: $shouldSearchInArea
-                )
+                ZStack {
+                    MapView(
+                        locationManager: contentVM.locationManager,
+                        coffeeShops: $contentVM.coffeeShops,
+                        selectedCoffeeShop: $contentVM.selectedCoffeeShop,
+                        centeredOnUser: $centeredOnUser,
+                        mapView: $mapView,
+                        userHasMoved: $userHasMoved,
+                        visibleRegionCenter: $visibleRegionCenter,
+                        showUserLocationButton: $showUserLocationButton,
+                        isAnnotationSelected: $isAnnotationSelected,
+                        mapTapped: $mapTapped,
+                        showBrewPreview: $contentVM.showBrewPreview,
+                        searchedLocation: $searchedLocation,
+                        searchQuery: $searchQuery,
+                        shouldSearchInArea: $shouldSearchInArea
+                    )
+                    // 2. User Location Button
+                    if showUserLocationButton {
+                        GeometryReader { geo in
+                            Button(action: {
+                                centeredOnUser = true
+                            }) {
+                                Image(systemName: "location.square.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(Color.primary)
+                                    .background(
+                                        Rectangle()
+                                            .fill(Color.accentColor)
+                                    )
+                            }
+                            .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
+                        }
+                    }
+                }
+                
                 //MARK: BREW PREVIEW
-                .bottomSheet(bottomSheetPosition: self.$bottomSheetPosition, switchablePositions: [
+                .bottomSheet(bottomSheetPosition: self.$sharedVM.bottomSheetPosition, switchablePositions: [
                     .relativeBottom(0.20), //Floor
                     .relative(0.70), // Mid swipe
                     .relativeTop(0.95) //Top full swipe
@@ -99,7 +121,7 @@ struct ContentView: View {
                             TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
                                 if isEditing {
                                     isSearching = true
-                                    bottomSheetPosition = .relative(0.70)
+                                    sharedVM.bottomSheetPosition = .relative(0.70)
                                 }
                             }, onCommit: {
                                 searchLocation(for: searchQuery)
@@ -115,9 +137,9 @@ struct ContentView: View {
                                     searchQuery = ""
                                     isInputActive = false
                                     isSearching = false
-                                    bottomSheetPosition = .relativeBottom(0.20)
+                                    sharedVM.bottomSheetPosition = .relativeBottom(0.20)
                                 } else {
-                                    bottomSheetPosition = .relativeBottom(0.20)
+                                    sharedVM.bottomSheetPosition = .relativeBottom(0.20)
                                     if userVM.user.isLoggedIn {
                                         // If user is logged in, show user profile view
                                         showingUserProfile = true
@@ -202,6 +224,7 @@ struct ContentView: View {
                         }
                     }
                 }
+                
                 .enableAppleScrollBehavior()
                 .enableBackgroundBlur()
                 .backgroundBlurMaterial(.systemDark)
@@ -274,24 +297,6 @@ struct ContentView: View {
                         StorefrontView()
                     }
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
-                }
-                
-                if showUserLocationButton {
-                    GeometryReader { geo in
-                        Button(action: {
-                            centeredOnUser = true
-                        }) {
-                            Image(systemName: "location.square.fill")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(Color.primary)
-                                .background(
-                                    Rectangle()
-                                        .fill(Color.accentColor)
-                                )
-                        }
-                        .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
-                    }
                 }
                 if let alertType = sharedAlertVM.currentAlertType {
                     Color.black.opacity(0.4)
@@ -403,3 +408,4 @@ struct ContentView: View {
         }
     }
 }
+

@@ -13,9 +13,11 @@
 //
 import MapKit
 import SwiftUI
+import BottomSheet
 
 struct MapView: UIViewRepresentable {
     @ObservedObject var locationManager: LocationManager
+    @EnvironmentObject var sharedVM: SharedViewModel
     
     // Bindings
     @Binding var coffeeShops: [CoffeeShop]
@@ -32,13 +34,16 @@ struct MapView: UIViewRepresentable {
     @Binding var searchedLocation: CLLocationCoordinate2D?
     @Binding var searchQuery: String
     @Binding var shouldSearchInArea: Bool
-    
+
+
     let DISTANCE = CLLocationDistance(2500)
     
     // Creates the coordinator for the MapView
     func makeCoordinator() -> Coordinator {
-        Coordinator(self)
+        return Coordinator(self, sharedVM: sharedVM, updateBottomSheetPosition: $sharedVM.bottomSheetPosition)
     }
+
+
     
     // Creates and configures the MKMapView
     func makeUIView(context: Context) -> MKMapView {
@@ -146,11 +151,16 @@ struct MapView: UIViewRepresentable {
     // Coordinator class that handles delegate callbacks and actions
     class Coordinator: NSObject, MKMapViewDelegate {
         var parent: MapView
-        
-        init(_ parent: MapView) {
+        var sharedVM: SharedViewModel
+        var updateBottomSheetPosition: Binding<BottomSheetPosition>
+
+
+        init(_ parent: MapView, sharedVM: SharedViewModel, updateBottomSheetPosition: Binding<BottomSheetPosition>) {
             self.parent = parent
+            self.sharedVM = sharedVM
+            self.updateBottomSheetPosition = updateBottomSheetPosition
         }
-        
+
         @objc func mapTapped() {
             parent.mapTapped = true
         }
@@ -164,11 +174,23 @@ struct MapView: UIViewRepresentable {
             // Signal that the user has moved the map and might want to search in this area
             parent.shouldSearchInArea = true
         }
-        
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+            print("Annotation selected")
+          
             if let coffeeShop = parent.coffeeShops.first(where: { $0.latitude == view.annotation?.coordinate.latitude && $0.longitude == view.annotation?.coordinate.longitude }) {
                 parent.selectedCoffeeShop = coffeeShop
                 parent.showBrewPreview = true
+
+                // Move the selected coffee shop to the front of the array
+                if let index = parent.coffeeShops.firstIndex(of: coffeeShop) {
+                    parent.coffeeShops.remove(at: index)
+                    parent.coffeeShops.insert(coffeeShop, at: 0)
+                }
+
+                // Change the bottomSheetPosition to make it appear
+                DispatchQueue.main.async {
+                    self.updateBottomSheetPosition.wrappedValue = .relative(0.70)
+                }
             }
         }
     }
