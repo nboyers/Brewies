@@ -17,7 +17,6 @@ struct ContentView: View {
     
     private var rewardAd = RewardAdController()
     
-    @Environment(\.rootViewController) private var rootViewController: UIViewController?
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     @EnvironmentObject var sharedVM: SharedViewModel
     
@@ -25,12 +24,13 @@ struct ContentView: View {
     @EnvironmentObject var yelpParams: YelpSearchParams
     @EnvironmentObject var contentVM: ContentViewModel
     @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
-//  eet
+    @State private var activeSheet: ActiveSheet?
+    
     @State private var mapView = MKMapView()
     
-    @State private var showAlert = false
     @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
@@ -38,16 +38,12 @@ struct ContentView: View {
     @State private var isAnnotationSelected = false
     @State private var mapTapped = false
     @State private var showNoCreditsAlert = false
-    @State private var showingUserProfile = false
-    @State private var showingFilterView = false
     @State private var shouldSearchInArea = false
-    @State private var showSignUpWithApple = false
-    @State private var showingStorefront = false
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
-   
-
+    
+    
     
     
     
@@ -108,7 +104,7 @@ struct ContentView: View {
                         Spacer()
                         HStack(alignment: .center, spacing: 10) {
                             Button(action: {
-                                showingFilterView = true
+                                activeSheet = .filter
                             }) {
                                 Image(systemName: "ellipsis.circle")
                                     .resizable()
@@ -130,7 +126,7 @@ struct ContentView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .padding(.horizontal)
                             .foregroundColor(.primary) // Use primary color for text to adapt to light/dark mode
-
+                            
                             //MARK: Profile / Cancel Button
                             Button(action: {
                                 if isSearching {
@@ -142,9 +138,11 @@ struct ContentView: View {
                                     sharedVM.bottomSheetPosition = .relativeBottom(0.20)
                                     if userVM.user.isLoggedIn {
                                         // If user is logged in, show user profile view
-                                        showingUserProfile = true
+                                        activeSheet = .userProfile
+                                        
                                     } else {
-                                        showSignUpWithApple = true
+                                        activeSheet = .signUpWithApple
+                                        
                                     }
                                 }
                             })
@@ -192,9 +190,11 @@ struct ContentView: View {
                                 Spacer()
                             }
                             
-                            BrewPreviewList(coffeeShops: $contentVM.coffeeShops,
+                            BrewPreviewList(coffeeShops: $contentVM.coffeeShops, 
                                             selectedCoffeeShop: $contentVM.selectedCoffeeShop,
-                                            showBrewPreview: $contentVM.showBrewPreview)
+                                            showBrewPreview: $contentVM.showBrewPreview,
+                                            activeSheet: $activeSheet)
+
                         }
                         if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
                             AdBannerView()
@@ -247,10 +247,10 @@ struct ContentView: View {
                     
                 }
                 
-                .sheet(isPresented: $showingFilterView) {
-                    FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
-                        .environmentObject(userVM)
-                }
+                //                .sheet(isPresented: $showingFilterView) {
+                //                    FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
+                //                        .environmentObject(userVM)
+                //                }
                 
                 GeometryReader { geo in
                     VStack {
@@ -277,7 +277,8 @@ struct ContentView: View {
                         .shadow(radius: 50)
                         
                         Button(action: {
-                            showingStorefront = true
+                            activeSheet = .storefront
+                            
                         }) {
                             Text("Discover Credits: \(userVM.user.credits)")
                                 .frame(minWidth: geo.size.width/3, idealWidth: geo.size.width/3, maxWidth: geo.size.width/3 + CGFloat(5 * String(userVM.user.credits).count), minHeight:geo.size.width/20, idealHeight: geo.size.width/20, maxHeight: geo.size.width/20)
@@ -293,9 +294,9 @@ struct ContentView: View {
                         
                         
                     }
-                    .sheet(isPresented: $showingStorefront) {
-                        StorefrontView()
-                    }
+                    //                    .sheet(isPresented: $showingStorefront) {
+                    //                        StorefrontView()
+                    //                    }
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                 }
                 if let alertType = sharedAlertVM.currentAlertType {
@@ -307,7 +308,7 @@ struct ContentView: View {
                         message: alertType == .maxFavoritesReached ? "Watch an ad to unlock more favorite slots or go to the store." : "Watch an ad or click the credits to buy more from the store.",
                         goToStoreAction: {
                             // Your action for going to the store
-                            showingStorefront = true
+                            activeSheet = .storefront
                             sharedAlertVM.currentAlertType = nil
                             sharedAlertVM.showCustomAlert = false
                         },
@@ -325,62 +326,78 @@ struct ContentView: View {
                 }
             }
             //MARK: User Profile
-            .sheet(isPresented: $showSignUpWithApple) {
-                if userVM.user.isLoggedIn {
-                    UserProfileView(userViewModel: userVM, contentViewModel: contentVM)
+            .sheet(item: $activeSheet) { sheet in
+                switch sheet {
+                case .settings:
+                    SettingsView()
+                    
+                case .filter:
+                    FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
+                        .environmentObject(userVM)
+                    
+                case .userProfile:
+                    UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)
+                        .presentationDragIndicator(.visible)
                         .presentationDetents([.medium])
-                } else {
-                    GeometryReader { geo in
-                        VStack {
-                            HStack() {
-                                Button(action: {
-                                    print("TODO: Handle settings button")
-                                }) {
-                                    Image(systemName: "gear")
-                                        .resizable()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.primary)
-                                        .padding()
+                    
+                case .signUpWithApple:
+                    if userVM.user.isLoggedIn {
+                        UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)
+                            .presentationDetents([.medium])
+                    } else {
+                        GeometryReader { geo in
+                            VStack {
+                                HStack() {
+                                    Button(action: {
+                                        activeSheet = .settings
+
+                                    }) {
+                                        Image(systemName: "gear")
+                                            .resizable()
+                                            .frame(width: 25, height: 25)
+                                            .foregroundColor(.primary)
+                                            .padding()
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Button(action: {
+                                        self.presentationMode.wrappedValue.dismiss()
+                                    }) {
+                                        Image(systemName: "x.circle.fill")
+                                            .resizable()
+                                            .frame(width: 25, height: 25)
+                                            .foregroundColor(.primary)
+                                            .padding()
+                                    }
                                 }
                                 Spacer()
-                                
-                                Button(action: {
-                                    showSignUpWithApple = false
-                                }) {
-                                    Image(systemName: "x.circle.fill")
-                                        .resizable()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.primary)
-                                        .padding()
-                                }
+                                SignInWithAppleButton(action: {
+                                    signInCoordinator.startSignInWithAppleFlow()
+                                }, label: "Sign in with Apple")
+                                .frame(width: 280, height: 45)
+                                .padding(.top, 50)
                             }
-                            Spacer()
-                            SignInWithAppleButton(action: {
-                                signInCoordinator.startSignInWithAppleFlow()
-                            }, label: "Sign in with Apple")
-                            .frame(width: 280, height: 45)
-                            .padding(.top, 50)
                         }
+                        
+                        .presentationDragIndicator(.visible)
+                        .presentationDetents([.medium, .large])
                     }
                     
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.medium, .large])
+                case .storefront:
+                    StorefrontView()
+                    
+                case .detailBrew:
+                    EmptyView()
                 }
-            } //end user sheet
-            
-            .sheet(isPresented: $showingUserProfile) {
-                UserProfileView(userViewModel: userVM, contentViewModel: contentVM)
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.medium, .large])
             }
-            
             .edgesIgnoringSafeArea(.top)
             .tabItem {
                 Image(systemName: "map")
                 Text("Map")
             }
             
-            FavoritesView(showPreview: $contentVM.showBrewPreview)
+            FavoritesView(showPreview: $contentVM.showBrewPreview, activeSheet: $activeSheet)
                 .environmentObject(userVM)
                 .tabItem {
                     Image(systemName: "star.fill")

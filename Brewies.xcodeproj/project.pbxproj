@@ -11,6 +11,7 @@
 		FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E12A0EE7C300F705CB /* FavoriteView.swift */; };
 		FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */; };
 		FF149FED2A6EC8AA008D44CE /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF149FEC2A6EC8AA008D44CE /* MenuView.swift */; };
+		FF16384C2ABA43F100E1E884 /* ActiveSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */; };
 		FF188E912AA0F1B500C62791 /* Brewies Storefront.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF188E902AA0F1B500C62791 /* Brewies Storefront.storekit */; };
 		FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */; };
 		FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */; };
@@ -21,7 +22,6 @@
 		FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637A52A55C68A00A33899 /* ProductList.plist */; };
 		FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */; };
 		FF3637B12A55FD0500A33899 /* SubscriptionsList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */; };
-		FF3637B32A5604DF00A33899 /* product.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF3637B22A5604DF00A33899 /* product.storekit */; };
 		FF3637B52A560AB800A33899 /* ProductStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637B42A560AB800A33899 /* ProductStoreView.swift */; };
 		FF3637B92A5749F800A33899 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637B82A5749F800A33899 /* UserViewModel.swift */; };
 		FF3637BB2A57521400A33899 /* StorefrontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637BA2A57521400A33899 /* StorefrontView.swift */; };
@@ -98,6 +98,7 @@
 		FF0946E12A0EE7C300F705CB /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
 		FF149FEC2A6EC8AA008D44CE /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSheet.swift; sourceTree = "<group>"; };
 		FF188E902AA0F1B500C62791 /* Brewies Storefront.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Brewies Storefront.storekit"; sourceTree = "<group>"; };
 		FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpResponse.swift; sourceTree = "<group>"; };
 		FF2467822A78824500B04BBE /* FoodDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDetailView.swift; sourceTree = "<group>"; };
@@ -106,7 +107,6 @@
 		FF3637A52A55C68A00A33899 /* ProductList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductList.plist; sourceTree = "<group>"; };
 		FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
 		FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubscriptionsList.plist; sourceTree = "<group>"; };
-		FF3637B22A5604DF00A33899 /* product.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = product.storekit; sourceTree = "<group>"; };
 		FF3637B42A560AB800A33899 /* ProductStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductStoreView.swift; sourceTree = "<group>"; };
 		FF3637B82A5749F800A33899 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		FF3637BA2A57521400A33899 /* StorefrontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontView.swift; sourceTree = "<group>"; };
@@ -236,7 +236,6 @@
 			isa = PBXGroup;
 			children = (
 				FF188E902AA0F1B500C62791 /* Brewies Storefront.storekit */,
-				FF3637B22A5604DF00A33899 /* product.storekit */,
 				FF3FF29029EA0D2300510FCD /* Brewies */,
 				FF3FF2A229EA0D2600510FCD /* BrewiesTests */,
 				FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */,
@@ -343,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */,
+				FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */,
 			);
 			path = "Supporting Assets";
 			sourceTree = "<group>";
@@ -658,7 +658,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FF3637B32A5604DF00A33899 /* product.storekit in Resources */,
 				FF188E912AA0F1B500C62791 /* Brewies Storefront.storekit in Resources */,
 				FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */,
 				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
@@ -694,6 +693,7 @@
 				FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */,
 				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
 				FF149FED2A6EC8AA008D44CE /* MenuView.swift in Sources */,
+				FF16384C2ABA43F100E1E884 /* ActiveSheet.swift in Sources */,
 				FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */,
 				FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */,
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,

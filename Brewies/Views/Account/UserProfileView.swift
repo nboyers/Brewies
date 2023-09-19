@@ -10,17 +10,12 @@ import SwiftUI
 struct UserProfileView: View {
     @ObservedObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State var showFavorites = false
     @ObservedObject var contentViewModel: ContentViewModel
-    @State private var showSettings = false // State for showing SettingsView
+    
+    @Binding var activeSheet: ActiveSheet?
     
     let signInCoordinator = SignInWithAppleCoordinator()
-    
-    init(userViewModel: UserViewModel, contentViewModel: ContentViewModel) {
-        self.userViewModel = userViewModel
-        self.contentViewModel = contentViewModel
-    }
-    
+        
     var body: some View {
         if userViewModel.user.isLoggedIn {
             VStack {
@@ -48,10 +43,9 @@ struct UserProfileView: View {
                     .padding([.top, .horizontal], 20)
                 }
                 Divider()
-                
                 Spacer()
                 Button(action: {
-                    self.showSettings = true
+                    activeSheet = .settings
                 }) {
                     HStack {
                         Spacer()
@@ -65,53 +59,87 @@ struct UserProfileView: View {
                 .background(.bar)
                 .cornerRadius(10)
                 .frame(width: 375)
-                Spacer()
                 
-                // Add a sheet for SettingsView
-                    .sheet(isPresented: $showSettings) {
-                        SettingsView()
+                
+                
+                
+                Button(action: shareApp) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "square.and.arrow.up")
+                        Text("Share Brewies")
+                        Spacer()
                     }
+                }
+                .padding()
+                .foregroundColor(.primary)
+                .background(.bar)
+                .cornerRadius(10)
+                .frame(width: 375)
+                
+                
+                
+                
+                Button(action: leaveReview) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "star.fill")
+                        Text("Leave a Review")
+                        Spacer()
+                    }
+                }
+                .padding()
+                .foregroundColor(.primary)
+                .background(.bar)
+                .cornerRadius(10)
+                .frame(width: 375)
+                Spacer()
             }
-            .sheet(isPresented: $showFavorites) {
-                FavoritesView(showPreview: $showFavorites)
-            }
-            Spacer()
-        } else {
-            GeometryReader { geo in
-                VStack {
-                    HStack() {
-                        Button(action: {
-                            print("TODO: Handle settings button")
-                        }) {
-                            Image(systemName: "gear")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.primary)
-                                .padding()
+            } else {
+                GeometryReader { geo in
+                    VStack {
+                        HStack() {
+                            Button(action: {
+                                activeSheet = .settings
+                            }) {
+                                Image(systemName: "gear")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.primary)
+                                    .padding()
+                            }
+                            Spacer()
+                            
+                            Button(action: {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }) {
+                                Image(systemName: "x.circle.fill")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.primary)
+                                    .padding()
+                            }
                         }
                         Spacer()
-                        
-                        Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "x.circle.fill")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.primary)
-                                .padding()
-                        }
+                        SignInWithAppleButton(action: {
+                            signInCoordinator.startSignInWithAppleFlow()
+                        }, label: "Sign in with Apple")
+                        .frame(width: 280, height: 45)
+                        .padding(.top, 50)
                     }
-                    Spacer()
-                    SignInWithAppleButton(action: {
-                        signInCoordinator.startSignInWithAppleFlow()
-                    }, label: "Sign in with Apple")
-                    .frame(width: 280, height: 45)
-                    .padding(.top, 50)
+                }
+                
+                .presentationDragIndicator(.visible)
+                .presentationDetents([.medium, .large])
+            }
         }
-    }
-            
-            .presentationDragIndicator(.visible)
-            .presentationDetents([.medium, .large])
+        private func shareApp() {
+            activeSheet = .storefront
         }
+        
+        private func leaveReview() {
+            let reviewURL = URL(string: "https://apps.apple.com/us/app/brewies/id6450864433?action=write-review")!
+            UIApplication.shared.open(reviewURL)
+        }
+        
     }
-}

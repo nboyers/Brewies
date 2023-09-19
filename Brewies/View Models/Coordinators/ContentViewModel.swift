@@ -87,7 +87,8 @@ class ContentViewModel: ObservableObject {
     }
     
     func handleRewardAd(reward: String) {
-        if let viewController = UIApplication.shared.windows.first?.rootViewController {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let viewController = windowScene.windows.first?.rootViewController {
             rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [self] in
                 // This code will be called when the ad completes
                 // Add credit to the user
@@ -113,6 +114,7 @@ class ContentViewModel: ObservableObject {
             showNoAdsAvailableAlert = true
         }
     }
+
     
     func deductUserCredit() {
         if userViewModel.user.credits > 0 {

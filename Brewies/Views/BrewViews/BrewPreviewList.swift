@@ -14,8 +14,9 @@ struct BrewPreviewList: View {
     @Binding var selectedCoffeeShop: CoffeeShop?
     @Binding var showBrewPreview: Bool
     @State private var showAlert = false
-
+    
     @State var showStorefront = false
+    @Binding var activeSheet: ActiveSheet?
     
     @ObservedObject var userViewModel = UserViewModel.shared
     
@@ -25,7 +26,7 @@ struct BrewPreviewList: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(coffeeShops) { coffeeShop in
-                            BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showBrewPreview)
+                            BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showBrewPreview)
                                 .id(coffeeShop.id)
                         }
                     }
@@ -47,6 +48,10 @@ struct BrewPreview: View {
     let coffeeShop: CoffeeShop
     let BUTTON_WIDTH: CGFloat = 175
     let BUTTON_HEIGHT: CGFloat = 15
+    
+    @Binding var activeSheet: ActiveSheet?
+    
+    
     @Binding var showBrewPreview: Bool
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
     @ObservedObject var userViewModel = UserViewModel.shared
@@ -56,9 +61,7 @@ struct BrewPreview: View {
     @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
     
     @State private var isDetailShowing: Bool = false
-    @State var showStorefront = false
     @State private var favoriteSlotsUsed = 0
-    @State private var showAlert = false
     @State private var showCustomAlertForFavorites = false
     
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
@@ -111,7 +114,7 @@ struct BrewPreview: View {
                             .foregroundColor(Color.black)
                             .lineLimit(nil)  // Allows text to wrap to the next line
                             .fixedSize(horizontal: false, vertical: true) // Properly wraps text inside a ScrollView
-
+                        
                         Spacer()
                         
                         Button(action: {
@@ -135,50 +138,55 @@ struct BrewPreview: View {
                         .font(.caption)
                         .foregroundColor(.gray)
                     Spacer()
-//                      TODO: This will be a later update...maybe
-//                    HStack { // Center the buttons to the middle
-//                        Spacer()
-//                        if coffeeShop.transactions.contains("delivery") || coffeeShop.transactions.contains("pickup") {
-//                            Button(action: {
-//                                // Stub functionality for mobile order
-//                                print("Mobile Order UI")
-//
-//                            }) {
-//                                Text("Mobile Order")
-//                                    .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-//                                    .font(.headline)
-//                                    .foregroundColor(.white)
-//                                    .padding()
-//                                    .background(Color.blue)
-//                                    .cornerRadius(10)
-//                            }
-//                        } else {
-//                            Button(action: {
-//                                // Stub functionality for calling
-//                                print("Calling....")
-//
-//                            }) {
-//                                HStack {
-//                                    Image(systemName: "phone.circle")
-//                                    Text("Call")
-//                                }
-//                                .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-//                                .font(.headline)
-//                                .foregroundColor(.white)
-//                                .padding()
-//                                .background(Color.black)
-//                                .cornerRadius(10)
-//                            }
-//                        }
-//                        Spacer()
-//                    }
+                    //                      TODO: This will be a later update...maybe
+                    //                    HStack { // Center the buttons to the middle
+                    //                        Spacer()
+                    //                        if coffeeShop.transactions.contains("delivery") || coffeeShop.transactions.contains("pickup") {
+                    //                            Button(action: {
+                    //                                // Stub functionality for mobile order
+                    //                                print("Mobile Order UI")
+                    //
+                    //                            }) {
+                    //                                Text("Mobile Order")
+                    //                                    .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
+                    //                                    .font(.headline)
+                    //                                    .foregroundColor(.white)
+                    //                                    .padding()
+                    //                                    .background(Color.blue)
+                    //                                    .cornerRadius(10)
+                    //                            }
+                    //                        } else {
+                    //                            Button(action: {
+                    //                                // Stub functionality for calling
+                    //                                print("Calling....")
+                    //
+                    //                            }) {
+                    //                                HStack {
+                    //                                    Image(systemName: "phone.circle")
+                    //                                    Text("Call")
+                    //                                }
+                    //                                .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
+                    //                                .font(.headline)
+                    //                                .foregroundColor(.white)
+                    //                                .padding()
+                    //                                .background(Color.black)
+                    //                                .cornerRadius(10)
+                    //                            }
+                    //                        }
+                    //                        Spacer()
+                    //                    }
                 }
             }
-            .fullScreenCover(isPresented: $isDetailShowing) {
-                BrewDetailView(coffeeShop: coffeeShop)
-            }
-            .sheet(isPresented: $showStorefront) {
-                StorefrontView()
+            .fullScreenCover(item: $activeSheet) { sheet in
+                switch sheet {
+                case .storefront:
+                    StorefrontView()
+                    
+                case .detailBrew:
+                    BrewDetailView(coffeeShop: coffeeShop)
+                default:
+                    EmptyView()
+                }
             }
             
             .onTapGesture {

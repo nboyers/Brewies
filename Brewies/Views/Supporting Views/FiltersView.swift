@@ -263,6 +263,11 @@ struct FiltersView: View {
                         initialState["sortBy"] = yelpParams.sortBy
                         initialState["price"] = yelpParams.price
                     }
+                    .onTapGesture {
+                        if !userVM.user.isSubscribed {
+                          
+                        }
+                    }
                 }
             }
         }

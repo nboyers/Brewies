@@ -10,7 +10,10 @@ import SwiftUI
 
 struct UIViewControllerKey: EnvironmentKey {
     static var defaultValue: UIViewController? {
-        UIApplication.shared.windows.first?.rootViewController
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            return windowScene.windows.first?.rootViewController
+        }
+        return nil
     }
 }
 

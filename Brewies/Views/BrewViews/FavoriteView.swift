@@ -20,6 +20,8 @@ struct FavoritesView: View {
     @State private var showRemovalConfirmationAlert = false
     @State private var toRemoveCoffeeShop: CoffeeShop?
     
+    @Binding var activeSheet: ActiveSheet?
+
     
     var body: some View {
         NavigationView {
@@ -40,7 +42,8 @@ struct FavoritesView: View {
                         
                         NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
                             VStack {
-                                BrewPreview(coffeeShop: coffeeShop, showBrewPreview: $showPreview)
+                                BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showPreview)
+
                             }
                             .contextMenu {
                                 Button(action: {

@@ -9,8 +9,6 @@ import SwiftUI
 
 struct SettingsView: View {
     @State var editProfileView = false
-    @State private var showShareSheet = false
-    
     @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -48,30 +46,7 @@ struct SettingsView: View {
                 .padding(.horizontal)
                 .background(Color.gray.opacity(0.2))
                 .cornerRadius(10)
-                
-                Button(action: shareApp) {
-                    HStack {
-                        Text("Share Brewies")
-                            .padding()
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-                .padding(.horizontal)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-                
-                Button(action: leaveReview) {
-                    HStack {
-                        Text("Leave a Review")
-                            .padding()
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-                .padding(.horizontal)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
+
                 
                 Spacer()
                 if userViewModel.user.isLoggedIn {
@@ -93,23 +68,8 @@ struct SettingsView: View {
                 }
             }
             .padding()
-            .navigationBarHidden(true)
-            .sheet(isPresented: $showShareSheet) {
-                ShareSheet(activityItems: [URL(string: "https://apps.apple.com/us/app/brewies/id6450864433")!])
-                    .presentationDetents([.medium])
-            }
-            
+            .navigationBarHidden(true)            
         }
-    }
-    
-    private func shareApp() {
-        showShareSheet = true
-    }
-    
-    
-    private func leaveReview() {
-        let reviewURL = URL(string: "https://apps.apple.com/us/app/brewies/id6450864433?action=write-review")!
-        UIApplication.shared.open(reviewURL)
     }
 }
 
