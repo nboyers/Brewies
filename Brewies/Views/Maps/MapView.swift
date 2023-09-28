@@ -175,9 +175,7 @@ struct MapView: UIViewRepresentable {
             parent.shouldSearchInArea = true
         }
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            print("Annotation selected")
-          
-            if let coffeeShop = parent.coffeeShops.first(where: { $0.latitude == view.annotation?.coordinate.latitude && $0.longitude == view.annotation?.coordinate.longitude }) {
+          if let coffeeShop = parent.coffeeShops.first(where: { $0.latitude == view.annotation?.coordinate.latitude && $0.longitude == view.annotation?.coordinate.longitude }) {
                 parent.selectedCoffeeShop = coffeeShop
                 parent.showBrewPreview = true
 

@@ -13,16 +13,32 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var location: CLLocation?
     @Published var isLocationAvailable: Bool = false
     @Published var initialRegionSet: Bool = false
+    @Published var isLocationAccessGranted: Bool = false
+
     private let locationManager = CLLocationManager()
-    
-    
-    override init() {
-        super.init()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-    }
+       
+       override init() {
+           super.init()
+           locationManager.delegate = self
+           locationManager.desiredAccuracy = kCLLocationAccuracyBest
+           locationManager.requestWhenInUseAuthorization()
+           locationManager.startUpdatingLocation()
+       }
+       
+       func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+           switch status {
+           case .authorizedWhenInUse, .authorizedAlways:
+               isLocationAccessGranted = true
+           default:
+               isLocationAccessGranted = false
+           }
+       }
+       
+       func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+           guard let location = locations.last else { return }
+           userLocation = location
+           isLocationAvailable = true
+       }
 
     
     func requestLocationAccess() {
@@ -38,11 +54,5 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func startUpdatingLocation() {
         locationManager.startUpdatingLocation()
         
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        userLocation = location
-        isLocationAvailable = true
     }
 }

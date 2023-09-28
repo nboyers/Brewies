@@ -76,6 +76,7 @@ struct CourseItem: View {
 
 struct ProductStoreView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductStoreView().environmentObject(StoreKitManager())
+        ProductStoreView()
+            .environmentObject(StoreKitManager())
     }
 }

@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @State var editProfileView = false
     @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+   
+    @State private var activeSheet: ActiveSheet?
     
     var body: some View {
         NavigationView {
@@ -23,44 +24,43 @@ struct SettingsView: View {
                     Spacer()
                 }
                 if userViewModel.user.isLoggedIn {
-                    // NavigationLink to EditProfileView
-                    NavigationLink(destination: EditProfileView()) {
+                    Button(action: {
+                        activeSheet = .userProfile // Change to the appropriate case
+                    }) {
                         Text("Edit Profile")
                             .padding()
                             .font(.title2)
                             .frame(maxWidth: .infinity)
                     }
-                    
                     .padding(.horizontal)
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
-                }
-                NavigationLink(destination: StorefrontView()) {
-                    HStack {
+                    
+                    Button(action: {
+                        activeSheet = .storefront // Change to the appropriate case
+                    }) {
                         Text("In-App Store")
                             .padding()
                             .font(.title2)
                             .frame(maxWidth: .infinity)
                     }
+                    .padding(.horizontal)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(10)
                 }
-                .padding(.horizontal)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(10)
-
                 
                 Spacer()
+                
                 if userViewModel.user.isLoggedIn {
                     Button(action: {
-                        userViewModel.signOut()
                         self.presentationMode.wrappedValue.dismiss()
+                        userViewModel.signOut()
                     }) {
-                        HStack {
-                            Text("Sign Out")
-                                .foregroundColor(.red)
-                                .padding()
-                                .font(.title2)
-                                .frame(maxWidth: .infinity)
-                        }
+                        Text("Sign Out")
+                            .foregroundColor(.red)
+                            .padding()
+                            .font(.title2)
+                            .frame(maxWidth: .infinity)
                     }
                     .padding(.horizontal)
                     .background(Color.gray.opacity(0.2))
@@ -68,7 +68,18 @@ struct SettingsView: View {
                 }
             }
             .padding()
-            .navigationBarHidden(true)            
+            .navigationBarHidden(true)
+            .sheet(item: $activeSheet) { item in
+                switch item {
+                case .userProfile:
+                    EditProfileView()
+                case .storefront:
+                    StorefrontView()
+                // Handle other cases as needed
+                default:
+                    Text("Not Implemented")
+                }
+            }
         }
     }
 }

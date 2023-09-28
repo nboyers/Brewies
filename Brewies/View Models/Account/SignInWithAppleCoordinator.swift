@@ -31,6 +31,7 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
             let userIdentifier = appleIDCredential.user
             let fullName = appleIDCredential.fullName
             let email = appleIDCredential.email
+            
             // Here you update your User object with data from Apple ID
             DispatchQueue.main.async {
                 self.userViewModel.user.isLoggedIn = true
@@ -38,9 +39,6 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
                 self.userViewModel.user.firstName = fullName?.givenName ?? ""
                 self.userViewModel.user.lastName = fullName?.familyName ?? ""
                 self.userViewModel.user.email = email?.lowercased() ?? ""
-                self.userViewModel.syncCredits()
-                // Sign in successful
-                self.userViewModel.saveUserLoginStatus()
             }
         }
     }
@@ -63,10 +61,6 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         authorizationController.performRequests()
-        
-        // Sync the credits
-        userViewModel.syncCredits()
-        
         // Save the login status
         userViewModel.saveUserLoginStatus()
     }

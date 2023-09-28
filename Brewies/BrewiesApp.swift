@@ -14,7 +14,7 @@ struct BrewiesApp: App {
     let yelpParams = YelpSearchParams()
     let contentViewModel: ContentViewModel
     var sharedViewModel = SharedViewModel()
-    
+    var locationManager = LocationManager()
     init() {
         self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
     }

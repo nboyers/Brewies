@@ -14,14 +14,14 @@ struct FavoritesView: View {
     
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
     @ObservedObject var storeKit = StoreKitManager()
-    
+    @State private var selectedCoffeeShop: CoffeeShop?
     @Binding var showPreview: Bool
     
     @State private var showRemovalConfirmationAlert = false
     @State private var toRemoveCoffeeShop: CoffeeShop?
     
     @Binding var activeSheet: ActiveSheet?
-
+    
     
     var body: some View {
         NavigationView {
@@ -39,11 +39,9 @@ struct FavoritesView: View {
                     }
                     
                     ForEach(coffeeShopData.favoriteShops.prefix(coffeeShopData.maxFavoriteSlots), id: \.id) { coffeeShop in
-                        
-                        NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
+                        NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop, selectedCoffeeShop: $selectedCoffeeShop)) {
                             VStack {
-                                BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showPreview)
-
+                                BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showPreview, selectedCoffeeShop: $selectedCoffeeShop)
                             }
                             .contextMenu {
                                 Button(action: {

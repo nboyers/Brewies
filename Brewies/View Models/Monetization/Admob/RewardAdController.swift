@@ -43,14 +43,13 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
             ad.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [weak self] in
                 // When the ad completes, call the callback function
                 self?.onUserDidEarnReward?()
-                
-                // Increment the user's credits by one
-                self?.userVM.addCredits(1)
             })
         } else {
             loadRewardedAd()
         }
     }
+
+
     
     
     //// Tells the delegate that the ad failed to present full screen content.

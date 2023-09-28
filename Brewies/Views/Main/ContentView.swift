@@ -14,8 +14,10 @@ import Introspect
 
 struct ContentView: View {
     @ObservedObject var storeKit = StoreKitManager()
+    @ObservedObject var locationManager = LocationManager()
     
     private var rewardAd = RewardAdController()
+    let signInCoordinator = SignInWithAppleCoordinator()
     
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     @EnvironmentObject var sharedVM: SharedViewModel
@@ -30,7 +32,7 @@ struct ContentView: View {
     @State private var activeSheet: ActiveSheet?
     
     @State private var mapView = MKMapView()
-    
+    @State private var showLocationAccessAlert = false
     @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
@@ -42,7 +44,7 @@ struct ContentView: View {
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
-    
+    @State private var selectedCoffeeShop: CoffeeShop?
     
     
     
@@ -51,8 +53,6 @@ struct ContentView: View {
     @FocusState var isInputActive: Bool
     
     let DISTANCE = CLLocationDistance(2500)
-    
-    let signInCoordinator = SignInWithAppleCoordinator()
     
     var body: some View {
         TabView {
@@ -77,19 +77,38 @@ struct ContentView: View {
                     // 2. User Location Button
                     if showUserLocationButton {
                         GeometryReader { geo in
-                            Button(action: {
-                                centeredOnUser = true
-                            }) {
-                                Image(systemName: "location.square.fill")
-                                    .resizable()
-                                    .frame(width: 40, height: 40)
-                                    .foregroundColor(Color.primary)
-                                    .background(
-                                        Rectangle()
-                                            .fill(Color.accentColor)
-                                    )
+                            if !locationManager.isLocationAccessGranted {
+                                // User has not granted location access, show Finder button
+                                Button(action: {
+                                    // Show the alert when the button is pressed
+                                    showLocationAccessAlert = true
+                                }) {
+                                    Image(systemName: "questionmark.app.fill")
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                        .foregroundColor(Color.primary)
+                                        .background(
+                                            Rectangle()
+                                                .fill(Color.accentColor)
+                                        )
+                                }
+                                .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
+                            } else {
+                                // User has granted location access, show existing location button
+                                Button(action: {
+                                    centeredOnUser = true
+                                }) {
+                                    Image(systemName: "location.square.fill")
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
+                                        .foregroundColor(Color.primary)
+                                        .background(
+                                            Rectangle()
+                                                .fill(Color.accentColor)
+                                        )
+                                }
+                                .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
                             }
-                            .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
                         }
                     }
                 }
@@ -98,7 +117,7 @@ struct ContentView: View {
                 .bottomSheet(bottomSheetPosition: self.$sharedVM.bottomSheetPosition, switchablePositions: [
                     .relativeBottom(0.20), //Floor
                     .relative(0.70), // Mid swipe
-                    .relativeTop(0.95) //Top full swipe
+                    .relativeTop(0.80) //Top full swipe
                 ], headerContent: { // the top portion
                     HStack {
                         Spacer()
@@ -190,11 +209,11 @@ struct ContentView: View {
                                 Spacer()
                             }
                             
-                            BrewPreviewList(coffeeShops: $contentVM.coffeeShops, 
+                            BrewPreviewList(coffeeShops: $contentVM.coffeeShops,
                                             selectedCoffeeShop: $contentVM.selectedCoffeeShop,
                                             showBrewPreview: $contentVM.showBrewPreview,
                                             activeSheet: $activeSheet)
-
+                            
                         }
                         if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
                             AdBannerView()
@@ -247,11 +266,6 @@ struct ContentView: View {
                     
                 }
                 
-                //                .sheet(isPresented: $showingFilterView) {
-                //                    FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
-                //                        .environmentObject(userVM)
-                //                }
-                
                 GeometryReader { geo in
                     VStack {
                         Button(action: {
@@ -294,9 +308,7 @@ struct ContentView: View {
                         
                         
                     }
-                    //                    .sheet(isPresented: $showingStorefront) {
-                    //                        StorefrontView()
-                    //                    }
+                    
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                 }
                 if let alertType = sharedAlertVM.currentAlertType {
@@ -345,52 +357,58 @@ struct ContentView: View {
                         UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)
                             .presentationDetents([.medium])
                     } else {
-                        GeometryReader { geo in
+                        Spacer()
+                        
+                        GeometryReader { geometry in
                             VStack {
-                                HStack() {
-                                    Button(action: {
-                                        activeSheet = .settings
-
-                                    }) {
-                                        Image(systemName: "gear")
-                                            .resizable()
-                                            .frame(width: 25, height: 25)
-                                            .foregroundColor(.primary)
-                                            .padding()
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Button(action: {
-                                        self.presentationMode.wrappedValue.dismiss()
-                                    }) {
-                                        Image(systemName: "x.circle.fill")
-                                            .resizable()
-                                            .frame(width: 25, height: 25)
-                                            .foregroundColor(.primary)
-                                            .padding()
-                                    }
+                                Spacer() // Pushes the content to the center vertically
+                                HStack {
+                                    Spacer() // Pushes the content to the center horizontally
+                                    Image("Brewies_icon")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: geometry.size.width * 0.5, height: geometry.size.width * 0.5) // 50% of the width of the GeometryReader
+                                        .clipped()
+                                        .cornerRadius(10)
+                                    Spacer() // Pushes the content to the center horizontally
                                 }
-                                Spacer()
-                                SignInWithAppleButton(action: {
-                                    signInCoordinator.startSignInWithAppleFlow()
-                                }, label: "Sign in with Apple")
-                                .frame(width: 280, height: 45)
-                                .padding(.top, 50)
+                                Spacer() // Pushes the content to the center vertically
                             }
                         }
+                        Spacer()
+                        SignInWithAppleButton(action: {
+                            signInCoordinator.startSignInWithAppleFlow()
+                        }, label: "Sign in with Apple")
+                        .frame(width: 280, height: 45)
+                        .padding([.top, .bottom], 50)
+                        .presentationDetents([.medium])
                         
-                        .presentationDragIndicator(.visible)
-                        .presentationDetents([.medium, .large])
                     }
                     
                 case .storefront:
                     StorefrontView()
                     
                 case .detailBrew:
-                    EmptyView()
+                    if let selectedCoffeeShop = selectedCoffeeShop {
+                        BrewDetailView(coffeeShop: selectedCoffeeShop, selectedCoffeeShop: $selectedCoffeeShop)
+                    } else {
+                        EmptyView()
+                    }
+                    
+                case .safariView:
+                    if let url = URL(string: selectedCoffeeShop?.url ?? "https://nobosoftware.com") {
+                        SafariView(url: url)
+                    }
                 }
             }
+            .alert(isPresented: $showLocationAccessAlert) {
+                Alert(
+                    title: Text("Location Access Required"),
+                    message: Text("To give local recommendations, Brewies needs access to your location. Please go to Settings > Privacy > Location Services, find Brewies, and allow location access."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+            
             .edgesIgnoringSafeArea(.top)
             .tabItem {
                 Image(systemName: "map")

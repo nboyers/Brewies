@@ -9,6 +9,7 @@ import Kingfisher
 
 
 
+//#warning("BREWPREVIEW is showing an empty sheet")
 struct BrewPreviewList: View {
     @Binding var coffeeShops: [CoffeeShop]
     @Binding var selectedCoffeeShop: CoffeeShop?
@@ -26,7 +27,7 @@ struct BrewPreviewList: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(coffeeShops) { coffeeShop in
-                            BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showBrewPreview)
+                            BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showBrewPreview, selectedCoffeeShop: $selectedCoffeeShop)
                                 .id(coffeeShop.id)
                         }
                     }
@@ -63,6 +64,7 @@ struct BrewPreview: View {
     @State private var isDetailShowing: Bool = false
     @State private var favoriteSlotsUsed = 0
     @State private var showCustomAlertForFavorites = false
+    @Binding var selectedCoffeeShop: CoffeeShop?
     
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
     
@@ -139,58 +141,48 @@ struct BrewPreview: View {
                         .foregroundColor(.gray)
                     Spacer()
                     //                      TODO: This will be a later update...maybe
-                    //                    HStack { // Center the buttons to the middle
-                    //                        Spacer()
-                    //                        if coffeeShop.transactions.contains("delivery") || coffeeShop.transactions.contains("pickup") {
-                    //                            Button(action: {
-                    //                                // Stub functionality for mobile order
-                    //                                print("Mobile Order UI")
+                    //                                        HStack { // Center the buttons to the middle
+                    //                                            Spacer()
+                    //                                            if coffeeShop.transactions.contains("delivery") || coffeeShop.transactions.contains("pickup") {
+                    //                                                Button(action: {
+                    //                                                    // Stub functionality for mobile order
+                    //                                                    print("Mobile Order UI")
                     //
-                    //                            }) {
-                    //                                Text("Mobile Order")
-                    //                                    .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-                    //                                    .font(.headline)
-                    //                                    .foregroundColor(.white)
-                    //                                    .padding()
-                    //                                    .background(Color.blue)
-                    //                                    .cornerRadius(10)
-                    //                            }
-                    //                        } else {
-                    //                            Button(action: {
-                    //                                // Stub functionality for calling
-                    //                                print("Calling....")
+                    //                                                }) {
+                    //                                                    Text("Mobile Order")
+                    //                                                        .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
+                    //                                                        .font(.headline)
+                    //                                                        .foregroundColor(.white)
+                    //                                                        .padding()
+                    //                                                        .background(Color.blue)
+                    //                                                        .cornerRadius(10)
+                    //                                                }
+                    //                                            } else {
+                    //                                                Button(action: {
+                    //                                                    // Stub functionality for calling
+                    //                                                    print("Calling....")
                     //
-                    //                            }) {
-                    //                                HStack {
-                    //                                    Image(systemName: "phone.circle")
-                    //                                    Text("Call")
-                    //                                }
-                    //                                .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-                    //                                .font(.headline)
-                    //                                .foregroundColor(.white)
-                    //                                .padding()
-                    //                                .background(Color.black)
-                    //                                .cornerRadius(10)
-                    //                            }
-                    //                        }
-                    //                        Spacer()
-                    //                    }
+                    //                                                }) {
+                    //                                                    HStack {
+                    //                                                        Image(systemName: "phone.circle")
+                    //                                                        Text("Call")
+                    //                                                    }
+                    //                                                    .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
+                    //                                                    .font(.headline)
+                    //                                                    .foregroundColor(.white)
+                    //                                                    .padding()
+                    //                                                    .background(Color.black)
+                    //                                                    .cornerRadius(10)
+                    //                                                }
+                    //                                            }
+                    //                                            Spacer()
+                    //                                        }
                 }
             }
-            .fullScreenCover(item: $activeSheet) { sheet in
-                switch sheet {
-                case .storefront:
-                    StorefrontView()
-                    
-                case .detailBrew:
-                    BrewDetailView(coffeeShop: coffeeShop)
-                default:
-                    EmptyView()
-                }
-            }
-            
+            //FIXME: THIS NO LONGER BRINGS UP THE DETAILED BREW
             .onTapGesture {
-                isDetailShowing = true
+                selectedCoffeeShop = coffeeShop
+                activeSheet = .detailBrew
             }
             .padding()
         }

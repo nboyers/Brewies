@@ -58,6 +58,7 @@
 		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
 		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
+		FFBC5B572ABCB61700FA3C74 /* APIKeyProvider .swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC5B562ABCB61700FA3C74 /* APIKeyProvider .swift */; };
 		FFBFFD282A59D28D004576EC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD272A59D28D004576EC /* SettingsView.swift */; };
 		FFBFFD2D2A59DCD9004576EC /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */; };
 		FFC575CC2A9C2549008EB5E2 /* ApplePay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */; };
@@ -145,6 +146,7 @@
 		FFB0A0ED2A6F11F5003E79E4 /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
+		FFBC5B562ABCB61700FA3C74 /* APIKeyProvider .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIKeyProvider .swift"; sourceTree = "<group>"; };
 		FFBFFD272A59D28D004576EC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePay.swift; sourceTree = "<group>"; };
@@ -352,6 +354,7 @@
 			children = (
 				FF3FF2D429EA1C0300510FCD /* readme.md */,
 				FF3FF2D229EA183900510FCD /* Secrets.swift */,
+				FFBC5B562ABCB61700FA3C74 /* APIKeyProvider .swift */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -714,6 +717,7 @@
 				FFFC118F2AA6557E00849AAD /* SharedAlertViewModel.swift in Sources */,
 				FF2467832A78824500B04BBE /* FoodDetailView.swift in Sources */,
 				FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */,
+				FFBC5B572ABCB61700FA3C74 /* APIKeyProvider .swift in Sources */,
 				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,
 				FF2467852A78881600B04BBE /* CoffeeModiferView.swift in Sources */,
 				FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */,

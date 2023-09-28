@@ -18,9 +18,8 @@ class ContentViewModel: ObservableObject {
     @Published var searchQuery: String = ""
     @Published var showNoCoffeeShopsAlert = false
     @Published var showNoAdsAvailableAlert = false
-    @Published var  showNoCreditsAlert = false
+    @Published var showNoCreditsAlert = false
     @Published var adsWatched = 0
-    @Published var favoriteSlots = 0
 
     @ObservedObject var userViewModel = UserViewModel.shared
     @ObservedObject var locationManager = LocationManager()
@@ -95,14 +94,15 @@ class ContentViewModel: ObservableObject {
                 switch reward {
                 case "credits":
                     userViewModel.addCredits(1)
-                    userViewModel.syncCredits()
                     break
+                    
                 case "favorites":
                     adsWatched += 1
                     if adsWatched >= 3 {
-                        favoriteSlots += 1
+                        CoffeeShopData.shared.addFavoriteSlots(1)
                         adsWatched = 0
                     }
+                    
                     break
                 default:
                     break

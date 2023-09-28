@@ -30,18 +30,14 @@ class UserViewModel: ObservableObject {
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         UserDefaults.standard.set(user.userID, forKey: "userID")
         UserDefaults.standard.set(user.isSubscribed, forKey: "isSubscribed") // Save isSubscribed status to UserDefaults
-        
-        saveUserDetails()
+        UserDefaults.standard.set(user.firstName, forKey: "UserFirstName")
+        UserDefaults.standard.set(user.lastName, forKey: "UserLastName")
     }
 
     func loadUserLoginStatus() -> Bool {
         return UserDefaults.standard.bool(forKey: "isLoggedIn")
     }
     
-    func saveUserDetails() {
-        UserDefaults.standard.set(user.firstName, forKey: "UserFirstName")
-        UserDefaults.standard.set(user.lastName, forKey: "UserLastName")
-    }
     
     func loadUserDetails() {
         let firstName = UserDefaults.standard.string(forKey: "UserFirstName") ?? ""
@@ -62,21 +58,32 @@ class UserViewModel: ObservableObject {
 
     func syncCredits() {
         let guestCredits = UserDefaults.standard.integer(forKey: "UserCredits_Guest")
+        UserDefaults.standard.set(0, forKey: "UserCredits_Guest") // Reset guest credits immediately
+        
         let userCredits = UserDefaults.standard.integer(forKey: "UserCredits_\(self.user.userID)")
         let mergedCredits = guestCredits + userCredits
+        
         UserDefaults.standard.set(mergedCredits, forKey: "UserCredits_\(self.user.userID)")
-        UserDefaults.standard.set(0, forKey: "UserCredits_Guest")
         self.user.credits = mergedCredits
+
     }
     
     func addOrder(order: Order) {
         self.user.pastOrders.append(order)
     }
-    func addCredits(_ amount: Int) {
+    
+    func addCredits(_ amount: Int = 1) {
         self.user.credits += amount
         let key = user.isLoggedIn ? "UserCredits_\(user.userID)" : "UserCredits_Guest"
-        UserDefaults.standard.set(self.user.credits, forKey: key)
+        UserDefaults.standard.set(self.user.credits, forKey: key)  
+        // Sync the credits
+        self.syncCredits()
+        
+        // Print statement to log when and how many credits are being added
+        print("Added 1 credit. Total credits: \(self.user.credits)")
     }
+
+
     
     func subtractCredits(_ amount: Int) {
         self.user.credits -= amount
