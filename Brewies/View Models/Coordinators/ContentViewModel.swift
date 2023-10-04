@@ -94,6 +94,7 @@ class ContentViewModel: ObservableObject {
                 switch reward {
                 case "credits":
                     userViewModel.addCredits(1)
+                    userViewModel.noCredits = false
                     break
                     
                 case "favorites":

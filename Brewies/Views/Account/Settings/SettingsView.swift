@@ -53,8 +53,9 @@ struct SettingsView: View {
                 
                 if userViewModel.user.isLoggedIn {
                     Button(action: {
-                        self.presentationMode.wrappedValue.dismiss()
                         userViewModel.signOut()
+                        userViewModel.syncCredits()
+                        self.presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Sign Out")
                             .foregroundColor(.red)
@@ -75,9 +76,8 @@ struct SettingsView: View {
                     EditProfileView()
                 case .storefront:
                     StorefrontView()
-                // Handle other cases as needed
                 default:
-                    Text("Not Implemented")
+                    Text("Something went wrong")
                 }
             }
         }

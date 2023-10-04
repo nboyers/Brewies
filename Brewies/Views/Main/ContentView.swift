@@ -26,6 +26,8 @@ struct ContentView: View {
     @EnvironmentObject var yelpParams: YelpSearchParams
     @EnvironmentObject var contentVM: ContentViewModel
     @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
+    @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
+    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
@@ -44,7 +46,7 @@ struct ContentView: View {
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
-    @State private var selectedCoffeeShop: CoffeeShop?
+    
     
     
     
@@ -221,6 +223,7 @@ struct ContentView: View {
                         }
                         
                         Button(action: {
+                            
                             // Your action to handle the ad goes here
                             self.contentVM.handleRewardAd(reward: "credits")
                         }) {
@@ -337,28 +340,30 @@ struct ContentView: View {
                     )
                 }
             }
+            //            Text("Selected Coffee Shop before Sheet Presentation: \(selectedCoffeeShop?.name ?? "None")")
             //MARK: User Profile
             .sheet(item: $activeSheet) { sheet in
+                            
                 switch sheet {
                 case .settings:
                     SettingsView()
-                    
+                                
                 case .filter:
                     FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
                         .environmentObject(userVM)
-                    
+                                
                 case .userProfile:
                     UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)
                         .presentationDragIndicator(.visible)
                         .presentationDetents([.medium])
-                    
+                                
                 case .signUpWithApple:
                     if userVM.user.isLoggedIn {
                         UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)
                             .presentationDetents([.medium])
                     } else {
                         Spacer()
-                        
+                                    
                         GeometryReader { geometry in
                             VStack {
                                 Spacer() // Pushes the content to the center vertically
@@ -382,25 +387,23 @@ struct ContentView: View {
                         .frame(width: 280, height: 45)
                         .padding([.top, .bottom], 50)
                         .presentationDetents([.medium])
-                        
+                                    
                     }
-                    
+                                
                 case .storefront:
                     StorefrontView()
-                    
-                case .detailBrew:
-                    if let selectedCoffeeShop = selectedCoffeeShop {
-                        BrewDetailView(coffeeShop: selectedCoffeeShop, selectedCoffeeShop: $selectedCoffeeShop)
-                    } else {
-                        EmptyView()
-                    }
-                    
+                                
+                case .detailBrew: 
+                    if let coffeeShop = selectedCoffeeShop.coffeeShop { BrewDetailView(coffeeShop: coffeeShop) }
+                                
                 case .safariView:
-                    if let url = URL(string: selectedCoffeeShop?.url ?? "https://nobosoftware.com") {
-                        SafariView(url: url)
-                    }
+                    EmptyView()
+//                    self.presentationMode.wrappedValue.dismiss()
                 }
+                            
             }
+
+            
             .alert(isPresented: $showLocationAccessAlert) {
                 Alert(
                     title: Text("Location Access Required"),
@@ -415,12 +418,13 @@ struct ContentView: View {
                 Text("Map")
             }
             
-            FavoritesView(showPreview: $contentVM.showBrewPreview, activeSheet: $activeSheet)
-                .environmentObject(userVM)
-                .tabItem {
-                    Image(systemName: "star.fill")
-                    Text("Favorites")
-                }
+            FavoritesView(showPreview: $contentVM.showBrewPreview,
+                          activeSheet: $activeSheet)
+            .environmentObject(userVM)
+            .tabItem {
+                Image(systemName: "star.fill")
+                Text("Favorites")
+            }
         }
     }
     

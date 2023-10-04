@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+class SelectedCoffeeShop: ObservableObject {
+    @Published var coffeeShop: CoffeeShop?
+}

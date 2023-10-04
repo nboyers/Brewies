@@ -15,6 +15,7 @@ struct BrewiesApp: App {
     let contentViewModel: ContentViewModel
     var sharedViewModel = SharedViewModel()
     var locationManager = LocationManager()
+    @StateObject var selectedCoffeeShop = SelectedCoffeeShop()
     init() {
         self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
     }
@@ -24,6 +25,7 @@ struct BrewiesApp: App {
             ContentView()
                 .environmentObject(UserViewModel.shared)
                 .environmentObject(yelpParams)
+                .environmentObject(selectedCoffeeShop)
                 .environmentObject(contentViewModel)
                 .environmentObject(SharedAlertViewModel())
                 .environmentObject(sharedViewModel)

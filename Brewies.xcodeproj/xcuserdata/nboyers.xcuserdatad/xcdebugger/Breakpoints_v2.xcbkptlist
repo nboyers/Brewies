@@ -485,54 +485,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "99AD3340-7E57-4957-B57F-EF8B4D52A095"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Brewies/Views/BrewViews/BrewDetailView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
-            landmarkName = "body"
-            landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "99AD3340-7E57-4957-B57F-EF8B4D52A095 - e1ceb2be97da7b0f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (SwiftUI.GeometryProxy) -&gt; &lt;&lt;opaque return type of SwiftUI.View.navigationBarItems&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(trailing: &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in Brewies.BrewDetailView.body.getter : some"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/BrewViews/BrewDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "285"
-                  endingLineNumber = "285"
-                  offsetFromSymbolStart = "1628">
-               </Location>
-               <Location
-                  uuid = "99AD3340-7E57-4957-B57F-EF8B4D52A095 - e1ceb2be97da7be8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (SwiftUI.GeometryProxy) -&gt; &lt;&lt;opaque return type of SwiftUI.View.navigationBarItems&lt;&#x3c4;_0_0 where &#x3c4;_1_0: SwiftUI.View&gt;(trailing: &#x3c4;_1_0) -&gt; some&gt;&gt;.0 in Brewies.BrewDetailView.body.getter : some"
-                  moduleName = "Brewies"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/nboyers/Xcode/Brewies/Brewies/Views/BrewViews/BrewDetailView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "286"
-                  endingLineNumber = "286"
-                  offsetFromSymbolStart = "824">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "D5EDF555-E397-47C6-A3D9-0E5DA9F95DB1"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1010,8 +962,8 @@
             filePath = "Brewies/Views/BrewViews/BrewPreviewList.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
+            startingLineNumber = "179"
+            endingLineNumber = "179"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -1062,6 +1014,70 @@
             endingLineNumber = "95"
             landmarkName = "handleRewardAd(reward:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1CD99841-D617-49A7-823C-C377C0D5FE59"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/Views/Main/ContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "345"
+            endingLineNumber = "345"
+            landmarkName = "body"
+            landmarkType = "24">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "55CCF371-3E79-47FE-BF52-3A0E1A92DA47"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Account/UserViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
+            landmarkName = "syncCredits()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2762D25F-5916-475A-87DC-A99AE16D5684"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/View Models/Account/UserViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "UserViewModel"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C2DE773-7794-40B6-9C68-6356891B7145"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Brewies/Views/Main/ContentView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "body"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

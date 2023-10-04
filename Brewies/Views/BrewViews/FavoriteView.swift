@@ -10,18 +10,16 @@ import SwiftUI
 
 struct FavoritesView: View {
     @EnvironmentObject var contentVM: ContentViewModel
-    @EnvironmentObject var userVM: UserViewModel
-    
-    @ObservedObject var coffeeShopData = CoffeeShopData.shared
-    @ObservedObject var storeKit = StoreKitManager()
-    @State private var selectedCoffeeShop: CoffeeShop?
-    @Binding var showPreview: Bool
-    
-    @State private var showRemovalConfirmationAlert = false
-    @State private var toRemoveCoffeeShop: CoffeeShop?
-    
-    @Binding var activeSheet: ActiveSheet?
-    
+       @EnvironmentObject var userVM: UserViewModel
+       @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
+       
+       @ObservedObject var coffeeShopData = CoffeeShopData.shared
+       @ObservedObject var storeKit = StoreKitManager()
+       
+       @Binding var showPreview: Bool
+       @State private var showRemovalConfirmationAlert = false
+       @State private var toRemoveCoffeeShop: CoffeeShop?
+       @Binding var activeSheet: ActiveSheet?
     
     var body: some View {
         NavigationView {
@@ -39,10 +37,10 @@ struct FavoritesView: View {
                     }
                     
                     ForEach(coffeeShopData.favoriteShops.prefix(coffeeShopData.maxFavoriteSlots), id: \.id) { coffeeShop in
-                        NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop, selectedCoffeeShop: $selectedCoffeeShop)) {
-                            VStack {
-                                BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showPreview, selectedCoffeeShop: $selectedCoffeeShop)
-                            }
+                                   NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
+                                       VStack {
+                                           BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showPreview)
+                                       }
                             .contextMenu {
                                 Button(action: {
                                     toRemoveCoffeeShop = coffeeShop

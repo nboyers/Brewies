@@ -45,6 +45,7 @@
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CC92A4624C5003894D9 /* FiltersView.swift */; };
 		FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */; };
+		FF5AAB222AC6490300E7213F /* SelectedCoffeeShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
 		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
 		FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */; };
@@ -134,6 +135,7 @@
 		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
 		FF5A6CC92A4624C5003894D9 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleButton.swift; sourceTree = "<group>"; };
+		FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCoffeeShop.swift; sourceTree = "<group>"; };
 		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
 		FF8E43462A339FA700CEC800 /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardAdController.swift; sourceTree = "<group>"; };
 		FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
@@ -316,6 +318,7 @@
 		FF3FF2C629EA0F0800510FCD /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				FF5AAB202AC648D800E7213F /* Environment Object */,
 				FFBFFD212A598EA2004576EC /* Account */,
 				FF5BC28C2A4521DB00759BFA /* Maps */,
 				FF5BC28B2A4521CD00759BFA /* Networking */,
@@ -344,7 +347,6 @@
 			isa = PBXGroup;
 			children = (
 				FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */,
-				FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */,
 			);
 			path = "Supporting Assets";
 			sourceTree = "<group>";
@@ -357,6 +359,15 @@
 				FFBC5B562ABCB61700FA3C74 /* APIKeyProvider .swift */,
 			);
 			path = Misc;
+			sourceTree = "<group>";
+		};
+		FF5AAB202AC648D800E7213F /* Environment Object */ = {
+			isa = PBXGroup;
+			children = (
+				FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */,
+				FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */,
+			);
+			path = "Environment Object";
 			sourceTree = "<group>";
 		};
 		FF5BC28B2A4521CD00759BFA /* Networking */ = {
@@ -709,6 +720,7 @@
 				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
 				FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */,
 				FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */,
+				FF5AAB222AC6490300E7213F /* SelectedCoffeeShop.swift in Sources */,
 				FFC575CE2A9C258A008EB5E2 /* ApplyPayModel.swift in Sources */,
 				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
 				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,

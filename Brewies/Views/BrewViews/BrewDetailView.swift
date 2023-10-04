@@ -14,22 +14,22 @@ import CoreLocation
 import MapKit
 
 
-
-
 struct BrewDetailView: View {
     var coffeeShop: CoffeeShop
+    
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var showSafariView = false
     @State private var showHoursSheet = false
     @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.0) // Starting position for bottomSheet
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     @State private var activeSheet: ActiveSheet?
-    @Binding var selectedCoffeeShop: CoffeeShop?
+    
+    @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
+    
     
     var body: some View {
         GeometryReader { geo in
             ScrollView {
-                
                 VStack(alignment: .leading) {
                     ZStack(alignment: .topLeading) {
                         //MARK: Header image
@@ -41,6 +41,7 @@ struct BrewDetailView: View {
                             .edgesIgnoringSafeArea(.top)
                         // Dismiss Button
                         Button(action: {
+                            activeSheet = nil
                             self.presentationMode.wrappedValue.dismiss()
                         }) {
                             Image(systemName: "arrow.uturn.left")
@@ -242,15 +243,14 @@ struct BrewDetailView: View {
                                 
                                 Divider()
                                 
-                                // Website
+                                //MARK: Website
                                 Button(action: {
-                                    openCoffeeShopWebsite()
+                                    showSafariView = true
                                 }) {
                                     HStack {
                                         VStack(alignment: .leading) {
                                             Text("Website")
                                                 .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                            
                                         }
                                         Spacer()
                                         
@@ -276,75 +276,31 @@ struct BrewDetailView: View {
                     }
                 }
             }
-            #warning("SHEET MAYBE NEEDED")
-//            .sheet(item: $activeSheet) { sheet in
-//                switch sheet {
-//                case .safariView:
-//                    if let url = URL(string: coffeeShop.url) {
-//                        SafariView(url: url)
-//                    }
-//                default:
-//                    EmptyView()
-//                }
-//            }
-//                
-//                    .navigationBarItems(trailing: closeButton)
-            }
-            .edgesIgnoringSafeArea(.top)
-        }
-        
-        private var closeButton: some View {
-            Button("Close") {
-                self.presentationMode.wrappedValue.dismiss()
+        .sheet(isPresented: $showSafariView) {
+            if let url = URL(string: selectedCoffeeShop.coffeeShop?.url ?? "nobosoftware.com") {
+                SafariView(url: url)
             }
         }
         
-        private func openMapsAppWithDirections() {
-            let destination = "\(coffeeShop.latitude),\(coffeeShop.longitude)"
-            let formattedDestination = destination.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            let url = "http://maps.apple.com/?daddr=\(formattedDestination)"
-            if let url = URL(string: url), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-            }
-        }
-        
-        private func callCoffeeShop() {
-            let phoneNumber = coffeeShop.displayPhone
-            if let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url)
-            }
-        }
-        
-        private func openCoffeeShopWebsite() {
-            showSafariView = true
-        }
-        private func dayOfTheWeek(_ day: Int) -> String {
-            switch day {
-            case 0: return "Monday"
-            case 1: return "Tuesday"
-            case 2: return "Wednesday"
-            case 3: return "Thursday"
-            case 4: return "Friday"
-            case 5: return "Saturday"
-            case 6: return "Sunday"
-            default: return "Unknown day"
-            }
-        }
-        private func formattedHours(_ hours: YelpOpenHours) -> String {
-            let startHour = timeFormat(hours.start )
-            let endHour = timeFormat(hours.end )
-            return "\(startHour) - \(endHour)"
-        }
-        
-        private func timeFormat(_ time: String) -> String {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HHmm"
-            
-            if let date = dateFormatter.date(from: time) {
-                dateFormatter.dateFormat = "h:mm a"
-                return dateFormatter.string(from: date)
-            } else {
-                return "Unknown time"
-            }
-        }
+        .edgesIgnoringSafeArea(.top)
     }
+}
+
+
+private func openMapsAppWithDirections() {
+    let destination = "\(coffeeShop.latitude),\(coffeeShop.longitude)"
+    let formattedDestination = destination.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+    let url = "http://maps.apple.com/?daddr=\(formattedDestination)"
+    if let url = URL(string: url), UIApplication.shared.canOpenURL(url) {
+        UIApplication.shared.open(url)
+    }
+}
+
+private func callCoffeeShop() {
+    let phoneNumber = coffeeShop.displayPhone
+    if let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) {
+        UIApplication.shared.open(url)
+    }
+}
+
+}

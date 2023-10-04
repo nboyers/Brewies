@@ -63,5 +63,6 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
         authorizationController.performRequests()
         // Save the login status
         userViewModel.saveUserLoginStatus()
+        userViewModel.syncCredits()
     }
 }

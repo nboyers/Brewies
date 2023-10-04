@@ -10,7 +10,7 @@ import SwiftUI
 
 class UserViewModel: ObservableObject {
     static let shared = UserViewModel()
-    
+    var noCredits = false
     @Published var user: User
     @Published var profileImage: Image?
     
@@ -57,16 +57,32 @@ class UserViewModel: ObservableObject {
     }
 
     func syncCredits() {
+        var mergedCredits = 0
+        
         let guestCredits = UserDefaults.standard.integer(forKey: "UserCredits_Guest")
-        UserDefaults.standard.set(0, forKey: "UserCredits_Guest") // Reset guest credits immediately
-        
+        print("SYNC Guest: \(guestCredits)")
         let userCredits = UserDefaults.standard.integer(forKey: "UserCredits_\(self.user.userID)")
-        let mergedCredits = guestCredits + userCredits
+        print("SYNC Account: \(userCredits)")
         
-        UserDefaults.standard.set(mergedCredits, forKey: "UserCredits_\(self.user.userID)")
+        #warning("Can never go to 0 credits")
+        if (guestCredits != 0) || userCredits > user.credits {
+             mergedCredits = max(guestCredits, userCredits)
+        } else if (guestCredits != 0) || userCredits < user.credits{
+             mergedCredits = min(guestCredits, userCredits)
+        } else if noCredits == true {
+            mergedCredits = 0
+        }
+        
+        print("SYNC: \(mergedCredits)")
+        
         self.user.credits = mergedCredits
-
+        
+        //Saves both
+        UserDefaults.standard.set(self.user.credits, forKey: "UserCredits_\(self.user.userID)")
+        UserDefaults.standard.set(self.user.credits, forKey: "UserCredits_Guest")
     }
+// If guest or user, is greater than account credits, pick the max of the two, if they are less, pick the
+    
     
     func addOrder(order: Order) {
         self.user.pastOrders.append(order)
@@ -75,9 +91,7 @@ class UserViewModel: ObservableObject {
     func addCredits(_ amount: Int = 1) {
         self.user.credits += amount
         let key = user.isLoggedIn ? "UserCredits_\(user.userID)" : "UserCredits_Guest"
-        UserDefaults.standard.set(self.user.credits, forKey: key)  
-        // Sync the credits
-        self.syncCredits()
+        UserDefaults.standard.set(self.user.credits, forKey: key)
         
         // Print statement to log when and how many credits are being added
         print("Added 1 credit. Total credits: \(self.user.credits)")

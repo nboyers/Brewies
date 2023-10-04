@@ -19,6 +19,7 @@ struct BrewPreviewList: View {
     @State var showStorefront = false
     @Binding var activeSheet: ActiveSheet?
     
+    
     @ObservedObject var userViewModel = UserViewModel.shared
     
     var body: some View {
@@ -27,18 +28,13 @@ struct BrewPreviewList: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 16) {
                         ForEach(coffeeShops) { coffeeShop in
-                            BrewPreview(coffeeShop: coffeeShop, activeSheet: $activeSheet, showBrewPreview: $showBrewPreview, selectedCoffeeShop: $selectedCoffeeShop)
-                                .id(coffeeShop.id)
+                            BrewPreview(coffeeShop: coffeeShop,
+                                        activeSheet: $activeSheet,
+                                        showBrewPreview: $showBrewPreview)
+                            .id(coffeeShop.id)
                         }
                     }
                     .padding([.top, .horizontal])
-                }
-                .onChange(of: selectedCoffeeShop) { coffeeShop in
-                    if let coffeeShop = coffeeShop {
-                        withAnimation(.easeInOut(duration: 0.5)) {
-                            scrollView.scrollTo(coffeeShop.id, anchor: .center)
-                        }
-                    }
                 }
             }
         }
@@ -57,6 +53,7 @@ struct BrewPreview: View {
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
     @ObservedObject var userViewModel = UserViewModel.shared
     @EnvironmentObject var contentVM: ContentViewModel
+    @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
     
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
     @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
@@ -64,7 +61,7 @@ struct BrewPreview: View {
     @State private var isDetailShowing: Bool = false
     @State private var favoriteSlotsUsed = 0
     @State private var showCustomAlertForFavorites = false
-    @Binding var selectedCoffeeShop: CoffeeShop?
+    //    @Binding var selectedCoffeeShop: CoffeeShop?
     
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
     
@@ -179,17 +176,24 @@ struct BrewPreview: View {
                     //                                        }
                 }
             }
-            //FIXME: THIS NO LONGER BRINGS UP THE DETAILED BREW
             .onTapGesture {
-                selectedCoffeeShop = coffeeShop
-                activeSheet = .detailBrew
+                   selectBrew()
             }
+            
+            
             .padding()
         }
         .frame(width: 300, height: 300)
         .background(Color.white)
         .cornerRadius(8)
         .shadow(radius: 4)
+    }
+    
+    private func selectBrew() {
+        DispatchQueue.main.async {
+            selectedCoffeeShop.coffeeShop = coffeeShop
+            activeSheet = .detailBrew
+        }
     }
     
     private func toggleFavorite() {

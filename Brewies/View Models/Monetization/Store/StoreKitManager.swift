@@ -255,7 +255,6 @@ class StoreKitManager: ObservableObject {
         // check the results
         switch result {
         case .success(let verificationResult):
-            //Transaction will be verified for automatically using JWT(jwsRepresentation) - we can check the result
             let transaction = try checkVerified(verificationResult)
             
             DispatchQueue.main.async {
@@ -263,6 +262,7 @@ class StoreKitManager: ObservableObject {
                 case self.creditsProductId:
                     self.getCreditsForSubscription(product.id)
                     break
+                    
                 case self.yearlyID:
                     self.getCreditsForSubscription(product.id)
                 case self.semiYearlyID:
@@ -321,7 +321,6 @@ class StoreKitManager: ObservableObject {
     
     //check if product has already been purchased
     func isPurchased(_ product: Product) async throws -> Bool {
-        //as we only have one product type grouping .nonconsumable - we check if it belongs to the purchasedCourses which ran init()
         return purchasedCourses.contains(product)
     }
 }
