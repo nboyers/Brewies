@@ -398,7 +398,9 @@ struct ContentView: View {
                                 
                 case .safariView:
                     EmptyView()
-//                    self.presentationMode.wrappedValue.dismiss()
+                case .shareApp:
+                    ShareSheet(activityItems: ["Share Brewies", URL(string: "https://apps.apple.com/us/app/brewies/id6450864433")!])
+                        .presentationDetents([.medium])
                 }
                             
             }

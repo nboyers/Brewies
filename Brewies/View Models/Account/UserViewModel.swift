@@ -10,7 +10,6 @@ import SwiftUI
 
 class UserViewModel: ObservableObject {
     static let shared = UserViewModel()
-    var noCredits = false
     @Published var user: User
     @Published var profileImage: Image?
     
@@ -56,34 +55,23 @@ class UserViewModel: ObservableObject {
         UserDefaults.standard.removeObject(forKey: "userID")
     }
 
-    func syncCredits() {
-        var mergedCredits = 0
+    func syncCredits(accountStatus: String) {
         
-        let guestCredits = UserDefaults.standard.integer(forKey: "UserCredits_Guest")
-        print("SYNC Guest: \(guestCredits)")
-        let userCredits = UserDefaults.standard.integer(forKey: "UserCredits_\(self.user.userID)")
-        print("SYNC Account: \(userCredits)")
-        
-        #warning("Can never go to 0 credits")
-        if (guestCredits != 0) || userCredits > user.credits {
-             mergedCredits = max(guestCredits, userCredits)
-        } else if (guestCredits != 0) || userCredits < user.credits{
-             mergedCredits = min(guestCredits, userCredits)
-        } else if noCredits == true {
-            mergedCredits = 0
+        switch accountStatus {
+        case "login":
+            let guestCredits = UserDefaults.standard.integer(forKey: "UserCredits_Guest")
+            UserDefaults.standard.set(guestCredits, forKey: "UserCredits_\(self.user.userID)")
+            self.user.credits = guestCredits
+            
+        case "signOut":
+            let userCredits = UserDefaults.standard.integer(forKey: "UserCredits_\(self.user.userID)")
+            UserDefaults.standard.set(userCredits, forKey: "UserCredits_Guest")
+            self.user.credits = userCredits
+        default:
+            break
         }
-        
-        print("SYNC: \(mergedCredits)")
-        
-        self.user.credits = mergedCredits
-        
-        //Saves both
-        UserDefaults.standard.set(self.user.credits, forKey: "UserCredits_\(self.user.userID)")
-        UserDefaults.standard.set(self.user.credits, forKey: "UserCredits_Guest")
     }
-// If guest or user, is greater than account credits, pick the max of the two, if they are less, pick the
-    
-    
+  
     func addOrder(order: Order) {
         self.user.pastOrders.append(order)
     }

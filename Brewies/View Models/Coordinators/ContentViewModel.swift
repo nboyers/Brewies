@@ -33,7 +33,7 @@ class ContentViewModel: ObservableObject {
         self.yelpParams = yelpParams
         rewardAdController.onUserDidEarnReward = { [weak self] in
             self?.userViewModel.addCredits(1)
-            self?.userViewModel.syncCredits()
+            self?.userViewModel.syncCredits(accountStatus: "")
         }
         rewardAdController.requestIDFA()
         rewardAdController.onAdDidDismissFullScreenContent = { [weak self] in
@@ -94,7 +94,6 @@ class ContentViewModel: ObservableObject {
                 switch reward {
                 case "credits":
                     userViewModel.addCredits(1)
-                    userViewModel.noCredits = false
                     break
                     
                 case "favorites":

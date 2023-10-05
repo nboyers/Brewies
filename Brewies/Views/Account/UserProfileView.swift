@@ -11,11 +11,11 @@ struct UserProfileView: View {
     @ObservedObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var contentViewModel: ContentViewModel
-    
+    @State private var showShareSheet = false
     @Binding var activeSheet: ActiveSheet?
     
     let signInCoordinator = SignInWithAppleCoordinator()
-        
+    
     var body: some View {
         if userViewModel.user.isLoggedIn {
             VStack {
@@ -45,6 +45,7 @@ struct UserProfileView: View {
                 Divider()
                 Spacer()
                 Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
                     activeSheet = .settings
                 }) {
                     HStack {
@@ -95,51 +96,52 @@ struct UserProfileView: View {
                 .frame(width: 375)
                 Spacer()
             }
-            } else {
-                GeometryReader { geo in
-                    VStack {
-                        HStack() {
-                            Button(action: {
-                                activeSheet = .settings
-                            }) {
-                                Image(systemName: "gear")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(.primary)
-                                    .padding()
-                            }
-                            Spacer()
-                            
-                            Button(action: {
-                                self.presentationMode.wrappedValue.dismiss()
-                            }) {
-                                Image(systemName: "x.circle.fill")
-                                    .resizable()
-                                    .frame(width: 25, height: 25)
-                                    .foregroundColor(.primary)
-                                    .padding()
-                            }
+        } else {
+            GeometryReader { geo in
+                VStack {
+                    HStack() {
+                        Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                            activeSheet = .settings
+                        }) {
+                            Image(systemName: "gear")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.primary)
+                                .padding()
                         }
                         Spacer()
-                        SignInWithAppleButton(action: {
-                            signInCoordinator.startSignInWithAppleFlow()
-                        }, label: "Sign in with Apple")
-                        .frame(width: 280, height: 45)
-                        .padding(.top, 50)
+                        
+                        Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "x.circle.fill")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.primary)
+                                .padding()
+                        }
                     }
+                    Spacer()
+                    SignInWithAppleButton(action: {
+                        signInCoordinator.startSignInWithAppleFlow()
+                    }, label: "Sign in with Apple")
+                    .frame(width: 280, height: 45)
+                    .padding(.top, 50)
                 }
-                
-                .presentationDragIndicator(.visible)
-                .presentationDetents([.medium, .large])
             }
+            
+            .presentationDragIndicator(.visible)
+            .presentationDetents([.medium, .large])
         }
-        private func shareApp() {
-            activeSheet = .storefront
-        }
-        
-        private func leaveReview() {
-            let reviewURL = URL(string: "https://apps.apple.com/us/app/brewies/id6450864433?action=write-review")!
-            UIApplication.shared.open(reviewURL)
-        }
-        
     }
+    private func shareApp() {
+        activeSheet = .shareApp
+    }
+    
+    private func leaveReview() {
+        let reviewURL = URL(string: "https://apps.apple.com/us/app/brewies/id6450864433?action=write-review")!
+        UIApplication.shared.open(reviewURL)
+    }
+    
+}

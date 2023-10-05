@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-   
+    
     @State private var activeSheet: ActiveSheet?
     
     var body: some View {
@@ -25,6 +25,7 @@ struct SettingsView: View {
                 }
                 if userViewModel.user.isLoggedIn {
                     Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
                         activeSheet = .userProfile // Change to the appropriate case
                     }) {
                         Text("Edit Profile")
@@ -37,6 +38,7 @@ struct SettingsView: View {
                     .cornerRadius(10)
                     
                     Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
                         activeSheet = .storefront // Change to the appropriate case
                     }) {
                         Text("In-App Store")
@@ -47,14 +49,12 @@ struct SettingsView: View {
                     .padding(.horizontal)
                     .background(Color.gray.opacity(0.2))
                     .cornerRadius(10)
-                }
-                
-                Spacer()
-                
-                if userViewModel.user.isLoggedIn {
+                    
+                    
+                    Spacer()
                     Button(action: {
                         userViewModel.signOut()
-                        userViewModel.syncCredits()
+                        userViewModel.syncCredits(accountStatus: "signOut")
                         self.presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("Sign Out")
@@ -70,16 +70,7 @@ struct SettingsView: View {
             }
             .padding()
             .navigationBarHidden(true)
-            .sheet(item: $activeSheet) { item in
-                switch item {
-                case .userProfile:
-                    EditProfileView()
-                case .storefront:
-                    StorefrontView()
-                default:
-                    Text("Something went wrong")
-                }
-            }
+            
         }
     }
 }
