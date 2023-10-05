@@ -343,27 +343,24 @@ struct ContentView: View {
             //            Text("Selected Coffee Shop before Sheet Presentation: \(selectedCoffeeShop?.name ?? "None")")
             //MARK: User Profile
             .sheet(item: $activeSheet) { sheet in
-                            
+                
                 switch sheet {
-                case .settings:
-                    SettingsView()
-                                
                 case .filter:
                     FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
                         .environmentObject(userVM)
-                                
+                    
                 case .userProfile:
                     UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)
                         .presentationDragIndicator(.visible)
                         .presentationDetents([.medium])
-                                
+                    
                 case .signUpWithApple:
                     if userVM.user.isLoggedIn {
                         UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)
                             .presentationDetents([.medium])
                     } else {
                         Spacer()
-                                    
+                        
                         GeometryReader { geometry in
                             VStack {
                                 Spacer() // Pushes the content to the center vertically
@@ -387,25 +384,21 @@ struct ContentView: View {
                         .frame(width: 280, height: 45)
                         .padding([.top, .bottom], 50)
                         .presentationDetents([.medium])
-                                    
                     }
-                                
+                    
                 case .storefront:
                     StorefrontView()
-                                
-                case .detailBrew: 
+                    
+                case .detailBrew:
                     if let coffeeShop = selectedCoffeeShop.coffeeShop { BrewDetailView(coffeeShop: coffeeShop) }
-                                
-                case .safariView:
-                    EmptyView()
+                    
+                    
                 case .shareApp:
                     ShareSheet(activityItems: ["Share Brewies", URL(string: "https://apps.apple.com/us/app/brewies/id6450864433")!])
                         .presentationDetents([.medium])
+                    
                 }
-                            
             }
-
-            
             .alert(isPresented: $showLocationAccessAlert) {
                 Alert(
                     title: Text("Location Access Required"),

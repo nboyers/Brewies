@@ -10,8 +10,8 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
-    @State private var activeSheet: ActiveSheet?
+    @State var showStorefront = false
+    @State var editProfile = false
     
     var body: some View {
         NavigationView {
@@ -23,54 +23,54 @@ struct SettingsView: View {
                         .font(.largeTitle)
                     Spacer()
                 }
-                if userViewModel.user.isLoggedIn {
-                    Button(action: {
-                        self.presentationMode.wrappedValue.dismiss()
-                        activeSheet = .userProfile // Change to the appropriate case
-                    }) {
-                        Text("Edit Profile")
-                            .padding()
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .padding(.horizontal)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-                    
-                    Button(action: {
-                        self.presentationMode.wrappedValue.dismiss()
-                        activeSheet = .storefront // Change to the appropriate case
-                    }) {
-                        Text("In-App Store")
-                            .padding()
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .padding(.horizontal)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
-                    
-                    
-                    Spacer()
-                    Button(action: {
-                        userViewModel.signOut()
-                        userViewModel.syncCredits(accountStatus: "signOut")
-                        self.presentationMode.wrappedValue.dismiss()
-                    }) {
-                        Text("Sign Out")
-                            .foregroundColor(.red)
-                            .padding()
-                            .font(.title2)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .padding(.horizontal)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
+                Button(action: {
+                    editProfile = true
+                }) {
+                    Text("Edit Profile")
+                        .padding()
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
                 }
+                .padding(.horizontal)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(10)
+                
+                Button(action: {
+                  showStorefront   = true
+                }) {
+                    Text("In-App Store")
+                        .padding()
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                }
+                .padding(.horizontal)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(10)
+                
+                
+                Spacer()
+                Button(action: {
+                    userViewModel.signOut()
+                    userViewModel.syncCredits(accountStatus: "signOut")
+                }) {
+                    Text("Sign Out")
+                        .foregroundColor(.red)
+                        .padding()
+                        .font(.title2)
+                        .frame(maxWidth: .infinity)
+                }
+                .padding(.horizontal)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(10)
             }
-            .padding()
-            .navigationBarHidden(true)
-            
+        }
+        .padding()
+        .navigationBarHidden(true)
+        .sheet(isPresented: $showStorefront) {
+            StorefrontView()
+        }
+        .sheet(isPresented: $editProfile) {
+           EditProfileView()
         }
     }
 }

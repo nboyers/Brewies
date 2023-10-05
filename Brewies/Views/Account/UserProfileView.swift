@@ -11,10 +11,10 @@ struct UserProfileView: View {
     @ObservedObject var userViewModel: UserViewModel
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var contentViewModel: ContentViewModel
-    @State private var showShareSheet = false
     @Binding var activeSheet: ActiveSheet?
+    @State var TEST = false
     
-    let signInCoordinator = SignInWithAppleCoordinator()
+//    let signInCoordinator = SignInWithAppleCoordinator()
     
     var body: some View {
         if userViewModel.user.isLoggedIn {
@@ -42,11 +42,14 @@ struct UserProfileView: View {
                     }
                     .padding([.top, .horizontal], 20)
                 }
+                .sheet(isPresented: $TEST) {
+                    SettingsView()
+                }
+                
                 Divider()
                 Spacer()
                 Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                    activeSheet = .settings
+                    TEST = true
                 }) {
                     HStack {
                         Spacer()
@@ -60,10 +63,7 @@ struct UserProfileView: View {
                 .background(.bar)
                 .cornerRadius(10)
                 .frame(width: 375)
-                
-                
-                
-                
+    
                 Button(action: shareApp) {
                     HStack {
                         Spacer()
@@ -77,10 +77,7 @@ struct UserProfileView: View {
                 .background(.bar)
                 .cornerRadius(10)
                 .frame(width: 375)
-                
-                
-                
-                
+                 
                 Button(action: leaveReview) {
                     HStack {
                         Spacer()
@@ -96,48 +93,12 @@ struct UserProfileView: View {
                 .frame(width: 375)
                 Spacer()
             }
-        } else {
-            GeometryReader { geo in
-                VStack {
-                    HStack() {
-                        Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                            activeSheet = .settings
-                        }) {
-                            Image(systemName: "gear")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.primary)
-                                .padding()
-                        }
-                        Spacer()
-                        
-                        Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "x.circle.fill")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.primary)
-                                .padding()
-                        }
-                    }
-                    Spacer()
-                    SignInWithAppleButton(action: {
-                        signInCoordinator.startSignInWithAppleFlow()
-                    }, label: "Sign in with Apple")
-                    .frame(width: 280, height: 45)
-                    .padding(.top, 50)
-                }
-            }
-            
-            .presentationDragIndicator(.visible)
-            .presentationDetents([.medium, .large])
         }
     }
     private func shareApp() {
         activeSheet = .shareApp
     }
+    
     
     private func leaveReview() {
         let reviewURL = URL(string: "https://apps.apple.com/us/app/brewies/id6450864433?action=write-review")!
