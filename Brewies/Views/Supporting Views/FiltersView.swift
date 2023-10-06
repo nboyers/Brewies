@@ -30,9 +30,12 @@ struct FiltersView: View {
     @ObservedObject var yelpParams: YelpSearchParams
     @EnvironmentObject var userVM: UserViewModel
     @ObservedObject var contentVM: ContentViewModel
- 
+    @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
+    
+    @State private var activeSheet: ActiveSheet?
     @State private var applyChangesCount: Int = 0
     
+    @State private var showAlert = false
     @State private var selectedSort: String = ""
     @State private var selectedOption: Int = 0
     @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186]
@@ -158,33 +161,62 @@ struct FiltersView: View {
                         Spacer()
                     }
                     Divider()
-                    
-                    Text("Sort")
-                        .font(.title2)
-                        .bold()
-                        .padding(.horizontal)
-                    VStack(alignment: .leading) {
-                        ForEach(sortOptions, id: \.self) { sortOption in
-                            HStack {
-                                Text(sortOption)
-                                    .font(.body)
-                                Spacer()
-                                Button(action: {
-                                    selectedSort = sortOption
-                                    yelpParams.sortBy = apiSortOptions[selectedSort] ?? ""
-                                }) {
-                                    Circle()
-                                        .frame(width: 24, height: 24)
-                                        .foregroundColor(selectedSort == sortOption ? .blue : .clear)
-                                        .overlay(
-                                            Capsule()
-                                                .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedSort == sortOption ? 0 : 1)
-                                        )
-                                }
-                                
-                            }.padding(.horizontal)
+
+                   
+                        Text("Sort")
+                            .font(.title2)
+                            .bold()
+                            .padding(.horizontal)
+                    ZStack {
+                        VStack(alignment: .leading) {
+                            ForEach(sortOptions, id: \.self) { sortOption in
+                                HStack {
+                                    Text(sortOption)
+                                        .font(.body)
+                                    Spacer()
+                                    Button(action: {
+                                        selectedSort = sortOption
+                                        yelpParams.sortBy = apiSortOptions[selectedSort] ?? ""
+                                    }) {
+                                        Circle()
+                                            .frame(width: 24, height: 24)
+                                            .foregroundColor(selectedSort == sortOption ? .blue : .clear)
+                                            .overlay(
+                                                Capsule()
+                                                    .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedSort == sortOption ? 0 : 1)
+                                            )
+                                    }
+                                    
+                                }.padding(.horizontal)
+                            }
                         }
-                    }.disabled(!userVM.user.isSubscribed)
+                        .disabled(!userVM.user.isSubscribed)
+                        
+                        // This will be displayed on top of the ScrollView when showAlert is true
+                        if sharedAlertVM.currentAlertType == .notSubscribed {
+                            CustomAlertView(
+                                title: "Subscription Required",
+                                message: "You need to be subscribed to use the filters view.",
+                                goToStoreAction: {
+                                    showAlert = true
+                                    sharedAlertVM.currentAlertType = nil
+                                    sharedAlertVM.showCustomAlert = false
+                                    
+                                },
+                                watchAdAction: nil,  // No action for "Watch Ad", so the button will not be displayed
+                                dismissAction: {
+                                    // Add your action for the dismiss button here
+                                    sharedAlertVM.currentAlertType = nil
+                                    sharedAlertVM.showCustomAlert = false
+                                }
+                            )
+
+                            .frame(width: 300, height: 200)  // Adjust the frame as needed
+                            .background(VisualEffectBlur(blurStyle: .systemMaterial))  // Optional: Add a blur effect
+                            .cornerRadius(20)
+                            .shadow(radius: 20)
+                        }
+                    }
                     Divider()
                     
                     VStack(alignment: .leading) {
@@ -196,7 +228,7 @@ struct FiltersView: View {
                         Picker("Search Radius", selection: $yelpParams.radiusInMeters) {
                             ForEach(radiusOptionsInMeters, id: \.self) { unit in
                                 Text("\(yelpParams.radiusUnit == "km" ? Double(unit)/1000.0 : Double(unit)/1609.34, specifier: "%.2f") \(yelpParams.radiusUnit)").tag(unit)
-                              
+                                
                             }
                         }.pickerStyle(SegmentedPickerStyle())
                             .padding(.horizontal)
@@ -217,8 +249,7 @@ struct FiltersView: View {
                             VStack(alignment: .leading) {
                                 Divider()
                                 //MARK: Brew Type
-                                Text("Currently Unavailable")
-                                //                                Text("Business Category")
+                                Text("Business Category")
                                     .font(.title2)
                                     .bold()
                                     .padding(.horizontal)
@@ -245,15 +276,7 @@ struct FiltersView: View {
                                     }
                                 }
                             }
-                            
-                            .opacity(0.5) // This lowers the opacity, making it appear more "disabled"
                             Spacer()
-                            Image(systemName: "lock.fill") // This overlays a lock icon
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 75, height: 75)
-                                .foregroundColor(.gray)
-                                .opacity(0.5) // This makes the lock icon semi-transparent
                         }
                     }
                     .onAppear {
@@ -263,12 +286,12 @@ struct FiltersView: View {
                         initialState["sortBy"] = yelpParams.sortBy
                         initialState["price"] = yelpParams.price
                     }
-                    .onTapGesture {
-                        if !userVM.user.isSubscribed {
-                          
-                        }
-                    }
                 }
+            }
+        }
+        .onTapGesture {
+            if !userVM.user.isSubscribed {
+                sharedAlertVM.currentAlertType = .notSubscribed
             }
         }
         
@@ -292,7 +315,11 @@ struct FiltersView: View {
             }
             Spacer()
                 .frame(width: 25)
-        }.disabled(!userVM.user.isSubscribed)
-            .frame(maxHeight: 75)
+        }
+        .disabled(!userVM.user.isSubscribed)
+        .frame(maxHeight: 75)
+        .sheet(isPresented: $showAlert) {
+            StorefrontView()
+        }
     }
 }

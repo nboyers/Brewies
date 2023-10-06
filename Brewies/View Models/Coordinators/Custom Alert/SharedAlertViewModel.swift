@@ -15,4 +15,5 @@ class SharedAlertViewModel: ObservableObject {
 enum CustomAlertType {
     case insufficientCredits
     case maxFavoritesReached
+    case notSubscribed
 }

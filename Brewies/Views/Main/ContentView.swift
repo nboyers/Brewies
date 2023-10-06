@@ -348,6 +348,7 @@ struct ContentView: View {
                 case .filter:
                     FiltersView(yelpParams: yelpParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
                         .environmentObject(userVM)
+                        .environmentObject(sharedAlertVM)
                     
                 case .userProfile:
                     UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $activeSheet)

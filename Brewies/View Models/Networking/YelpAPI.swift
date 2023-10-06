@@ -72,6 +72,10 @@ class YelpAPI : ObservableObject {
         "grocery","intlgrocery"
     ]
     
+    private lazy var desiredCatagories : Set<String> = [
+        "brewpubs", "breweries"
+        ]
+    
     func fetchIndependentCoffeeShops (
         latitude: Double,
         longitude: Double,
@@ -133,10 +137,6 @@ class YelpAPI : ObservableObject {
                 isClosed: business.isClosed,
                 price: business.price
             )
-//            if let cachedCoffeeShop = UserCache.shared.getCachedCoffeeShop(id: business.id), cachedCoffeeShop.isFavorite == true {
-//                coffeeShop.isFavorite = true
-//                favoriteCoffeeShops.append(coffeeShop)
-//            }
             coffeeShops.append(coffeeShop)
         }
         return coffeeShops
@@ -152,8 +152,8 @@ class YelpAPI : ObservableObject {
             switch response.result {
             case .success(let yelpBusiness):
                 completion(yelpBusiness)
-            case .failure(let error):
-                print("Error fetching coffee shop details: \(error.localizedDescription)")
+            case .failure(_):
+                return
             }
         }
     }
@@ -168,6 +168,4 @@ class YelpAPI : ObservableObject {
         }
         return false
     }
-    
-    
 }

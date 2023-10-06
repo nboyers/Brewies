@@ -9,10 +9,10 @@ import SwiftUI
 
 struct CustomAlertView: View {
     var title: String
-      var message: String
-      var goToStoreAction: () -> Void
-      var watchAdAction: () -> Void
-      var dismissAction: () -> Void
+    var message: String
+    var goToStoreAction: (() -> Void)?
+    var watchAdAction: (() -> Void)?
+    var dismissAction: (() -> Void)?
     
     var body: some View {
         VStack {
@@ -22,7 +22,7 @@ struct CustomAlertView: View {
                     .font(.headline)
                     .foregroundColor(.primary)
                 Spacer()
-                Button(action: dismissAction) {
+                Button(action: dismissAction ?? {}) {
                     Image(systemName: "xmark")
                 }
                 .foregroundColor(.secondary)
@@ -37,18 +37,21 @@ struct CustomAlertView: View {
             
             HStack {
                 Spacer()
-                Button(action: goToStoreAction) {
-                    Text("Go to Store")
-                        .foregroundColor(.blue)
+                if let goToStoreAction = goToStoreAction {
+                    Button(action: goToStoreAction) {
+                        Text("Go to Store")
+                            .foregroundColor(.blue)
+                    }
+                    Spacer()
                 }
                 
-                Spacer()
-                
-                Button(action: watchAdAction) {
-                    Text("Watch Ad")
-                        .foregroundColor(.blue)
+                if let watchAdAction = watchAdAction {
+                    Button(action: watchAdAction) {
+                        Text("Watch Ad")
+                            .foregroundColor(.blue)
+                    }
+                    Spacer()
                 }
-                Spacer()
             }
         }
         .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
