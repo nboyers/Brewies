@@ -18,7 +18,12 @@ class YelpSearchParams: ObservableObject {
     @Published var price: [String] = []
     @Published var priceForAPI: [Int] = []
     func resetFilters() {
-        
+        radiusInMeters = 5000
+        radiusUnit = "mi"
+        businessType = "coffee shop"
+        sortBy = "distance"
+        price = []
+        priceForAPI = []
     }
 }
 
@@ -66,9 +71,9 @@ struct FiltersView: View {
         initialState["radiusUnit"] = yelpParams.radiusUnit
         initialState["businessType"] = yelpParams.businessType
         initialState["sortBy"] = yelpParams.sortBy
-        initialState["price"] = yelpParams.price
-        print(yelpParams.radiusInMeters)
+        initialState["price"] = yelpParams.priceForAPI // Note: Using priceForAPI instead of price
     }
+
     
     private func priceButtonAction(price: String) {
         if let index = yelpParams.price.firstIndex(of: price) {
@@ -94,6 +99,7 @@ struct FiltersView: View {
                     self.presentationMode.wrappedValue.dismiss()
                     // Reset the Settings Applied
                     yelpParams.resetFilters()
+                    
                     // Also reset the UI
                     selectedSort = ""
                     selectedBrew = ""
@@ -161,12 +167,12 @@ struct FiltersView: View {
                         Spacer()
                     }
                     Divider()
-
-                   
-                        Text("Sort")
-                            .font(.title2)
-                            .bold()
-                            .padding(.horizontal)
+                    
+                    
+                    Text("Sort")
+                        .font(.title2)
+                        .bold()
+                        .padding(.horizontal)
                     ZStack {
                         VStack(alignment: .leading) {
                             ForEach(sortOptions, id: \.self) { sortOption in
@@ -210,7 +216,7 @@ struct FiltersView: View {
                                     sharedAlertVM.showCustomAlert = false
                                 }
                             )
-
+                            
                             .frame(width: 300, height: 200)  // Adjust the frame as needed
                             .background(VisualEffectBlur(blurStyle: .systemMaterial))  // Optional: Add a blur effect
                             .cornerRadius(20)
