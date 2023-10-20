@@ -19,6 +19,7 @@ struct RatingView: View {
             return "\(roundedRating)"
         }
     }
+    
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 3) {
             Image("regular_\(imageName)")
@@ -26,6 +27,10 @@ struct RatingView: View {
             Text("\(rating, specifier: "%.1f")")
                 .font(.headline)
                 .foregroundColor(.white)
+                Image("yelp")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)  // Maintain aspect ratio while resizing
+                    .frame(width: 50, height: 50)  // Specify the desired width and height
             Spacer()
         }
     }

@@ -10,7 +10,7 @@ import CoreLocation
 import MapKit
 import BottomSheet
 import AuthenticationServices
-import Introspect
+
 
 struct ContentView: View {
     @ObservedObject var storeKit = StoreKitManager()
@@ -135,7 +135,7 @@ struct ContentView: View {
                             }.padding(.horizontal)
                             
                             
-                            TextField("Search Location", text: $searchQuery, onEditingChanged: { isEditing in
+                            TextField("Which Area?", text: $searchQuery, onEditingChanged: { isEditing in
                                 if isEditing {
                                     isSearching = true
                                     sharedVM.bottomSheetPosition = .relative(0.70)
@@ -221,29 +221,30 @@ struct ContentView: View {
                             AdBannerView()
                                 .frame(width: 320, height: 50)
                         }
-                        
-                        Button(action: {
-                            
-                            // Your action to handle the ad goes here
-                            self.contentVM.handleRewardAd(reward: "credits")
-                        }) {
-                            HStack(spacing: 10) {
-                                Image(systemName: "video.fill")
-                                    .resizable()
-                                    .scaledToFit() // Maintain aspect ratio
-                                    .frame(width: 20, height: 20) // Specify the size of the image
-                                    .foregroundColor(.white) // Color of the star
-                                    .padding(5) // Add some padding to give the image more room
-                                    .background(Color.blue) // Background color of the circle
-                                    .clipShape(Circle()) // Make the background a circle
-                                Text("Watch Ads for Credits")
-                                    .font(.headline)
-                            }
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                        }
+                        // While testing, no one actually used this button. just created more noise removing
+                        // Until further notice
+                        //                        Button(action: {
+                        //
+                        //                            // Your action to handle the ad goes here
+                        //                            self.contentVM.handleRewardAd(reward: "credits")
+                        //                        }) {
+                        //                            HStack(spacing: 10) {
+                        //                                Image(systemName: "video.fill")
+                        //                                    .resizable()
+                        //                                    .scaledToFit() // Maintain aspect ratio
+                        //                                    .frame(width: 20, height: 20) // Specify the size of the image
+                        //                                    .foregroundColor(.white) // Color of the star
+                        //                                    .padding(5) // Add some padding to give the image more room
+                        //                                    .background(Color.blue) // Background color of the circle
+                        //                                    .clipShape(Circle()) // Make the background a circle
+                        //                                Text("Watch Ads for Credits")
+                        //                                    .font(.headline)
+                        //                            }
+                        //                            .padding()
+                        //                            .background(Color.green)
+                        //                            .foregroundColor(.white)
+                        //                            .cornerRadius(10)
+                        //                        }
                     }
                 }
                 
@@ -311,9 +312,14 @@ struct ContentView: View {
                         
                         
                     }
-                    
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
+                    
+                    
+                    StreakTrackerView()
+                        .offset(x: -geo.size.width / 20, y: -geo.size.height * 0.84)
+                    
                 }
+                
                 if let alertType = sharedAlertVM.currentAlertType {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
@@ -321,7 +327,7 @@ struct ContentView: View {
                     CustomAlertView(
                         title: alertType == .maxFavoritesReached ? "Maximum Favorites Reached" : "Insufficient Credits",
                         message: alertType == .maxFavoritesReached ? "Watch an ad to unlock more favorite slots or go to the store." : "Watch an ad or click the credits to buy more from the store.",
-                        goToStoreAction: {
+                        goToStoreAction:  {
                             // Your action for going to the store
                             activeSheet = .storefront
                             sharedAlertVM.currentAlertType = nil

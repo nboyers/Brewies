@@ -61,7 +61,6 @@ struct BrewPreview: View {
     @State private var isDetailShowing: Bool = false
     @State private var favoriteSlotsUsed = 0
     @State private var showCustomAlertForFavorites = false
-    //    @Binding var selectedCoffeeShop: CoffeeShop?
     
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
     
@@ -128,7 +127,7 @@ struct BrewPreview: View {
                     }
                     HStack(spacing: 1) {
                         Text("\(coffeeShop.city), \(coffeeShop.state)")
-                        Text((coffeeShop.price != nil ? "• \(coffeeShop.price!)" : ""))
+                        Text("• \(coffeeShop.price ?? "Unknown price range")")
                         Spacer()
                     }
                     .foregroundColor(.gray)
@@ -195,7 +194,6 @@ struct BrewPreview: View {
             activeSheet = .detailBrew
         }
     }
-    
     private func toggleFavorite() {
         if isFavorite {
             userViewModel.removeFromFavorites(coffeeShop)

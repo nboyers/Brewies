@@ -7,15 +7,18 @@
 
 import SwiftUI
 import GoogleMobileAds
+import StoreKit
 
 @main
 struct BrewiesApp: App {
     private var rewardAd = RewardAdController()
     let yelpParams = YelpSearchParams()
     let contentViewModel: ContentViewModel
-    var sharedViewModel = SharedViewModel()
-    var locationManager = LocationManager()
+    let sharedViewModel = SharedViewModel()
+    let locationManager = LocationManager()
+
     @StateObject var selectedCoffeeShop = SelectedCoffeeShop()
+    
     init() {
         self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
     }
@@ -35,4 +38,5 @@ struct BrewiesApp: App {
         }
     }
 }
+
 

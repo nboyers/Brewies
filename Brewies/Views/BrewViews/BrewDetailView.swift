@@ -142,9 +142,17 @@ struct BrewDetailView: View {
                             }
                             
                             VStack(alignment: .center) {
-                                SmallMap(coordinate: CLLocationCoordinate2D ( latitude: coffeeShop.latitude,
-                                                                              longitude: coffeeShop.longitude
-                                                                            ), name: coffeeShop.name)
+                                
+                                Button(action: {
+                                    openMapsAppWithDirections()
+                                }) {
+                                    HStack {
+                                        SmallMap(coordinate: CLLocationCoordinate2D ( latitude: coffeeShop.latitude,
+                                                                                      longitude: coffeeShop.longitude
+                                                                                    ), name: coffeeShop.name)
+                                    }
+                                }
+                                
                                 Button(action: {
                                     UIPasteboard.general.string = "\(coffeeShop.address)"
                                 }) {
@@ -200,49 +208,14 @@ struct BrewDetailView: View {
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("Details")
+                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                     .font(.title2)
                                     .bold()
                                     .padding(.horizontal)
-                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                 Spacer()
                             }
                             
-                            
                             VStack(alignment: .leading) {
-                                //MARK: Hours are currently out of Service
-                                HStack(alignment: .firstTextBaseline){
-                                    VStack(alignment: .leading) {
-                                        Text("Price \(coffeeShop.price ?? "is not listed")")
-                                    }
-                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .lineLimit(2)
-                                    .padding()
-                                    Spacer()
-                                }
-                                
-                                Divider()
-                                
-                                // Phone
-                                
-                                Button(action: {
-                                    callCoffeeShop()
-                                }) {
-                                    HStack {
-                                        Text(coffeeShop.displayPhone.isEmpty ? "Phone number unavailable" : coffeeShop.displayPhone)
-                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                        Spacer()
-                                        
-                                        Image(systemName: "phone.connection")
-                                            .resizable()
-                                            .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
-                                            .foregroundColor(Color.accentColor)
-                                    }
-                                }
-                                .padding()
-                                
-                                Divider()
-                                
                                 //MARK: Website
                                 Button(action: {
                                     showSafariView = true
@@ -260,47 +233,90 @@ struct BrewDetailView: View {
                                             .foregroundColor(Color.accentColor)
                                     }
                                 }
-                                
                                 .padding()
                                 
+                                Divider()
                                 
+                                HStack(alignment: .firstTextBaseline){
+                                    VStack(alignment: .leading) {
+                                        Text("Price: \(convertYelpPriceToRange(yelpPrice: coffeeShop.price ?? "is not listed"))")
+                                    }
+                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .lineLimit(2)
+                                    .padding()
+                                    Spacer()
+                                }
+                                
+                                Divider()
+                                
+                                //MARK: Phone
+                                
+                                Button(action: {
+                                    callCoffeeShop()
+                                }) {
+                                    HStack {
+                                        Text(coffeeShop.displayPhone.isEmpty ? "Phone number unavailable" : coffeeShop.displayPhone)
+                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                        Spacer()
+                                        
+                                        Image(systemName: "phone.connection")
+                                            .resizable()
+                                            .frame(width: geo.size.width*0.05, height: geo.size.width*0.05)
+                                            .foregroundColor(Color.accentColor)
+                                    }
+                                }
+                                .padding()
                             }
                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                             .background(.bar)
                             .cornerRadius(15)
                             .frame(width: geo.size.width, height: geo.size.height*0.25)
                             
-                            
                         }
                         
                     }
                 }
             }
-        .sheet(isPresented: $showSafariView) {
-            if let url = URL(string: selectedCoffeeShop.coffeeShop?.url ?? "nobosoftware.com") {
-                SafariView(url: url)
+            .sheet(isPresented: $showSafariView) {
+                if let url = URL(string: selectedCoffeeShop.coffeeShop?.url ?? "nobosoftware.com") {
+                    SafariView(url: url)
+                }
             }
+            
+            .edgesIgnoringSafeArea(.top)
         }
-        
-        .edgesIgnoringSafeArea(.top)
     }
-}
-
-
-private func openMapsAppWithDirections() {
-    let destination = "\(coffeeShop.latitude),\(coffeeShop.longitude)"
-    let formattedDestination = destination.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-    let url = "http://maps.apple.com/?daddr=\(formattedDestination)"
-    if let url = URL(string: url), UIApplication.shared.canOpenURL(url) {
-        UIApplication.shared.open(url)
+    
+    private func convertYelpPriceToRange(yelpPrice: String) -> String {
+        switch yelpPrice {
+        case "$":
+            return "Under $10"
+        case "$$":
+            return "$11 - $30"
+        case "$$$":
+            return "$31 - $60"
+        case "$$$$":
+            return "Over $61"
+        default:
+            return "Unknown price range"  // Handle unknown or unexpected input
+        }
     }
-}
-
-private func callCoffeeShop() {
-    let phoneNumber = coffeeShop.displayPhone
-    if let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) {
-        UIApplication.shared.open(url)
+    
+    private func openMapsAppWithDirections() {
+        let destination = "\(coffeeShop.latitude),\(coffeeShop.longitude)"
+        let formattedDestination = destination.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let url = "http://maps.apple.com/?daddr=\(formattedDestination)"
+        if let url = URL(string: url), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
     }
-}
-
+    
+    private func callCoffeeShop() {
+        let phoneNumber = coffeeShop.displayPhone
+        if let url = URL(string: "tel://\(phoneNumber)"), UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
+    
 }

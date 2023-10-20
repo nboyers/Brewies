@@ -12,44 +12,50 @@ struct UserProfileView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @ObservedObject var contentViewModel: ContentViewModel
     @Binding var activeSheet: ActiveSheet?
-    @State var TEST = false
-    
-//    let signInCoordinator = SignInWithAppleCoordinator()
-    
+    @State var showSettings  = false
+    @State var changeName = false
     var body: some View {
         if userViewModel.user.isLoggedIn {
             VStack {
                 VStack {
-                    HStack {
-                        Text(String(userViewModel.user.firstName.prefix(1)))
-                            .foregroundColor(.white)
-                            .font(.system(size: 30, weight: .bold))
-                            .frame(width: 30, height: 30)
-                            .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
-                            .clipShape(Circle())
-                        Text("\(userViewModel.user.firstName) \(userViewModel.user.lastName)")
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "x.circle.fill")
-                                .resizable()
-                                .frame(width: 25, height: 25)
-                                .foregroundColor(.secondary)
+                    Button(action: {
+                       changeName = true
+                    }) {
+                        HStack {
+                            Text(String(userViewModel.user.firstName.prefix(1)))
+                                .foregroundColor(.white)
+                                .font(.system(size: 30, weight: .bold))
+                                .frame(width: 30, height: 30)
+                                .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                .clipShape(Circle())
+                            Text("\(userViewModel.user.firstName) \(userViewModel.user.lastName)")
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                self.presentationMode.wrappedValue.dismiss()
+                            }) {
+                                Image(systemName: "x.circle.fill")
+                                    .resizable()
+                                    .frame(width: 25, height: 25)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                     .padding([.top, .horizontal], 20)
                 }
-                .sheet(isPresented: $TEST) {
+                .sheet(isPresented: $changeName) {
+                  EditProfileView()
+                }
+                
+                .sheet(isPresented: $showSettings) {
                     SettingsView()
                 }
                 
                 Divider()
                 Spacer()
                 Button(action: {
-                    TEST = true
+                    showSettings = true
                 }) {
                     HStack {
                         Spacer()

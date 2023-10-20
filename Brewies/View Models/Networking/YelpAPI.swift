@@ -6,21 +6,23 @@
 //
 import Foundation
 import Alamofire
+import Combine
 
 class YelpAPI : ObservableObject {
-    private let apiKey = Secrets.yelpApiKey
-    var favoriteCoffeeShops: [CoffeeShop] = []
     @Published var yelpParam = YelpSearchParams() { didSet { updateParams() } }
     
-    init(yelpParams: YelpSearchParams) {
-        self.yelpParam = yelpParams
-    }
-    
+    var favoriteCoffeeShops: [CoffeeShop] = []
+    var cancellables: Set<AnyCancellable> = []
     var radiusInMeters: Int = 5000
     var businessType: String = "coffee shop"
     var sortBy: String = "distance"
     var price: [String] = []
     var priceForAPI: [Int] = []
+     
+    init(yelpParams: YelpSearchParams) {
+        self.yelpParam = yelpParams
+    }
+    
     
     private func updateParams() {
         radiusInMeters = yelpParam.radiusInMeters
@@ -59,7 +61,8 @@ class YelpAPI : ObservableObject {
         "Paul Bassett", "Bo's Coffee", "Zarraffas Coffee", "Blue Bottle Coffee", "Philz Coffee",
         "Hudsons Coffee", "Java House", "Vida e Caffè", "Blenz Coffee", "Dôme", "Coffee#1",
         "Figaro Coffee", "Cafe Barbera", "AMT Coffee", "Ya Kun Kaya Toast", "Drunkin'", "Krispy Kreme Doughnuts"
-        ,"Joffrey’s Coffee & Tea Company", "Mega Play", "RaceTrac", "Speedway", "Gas station", "IHOP", "Sheetz", "Ciro's Pizza", "Waffle House","Peet's Coffee"
+        ,"Joffrey’s Coffee & Tea Company", "Mega Play", "RaceTrac", "Speedway", "Gas station", "IHOP", "Sheetz", "Ciro's Pizza", "Waffle House",
+        "Peet's Coffee", "Starbuck's"
     ]
     
     private lazy var undesiredCatagories : Set<String> = [
@@ -69,19 +72,20 @@ class YelpAPI : ObservableObject {
         "irish_pubs", "sandwiches","tradamerican",
         "italian","desserts","vapeshops",
         "salad","newamerican","breakfast_brunch","icecream",
-        "grocery","intlgrocery"
+        "grocery","intlgrocery","Food Trucks", "Indian", "Cannabis Dispensaries", "Cannabis Clinics", "candy store"
     ]
-    
     private lazy var desiredCatagories : Set<String> = [
         "brewpubs", "breweries"
-        ]
+    ]
     
     func fetchIndependentCoffeeShops (
+        apiKey : String,
         latitude: Double,
         longitude: Double,
         pricing: [Int]? = nil,
         completion: @escaping ([CoffeeShop]) -> Void
     ) {
+        
         let url = "https://api.yelp.com/v3/businesses/search"
         var parameters: [String: Any] = [
             "term": yelpParam.businessType,
@@ -98,7 +102,7 @@ class YelpAPI : ObservableObject {
         }
         
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(apiKey)"
+            "Authorization": "Bearer \(String(describing: apiKey))"
         ]
         
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
@@ -142,10 +146,10 @@ class YelpAPI : ObservableObject {
         return coffeeShops
     }
     
-    func fetchCoffeeShopDetails(id: String, completion: @escaping (YelpBusiness) -> Void) {
+    func fetchCoffeeShopDetails(id: String, apiKey: String, completion: @escaping (YelpBusiness) -> Void) {
         let url = "https://api.yelp.com/v3/businesses/\(id)"
         let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(apiKey)"
+            "Authorization": "Bearer \(String(describing: apiKey))"
         ]
         
         AF.request(url, headers: headers).responseDecodable(of: YelpBusiness.self) { response in

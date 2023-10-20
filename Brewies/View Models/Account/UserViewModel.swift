@@ -119,4 +119,23 @@ class UserViewModel: ObservableObject {
             // Persist the user's favorites to your storage
         }
     }
+    
+    func saveStreakData(streakCount: Int, lastWatchedDate: Date?) {
+          guard user.isLoggedIn else { return }
+          
+          let userID = user.userID
+          UserDefaults.standard.set(streakCount, forKey: "UserStreakCount_\(userID)")
+          if let lastWatchedDate = lastWatchedDate {
+              UserDefaults.standard.set(lastWatchedDate, forKey: "UserLastWatchedDate_\(userID)")
+          }
+      }
+      
+      func loadStreakData() -> (streakCount: Int, lastWatchedDate: Date?) {
+          guard user.isLoggedIn else { return (0, nil) }
+          
+          let userID = user.userID
+          let streakCount = UserDefaults.standard.integer(forKey: "UserStreakCount_\(userID)")
+          let lastWatchedDate = UserDefaults.standard.object(forKey: "UserLastWatchedDate_\(userID)") as? Date
+          return (streakCount, lastWatchedDate)
+      }
 }

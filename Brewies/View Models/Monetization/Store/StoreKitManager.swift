@@ -60,7 +60,7 @@ class StoreKitManager: ObservableObject {
             productDict = [:]
         }
         
-    
+        
         //Start a transaction listener as close to the app launch as possible so you don't miss any transaction
         updateListenerTask = listenForTransactions()
         
@@ -68,7 +68,7 @@ class StoreKitManager: ObservableObject {
         Task {
             await requestProducts()
             
-    
+            
             
             //deliver the products that the customer purchased
             await updateCustomerProductStatus()
@@ -98,41 +98,32 @@ class StoreKitManager: ObservableObject {
     @Sendable func getCreditsForSubscription(_ productId: String) {
         let defaults = UserDefaults.standard
         
-        // Retrieve the current subscription ID
-        let currentSubscriptionID = defaults.string(forKey: "CurrentSubscriptionID") ?? ""
-        
-        // Check if user has already received credits for this purchase
-        if defaults.bool(forKey: productId) && productId != creditsProductId {
-            print("User has already received credits for this purchase")
-            return
-        }
-        
-        // Determine if this is an upgrade
-        let isUpgrade = currentSubscriptionID != "" && currentSubscriptionID != productId
         
         switch productId {
         case monthlyID:
             userViewModel.addCredits(25)
-            if !isUpgrade {
-                CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
-            }
+            
+            CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+            
+            
             break
         case semiYearlyID:
             userViewModel.addCredits(40)
-            if !isUpgrade {
-                CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
-            }
+            
+            CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+            
             break
         case yearlyID:
             userViewModel.addCredits(50)
-            if !isUpgrade {
-                CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
-            }
+            
+            CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+            
             break
         case creditsProductId:
             userViewModel.addCredits(5)
             break
         default:
+            
             break
         }
         
@@ -141,8 +132,13 @@ class StoreKitManager: ObservableObject {
         
         // Update the current subscription ID
         defaults.set(productId, forKey: "CurrentSubscriptionID")
+        if userViewModel.user.isLoggedIn {
+            userViewModel.syncCredits(accountStatus: "signOut")
+        } else {
+            userViewModel.syncCredits(accountStatus: "login")
+        }
     }
-
+    
     
     
     
@@ -317,7 +313,7 @@ class StoreKitManager: ObservableObject {
         // Update the subscription status in UserDefaults
         defaults.set(newIsSubscribed, forKey: "isSubscribed")
     }
-
+    
     
     //check if product has already been purchased
     func isPurchased(_ product: Product) async throws -> Bool {

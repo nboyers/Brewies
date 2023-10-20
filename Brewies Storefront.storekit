@@ -1,5 +1,5 @@
 {
-  "identifier" : "6903392F",
+  "identifier" : "84C28674",
   "nonRenewingSubscriptions" : [
 
   ],
@@ -40,20 +40,70 @@
       "internalID" : "6450880828",
       "localizations" : [
         {
-          "description" : "Removes the ads from view",
-          "displayName" : "Remove Ads",
+          "description" : "Removes the banner ads from view",
+          "displayName" : "Remove Banner Ads",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.nobosoftware.removeAds",
-      "referenceName" : "Remove Ads",
+      "referenceName" : "Remove Banner Ads",
       "type" : "NonConsumable"
     }
   ],
   "settings" : {
     "_applicationInternalID" : "6450864433",
     "_developerTeamID" : "JCL982F3T2",
-    "_lastSynchronizedDate" : 715190712.89706504
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 718819038.18377304,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
   },
   "subscriptionGroups" : [
     {
@@ -103,7 +153,7 @@
           "localizations" : [
             {
               "description" : "(6 months at $3.25/mo. Save 20%)",
-              "displayName" : "Biannual Subscription",
+              "displayName" : "Biannual Subscription ",
               "locale" : "en_US"
             }
           ],
@@ -142,7 +192,7 @@
     }
   ],
   "version" : {
-    "major" : 2,
+    "major" : 3,
     "minor" : 0
   }
 }

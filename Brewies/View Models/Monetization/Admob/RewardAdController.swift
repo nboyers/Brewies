@@ -5,11 +5,13 @@
 //  Created by Noah Boyers on 6/9/23.
 //
 
+
 import Foundation
 import GoogleMobileAds
 import GoogleMobileAdsTarget
 import AppTrackingTransparency
 import AdSupport
+import UIKit
 
 class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     
@@ -24,10 +26,10 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
         }
     }
     
+
     func loadRewardedAd() {
         let request = GADRequest()
-        
-        GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD, //FIXME: Change this to the live version once ready to ship
+        GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY,
                            request: request,
                            completionHandler: { [self] ad, error in
             if error != nil {
@@ -48,21 +50,16 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
             loadRewardedAd()
         }
     }
-
-
     
+    // MARK: - GADFullScreenContentDelegate
     
-    //// Tells the delegate that the ad failed to present full screen content.
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
         loadRewardedAd()  // Reload a new ad
     }
     
-    
-    /// Tells the delegate that the ad will present full screen content.
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
     }
     
-    /// Tells the delegate that the ad dismissed full screen content.
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         onAdDidDismissFullScreenContent?()
     }

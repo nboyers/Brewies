@@ -23,7 +23,7 @@ class ContentViewModel: ObservableObject {
 
     @ObservedObject var userViewModel = UserViewModel.shared
     @ObservedObject var locationManager = LocationManager()
-    
+    @ObservedObject var apiKeysViewModel = APIKeysViewModel.shared
     
     private var rewardAdController = RewardAdController()
     var yelpParams: YelpSearchParams
@@ -48,39 +48,34 @@ class ContentViewModel: ObservableObject {
             return
         }
         let yelpAPI = YelpAPI(yelpParams: yelpParams)
-    
-        //This is where the app is not extendin the
-        if userViewModel.user.isSubscribed {
-            if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request
-                yelpAPI.fetchIndependentCoffeeShops(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
-                    deductUserCredit() // If they make a request, they get deducted
-                    if coffeeShops.isEmpty {
-                        self.showNoCoffeeShopsAlert = true
-                    } else {
-                        self.coffeeShops = coffeeShops
-                        selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
-                        showBrewPreview = true
+        
+        apiKeysViewModel.fetchAPIKeys { [self] API in
+            //This is where the app is not extendin the
+            if userViewModel.user.isSubscribed {
+                if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request
+                    yelpAPI.fetchIndependentCoffeeShops(apiKey: apiKeysViewModel.apiKeys?.YELP_API ?? "", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
+                        deductUserCredit() // If they make a request, they get deducted
+                        if coffeeShops.isEmpty {
+                            self.showNoCoffeeShopsAlert = true
+                        } else {
+                            self.coffeeShops = coffeeShops
+                            selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
+                            showBrewPreview = true
+                        }
                     }
+                    return
                 }
-                return
             }
             
-//            if let cachedCoffeeShops = UserCache.shared.getCachedCoffeeShops(for: centerCoordinate, radius: selectedRadius) {
-//                self.coffeeShops = cachedCoffeeShops
-//                self.selectedCoffeeShop = cachedCoffeeShops.first // Set selectedCoffeeShop to first one
-//                showBrewPreview = true
-//                return
-//            }
-        }
-        
-        yelpAPI.fetchIndependentCoffeeShops(latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
-            deductUserCredit() // If they make a request, they get deducted
-            if coffeeShops.isEmpty {
-                self.showNoCoffeeShopsAlert = true
-            } else {
-                self.coffeeShops = coffeeShops
-                selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
-                showBrewPreview = true
+            yelpAPI.fetchIndependentCoffeeShops(apiKey: API?.YELP_API ?? "KEYLESS" , latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
+                deductUserCredit() // If they make a request, they get deducted
+                if coffeeShops.isEmpty {
+                    self.showNoCoffeeShopsAlert = true
+                } else {
+                    self.coffeeShops = coffeeShops
+                    self.selectedCoffeeShop = coffeeShops.first
+                    self.showBrewPreview = true
+                }
             }
         }
     }

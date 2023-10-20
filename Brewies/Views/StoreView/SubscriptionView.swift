@@ -53,6 +53,7 @@ struct SubscriptionView: View {
                 
                 Section() {
                     ForEach(storeVM.subscriptions) { product in
+                        
                         Button(action: {
                             Task {
                                 await buy(product: product)
@@ -61,7 +62,6 @@ struct SubscriptionView: View {
                             HStack {
                                 Text(product.displayName)
                                     .padding()
-                                
                                 // Checkmark if this product has been purchased
                                 if product == purchasedProduct {
                                     Spacer()
@@ -82,7 +82,13 @@ struct SubscriptionView: View {
             }  .onAppear(perform: setup)
         } else {
             VStack {
-                Text("Please sign in to view.")
+                Text("Sign in to Subscribe")
+                    .font(.largeTitle)  // Using a larger font size for emphasis
+                    .fontWeight(.semibold)  // Adding some weight to the font for better readability
+                    .foregroundColor(Color.primary)  // Using the primary color which adapts to light/dark mode
+                    .padding()  // Adding some padding around the text for better spacing
+                    .multilineTextAlignment(.center)  // Center-aligning the text
+                
                 SignInWithAppleButton(action: {
                     signInCoordinator.startSignInWithAppleFlow()
                 }, label: "Sign in with Apple")
@@ -91,12 +97,12 @@ struct SubscriptionView: View {
             }
         }
     }
-
+    
     func setup() {
-          Task {
-              await storeVM.updateCustomerProductStatus()
-          }
-      }
+        Task {
+            await storeVM.updateCustomerProductStatus()
+        }
+    }
     
     func buy(product: Product) async {
         do {
