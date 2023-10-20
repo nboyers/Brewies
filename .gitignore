@@ -8,6 +8,9 @@ GoogleService-Info.plist
 
 Config.xcconfig
 
+*.storekit
+
+*.plist
 
 ### macOS ###
 # General
