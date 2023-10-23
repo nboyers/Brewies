@@ -53,53 +53,7 @@ struct StreakTrackerView: View {
         formatter.timeZone = TimeZone.current
         return formatter.string(from: nextCheckInDate ?? Date())
     }
-    
-    
-    //    var overlayView: some View {
-    ////        if showAdAlert {
-    ////            CustomAlertView(
-    ////                title: "Watch an Ad",
-    ////                message: "Watch the ad to increase your streak count",
-    ////                primaryButtonTitle: "Watch Ad",
-    ////                primaryAction: {
-    ////                    showAd()
-    ////                    showAdAlert = false
-    ////                },
-    ////                dismissAction: {
-    ////                    showAdAlert = false
-    ////                }
-    ////            )
-    ////        } else if showLoginAlert {
-    ////            CustomAlertView(
-    ////                title: "Sign In Required",
-    ////                message: "Please sign in to continue",
-    ////                primaryButtonTitle: "Sign In",
-    ////                primaryAction: {
-    ////                    // Provide action to navigate to sign in screen
-    ////                    showLoginAlert = false
-    ////                },
-    ////                dismissAction: {
-    ////                    showLoginAlert = false
-    ////                }
-    ////            )
-    ////        } else if showTimeLeftAlert {
-    ////            CustomAlertView(
-    ////                title: "Not Yet",
-    ////                message: "You can re-check in at \(timeLeft())",
-    ////                dismissAction: {
-    ////                    showTimeLeftAlert = false
-    ////                }
-    ////            )
-    ////        } else {
-    ////            CustomAlertView(
-    ////                title: "Mr. Dev Man Broke something",
-    ////                message: "Existance is pain",
-    ////                dismissAction: {
-    ////                    showTimeLeftAlert = false
-    ////                }
-    ////            )
-    ////        }
-    //    }
+
     
     private func shouldAllowAd() -> String {
         // User is not logged in
