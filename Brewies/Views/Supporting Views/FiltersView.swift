@@ -297,19 +297,19 @@ struct FiltersView: View {
                     CustomAlertView(
                         title: "Subscription Required",
                         message: "You need to be subscribed to use the filters view.",
-                        goToStoreAction: {
+                        primaryButtonTitle: "Go to Store",
+                        primaryAction: {
                             showAlert = true
                             sharedAlertVM.currentAlertType = nil
                             sharedAlertVM.showCustomAlert = false
-                            
                         },
-                        watchAdAction: nil,  // No action for "Watch Ad", so the button will not be displayed
                         dismissAction: {
                             // Add your action for the dismiss button here
                             sharedAlertVM.currentAlertType = nil
                             sharedAlertVM.showCustomAlert = false
                         }
                     )
+
                     
                     .frame(width: 300, height: 200)  // Adjust the frame as needed
                     .background(VisualEffectBlur(blurStyle: .systemMaterial))  // Optional: Add a blur effect

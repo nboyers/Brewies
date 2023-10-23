@@ -10,8 +10,10 @@ import SwiftUI
 struct CustomAlertView: View {
     var title: String
     var message: String
-    var goToStoreAction: (() -> Void)?
-    var watchAdAction: (() -> Void)?
+    var primaryButtonTitle: String? // New parameter for the primary button title
+    var primaryAction: (() -> Void)? // Renamed from `goToStoreAction`
+    var secondaryButtonTitle: String? // New parameter for the primary button title
+    var secondaryAction: (() -> Void)?
     var dismissAction: (() -> Void)?
     
     var body: some View {
@@ -37,17 +39,10 @@ struct CustomAlertView: View {
             
             HStack {
                 Spacer()
-                if let goToStoreAction = goToStoreAction {
-                    Button(action: goToStoreAction) {
-                        Text("Go to Store")
-                            .foregroundColor(.blue)
-                    }
-                    Spacer()
-                }
-                
-                if let watchAdAction = watchAdAction {
-                    Button(action: watchAdAction) {
-                        Text("Watch Ad")
+                if let primaryAction = primaryAction,
+                   let primaryButtonTitle = primaryButtonTitle { // Check if both action and title are provided
+                    Button(action: primaryAction) {
+                        Text(primaryButtonTitle)
                             .foregroundColor(.blue)
                     }
                     Spacer()
@@ -63,14 +58,6 @@ struct CustomAlertView: View {
 }
 
 
-struct CustomAlertView_Previews: PreviewProvider {
-    static var previews: some View {
-        CustomAlertView(
-            title: "Test",
-            message: "You have some error",
-            goToStoreAction: {},
-            watchAdAction: {},
-            dismissAction: {}
-        )
-    }
+#Preview {
+    CustomAlertView(title: "TEST", message: "TEST", primaryButtonTitle: "Primary Button", primaryAction: nil, secondaryButtonTitle: "Secondary Button")
 }

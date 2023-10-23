@@ -15,7 +15,7 @@ import AuthenticationServices
 struct ContentView: View {
     @ObservedObject var storeKit = StoreKitManager()
     @ObservedObject var locationManager = LocationManager()
-    
+
     private var rewardAd = RewardAdController()
     let signInCoordinator = SignInWithAppleCoordinator()
     
@@ -47,11 +47,7 @@ struct ContentView: View {
     @State private var searchQuery: String = ""
     @State private var isSearching = false
     
-    
-    
-    
-    
-    
+
     @FocusState var isInputActive: Bool
     
     let DISTANCE = CLLocationDistance(2500)
@@ -76,6 +72,7 @@ struct ContentView: View {
                         searchQuery: $searchQuery,
                         shouldSearchInArea: $shouldSearchInArea
                     )
+
                     // 2. User Location Button
                     if showUserLocationButton {
                         GeometryReader { geo in
@@ -267,7 +264,6 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
-                    
                 }
                 
                 GeometryReader { geo in
@@ -327,13 +323,15 @@ struct ContentView: View {
                     CustomAlertView(
                         title: alertType == .maxFavoritesReached ? "Maximum Favorites Reached" : "Insufficient Credits",
                         message: alertType == .maxFavoritesReached ? "Watch an ad to unlock more favorite slots or go to the store." : "Watch an ad or click the credits to buy more from the store.",
-                        goToStoreAction:  {
-                            // Your action for going to the store
+                        primaryButtonTitle: alertType == .maxFavoritesReached ? "Go to Store" : "Buy Credits",
+                        primaryAction: {
+                            // Your action for going to the store or buying credits
                             activeSheet = .storefront
                             sharedAlertVM.currentAlertType = nil
                             sharedAlertVM.showCustomAlert = false
                         },
-                        watchAdAction: {
+                        secondaryButtonTitle: "Watch Ad",
+                        secondaryAction: {
                             self.contentVM.handleRewardAd(reward: alertType == .maxFavoritesReached ? "favorites" : "credits")
                             // Your action for watching an ad
                             sharedAlertVM.currentAlertType = nil
@@ -344,7 +342,51 @@ struct ContentView: View {
                             sharedAlertVM.showCustomAlert = false
                         }
                     )
+                    if sharedAlertVM.showAdAlert {
+                        CustomAlertView(
+                            title: "Watch an Ad",
+                            message: "Watch the ad to increase your streak count",
+                            primaryButtonTitle: "Watch Ad",
+                            primaryAction: {
+//                                showAd()
+                                sharedAlertVM.showAdAlert = false
+                            },
+                            dismissAction: {
+                                sharedAlertVM.showAdAlert = false
+                            }
+                        )
+                    } else if sharedAlertVM.showLoginAlert {
+                        CustomAlertView(
+                            title: "Sign In Required",
+                            message: "Please sign in to continue",
+                            primaryButtonTitle: "Sign In",
+                            primaryAction: {
+                                // Provide action to navigate to sign in screen
+                                sharedAlertVM.showLoginAlert = false
+                            },
+                            dismissAction: {
+                                sharedAlertVM.showLoginAlert = false
+                            }
+                        )
+                    } else if sharedAlertVM.showTimeLeftAlert {
+                        CustomAlertView(
+                            title: "Not Yet",
+                            message: "You can re-check in at \(34)",
+                            dismissAction: {
+                                sharedAlertVM.showTimeLeftAlert = false
+                            }
+                        )
+                    } else {
+                        CustomAlertView(
+                            title: "Mr. Dev Man Broke something",
+                            message: "Existance is pain",
+                            dismissAction: {
+                                sharedAlertVM.showTimeLeftAlert = false
+                            }
+                        )
+                    }
                 }
+                
             }
             //            Text("Selected Coffee Shop before Sheet Presentation: \(selectedCoffeeShop?.name ?? "None")")
             //MARK: User Profile
