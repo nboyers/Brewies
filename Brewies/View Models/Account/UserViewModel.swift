@@ -36,7 +36,7 @@ class UserViewModel: ObservableObject {
         let streakCount = UserDefaults.standard.integer(forKey: UserKeys.userStreakCount)
         let streakViewedDate = UserDefaults.standard.object(forKey: UserKeys.userStreakContentViewed) as? Date
         
-        user = User(isLoggedIn: isLoggedIn, userID: userID, firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: credits, streakCount: streakCount, streakViewedDate: streakViewedDate)
+        user = User(isLoggedIn: isLoggedIn, userID: userID, firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: credits, hasClaimedWeeklyReward: false, streakCount: streakCount, streakViewedDate: streakViewedDate)
         
         loadUserDetails()
     }
@@ -136,17 +136,12 @@ class UserViewModel: ObservableObject {
         user.streakCount = newStreakCount
         user.streakViewedDate = lastWatchedDate
         
-        user.credits += 5
-        let key = user.isLoggedIn ? UserKeys.userCredits(user.userID) : UserKeys.userCredits("Guest")
-        UserDefaults.standard.set(user.credits, forKey: key)
-        
         UserDefaults.standard.set(user.streakCount, forKey: UserKeys.userStreakCount)
         UserDefaults.standard.set(user.streakViewedDate, forKey: UserKeys.userStreakContentViewed)
     }
     
     func timeLeft() -> String {
         guard let lastDate = user.streakViewedDate else {
-            print("DEBUG: lastDate is nil")
             // You could return a default value or handle the error in some way
             return "No date available"
         }
@@ -155,7 +150,6 @@ class UserViewModel: ObservableObject {
         let remainingHours = 24 - elapsedHours
 
         guard let nextCheckInDate = Calendar.current.date(byAdding: .hour, value: remainingHours, to: lastDate) else {
-            print("DEBUG: Unable to compute nextCheckInDate")
             return "Error computing next check-in time"
         }
 
@@ -168,12 +162,27 @@ class UserViewModel: ObservableObject {
         return formattedString
         
     }
-//    
-//    func loadStreakData() -> (streakCount: Int, lastWatchedDate: Date?) {
-//        let streakCount = user.streakCount
-//        let lastWatchedDate = user.streakViewedDate
-//        
-//        print("DEBUG: Load \(streakCount), \(String(describing: lastWatchedDate))")
-//        return (streakCount, lastWatchedDate)
-//    }
+    
+    //MARK: Reward checks for the Favorites slot and Discover credits
+    func isWeeklyRewardAvailable() -> Bool {
+        return user.streakCount % 7 == 0 && !user.hasClaimedWeeklyReward
+    }
+    
+    func claimDiscoverCreditsReward() {
+        addCredits(3)
+        user.hasClaimedWeeklyReward = true
+    }
+    
+    func claimFavoriteSlotsReward() {
+        CoffeeShopData.shared.addFavoriteSlots(2)
+        user.hasClaimedWeeklyReward = true
+    }
+    
+    func resetWeeklyRewardClaimStatus() {
+        if user.streakCount % 7 != 0 {
+            user.hasClaimedWeeklyReward = false
+        }
+    }
+    
+    
 }

@@ -20,4 +20,6 @@ enum CustomAlertType {
     case notLoggedIn
     case tooSoon
     case showInstructions
+    case streakReward
+    case showNotEnoughStreakAlert
 }

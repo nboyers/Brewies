@@ -50,6 +50,7 @@ struct ContentView: View {
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
+   
     
     @State private var currentStreakColor: Color = .cyan
     
@@ -86,13 +87,9 @@ struct ContentView: View {
     
     
     private func shouldAllowAd() -> String {
-        
-        print("DEBUG: shouldAllowAd() called, returning:")
-        
         if !userVM.user.isLoggedIn {
             return "No_Login"
         }
-        
         // Check if it's been 28 hours since the last check-in.
         guard let lastDate = userVM.user.streakViewedDate else {
             // It's the user's first time, or it hasn't been 28hrs
@@ -325,6 +322,8 @@ struct ContentView: View {
                         dismissButton: .default(Text("OK"))
                     )
                 }
+                
+       
                 .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
                     Alert(
                         title: Text("No Ads Available"),
@@ -383,7 +382,7 @@ struct ContentView: View {
                     }
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                     
-#warning("User has to sign out and then sign back in to fully 'save' their streaks")
+
                     Button(action: {
                         
                         switch shouldAllowAd() {
@@ -396,7 +395,6 @@ struct ContentView: View {
                             
                         case "Reward_User":  // User is logged in & over 24hrs since last checkin
                             sharedAlertVM.currentAlertType = .streakCount
-                            
                             
                         default: // Show them how to use the System
                             sharedAlertVM.currentAlertType = .showInstructions
@@ -430,17 +428,14 @@ struct ContentView: View {
                             primaryAction: {
                                 activeSheet = .storefront
                                 sharedAlertVM.currentAlertType = nil
-                                
                             },
                             secondaryButtonTitle: "Watch Ad",
                             secondaryAction: {
                                 self.contentVM.handleRewardAd(reward: "favorites")
                                 sharedAlertVM.currentAlertType = nil
-                                
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
-                                
                             })
                         
                     case .insufficientCredits:
@@ -451,17 +446,14 @@ struct ContentView: View {
                             primaryAction: {
                                 activeSheet = .storefront
                                 sharedAlertVM.currentAlertType = nil
-                                
                             },
                             secondaryButtonTitle: "Watch Ad",
                             secondaryAction: {
                                 self.contentVM.handleRewardAd(reward: "credits")
                                 sharedAlertVM.currentAlertType = nil
-                                
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
-                                
                             })
                         
                     case .streakCount:
@@ -472,17 +464,19 @@ struct ContentView: View {
                             primaryAction: {
                                 self.contentVM.handleRewardAd(reward: "check_in")
                                 sharedAlertVM.currentAlertType = nil
-                                
                             },
                             secondaryButtonTitle: "Reward",
                             secondaryAction: {
-                                //TODO: Create path to reward center
-//                                let DEBUG =  userVM.timeLeft()
-//                                print("DEBUG \(DEBUG)")
+                                if userVM.isWeeklyRewardAvailable() {
+                                    sharedAlertVM.currentAlertType = .streakReward
+                                } else {
+                                    sharedAlertVM.currentAlertType = .showNotEnoughStreakAlert
+                                }
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
                             })
+                        
                     case .notLoggedIn:
                         CustomAlertView(
                             title: "Sign In Required",
@@ -491,7 +485,6 @@ struct ContentView: View {
                             primaryAction: {
                                 signInCoordinator.startSignInWithAppleFlow()
                                 sharedAlertVM.currentAlertType = nil
-                                
                             },
                             secondaryButtonTitle: "Explain",
                             secondaryAction: {
@@ -500,15 +493,18 @@ struct ContentView: View {
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
                             })
-#warning("Create path to reward center")
+
                     case .tooSoon:
                         CustomAlertView(
                             title: "Not Yet",
                             message: "You can re-check in at \(userVM.timeLeft())",
                             primaryButtonTitle: "Reward",
                             primaryAction: {
-                                //TODO: Create path to reward center
-//                                let DEBUG =  timeLeft()
+                                if userVM.isWeeklyRewardAvailable() {
+                                    sharedAlertVM.currentAlertType = .streakReward
+                                } else {
+                                    sharedAlertVM.currentAlertType = .showNotEnoughStreakAlert
+                                }
                             },
                             secondaryButtonTitle: "Explain",
                             secondaryAction: {
@@ -516,8 +512,40 @@ struct ContentView: View {
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
-                            })
+                            }
+                        )
                         
+                    case .streakReward:
+                        CustomAlertView(
+                            title: "Choose your Reward!",
+                            message: "Thank you for using Brewies",
+                            primaryButtonTitle: "Discover \nCredits",
+                            primaryAction: {
+                                userVM.claimDiscoverCreditsReward()
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            secondaryButtonTitle: "Favorite \nSlot",
+                            secondaryAction: {
+                                userVM.claimFavoriteSlotsReward()
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = .streakReward // Makes sure user cannot be scammed 
+                            }
+                        )
+                    case .showNotEnoughStreakAlert:
+                        CustomAlertView(
+                            title: "Not Enough Streak",
+                            message: "You don't have enough streak amount to claim a reward. Keep checking in daily to increase your streak count!",
+                            primaryButtonTitle: "OK",
+                            primaryAction: {
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                            }
+                        )
+
                     default:
                         CustomAlertView(
                             title: "Mr. Dev Man Broke something",
@@ -533,7 +561,8 @@ struct ContentView: View {
             .sheet(isPresented: $howInstructions) {
                 InstructionsView()
             }
-            
+  
+
             //MARK: User Profile
             .sheet(item: $activeSheet) { sheet in
                 
@@ -622,11 +651,11 @@ struct ContentView: View {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { (placemarks, error) in
             guard error == nil else {
-                print("Geocoding error: \(error!.localizedDescription)")
+             
                 return
             }
             guard let placemark = placemarks?.first, let location = placemark.location else {
-                print("No placemark found for address: \(address)")
+              
                 return
             }
             

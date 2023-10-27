@@ -19,6 +19,7 @@ struct User {
     var favorites: [CoffeeShop]
     var pastOrders: [Order]
     var credits: Int
+    var hasClaimedWeeklyReward: Bool
     var streakCount: Int
     var streakViewedDate: Date?
 }

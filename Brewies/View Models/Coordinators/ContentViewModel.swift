@@ -97,9 +97,11 @@ class ContentViewModel: ObservableObject {
                         CoffeeShopData.shared.addFavoriteSlots(1)
                         adsWatched = 0
                     }
+                    break
                     
                 case "check_in":
                     userViewModel.saveStreakData()
+                    break
                     
                 default:
                     break
