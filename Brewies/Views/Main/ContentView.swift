@@ -80,29 +80,7 @@ struct ContentView: View {
     }
     
     
-    
-    private func timeLeft() -> String {
-        let (_, lastWatchedDate) = userVM.loadStreakData()
-        
-        
-        guard let lastDate = lastWatchedDate else { return "ERROR!" }
-        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
-        let remainingHours = 24 - elapsedHours
-        
-        let nextCheckInDate = Calendar.current.date(byAdding: .hour, value: remainingHours, to: lastDate)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a, EEEE, MMM d"
-        formatter.timeZone = TimeZone.current
-        let formattedString = formatter.string(from: nextCheckInDate ?? Date())
-        print("DEBUG: elapsedHours = \(elapsedHours)")
-        print("DEBUG: remainingHours = \(remainingHours)")
-        print("DEBUG: nextCheckInDate = \(String(describing: nextCheckInDate))")
-        
-        
-        print("DEBUG: formattedString = \(formattedString)")
-        return formattedString
-        
-    }
+ 
     
     
     
@@ -356,9 +334,7 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
-                    let streakData = UserViewModel.shared.loadStreakData()
-                    userVM.user.streakCount = streakData.streakCount
-                    userVM.user.streakViewedDate = streakData.lastWatchedDate
+                
                 }
                 
                 
@@ -501,8 +477,8 @@ struct ContentView: View {
                             secondaryButtonTitle: "Reward",
                             secondaryAction: {
                                 //TODO: Create path to reward center
-                                let DEBUG =  timeLeft()
-                                print("DEBUG \(DEBUG)")
+//                                let DEBUG =  userVM.timeLeft()
+//                                print("DEBUG \(DEBUG)")
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
@@ -528,11 +504,11 @@ struct ContentView: View {
                     case .tooSoon:
                         CustomAlertView(
                             title: "Not Yet",
-                            message: "You can re-check in at \(timeLeft())",
+                            message: "You can re-check in at \(userVM.timeLeft())",
                             primaryButtonTitle: "Reward",
                             primaryAction: {
                                 //TODO: Create path to reward center
-                                let DEBUG =  timeLeft()
+//                                let DEBUG =  timeLeft()
                             },
                             secondaryButtonTitle: "Explain",
                             secondaryAction: {

@@ -15,11 +15,11 @@ struct UserKeys {
     static let isSubscribed = "isSubscribed"
     static let firstName = "UserFirstName"
     static let lastName = "UserLastName"
-    
+    static let userStreakCount = "UserStreakCount"
+    static let userStreakContentViewed = "UserStreakContentViewed"
+
     // Computed properties for user-specific keys
     static func userCredits(_ userID: String) -> String { "UserCredits_\(userID)" }
-    static func userStreakCount(_ userID: String) -> String { "UserStreakCount_\(userID)" }
-    static func userStreakContentViewed(_ userID: String) -> String { "UserStreakContentViewed_\(userID)" }
 }
 
 class UserViewModel: ObservableObject {
@@ -33,16 +33,14 @@ class UserViewModel: ObservableObject {
         let key = isLoggedIn ? UserKeys.userCredits(userID) : UserKeys.userCredits("Guest")
         let credits = UserDefaults.standard.integer(forKey: key)
         
-        let streakCountKey = UserKeys.userStreakCount(userID)
-        let streakViewedDateKey = UserKeys.userStreakContentViewed(userID)
-        let streakCount = UserDefaults.standard.integer(forKey: streakCountKey)
-        let streakViewedDate = UserDefaults.standard.object(forKey: streakViewedDateKey) as? Date
+        let streakCount = UserDefaults.standard.integer(forKey: UserKeys.userStreakCount)
+        let streakViewedDate = UserDefaults.standard.object(forKey: UserKeys.userStreakContentViewed) as? Date
         
         user = User(isLoggedIn: isLoggedIn, userID: userID, firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: credits, streakCount: streakCount, streakViewedDate: streakViewedDate)
         
         loadUserDetails()
     }
-
+    
     func saveUserLoginStatus() {
         UserDefaults.standard.set(true, forKey: UserKeys.isLoggedIn)
         UserDefaults.standard.set(user.userID, forKey: UserKeys.userID)
@@ -50,7 +48,7 @@ class UserViewModel: ObservableObject {
         UserDefaults.standard.set(user.firstName, forKey: UserKeys.firstName)
         UserDefaults.standard.set(user.lastName, forKey: UserKeys.lastName)
     }
-
+    
     func loadUserLoginStatus() -> Bool {
         return UserDefaults.standard.bool(forKey: UserKeys.isLoggedIn)
     }
@@ -62,7 +60,7 @@ class UserViewModel: ObservableObject {
         user.firstName = firstName
         user.lastName = lastName
     }
-
+    
     func signOut() {
         user.firstName = ""
         user.lastName = ""
@@ -70,26 +68,26 @@ class UserViewModel: ObservableObject {
         UserDefaults.standard.set(false, forKey: UserKeys.isLoggedIn)
         UserDefaults.standard.removeObject(forKey: UserKeys.userID)
     }
-
+    
     func syncCredits(accountStatus: String) {
         switch accountStatus {
         case "login":
             let guestCredits = UserDefaults.standard.integer(forKey: UserKeys.userCredits("Guest"))
             UserDefaults.standard.set(guestCredits, forKey: UserKeys.userCredits(user.userID))
             user.credits = guestCredits
-            UserDefaults.standard.set(user.streakCount, forKey: UserKeys.userStreakCount(user.userID))
-            UserDefaults.standard.set(user.streakViewedDate, forKey: UserKeys.userStreakContentViewed(user.userID))
+            
+            
         case "signOut":
             let userCredits = UserDefaults.standard.integer(forKey: UserKeys.userCredits(user.userID))
             UserDefaults.standard.set(userCredits, forKey: UserKeys.userCredits("Guest"))
             user.credits = userCredits
-            UserDefaults.standard.set(user.streakCount, forKey: UserKeys.userStreakCount(user.userID))
-            UserDefaults.standard.set(user.streakViewedDate, forKey: UserKeys.userStreakContentViewed(user.userID))
+            
+            
         default:
             break
         }
     }
-  
+    
     func addOrder(order: Order) {
         user.pastOrders.append(order)
     }
@@ -99,7 +97,7 @@ class UserViewModel: ObservableObject {
         let key = user.isLoggedIn ? UserKeys.userCredits(user.userID) : UserKeys.userCredits("Guest")
         UserDefaults.standard.set(user.credits, forKey: key)
     }
-
+    
     func subtractCredits(_ amount: Int) {
         user.credits -= amount
         let key = user.isLoggedIn ? UserKeys.userCredits(user.userID) : UserKeys.userCredits("Guest")
@@ -111,13 +109,13 @@ class UserViewModel: ObservableObject {
         user.isSubscribed = true
         UserDefaults.standard.set(true, forKey: UserKeys.isSubscribed)
     }
-
+    
     func unsubscribe() {
         // Unsubscription logic here...
         user.isSubscribed = false
         UserDefaults.standard.set(false, forKey: UserKeys.isSubscribed)
     }
-
+    
     func addToFavorites(_ coffeeShop: CoffeeShop) {
         user.favorites.append(coffeeShop)
         // Persist the user's favorites to your storage
@@ -134,15 +132,48 @@ class UserViewModel: ObservableObject {
         let lastWatchedDate = Date()
         let elapsedHours = user.streakViewedDate != nil ? Calendar.current.dateComponents([.hour], from: user.streakViewedDate!, to: lastWatchedDate).hour ?? 0 : 28
         let newStreakCount = (elapsedHours <= 28 && elapsedHours >= 24) ? user.streakCount + 1 : 0
-        UserDefaults.standard.set(newStreakCount, forKey: UserKeys.userStreakCount(user.userID))
-        UserDefaults.standard.set(lastWatchedDate, forKey: UserKeys.userStreakContentViewed(user.userID))
+        
         user.streakCount = newStreakCount
         user.streakViewedDate = lastWatchedDate
+        
+        user.credits += 5
+        let key = user.isLoggedIn ? UserKeys.userCredits(user.userID) : UserKeys.userCredits("Guest")
+        UserDefaults.standard.set(user.credits, forKey: key)
+        
+        UserDefaults.standard.set(user.streakCount, forKey: UserKeys.userStreakCount)
+        UserDefaults.standard.set(user.streakViewedDate, forKey: UserKeys.userStreakContentViewed)
     }
+    
+    func timeLeft() -> String {
+        guard let lastDate = user.streakViewedDate else {
+            print("DEBUG: lastDate is nil")
+            // You could return a default value or handle the error in some way
+            return "No date available"
+        }
 
-    func loadStreakData() -> (streakCount: Int, lastWatchedDate: Date?) {
-        let streakCount = UserDefaults.standard.integer(forKey: UserKeys.userStreakCount(user.userID))
-        let lastWatchedDate = UserDefaults.standard.object(forKey: UserKeys.userStreakContentViewed(user.userID)) as? Date
-        return (streakCount, lastWatchedDate)
+        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
+        let remainingHours = 24 - elapsedHours
+
+        guard let nextCheckInDate = Calendar.current.date(byAdding: .hour, value: remainingHours, to: lastDate) else {
+            print("DEBUG: Unable to compute nextCheckInDate")
+            return "Error computing next check-in time"
+        }
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a, EEEE, MMM d"
+        formatter.timeZone = TimeZone.current
+
+        let formattedString = formatter.string(from: nextCheckInDate)
+
+        return formattedString
+        
     }
+//    
+//    func loadStreakData() -> (streakCount: Int, lastWatchedDate: Date?) {
+//        let streakCount = user.streakCount
+//        let lastWatchedDate = user.streakViewedDate
+//        
+//        print("DEBUG: Load \(streakCount), \(String(describing: lastWatchedDate))")
+//        return (streakCount, lastWatchedDate)
+//    }
 }

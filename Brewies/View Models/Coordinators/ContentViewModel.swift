@@ -103,9 +103,7 @@ class ContentViewModel: ObservableObject {
                     
                 default:
                     break
-
                 }
-                    
             })
         } else {
             // If there is no root view controller available, show an alert
