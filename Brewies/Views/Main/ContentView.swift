@@ -36,7 +36,7 @@ struct ContentView: View {
     
     @State private var howInstructions = false
     @State private var swirlColors: (UIColor, UIColor)? = nil
-
+    
     @State private var mapView = MKMapView()
     @State private var showLocationAccessAlert = false
     @State private var centeredOnUser = false
@@ -52,7 +52,7 @@ struct ContentView: View {
     @State private var isSearching = false
     
     @State private var currentStreakColor: Color = .cyan
-
+    
     private func getRandomColor() -> UIColor {
         return UIColor(
             red: CGFloat.random(in: 0...1),
@@ -78,12 +78,12 @@ struct ContentView: View {
             self.swirlColors = (savedColors[0], savedColors[1])
         }
     }
-
+    
     
     
     private func timeLeft() -> String {
         let (_, lastWatchedDate) = userVM.loadStreakData()
-    
+        
         
         guard let lastDate = lastWatchedDate else { return "ERROR!" }
         let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
@@ -97,8 +97,8 @@ struct ContentView: View {
         print("DEBUG: elapsedHours = \(elapsedHours)")
         print("DEBUG: remainingHours = \(remainingHours)")
         print("DEBUG: nextCheckInDate = \(String(describing: nextCheckInDate))")
-       
-
+        
+        
         print("DEBUG: formattedString = \(formattedString)")
         return formattedString
         
@@ -108,9 +108,9 @@ struct ContentView: View {
     
     
     private func shouldAllowAd() -> String {
-
+        
         print("DEBUG: shouldAllowAd() called, returning:")
-
+        
         if !userVM.user.isLoggedIn {
             return "No_Login"
         }
@@ -360,7 +360,7 @@ struct ContentView: View {
                     userVM.user.streakCount = streakData.streakCount
                     userVM.user.streakViewedDate = streakData.lastWatchedDate
                 }
-
+                
                 
                 
                 GeometryReader { geo in
@@ -407,7 +407,7 @@ struct ContentView: View {
                     }
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                     
-                    
+#warning("User has to sign out and then sign back in to fully 'save' their streaks")
                     Button(action: {
                         
                         switch shouldAllowAd() {
@@ -428,7 +428,8 @@ struct ContentView: View {
                         }
                     }) {
                         Text("\(userVM.user.streakCount)")
-                            .font(.caption)
+                            .font(.callout)
+                            .bold()
                             .padding()
                             .background(Circle().fill(currentStreakColor))
                             .foregroundColor(.white)
@@ -501,7 +502,7 @@ struct ContentView: View {
                             secondaryAction: {
                                 //TODO: Create path to reward center
                                 let DEBUG =  timeLeft()
-                                 print("DEBUG \(DEBUG)")
+                                print("DEBUG \(DEBUG)")
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
@@ -531,8 +532,7 @@ struct ContentView: View {
                             primaryButtonTitle: "Reward",
                             primaryAction: {
                                 //TODO: Create path to reward center
-                               let DEBUG =  timeLeft()
-                                print("DEBUG \(DEBUG)")
+                                let DEBUG =  timeLeft()
                             },
                             secondaryButtonTitle: "Explain",
                             secondaryAction: {
