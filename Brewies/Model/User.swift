@@ -19,6 +19,8 @@ struct User {
     var favorites: [CoffeeShop]
     var pastOrders: [Order]
     var credits: Int
+    var streakCount: Int
+    var streakViewedDate: Date?
 }
 
 

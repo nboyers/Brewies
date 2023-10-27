@@ -301,12 +301,12 @@ struct FiltersView: View {
                         primaryAction: {
                             showAlert = true
                             sharedAlertVM.currentAlertType = nil
-                            sharedAlertVM.showCustomAlert = false
+                          
                         },
                         dismissAction: {
                             // Add your action for the dismiss button here
                             sharedAlertVM.currentAlertType = nil
-                            sharedAlertVM.showCustomAlert = false
+                          
                         }
                     )
 

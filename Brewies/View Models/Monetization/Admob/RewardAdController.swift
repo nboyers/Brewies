@@ -29,7 +29,7 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
 
     func loadRewardedAd() {
         let request = GADRequest()
-        GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY,
+        GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD_AD_KEY,
                            request: request,
                            completionHandler: { [self] ad, error in
             if error != nil {

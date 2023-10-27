@@ -15,7 +15,8 @@ import AuthenticationServices
 struct ContentView: View {
     @ObservedObject var storeKit = StoreKitManager()
     @ObservedObject var locationManager = LocationManager()
-
+    @StateObject var sharedAlertVM = SharedAlertViewModel()
+    
     private var rewardAd = RewardAdController()
     let signInCoordinator = SignInWithAppleCoordinator()
     
@@ -25,7 +26,7 @@ struct ContentView: View {
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var yelpParams: YelpSearchParams
     @EnvironmentObject var contentVM: ContentViewModel
-    @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
+    
     @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -33,6 +34,9 @@ struct ContentView: View {
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var activeSheet: ActiveSheet?
     
+    @State private var howInstructions = false
+    @State private var swirlColors: (UIColor, UIColor)? = nil
+
     @State private var mapView = MKMapView()
     @State private var showLocationAccessAlert = false
     @State private var centeredOnUser = false
@@ -47,11 +51,99 @@ struct ContentView: View {
     @State private var searchQuery: String = ""
     @State private var isSearching = false
     
+    @State private var currentStreakColor: Color = .cyan
 
+    private func getRandomColor() -> UIColor {
+        return UIColor(
+            red: CGFloat.random(in: 0...1),
+            green: CGFloat.random(in: 0...1),
+            blue: CGFloat.random(in: 0...1),
+            alpha: 1.0
+        )
+    }
+    
+    private func updateStreakColor() {
+        if userVM.user.streakCount % 7 == 0 && userVM.user.streakCount != 0 {
+            let randomColor1 = getRandomColor()
+            let randomColor2 = userVM.user.streakCount >= 365 ? getRandomColor() : randomColor1
+            // Save the colors
+            let colorsData = try? NSKeyedArchiver.archivedData(withRootObject: [randomColor1, randomColor2], requiringSecureCoding: false)
+            UserDefaults.standard.set(colorsData, forKey: "streakColors")
+        } else if userVM.user.streakCount == 0 {
+            currentStreakColor = .cyan
+            UserDefaults.standard.removeObject(forKey: "streakColors")
+        }    else if let colorsData = UserDefaults.standard.data(forKey: "streakColors"),
+                     let savedColors = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: colorsData) as? [UIColor],
+                     savedColors.count == 2 {
+            self.swirlColors = (savedColors[0], savedColors[1])
+        }
+    }
+
+    
+    
+    private func timeLeft() -> String {
+        let (_, lastWatchedDate) = userVM.loadStreakData()
+    
+        
+        guard let lastDate = lastWatchedDate else { return "ERROR!" }
+        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
+        let remainingHours = 24 - elapsedHours
+        
+        let nextCheckInDate = Calendar.current.date(byAdding: .hour, value: remainingHours, to: lastDate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a, EEEE, MMM d"
+        formatter.timeZone = TimeZone.current
+        let formattedString = formatter.string(from: nextCheckInDate ?? Date())
+        print("DEBUG: elapsedHours = \(elapsedHours)")
+        print("DEBUG: remainingHours = \(remainingHours)")
+        print("DEBUG: nextCheckInDate = \(String(describing: nextCheckInDate))")
+       
+
+        print("DEBUG: formattedString = \(formattedString)")
+        return formattedString
+        
+    }
+    
+    
+    
+    
+    private func shouldAllowAd() -> String {
+
+        print("DEBUG: shouldAllowAd() called, returning:")
+
+        if !userVM.user.isLoggedIn {
+            return "No_Login"
+        }
+        
+        // Check if it's been 28 hours since the last check-in.
+        guard let lastDate = userVM.user.streakViewedDate else {
+            // It's the user's first time, or it hasn't been 28hrs
+            let hasCheckedInBefore = UserDefaults.standard.bool(forKey: "hasCheckedInBefore")
+            if hasCheckedInBefore {
+                return "Too_Soon"
+            } else {
+                // Set the flag to true for future reference
+                UserDefaults.standard.set(true, forKey: "hasCheckedInBefore")
+                return "Reward_User"
+            }
+        }
+        
+        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
+        
+        if elapsedHours <= 28 && elapsedHours >= 24 && userVM.user.isLoggedIn {
+            // It's been less than 28 hours, prompt to watch ad
+            return "Reward_User"
+        }
+        // It's been 24 hours or less, too soon to earn another streak point
+        return "Too_Soon"
+    }
+    
+    
+    
     @FocusState var isInputActive: Bool
     
     let DISTANCE = CLLocationDistance(2500)
-    
+    init() {}
     var body: some View {
         TabView {
             ZStack {
@@ -72,7 +164,7 @@ struct ContentView: View {
                         searchQuery: $searchQuery,
                         shouldSearchInArea: $shouldSearchInArea
                     )
-
+                    
                     // 2. User Location Button
                     if showUserLocationButton {
                         GeometryReader { geo in
@@ -264,7 +356,12 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
+                    let streakData = UserViewModel.shared.loadStreakData()
+                    userVM.user.streakCount = streakData.streakCount
+                    userVM.user.streakViewedDate = streakData.lastWatchedDate
                 }
+
+                
                 
                 GeometryReader { geo in
                     VStack {
@@ -311,84 +408,156 @@ struct ContentView: View {
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                     
                     
-                    StreakTrackerView()
-                        .offset(x: -geo.size.width / 20, y: -geo.size.height * 0.84)
+                    Button(action: {
+                        
+                        switch shouldAllowAd() {
+                        case "No_Login": // User is not logged in
+                            sharedAlertVM.currentAlertType = .notLoggedIn
+                            
+                        case "Too_Soon": // User comes before 24hrs
+                            sharedAlertVM.currentAlertType = .tooSoon
+                            
+                            
+                        case "Reward_User":  // User is logged in & over 24hrs since last checkin
+                            sharedAlertVM.currentAlertType = .streakCount
+                            
+                            
+                        default: // Show them how to use the System
+                            sharedAlertVM.currentAlertType = .showInstructions
+                            
+                        }
+                    }) {
+                        Text("\(userVM.user.streakCount)")
+                            .font(.caption)
+                            .padding()
+                            .background(Circle().fill(currentStreakColor))
+                            .foregroundColor(.white)
+                            .frame(width: 200, height: 200)
+                    }
+                    .offset(CGSize(width: geo.size.width*0.65, height: geo.size.height/65 - 20))
+                    
                     
                 }
                 
-                if let alertType = sharedAlertVM.currentAlertType {
+                if  sharedAlertVM.currentAlertType != nil {
                     Color.black.opacity(0.4)
                         .edgesIgnoringSafeArea(.all)
                     
-                    CustomAlertView(
-                        title: alertType == .maxFavoritesReached ? "Maximum Favorites Reached" : "Insufficient Credits",
-                        message: alertType == .maxFavoritesReached ? "Watch an ad to unlock more favorite slots or go to the store." : "Watch an ad or click the credits to buy more from the store.",
-                        primaryButtonTitle: alertType == .maxFavoritesReached ? "Go to Store" : "Buy Credits",
-                        primaryAction: {
-                            // Your action for going to the store or buying credits
-                            activeSheet = .storefront
-                            sharedAlertVM.currentAlertType = nil
-                            sharedAlertVM.showCustomAlert = false
-                        },
-                        secondaryButtonTitle: "Watch Ad",
-                        secondaryAction: {
-                            self.contentVM.handleRewardAd(reward: alertType == .maxFavoritesReached ? "favorites" : "credits")
-                            // Your action for watching an ad
-                            sharedAlertVM.currentAlertType = nil
-                            sharedAlertVM.showCustomAlert = false
-                        },
-                        dismissAction: {
-                            sharedAlertVM.currentAlertType = nil
-                            sharedAlertVM.showCustomAlert = false
-                        }
-                    )
-                    if sharedAlertVM.showAdAlert {
+                    switch sharedAlertVM.currentAlertType {
+                        
+                    case .maxFavoritesReached:
+                        CustomAlertView(
+                            title: "Maximum Favorites Reached",
+                            message: "Watch an ad to unlock more favorite slots or go to the store.",
+                            primaryButtonTitle: "Go to Store",
+                            primaryAction: {
+                                activeSheet = .storefront
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            },
+                            secondaryButtonTitle: "Watch Ad",
+                            secondaryAction: {
+                                self.contentVM.handleRewardAd(reward: "favorites")
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            })
+                        
+                    case .insufficientCredits:
+                        CustomAlertView(
+                            title: "Insufficient Credits",
+                            message: "Watch an ad to get a discover credit or go to the store.",
+                            primaryButtonTitle: "Go to Store",
+                            primaryAction: {
+                                activeSheet = .storefront
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            },
+                            secondaryButtonTitle: "Watch Ad",
+                            secondaryAction: {
+                                self.contentVM.handleRewardAd(reward: "credits")
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            })
+                        
+                    case .streakCount:
                         CustomAlertView(
                             title: "Watch an Ad",
                             message: "Watch the ad to increase your streak count",
                             primaryButtonTitle: "Watch Ad",
                             primaryAction: {
-//                                showAd()
-                                sharedAlertVM.showAdAlert = false
+                                self.contentVM.handleRewardAd(reward: "check_in")
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            },
+                            secondaryButtonTitle: "Reward",
+                            secondaryAction: {
+                                //TODO: Create path to reward center
+                                let DEBUG =  timeLeft()
+                                 print("DEBUG \(DEBUG)")
                             },
                             dismissAction: {
-                                sharedAlertVM.showAdAlert = false
-                            }
-                        )
-                    } else if sharedAlertVM.showLoginAlert {
+                                sharedAlertVM.currentAlertType = nil
+                            })
+                    case .notLoggedIn:
                         CustomAlertView(
                             title: "Sign In Required",
-                            message: "Please sign in to continue",
+                            message: "Please sign in to use Daily Check In",
                             primaryButtonTitle: "Sign In",
                             primaryAction: {
-                                // Provide action to navigate to sign in screen
-                                sharedAlertVM.showLoginAlert = false
+                                signInCoordinator.startSignInWithAppleFlow()
+                                sharedAlertVM.currentAlertType = nil
+                                
+                            },
+                            secondaryButtonTitle: "Explain",
+                            secondaryAction: {
+                                howInstructions = true
                             },
                             dismissAction: {
-                                sharedAlertVM.showLoginAlert = false
-                            }
-                        )
-                    } else if sharedAlertVM.showTimeLeftAlert {
+                                sharedAlertVM.currentAlertType = nil
+                            })
+#warning("Create path to reward center")
+                    case .tooSoon:
                         CustomAlertView(
                             title: "Not Yet",
-                            message: "You can re-check in at \(34)",
+                            message: "You can re-check in at \(timeLeft())",
+                            primaryButtonTitle: "Reward",
+                            primaryAction: {
+                                //TODO: Create path to reward center
+                               let DEBUG =  timeLeft()
+                                print("DEBUG \(DEBUG)")
+                            },
+                            secondaryButtonTitle: "Explain",
+                            secondaryAction: {
+                                howInstructions = true
+                            },
                             dismissAction: {
-                                sharedAlertVM.showTimeLeftAlert = false
-                            }
-                        )
-                    } else {
+                                sharedAlertVM.currentAlertType = nil
+                            })
+                        
+                    default:
                         CustomAlertView(
                             title: "Mr. Dev Man Broke something",
-                            message: "Existance is pain",
+                            message: "Existence is pain",
                             dismissAction: {
-                                sharedAlertVM.showTimeLeftAlert = false
+                                sharedAlertVM.currentAlertType = nil
                             }
                         )
                     }
                 }
-                
             }
-            //            Text("Selected Coffee Shop before Sheet Presentation: \(selectedCoffeeShop?.name ?? "None")")
+            
+            .sheet(isPresented: $howInstructions) {
+                InstructionsView()
+            }
+            
             //MARK: User Profile
             .sheet(item: $activeSheet) { sheet in
                 

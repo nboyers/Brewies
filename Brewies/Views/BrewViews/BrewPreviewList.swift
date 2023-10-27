@@ -208,7 +208,7 @@ struct BrewPreview: View {
                 favoriteSlotsUsed += 1
             } else {
                 sharedAlertVM.currentAlertType = .maxFavoritesReached
-                sharedAlertVM.showCustomAlert = true
+//                sharedAlertVM.showCustomAlert = true
             }
         }
     }

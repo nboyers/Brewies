@@ -98,9 +98,12 @@ class ContentViewModel: ObservableObject {
                         adsWatched = 0
                     }
                     
-                    break
+                case "check_in":
+                    userViewModel.saveStreakData()
+                    
                 default:
                     break
+
                 }
                     
             })

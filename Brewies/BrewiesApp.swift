@@ -11,13 +11,13 @@ import StoreKit
 
 @main
 struct BrewiesApp: App {
-    private var rewardAd = RewardAdController()
-    let yelpParams = YelpSearchParams()
-    let contentViewModel: ContentViewModel
-    let sharedViewModel = SharedViewModel()
-    let locationManager = LocationManager()
+    private let rewardAd = RewardAdController()
+    private let yelpParams = YelpSearchParams()
+    private let contentViewModel: ContentViewModel
+    private let sharedViewModel = SharedViewModel()
+    private let locationManager = LocationManager()
 
-    @StateObject var selectedCoffeeShop = SelectedCoffeeShop()
+    @StateObject private var selectedCoffeeShop = SelectedCoffeeShop()
     
     init() {
         self.contentViewModel = ContentViewModel(yelpParams: yelpParams)

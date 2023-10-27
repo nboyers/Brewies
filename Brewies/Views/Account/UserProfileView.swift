@@ -19,7 +19,7 @@ struct UserProfileView: View {
             VStack {
                 VStack {
                     Button(action: {
-                       changeName = true
+                        showSettings = true
                     }) {
                         HStack {
                             Text(String(userViewModel.user.firstName.prefix(1)))
@@ -44,10 +44,6 @@ struct UserProfileView: View {
                     }
                     .padding([.top, .horizontal], 20)
                 }
-                .sheet(isPresented: $changeName) {
-                  EditProfileView()
-                }
-                
                 .sheet(isPresented: $showSettings) {
                     SettingsView()
                 }

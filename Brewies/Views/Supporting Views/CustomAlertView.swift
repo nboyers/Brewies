@@ -11,8 +11,8 @@ struct CustomAlertView: View {
     var title: String
     var message: String
     var primaryButtonTitle: String? // New parameter for the primary button title
-    var primaryAction: (() -> Void)? // Renamed from `goToStoreAction`
-    var secondaryButtonTitle: String? // New parameter for the primary button title
+    var primaryAction: (() -> Void)?
+    var secondaryButtonTitle: String? // New parameter for the secondary button title
     var secondaryAction: (() -> Void)?
     var dismissAction: (() -> Void)?
     
@@ -43,6 +43,14 @@ struct CustomAlertView: View {
                    let primaryButtonTitle = primaryButtonTitle { // Check if both action and title are provided
                     Button(action: primaryAction) {
                         Text(primaryButtonTitle)
+                            .foregroundColor(.blue)
+                    }
+                    Spacer()
+                }
+                if let secondaryAction = secondaryAction,
+                   let secondaryButtonTitle = secondaryButtonTitle { // Check if both action and title are provided
+                    Button(action: secondaryAction) {
+                        Text(secondaryButtonTitle)
                             .foregroundColor(.blue)
                     }
                     Spacer()
