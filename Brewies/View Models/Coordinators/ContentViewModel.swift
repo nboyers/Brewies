@@ -20,14 +20,14 @@ class ContentViewModel: ObservableObject {
     @Published var showNoAdsAvailableAlert = false
     @Published var showNoCreditsAlert = false
     @Published var adsWatched = 0
-
+    @Published var fetchedFromCache = false
+    
     @ObservedObject var userViewModel = UserViewModel.shared
     @ObservedObject var locationManager = LocationManager()
     @ObservedObject var apiKeysViewModel = APIKeysViewModel.shared
     
     private var rewardAdController = RewardAdController()
     var yelpParams: YelpSearchParams
-    
     
     init(yelpParams: YelpSearchParams) {
         self.yelpParams = yelpParams
@@ -39,7 +39,7 @@ class ContentViewModel: ObservableObject {
         rewardAdController.onAdDidDismissFullScreenContent = { [weak self] in
             self?.showAlert = true
         }
-        
+        clearOldCache()
     }
     
     func fetchCoffeeShops(visibleRegionCenter: CLLocationCoordinate2D?) {
@@ -47,72 +47,80 @@ class ContentViewModel: ObservableObject {
             showAlert = true
             return
         }
-        let yelpAPI = YelpAPI(yelpParams: yelpParams)
+        
+        let cacheKey = "\(centerCoordinate.latitude),\(centerCoordinate.longitude)"
+        
+        if let cachedShops = retrieveFromCache(forKey: cacheKey) {
+            self.coffeeShops = cachedShops
+            self.selectedCoffeeShop = cachedShops.first
+            self.showBrewPreview = true
+            self.fetchedFromCache = true
+            return
+        }
         
         apiKeysViewModel.fetchAPIKeys { [self] API in
-            //This is where the app is not extendin the
-            if userViewModel.user.isSubscribed {
-                if yelpParams.radiusInMeters > 5000 { //If the user created a higher search raduis, resend the request
-                    yelpAPI.fetchIndependentCoffeeShops(apiKey: apiKeysViewModel.apiKeys?.YELP_API ?? "", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
-                        deductUserCredit() // If they make a request, they get deducted
-                        if coffeeShops.isEmpty {
-                            self.showNoCoffeeShopsAlert = true
-                        } else {
-                            self.coffeeShops = coffeeShops
-                            selectedCoffeeShop = coffeeShops.first // Set selectedCoffeeShop to first one
-                            showBrewPreview = true
-                        }
-                    }
-                    return
-                }
+            let yelpAPI = YelpAPI(yelpParams: yelpParams)
+            yelpAPI.fetchIndependentCoffeeShops(apiKey: API?.YELP_API ?? "KEYLESS", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self] coffeeShops in
+                self.fetchedFromCache = false
+                processCoffeeShops(coffeeShops: coffeeShops, cacheKey: cacheKey)
             }
-            
-            yelpAPI.fetchIndependentCoffeeShops(apiKey: API?.YELP_API ?? "KEYLESS" , latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self]  coffeeShops in
-                deductUserCredit() // If they make a request, they get deducted
-                if coffeeShops.isEmpty {
-                    self.showNoCoffeeShopsAlert = true
-                } else {
-                    self.coffeeShops = coffeeShops
-                    self.selectedCoffeeShop = coffeeShops.first
-                    self.showBrewPreview = true
-                }
+        }
+    }
+    
+    private func processCoffeeShops(coffeeShops: [CoffeeShop], cacheKey: String) {
+        saveToCache(coffeeShops: coffeeShops, forKey: cacheKey)
+        self.coffeeShops = coffeeShops
+        self.selectedCoffeeShop = coffeeShops.first
+        self.showBrewPreview = true
+    }
+    
+    private func saveToCache(coffeeShops: [CoffeeShop], forKey key: String) {
+        let data = try? JSONEncoder().encode(coffeeShops)
+        UserDefaults.standard.set(data, forKey: key)
+        UserDefaults.standard.set(Date(), forKey: "\(key)-date")
+    }
+    
+    private func retrieveFromCache(forKey key: String) -> [CoffeeShop]? {
+        if let data = UserDefaults.standard.data(forKey: key) {
+            deductUserCredit()
+            return try? JSONDecoder().decode([CoffeeShop].self, from: data)
+        }
+        return nil
+    }
+    
+    private func clearOldCache() {
+        let userDefaults = UserDefaults.standard
+        for key in userDefaults.dictionaryRepresentation().keys {
+            if key.contains("-date"), let cacheDate = userDefaults.object(forKey: key) as? Date, Date().timeIntervalSince(cacheDate) >= 86400 {
+                let dataKey = key.replacingOccurrences(of: "-date", with: "")
+                userDefaults.removeObject(forKey: dataKey)
+                userDefaults.removeObject(forKey: key)
             }
         }
     }
     
     func handleRewardAd(reward: String) {
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let viewController = windowScene.windows.first?.rootViewController {
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let viewController = windowScene.windows.first?.rootViewController {
             rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [self] in
-                // This code will be called when the ad completes
-                // Add credit to the user
                 switch reward {
                 case "credits":
                     userViewModel.addCredits(1)
-                    break
-                    
                 case "favorites":
                     adsWatched += 1
                     if adsWatched >= 3 {
                         CoffeeShopData.shared.addFavoriteSlots(1)
                         adsWatched = 0
                     }
-                    break
-                    
                 case "check_in":
                     userViewModel.saveStreakData()
-                    break
-                    
                 default:
                     break
                 }
             })
         } else {
-            // If there is no root view controller available, show an alert
             showNoAdsAvailableAlert = true
         }
     }
-
     
     func deductUserCredit() {
         if userViewModel.user.credits > 0 {

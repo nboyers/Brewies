@@ -25,15 +25,31 @@ struct FavoritesView: View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 16) {
-                    VStack {
+                    VStack(spacing: 10) {
                         Text("Ads Watched: \(contentVM.adsWatched)/3")
+                            .font(.headline)
                         
-                        ProgressView(value: Float(contentVM.adsWatched), total: 5)
-                            .progressViewStyle(LinearProgressViewStyle())
+                        ProgressView(value: Float(contentVM.adsWatched), total: 3)
+                            .progressViewStyle(LinearProgressViewStyle(tint: Color.blue))
+                            .accentColor(Color.blue)
+                            .background(Color.gray.opacity(0.2).cornerRadius(5))
+                            .cornerRadius(5)
                         
-                        Button("Watch Ad to Unlock Favorite Slot") {
+                        Button(action: {
                             contentVM.handleRewardAd(reward: "favorites")
+                        }) {
+                            HStack {
+                                Image(systemName: "video")
+                                    .resizable()
+                                    .frame(width: 16, height: 16)
+                                Text("Watch Ad to Unlock Favorite Slot")
+                                    .fontWeight(.semibold)
+                            }
                         }
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
                     }
                     
                     ForEach(coffeeShopData.favoriteShops.prefix(coffeeShopData.maxFavoriteSlots), id: \.id) { coffeeShop in

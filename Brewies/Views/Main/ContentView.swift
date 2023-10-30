@@ -407,9 +407,9 @@ struct ContentView: View {
                             .padding()
                             .background(Circle().fill(currentStreakColor))
                             .foregroundColor(.white)
-                            .frame(width: 200, height: 200)
+                            .frame(width: 50, height: 50)
                     }
-                    .offset(CGSize(width: geo.size.width*0.65, height: geo.size.height/65 - 20))
+                    .offset(CGSize(width: geo.size.width*0.80, height: geo.size.height/13))
                     
                     
                 }
@@ -442,14 +442,14 @@ struct ContentView: View {
                         CustomAlertView(
                             title: "Insufficient Credits",
                             message: "Watch an ad to get a discover credit or go to the store.",
-                            primaryButtonTitle: "Go to Store",
+                            primaryButtonTitle: "Watch Ad",
                             primaryAction: {
-                                activeSheet = .storefront
+                                self.contentVM.handleRewardAd(reward: "credits")
                                 sharedAlertVM.currentAlertType = nil
                             },
-                            secondaryButtonTitle: "Watch Ad",
+                            secondaryButtonTitle: "Go to Store",
                             secondaryAction: {
-                                self.contentVM.handleRewardAd(reward: "credits")
+                                activeSheet = .storefront
                                 sharedAlertVM.currentAlertType = nil
                             },
                             dismissAction: {
