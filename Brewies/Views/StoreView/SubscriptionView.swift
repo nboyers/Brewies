@@ -17,69 +17,77 @@ struct SubscriptionView: View {
     
     var body: some View {
         if userVM.user.isLoggedIn {
-            VStack {
+            VStack(spacing: 20) { // Add spacing between VStack elements
                 Text("Brewies+")
                     .bold()
                     .font(.largeTitle)
                 
-                VStack(alignment: .leading){
-                    Text("Features")
-                        .bold()
-                    Divider()
+                GeometryReader { geo in
+                    VStack(alignment: .leading, spacing: 5) { // Add spacing between VStack elements
+                        Text("Features")
+                            .bold()
+                        Divider()
+                        
+                        Group {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("No banner ads")
+                            }
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("25/40/50 discover credits welcome bonus")
+                            }
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("More Filtering Options")
+                            }
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("20 Favorite's Slots")
+                            }
+                        }
+                        .font(.system(size: geo.size.width <= 350 ? 11 : 17))
+                        
+                        
+                        Section() {
+                            ForEach(storeVM.subscriptions) { product in
+                                Button(action: {
+                                    Task {
+                                        await buy(product: product)
+                                    }
+                                }) {
+                                    HStack {
+                                        Text(product.displayName)
+                                         
+                                        if product == purchasedProduct {
+                                            Spacer()
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundColor(.green)
+                                        }
+                                        
+                                    }
                     
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("No banner ads")
+                                }
+                                .frame(width: geo.size.width - 40, height: geo.size.height/66) // Adjust height
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(.brown)
+                                .cornerRadius(15.0)
+                                Text(product.description)
+                                    .font(.caption)
+                                    .padding(.horizontal, 10) // Add some padding
+    
+                            }
+                        }
                     }
                     
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("25/40/50 discover credits welcome bonus")
-                    }
-                    
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("More Filtering Options")
-                    }
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                        Text("20 Favorite's Slots")
-                    }
                 }
                 .padding()
                 .background(colorScheme == .dark ? Color.black : Color.white)
                 .cornerRadius(10)
                 .shadow(radius: 5)
-                
-                Section() {
-                    ForEach(storeVM.subscriptions) { product in
-                        
-                        Button(action: {
-                            Task {
-                                await buy(product: product)
-                            }
-                        }) {
-                            HStack {
-                                Text(product.displayName)
-                                    .padding()
-                                // Checkmark if this product has been purchased
-                                if product == purchasedProduct {
-                                    Spacer()
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.green)
-                                }
-                            }
-                        }
-                        .frame(width: 300, height: 20)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(.brown)
-                        .cornerRadius(15.0)
-                        Text(product.description)
-                            .font(.caption)
-                    }
-                }
-            }  .onAppear(perform: setup)
+            }
+            .onAppear(perform: setup)
         } else {
             VStack {
                 Text("Sign in to Subscribe")
@@ -88,6 +96,12 @@ struct SubscriptionView: View {
                     .foregroundColor(Color.primary)  // Using the primary color which adapts to light/dark mode
                     .padding()  // Adding some padding around the text for better spacing
                     .multilineTextAlignment(.center)  // Center-aligning the text
+                Text("Enchance your Brewies Experience")
+                    .font(.footnote)
+                    .fontWeight(.semibold)  // Adding some weight to the font for better readability
+                    .foregroundColor(Color.primary)  // Using the primary color which adapts to light/dark mode
+                    .padding()  // Adding some padding around the text for better spacing
+                    .multilineTextAlignment(.center)  // Ce
                 
                 SignInWithAppleButton(action: {
                     signInCoordinator.startSignInWithAppleFlow()

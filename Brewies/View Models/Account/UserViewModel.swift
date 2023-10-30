@@ -165,7 +165,7 @@ class UserViewModel: ObservableObject {
     
     //MARK: Reward checks for the Favorites slot and Discover credits
     func isWeeklyRewardAvailable() -> Bool {
-        return user.streakCount % 7 == 0 && !user.hasClaimedWeeklyReward
+        return user.streakCount % 7 == 0 && !user.hasClaimedWeeklyReward && user.streakCount != 0
     }
     
     func claimDiscoverCreditsReward() {

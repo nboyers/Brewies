@@ -199,7 +199,7 @@ struct ContentView: View {
                             }.padding(.horizontal)
                             
                             
-                            TextField("Which Area?", text: $searchQuery, onEditingChanged: { isEditing in
+                            TextField("Search the Area", text: $searchQuery, onEditingChanged: { isEditing in
                                 if isEditing {
                                     isSearching = true
                                     sharedVM.bottomSheetPosition = .relative(0.70)
@@ -352,7 +352,9 @@ struct ContentView: View {
                             }
                         }) {
                             Text("Search this area")
-                                .font(.system(size: 20, weight: .bold))
+                            // .font(geometry.size.width > 320 ? .body : .footnote)
+                                .font(.system(size: geo.size.width <= 375 ? 17 : 20, weight: .bold))
+//                                .padding(.horizontal, geo.size.width > 320 ? 20 : 10)
                                 .frame(width: geo.size.width/2.5, height: geo.size.width/50)
                                 .padding()
                                 .font(.title3)
@@ -464,14 +466,6 @@ struct ContentView: View {
                             primaryAction: {
                                 self.contentVM.handleRewardAd(reward: "check_in")
                                 sharedAlertVM.currentAlertType = nil
-                            },
-                            secondaryButtonTitle: "Reward",
-                            secondaryAction: {
-                                if userVM.isWeeklyRewardAvailable() {
-                                    sharedAlertVM.currentAlertType = .streakReward
-                                } else {
-                                    sharedAlertVM.currentAlertType = .showNotEnoughStreakAlert
-                                }
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
