@@ -45,6 +45,7 @@ struct BrewiesApp: App {
                 .environmentObject(sharedViewModel)
                 .onAppear {
                     GADMobileAds.sharedInstance().start(completionHandler: nil)
+                    rewardAd.requestIDFA()
                 }
         }
     }

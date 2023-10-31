@@ -12,7 +12,7 @@ struct EditProfileView: View {
     @State private var firstName: String = ""
     @State private var lastName: String = ""
     @State private var isLoading = false
-
+    @State var showDeleteAlert = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
@@ -34,16 +34,45 @@ struct EditProfileView: View {
             }
             .onAppear(perform: loadUserData)
             .navigationTitle("Edit Profile")
-         
+            
             if isLoading {
                 ProgressView()
                     .scaleEffect(2)
                     .progressViewStyle(CircularProgressViewStyle(tint: .blue))
             }
-       
+            Button(action: {
+                showDeleteAlert = true
+            }) {
+                Text("Delete Account")
+                    .foregroundColor(.red)
+                    .padding()
+                    .font(.title2)
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(.horizontal)
+            .background(Color.gray.opacity(0.2))
+            .cornerRadius(10)
+            if showDeleteAlert {
+                CustomAlertView(title: "Are you sure?",
+                                message: "All your saved progress will be wiped forever and cannot be retrieved.",
+                                primaryButtonTitle: "Go back",
+                                primaryAction: {
+                    showDeleteAlert = false
+                },
+                                secondaryButtonTitle: "Delete Forever",
+                                secondaryAction: {
+                    userViewModel.deleteUserData()
+                    userViewModel.signOut()
+                    showDeleteAlert = false
+                },
+                                dismissAction: {
+                    showDeleteAlert = false
+                })
+
+            }
         }
     }
-
+    
     
     func loadUserData() {
         firstName = userViewModel.user.firstName

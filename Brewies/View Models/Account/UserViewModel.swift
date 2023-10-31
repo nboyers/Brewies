@@ -184,5 +184,20 @@ class UserViewModel: ObservableObject {
         }
     }
     
+    func deleteUserData() {
+        // Remove user-related keys from UserDefaults
+        UserDefaults.standard.removeObject(forKey: UserKeys.isLoggedIn)
+        UserDefaults.standard.removeObject(forKey: UserKeys.userID)
+        UserDefaults.standard.removeObject(forKey: UserKeys.isSubscribed)
+        UserDefaults.standard.removeObject(forKey: UserKeys.firstName)
+        UserDefaults.standard.removeObject(forKey: UserKeys.lastName)
+        UserDefaults.standard.removeObject(forKey: UserKeys.userStreakCount)
+        UserDefaults.standard.removeObject(forKey: UserKeys.userStreakContentViewed)
+        UserDefaults.standard.removeObject(forKey: UserKeys.userCredits(user.userID))
+        
+        // Reset in-memory user data
+        user = User(isLoggedIn: false, userID: "", firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: 0, hasClaimedWeeklyReward: false, streakCount: 0, streakViewedDate: nil)
+    }
+    
     
 }

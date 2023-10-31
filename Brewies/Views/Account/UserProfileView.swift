@@ -14,6 +14,9 @@ struct UserProfileView: View {
     @Binding var activeSheet: ActiveSheet?
     @State var showSettings  = false
     @State var changeName = false
+    
+    let signInCoordinator = SignInWithAppleCoordinator()
+    
     var body: some View {
         if userViewModel.user.isLoggedIn {
             VStack {
@@ -95,6 +98,30 @@ struct UserProfileView: View {
                 .frame(width: 375)
                 Spacer()
             }
+        } else {
+            GeometryReader { geometry in
+                VStack {
+                    Spacer() // Pushes the content to the center vertically
+                    HStack {
+                        Spacer() // Pushes the content to the center horizontally
+                        Image("Brewies_icon")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: geometry.size.width * 0.5, height: geometry.size.width * 0.5) // 50% of the width of the GeometryReader
+                            .clipped()
+                            .cornerRadius(10)
+                        Spacer() // Pushes the content to the center horizontally
+                    }
+                    Spacer() // Pushes the content to the center vertically
+                }
+            }
+            Spacer()
+            SignInWithAppleButton(action: {
+                signInCoordinator.startSignInWithAppleFlow()
+            }, label: "Sign in with Apple")
+            .frame(width: 280, height: 45)
+            .padding([.top, .bottom], 50)
+            .presentationDetents([.medium])
         }
     }
     private func shareApp() {
