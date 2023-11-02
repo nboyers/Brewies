@@ -19,6 +19,7 @@ struct BrewPreviewList: View {
     @State var showStorefront = false
     @Binding var activeSheet: ActiveSheet?
     
+
     
     @ObservedObject var userViewModel = UserViewModel.shared
     
@@ -48,6 +49,11 @@ struct BrewPreview: View {
     
     @Binding var activeSheet: ActiveSheet?
     
+
+    var textColor: Color {
+        return colorScheme == .dark ? .white : .black
+    }
+
     
     @Binding var showBrewPreview: Bool
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
@@ -103,17 +109,19 @@ struct BrewPreview: View {
                     }
                 }
                 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading) {
                     Spacer()
                         .frame(height: geo.size.height / 2)
                     HStack {
-                        Text(coffeeShop.name)
-                            .font(.headline)
-                            .foregroundColor(Color.black)
-                            .lineLimit(nil)  // Allows text to wrap to the next line
-                            .fixedSize(horizontal: false, vertical: true) // Properly wraps text inside a ScrollView
+                        VStack(alignment: .leading, spacing: 0) {
+                            Text(coffeeShop.name)
+                                .font(.headline)
+                                .foregroundColor(Color.black)
+                                .lineLimit(nil)  // Allows text to wrap to the next line
+                                .fixedSize(horizontal: false, vertical: true) // Properly wraps text inside a ScrollView
+                        }
                         
-                        Spacer()
+                        
                         
                         Button(action: {
                             toggleFavorite()
@@ -125,6 +133,7 @@ struct BrewPreview: View {
                                 .padding(5)
                         }
                     }
+                    
                     HStack(spacing: 1) {
                         Text("\(coffeeShop.city), \(coffeeShop.state)")
                         Text("• \(coffeeShop.price ?? "Unknown price range")")
@@ -135,7 +144,8 @@ struct BrewPreview: View {
                     Text(coffeeShop.displayPhone.isEmpty ? "Phone number unavailable" : coffeeShop.displayPhone)
                         .font(.caption)
                         .foregroundColor(.gray)
-                    Spacer()
+                    
+                    
                     //                      TODO: This will be a later update...maybe
                     //                                        HStack { // Center the buttons to the middle
                     //                                            Spacer()
@@ -173,43 +183,59 @@ struct BrewPreview: View {
                     //                                            }
                     //                                            Spacer()
                     //                                        }
+                    Spacer()
+                    
                 }
             }
             .onTapGesture {
-                   selectBrew()
+                selectBrew()
+            }
+            .padding()
+            
+            HStack {
+                Spacer()
+                RatingView(rating: coffeeShop.rating, review_count: String(coffeeShop.review_count), colorScheme: .black)
+                   
+                Image("yelp")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 30, height: 30)
+                Spacer()
             }
             
-            
-            .padding()
-        }
+        
+        
+        
+
+    }
         .frame(width: 300, height: 300)
         .background(Color.white)
         .cornerRadius(8)
         .shadow(radius: 4)
+}
+
+private func selectBrew() {
+    DispatchQueue.main.async {
+        selectedCoffeeShop.coffeeShop = coffeeShop
+        activeSheet = .detailBrew
     }
-    
-    private func selectBrew() {
-        DispatchQueue.main.async {
-            selectedCoffeeShop.coffeeShop = coffeeShop
-            activeSheet = .detailBrew
-        }
-    }
-    private func toggleFavorite() {
-        if isFavorite {
-            userViewModel.removeFromFavorites(coffeeShop)
-            coffeeShopData.removeFromFavorites(coffeeShop)
-            // Decrement favoriteSlotsUsed
-            favoriteSlotsUsed -= 1
+}
+private func toggleFavorite() {
+    if isFavorite {
+        userViewModel.removeFromFavorites(coffeeShop)
+        coffeeShopData.removeFromFavorites(coffeeShop)
+        // Decrement favoriteSlotsUsed
+        favoriteSlotsUsed -= 1
+    } else {
+        // Check if adding a new favorite would exceed the maximum allowed
+        if coffeeShopData.addToFavorites(coffeeShop) {
+            userViewModel.addToFavorites(coffeeShop)
+            // Increment favoriteSlotsUsed
+            favoriteSlotsUsed += 1
         } else {
-            // Check if adding a new favorite would exceed the maximum allowed
-            if coffeeShopData.addToFavorites(coffeeShop) {
-                userViewModel.addToFavorites(coffeeShop)
-                // Increment favoriteSlotsUsed
-                favoriteSlotsUsed += 1
-            } else {
-                sharedAlertVM.currentAlertType = .maxFavoritesReached
-//                sharedAlertVM.showCustomAlert = true
-            }
+            sharedAlertVM.currentAlertType = .maxFavoritesReached
+            //                sharedAlertVM.showCustomAlert = true
         }
     }
+}
 }

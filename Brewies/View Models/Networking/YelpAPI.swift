@@ -139,7 +139,8 @@ class YelpAPI : ObservableObject {
                 transactions: business.transactions,
                 hours:  business.hours,
                 isClosed: business.isClosed,
-                price: business.price
+                price: business.price,
+                review_count: business.reviewCount
             )
             coffeeShops.append(coffeeShop)
         }

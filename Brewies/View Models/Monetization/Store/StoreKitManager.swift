@@ -11,89 +11,72 @@ public enum StoreError: Error {
     case failedVerification
 }
 
-//alias
-typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo //The Product.SubscriptionInfo.RenewalInfo provides information about the next subscription renewal period.
-typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState // the renewal states of auto-renewable subscriptions.
-
-
+typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo
+typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
 
 class StoreKitManager: ObservableObject {
     @Published var storeProducts: [Product] = []
-    
-    @Published var purchasedCourses : [Product] = []
+    @Published var purchasedCourses: [Product] = []
     @Published var isAdRemovalPurchased: Bool = false
     @Published private(set) var subscriptions: [Product] = []
     @Published private(set) var purchasedSubscriptions: [Product] = []
     @Published private(set) var subscriptionGroupStatus: RenewalState?
-    
+
     var userViewModel = UserViewModel.shared
-    var updateListenerTask : Task<Void, Error>? = nil
-    // Subscription slots
+    var updateListenerTask: Task<Void, Error>? = nil
     let subscriptionSlots = 20
-    
-    //maintain a plist of products
-    private let productDict: [String : String]
-    private let subscriptionsDict: [String : String]
+
+    // Product and Subscription Identifiers
     let adRemovalProductId = "com.nobosoftware.removeAds"
     let creditsProductId = "com.nobosoftware.BuyableRequests"
     let favoritesSlotId = "com.nobosoftware.FavoriteSlot"
     
-    //Subscription Types
     let yearlyID = "com.nobos.AnnualBrewies"
-    let semiYearlyID = "com.nobos.BiannualBrewies"
+    let semiYearlyID = "com.nobos.Biannual"
     let monthlyID = "com.nobosoftware.Brewies"
-    
+
+    private var productDict: [String: String] = [:]
+    private var subscriptionsDict: [String: String] = [:]
+    private var productLookup: [String: Product] = [:]
+    private var subscriptionLookup: [String: Product] = [:]
+
     init() {
-        //check the path for the plist
-        if let slistPath = Bundle.main.path(forResource: "SubscriptionsList", ofType: "plist"),
-           let plist = FileManager.default.contents(atPath: slistPath) {
-            subscriptionsDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String : String]) ?? [:]
-        } else {
-            subscriptionsDict = [:]
-        }
-        
-        if let plistPath = Bundle.main.path(forResource: "ProductList", ofType: "plist"),
-           //get the list of products
-           let plist = FileManager.default.contents(atPath: plistPath) {
-            productDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String : String]) ?? [:]
-        } else {
-            productDict = [:]
-        }
-        
-        
-        //Start a transaction listener as close to the app launch as possible so you don't miss any transaction
+        setupProductLists()
+        productLookup = Dictionary(uniqueKeysWithValues: storeProducts.map { ($0.id, $0) })
+        subscriptionLookup = Dictionary(uniqueKeysWithValues: subscriptions.map { ($0.id, $0) })
         updateListenerTask = listenForTransactions()
-        
-        //create async operation
         Task {
             await requestProducts()
-            
-            
-            
-            //deliver the products that the customer purchased
             await updateCustomerProductStatus()
         }
     }
-    
-    //denit transaction listener on exit or app close
+
     deinit {
         updateListenerTask?.cancel()
     }
-    
-    
+
+    private func setupProductLists() {
+        if let slistPath = Bundle.main.path(forResource: "SubscriptionsList", ofType: "plist"),
+           let plist = FileManager.default.contents(atPath: slistPath) {
+            subscriptionsDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String: String]) ?? [:]
+        }
+
+        if let plistPath = Bundle.main.path(forResource: "ProductList", ofType: "plist"),
+           let plist = FileManager.default.contents(atPath: plistPath) {
+            productDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String: String]) ?? [:]
+        }
+    }
+
     func checkIfAdsRemoved() async {
-        for product in storeProducts {
-            if product.id == adRemovalProductId {
-                DispatchQueue.main.async {
-                    Task {
-                        self.isAdRemovalPurchased = (try? await self.isPurchased(product)) ?? false
-                    }
+        if let product = storeProducts.first(where: { $0.id == adRemovalProductId }) {
+            DispatchQueue.main.async {
+                Task {
+                    self.isAdRemovalPurchased = (try? await self.isPurchased(product)) ?? false
                 }
-                break
             }
         }
     }
-    
+
     
     @Sendable func getCreditsForSubscription(_ productId: String) {
         let defaults = UserDefaults.standard
@@ -174,7 +157,7 @@ class StoreKitManager: ObservableObject {
             // request from the app store using the product ids from list
             subscriptions = try await Product.products(for: subscriptionsDict.values)
         } catch {
-            print("Failed - error retrieving products \(error)")
+//            print("Failed - error retrieving products \(error)")
         }
     }
     
@@ -197,51 +180,45 @@ class StoreKitManager: ObservableObject {
     func updateCustomerProductStatus() async {
         var purchasedCourses: [Product] = []
         
-        // iterate through all the user's purchased products
         for await result in Transaction.currentEntitlements {
             do {
-                // check if transaction is verified
                 let transaction = try checkVerified(result)
                 
                 if transaction.productID == adRemovalProductId {
                     isAdRemovalPurchased = true
                 }
                 
-                if let course = storeProducts.first(where: { $0.id == transaction.productID }) {
+                if let course = productLookup[transaction.productID] {
                     purchasedCourses.append(course)
                 }
                 
-                
                 switch transaction.productType {
                 case .autoRenewable:
-                    if let subscription = subscriptions.first(where: {$0.id == transaction.productID}) {
+                    if let subscription = subscriptionLookup[transaction.productID] {
                         purchasedSubscriptions.append(subscription)
                     }
                     if UserDefaults.standard.bool(forKey: "isSubscribed") {
-                        if let product = storeProducts.first(where: { $0.id == yearlyID }) {
+                        if let product = productLookup[yearlyID] {
                             purchasedCourses.append(product)
-                        } else if let product = storeProducts.first(where: { $0.id == semiYearlyID }) {
+                        } else if let product = productLookup[semiYearlyID] {
                             purchasedCourses.append(product)
-                        } else if let product = storeProducts.first(where: { $0.id == monthlyID }) {
+                        } else if let product = productLookup[monthlyID] {
                             purchasedCourses.append(product)
                         }
                     }
                 default:
                     break
                 }
-                // finally assign the purchased products
+
                 self.purchasedCourses = purchasedCourses
                 
-                // Always finish a transaction.
                 await transaction.finish()
             } catch {
-                // storekit has a transaction that fails verification, don't deliver content to the user
-                print("Transaction failed verification")
+                // handle errors
             }
         }
         handleSubscriptionStatusChange()
     }
-    
     
     //MARK: Purchase and returns an optional transaction
     func purchase(_ product: Product) async throws -> Transaction? {

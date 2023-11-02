@@ -62,51 +62,60 @@ struct BrewDetailView: View {
                                 .bold()
                                 .font(.title)
                                 .shadow(color: .black, radius: 3, x: 0, y: 0)
-                            
-                            RatingView(rating: coffeeShop.rating)
                         }
                     }
                     
                     VStack {
                         //MARK: Photos
-                        VStack(alignment: .leading) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            HStack {
+                                RatingView(rating: coffeeShop.rating, review_count: String(coffeeShop.review_count), colorScheme: colorScheme == .dark ? .white : .black)
+                                    .padding(.horizontal)
+                                Image("yelp")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 30, height: 30)
+                                Spacer()
+                            }
                             
-                            Text("Photos")
-                                .padding(.horizontal)
-                                .foregroundColor(.white)
-                                .bold()
-                                .font(.title)
-                                .shadow(color: .black, radius: 3, x: 0, y: 0)
+                            if !coffeeShop.photos.isEmpty {
+                                Text("Photos")
+                                    .padding(.horizontal)
+                                    .foregroundColor(.white)
+                                    .bold()
+                                    .font(.title)
+                                    .shadow(color: .black, radius: 3, x: 0, y: 0)
+                            }
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack {
-                                    if coffeeShop.photos.isEmpty {
-                                        
-                                        ForEach(0..<3) {_ in
-                                            ZStack {
-                                                Rectangle()
-                                                    .foregroundColor(.gray)
-                                                    .frame(width: geo.size.width/2, height: geo.size.height*0.25)
-                                                    .cornerRadius(25)
-                                                Image(systemName: "photo")
-                                                    .resizable()
-                                                    .foregroundColor(Color.white)
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(width: 50, height: 50)
-                                                    .clipped()
-                                                    .cornerRadius(10)
-                                                    .padding(.horizontal)
-                                            }
-                                        }
-                                    } else {
+                                    if !coffeeShop.photos.isEmpty {
                                         ForEach(coffeeShop.photos.prefix(3), id: \.self) { imageUrl in
                                             KFImage(URL(string: imageUrl))
                                                 .resizable()
+                                                .foregroundColor(Color.white)
                                                 .aspectRatio(contentMode: .fit)
-                                                .frame(width: geo.size.width/2, height: geo.size.height*0.25)
+                                                .frame(width: 50, height: 50)
                                                 .clipped()
                                                 .cornerRadius(10)
                                                 .padding(.horizontal)
                                         }
+//                                        
+//                                        ForEach(0..<3) {_ in
+//                                            ZStack {
+//                                                Rectangle()
+//                                                    .foregroundColor(.gray)
+//                                                    .frame(width: geo.size.width/2, height: geo.size.height*0.25)
+//                                                    .cornerRadius(25)
+//                                                Image(systemName: "photo")
+//                                                    .resizable()
+//                                                    .foregroundColor(Color.white)
+//                                                    .aspectRatio(contentMode: .fit)
+//                                                    .frame(width: 50, height: 50)
+//                                                    .clipped()
+//                                                    .cornerRadius(10)
+//                                                    .padding(.horizontal)
+//                                            }
+//                                        }
                                     }
                                 }
                             }
@@ -183,7 +192,6 @@ struct BrewDetailView: View {
                                     HStack {
                                         Text("Get Directions")
                                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                        
                                             .padding([.leading, .trailing, .bottom])
                                             .lineLimit(2)
                                         Spacer()

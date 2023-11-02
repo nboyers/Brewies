@@ -18,7 +18,6 @@ struct YelpBusiness: Decodable {
     let url: String
     let phone: String
     let displayPhone: String
-    let reviewCount: Int
     let categories: [Category]
     let rating: Double
     let location: YelpLocation
@@ -29,12 +28,16 @@ struct YelpBusiness: Decodable {
     let transactions: [String]
     let messaging: Messaging?
     let isClosed: Bool
+    let reviewCount: Int
+    
     enum CodingKeys: String, CodingKey {
         case id, alias, name, url, phone, categories, rating, location, coordinates, photos, price, hours, transactions, messaging
         case imageUrl = "image_url"
         case displayPhone = "display_phone"
         case reviewCount = "review_count"
         case isClosed = "is_closed"
+     
+       
     }
 }
 

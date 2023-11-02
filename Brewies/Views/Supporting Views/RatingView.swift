@@ -7,8 +7,12 @@
 
 import SwiftUI
 
+import SwiftUI
+
 struct RatingView: View {
     let rating: Double
+    let review_count: String
+    var colorScheme: Color
     
     var imageName: String {
         let roundedRating = Int(rating)
@@ -19,19 +23,20 @@ struct RatingView: View {
             return "\(roundedRating)"
         }
     }
-    
+
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 3) {
-            Image("regular_\(imageName)")
-                .padding(.leading)
+        HStack() {
             Text("\(rating, specifier: "%.1f")")
                 .font(.headline)
-                .foregroundColor(.white)
-                Image("yelp")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)  // Maintain aspect ratio while resizing
-                    .frame(width: 50, height: 50)  // Specify the desired width and height
-            Spacer()
+                .foregroundColor(colorScheme)
+            Image("regular_\(imageName)")
+            Text("\(review_count) reviews")
+                .font(.headline)
+                .foregroundColor(colorScheme)
         }
     }
+}
+
+#Preview {
+    RatingView(rating: 3.5, review_count: "363", colorScheme: .cyan)
 }

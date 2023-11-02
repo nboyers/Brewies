@@ -13,7 +13,7 @@ struct ProductStoreView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("In-App Purchase")
+            Text("In-App Purchases")
                 .bold()
             Divider()
             ForEach(storeKit.storeProducts) { product in

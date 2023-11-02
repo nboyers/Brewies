@@ -45,7 +45,7 @@ class SignInWithAppleCoordinator: NSObject, ASAuthorizationControllerDelegate, A
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         // Handle sign-in error
-        print("Sign-in with Apple failed: \(error.localizedDescription)")
+        // print("Sign-in with Apple failed: \(error.localizedDescription)")
     }
     
     func startSignInWithAppleFlow() {

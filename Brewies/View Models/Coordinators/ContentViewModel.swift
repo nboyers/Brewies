@@ -43,6 +43,7 @@ class ContentViewModel: ObservableObject {
     }
     
     func fetchCoffeeShops(visibleRegionCenter: CLLocationCoordinate2D?) {
+        deductUserCredit()
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
             return
@@ -82,11 +83,11 @@ class ContentViewModel: ObservableObject {
     
     private func retrieveFromCache(forKey key: String) -> [CoffeeShop]? {
         if let data = UserDefaults.standard.data(forKey: key) {
-            deductUserCredit()
             return try? JSONDecoder().decode([CoffeeShop].self, from: data)
         }
         return nil
     }
+
     
     private func clearOldCache() {
         let userDefaults = UserDefaults.standard

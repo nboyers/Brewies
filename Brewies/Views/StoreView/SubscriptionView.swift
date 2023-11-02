@@ -18,6 +18,7 @@ struct SubscriptionView: View {
     var body: some View {
         if userVM.user.isLoggedIn {
             VStack(spacing: 20) { // Add spacing between VStack elements
+                Spacer()
                 Text("Brewies+")
                     .bold()
                     .font(.largeTitle)
@@ -64,15 +65,16 @@ struct SubscriptionView: View {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .foregroundColor(.green)
                                         }
-                                        
                                     }
+                                    .frame(width: geo.size.width - 40, height: geo.size.height/66) // Adjust height
+                                    .foregroundColor(.white)
+                                    .padding()
+                                    .background(.brown)
+                                    .cornerRadius(15.0)
                     
                                 }
-                                .frame(width: geo.size.width - 40, height: geo.size.height/66) // Adjust height
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(.brown)
-                                .cornerRadius(15.0)
+ 
+                                
                                 Text(product.description)
                                     .font(.caption)
                                     .padding(.horizontal, 10) // Add some padding
@@ -126,7 +128,7 @@ struct SubscriptionView: View {
                 purchasedProduct = product
             }
         } catch {
-            print("Purchase failed")
+            // print("Purchase failed")
         }
     }
 }

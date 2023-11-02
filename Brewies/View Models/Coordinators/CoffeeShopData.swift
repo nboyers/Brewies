@@ -18,9 +18,9 @@ class CoffeeShopData: ObservableObject {
     
     @Published var maxFavoriteSlots: Int = UserDefaults.standard.integer(forKey: "MaxFavoriteSlots") {
         didSet {
-            print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
+            // print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
             UserDefaults.standard.set(maxFavoriteSlots, forKey: "MaxFavoriteSlots")
-            print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
+            // print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
         }
     }
 
