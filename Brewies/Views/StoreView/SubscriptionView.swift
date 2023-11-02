@@ -10,6 +10,7 @@ struct SubscriptionView: View {
     @EnvironmentObject var storeVM: StoreKitManager
     @StateObject var userVM = UserViewModel.shared
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.openURL) var openURL
     
     @State var isPurchased = false
     @State var purchasedProduct: Product?
@@ -81,8 +82,26 @@ struct SubscriptionView: View {
     
                             }
                         }
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                  openURL(URL(string: "https://nobosoftware.com/tos")!)
+                              }) {
+                                  Text("terms of service")
+                                      .font(.footnote)
+                              }
+                              Spacer()
+                              Button(action: {
+                                  openURL(URL(string: "https://nobosoftware.com/privacy")!)
+                              }) {
+                                  Text("privacy policy")
+                                      .font(.footnote)
+                              }
+                            Spacer()
+                        }
+                        Spacer()
                     }
-                    
                 }
                 .padding()
                 .background(colorScheme == .dark ? Color.black : Color.white)

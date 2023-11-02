@@ -19,7 +19,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 @main
 struct BrewiesApp: App {
-    // Use the UIApplicationDelegateAdaptor property wrapper to provide the AppDelegate
+    // Use the UIApplicationDelegateAdaptor \property wrapper to provide the AppDelegate
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     private let rewardAd = RewardAdController()
