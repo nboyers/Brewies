@@ -35,7 +35,6 @@ class ContentViewModel: ObservableObject {
             self?.userViewModel.addCredits(1)
             self?.userViewModel.syncCredits(accountStatus: "")
         }
-        rewardAdController.requestIDFA()
         rewardAdController.onAdDidDismissFullScreenContent = { [weak self] in
             self?.showAlert = true
         }
@@ -101,28 +100,33 @@ class ContentViewModel: ObservableObject {
     }
     
     func handleRewardAd(reward: String) {
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene, let viewController = windowScene.windows.first?.rootViewController {
-            rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [self] in
-                switch reward {
-                case "credits":
-                    userViewModel.addCredits(1)
-                case "favorites":
-                    adsWatched += 1
-                    if adsWatched >= 3 {
-                        CoffeeShopData.shared.addFavoriteSlots(1)
-                        adsWatched = 0
+        DispatchQueue.main.async { [self] in // Make sure you're on the main thread
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let viewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
+                rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [weak self] in
+                    guard let self = self else { return }
+                    
+                    switch reward {
+                    case "credits":
+                        self.userViewModel.addCredits(1)
+                    case "favorites":
+                        self.adsWatched += 1
+                        if self.adsWatched >= 3 {
+                            CoffeeShopData.shared.addFavoriteSlots(1)
+                            self.adsWatched = 0
+                        }
+                    case "check_in":
+                        self.userViewModel.saveStreakData()
+                    default:
+                        break
                     }
-                case "check_in":
-                    userViewModel.saveStreakData()
-                default:
-                    break
-                }
-            })
-        } else {
-            showNoAdsAvailableAlert = true
+                })
+            } else {
+                self.showNoAdsAvailableAlert = true
+            }
         }
     }
-    
+
     func deductUserCredit() {
         if userViewModel.user.credits > 0 {
             userViewModel.subtractCredits(1)

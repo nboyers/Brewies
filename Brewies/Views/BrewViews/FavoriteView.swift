@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import AppTrackingTransparency
 
 struct FavoritesView: View {
     @EnvironmentObject var contentVM: ContentViewModel
@@ -36,6 +36,25 @@ struct FavoritesView: View {
                             .cornerRadius(5)
                         
                         Button(action: {
+                            if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                                ATTrackingManager.requestTrackingAuthorization { [self] status in
+                                    switch status {
+                                    case .authorized:
+                                        // Here, you can continue with ad loading as the user has given permission
+                                        self.contentVM.handleRewardAd(reward: "favorites")
+                                    case .denied, .restricted:
+                                        // Handle the case where permission is denied
+                                        self.contentVM.handleRewardAd(reward: "favorites")
+                                        break
+                                    case .notDetermined:
+                                        // The user has not decided on permission
+                                        self.contentVM.handleRewardAd(reward: "favorites")
+                                        break
+                                    @unknown default:
+                                        break
+                                    }
+                                }
+                            }
                             contentVM.handleRewardAd(reward: "favorites")
                         }) {
                             HStack {

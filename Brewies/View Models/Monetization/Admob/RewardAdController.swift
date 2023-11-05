@@ -20,12 +20,6 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate {
     var onUserDidEarnReward: (() -> Void)?
     var onAdDidDismissFullScreenContent: (() -> Void)?
     
-    func requestIDFA() {
-        ATTrackingManager.requestTrackingAuthorization { [weak self] _ in
-            self?.loadRewardedAd()
-        }
-    }
-    
 
     func loadRewardedAd() {
         let request = GADRequest()

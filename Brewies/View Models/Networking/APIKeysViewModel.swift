@@ -12,7 +12,12 @@ import Alamofire
 class APIKeysViewModel: ObservableObject {
     
     /// Published variable to hold API keys and notify observers about changes.
-    @Published var apiKeys: APIKeys?
+    @Published var apiKeys: APIKeys? {
+        didSet {
+            // Cache the apiKeys in memory when they're set.
+            self.apiKeysCache = apiKeys
+        }
+    }
     
     /// Published variable to hold error messages and notify observers about changes.
     @Published var errorMessage: String?
@@ -20,22 +25,21 @@ class APIKeysViewModel: ObservableObject {
     /// Shared instance to allow singleton usage of the class.
     static let shared = APIKeysViewModel()
    
-    /// String to hold the API key.
-    var apiKeyString: String?
-    
-    /// Initializer to fetch the API key from Info.plist and assign it to `apiKeyString`.
-    init() {
-        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
-            fatalError("API Key not found in Info.plist")
-        }
-        self.apiKeyString = apiKey
-    }
+    /// In-memory cache for the API keys.
+    private var apiKeysCache: APIKeys?
     
     /// Function to fetch API keys from a specified URL.
     /// - Parameter completion: A closure to be executed once the request is finished, returning optional `APIKeys`.
     func fetchAPIKeys(completion: @escaping (APIKeys?) -> Void) {
-        guard let apiKey = self.apiKeyString else {
-            fatalError("API Key is not set")
+        if let cachedKeys = apiKeysCache {
+            // If we have cached keys, return them and do not make a network request.
+            completion(cachedKeys)
+            return
+        }
+        
+        /// Fetch the API key directly within this function.
+        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
+            fatalError("API Key not found in Info.plist")
         }
         
         /// URL string pointing to the API endpoint.
@@ -62,6 +66,7 @@ class APIKeysViewModel: ObservableObject {
             }
         }
     }
+    
 
     /// Function to clean a JSON string from unwanted characters.
     /// - Parameter jsonString: The original JSON string.

@@ -10,7 +10,7 @@ import CoreLocation
 import MapKit
 import BottomSheet
 import AuthenticationServices
-
+import AppTrackingTransparency
 
 struct ContentView: View {
     @ObservedObject var storeKit = StoreKitManager()
@@ -50,8 +50,6 @@ struct ContentView: View {
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
     @State private var isSearching = false
-   
-    
     @State private var currentStreakColor: Color = .cyan
     
     private func getRandomColor() -> UIColor {
@@ -139,6 +137,7 @@ struct ContentView: View {
                         searchQuery: $searchQuery,
                         shouldSearchInArea: $shouldSearchInArea
                     )
+                 
                     
                     // 2. User Location Button
                     if showUserLocationButton {
@@ -164,10 +163,10 @@ struct ContentView: View {
                                 Button(action: {
                                     centeredOnUser = true
                                 }) {
-                                    Image(systemName: "location.square.fill")
+                                    Image(systemName: "location.cirlce.fill")
                                         .resizable()
                                         .frame(width: 40, height: 40)
-                                        .foregroundColor(Color.primary)
+//                                        .foregroundColor(Color.primary)
                                         .background(
                                             Rectangle()
                                                 .fill(Color.accentColor)
@@ -178,7 +177,6 @@ struct ContentView: View {
                         }
                     }
                 }
-                
                 //MARK: BREW PREVIEW
                 .bottomSheet(bottomSheetPosition: self.$sharedVM.bottomSheetPosition, switchablePositions: [
                     .relativeBottom(0.20), //Floor
@@ -421,7 +419,6 @@ struct ContentView: View {
                         .edgesIgnoringSafeArea(.all)
                     
                     switch sharedAlertVM.currentAlertType {
-                        
                     case .maxFavoritesReached:
                         CustomAlertView(
                             title: "Maximum Favorites Reached",
@@ -433,6 +430,25 @@ struct ContentView: View {
                             },
                             secondaryButtonTitle: "Watch Ad",
                             secondaryAction: {
+                                if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                                    ATTrackingManager.requestTrackingAuthorization { [self] status in
+                                        switch status {
+                                        case .authorized:
+                                            // Here, you can continue with ad loading as the user has given permission
+                                            self.contentVM.handleRewardAd(reward: "favorites")
+                                        case .denied, .restricted:
+                                            // Handle the case where permission is denied
+                                            self.contentVM.handleRewardAd(reward: "favorites")
+                                            break
+                                        case .notDetermined:
+                                            // The user has not decided on permission
+                                            self.contentVM.handleRewardAd(reward: "favorites")
+                                            break
+                                        @unknown default:
+                                            break
+                                        }
+                                    }
+                                }
                                 self.contentVM.handleRewardAd(reward: "favorites")
                                 sharedAlertVM.currentAlertType = nil
                             },
@@ -446,6 +462,25 @@ struct ContentView: View {
                             message: "Watch an ad to get a discover credit or go to the store.",
                             primaryButtonTitle: "Watch Ad",
                             primaryAction: {
+                                if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                                    ATTrackingManager.requestTrackingAuthorization { [self] status in
+                                        switch status {
+                                        case .authorized:
+                                            // Here, you can continue with ad loading as the user has given permission
+                                            self.contentVM.handleRewardAd(reward: "credits")
+                                        case .denied, .restricted:
+                                            // Handle the case where permission is denied
+                                            self.contentVM.handleRewardAd(reward: "credits")
+                                            break
+                                        case .notDetermined:
+                                            // The user has not decided on permission
+                                            self.contentVM.handleRewardAd(reward: "credits")
+                                            break
+                                        @unknown default:
+                                            break
+                                        }
+                                    }
+                                }
                                 self.contentVM.handleRewardAd(reward: "credits")
                                 sharedAlertVM.currentAlertType = nil
                             },
@@ -542,8 +577,8 @@ struct ContentView: View {
 
                     default:
                         CustomAlertView(
-                            title: "Mr. Dev Man Broke something",
-                            message: "Existence is pain",
+                            title: "Mr. Dev Man Broke Something",
+                            message: "Existence is Pain",
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
                             }

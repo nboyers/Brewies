@@ -4,8 +4,6 @@
 //
 //  Created by Noah Boyers on 6/23/23.
 //
-
-
 import SwiftUI
 import MapKit
 
@@ -98,6 +96,7 @@ struct FiltersView: View {
             Group {
                 HStack {
                     Button(action: {
+                        sharedAlertVM.currentAlertType = nil
                         self.presentationMode.wrappedValue.dismiss()
                         // Reset the Settings Applied
                         yelpParams.resetFilters()
@@ -338,7 +337,9 @@ struct FiltersView: View {
                     } else {
                         updateInitialState()
                         // Close the view
+                        sharedAlertVM.currentAlertType = nil
                         self.presentationMode.wrappedValue.dismiss()
+                      
                     }
                 }) {
                     let changesCount = self.changesCount()

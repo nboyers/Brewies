@@ -86,7 +86,7 @@ struct SubscriptionView: View {
                         HStack {
                             Spacer()
                             Button(action: {
-                                  openURL(URL(string: "https://nobosoftware.com/tos")!)
+                                  openURL(URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
                               }) {
                                   Text("terms of service")
                                       .font(.footnote)
