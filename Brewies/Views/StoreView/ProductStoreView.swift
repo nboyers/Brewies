@@ -10,6 +10,7 @@ import StoreKit
 
 struct ProductStoreView: View {
     @StateObject var storeKit = StoreKitManager()
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,6 +20,7 @@ struct ProductStoreView: View {
             ForEach(storeKit.storeProducts) { product in
                 HStack {
                     Text(product.displayName)
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
                     Spacer()
                     Button(action: {
                         // purchase this product
@@ -30,6 +32,8 @@ struct ProductStoreView: View {
                     }
                 }
             }
+
+            
             Divider()
             HStack {
                 Spacer()
@@ -47,6 +51,7 @@ struct ProductStoreView: View {
 }
 
 struct CourseItem: View {
+   
     @ObservedObject var storeKit : StoreKitManager
     @State var isPurchased: Bool = false
     var product: Product
@@ -59,6 +64,7 @@ struct CourseItem: View {
                     .padding(10)
             } else {
                 Text(product.displayPrice)
+//                    .foregroundColor(colorScheme == .dark ? .primary : .black)
                     .padding(10)
             }
         }

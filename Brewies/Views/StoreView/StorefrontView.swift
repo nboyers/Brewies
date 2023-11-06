@@ -20,8 +20,6 @@ struct StorefrontView: View {
 }
 
 
-struct StorefrontView_Previews: PreviewProvider {
-    static var previews: some View {
-        StorefrontView()
-    }
+#Preview {
+    StorefrontView(storeVM: StoreKitManager())
 }

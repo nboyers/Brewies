@@ -79,7 +79,7 @@ struct ContentView: View {
     }
     
     
- 
+    
     
     
     
@@ -137,7 +137,7 @@ struct ContentView: View {
                         searchQuery: $searchQuery,
                         shouldSearchInArea: $shouldSearchInArea
                     )
-                 
+                    
                     
                     // 2. User Location Button
                     if showUserLocationButton {
@@ -163,16 +163,19 @@ struct ContentView: View {
                                 Button(action: {
                                     centeredOnUser = true
                                 }) {
-                                    Image(systemName: "location.cirlce.fill")
+                                    Image(systemName: "location.circle.fill")
                                         .resizable()
-                                        .frame(width: 40, height: 40)
-//                                        .foregroundColor(Color.primary)
-                                        .background(
-                                            Rectangle()
-                                                .fill(Color.accentColor)
-                                        )
+                                        .clipShape(Circle())
+                                        .aspectRatio(contentMode: .fit) // Maintain the aspect ratio of your image
+                                        .foregroundColor(.white) // Set the arrow color to blue
+                                        .frame(width: 50, height: 50) // Set the frame size for your image
+                                        .background(Circle().fill(Color.blue)) // Apply a white background in a circle shape
+                                    // Clip the image with its background to a circle
+                                    
+                                    
+                                    
                                 }
-                                .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
+                                .offset(CGSize(width: geo.size.width/10 - 20, height: geo.size.width*1.55))
                             }
                         }
                     }
@@ -283,30 +286,6 @@ struct ContentView: View {
                             AdBannerView()
                                 .frame(width: 320, height: 50)
                         }
-                        // While testing, no one actually used this button. just created more noise removing
-                        // Until further notice
-                        //                        Button(action: {
-                        //
-                        //                            // Your action to handle the ad goes here
-                        //                            self.contentVM.handleRewardAd(reward: "credits")
-                        //                        }) {
-                        //                            HStack(spacing: 10) {
-                        //                                Image(systemName: "video.fill")
-                        //                                    .resizable()
-                        //                                    .scaledToFit() // Maintain aspect ratio
-                        //                                    .frame(width: 20, height: 20) // Specify the size of the image
-                        //                                    .foregroundColor(.white) // Color of the star
-                        //                                    .padding(5) // Add some padding to give the image more room
-                        //                                    .background(Color.blue) // Background color of the circle
-                        //                                    .clipShape(Circle()) // Make the background a circle
-                        //                                Text("Watch Ads for Credits")
-                        //                                    .font(.headline)
-                        //                            }
-                        //                            .padding()
-                        //                            .background(Color.green)
-                        //                            .foregroundColor(.white)
-                        //                            .cornerRadius(10)
-                        //                        }
                     }
                 }
                 
@@ -321,7 +300,7 @@ struct ContentView: View {
                     )
                 }
                 
-       
+                
                 .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
                     Alert(
                         title: Text("No Ads Available"),
@@ -331,10 +310,8 @@ struct ContentView: View {
                 }
                 .onAppear {
                     contentVM.locationManager.requestLocationAccess()
-                
+                    
                 }
-                
-                
                 
                 GeometryReader { geo in
                     VStack {
@@ -352,7 +329,7 @@ struct ContentView: View {
                             Text("Search this area")
                             // .font(geometry.size.width > 320 ? .body : .footnote)
                                 .font(.system(size: geo.size.width <= 375 ? 17 : 20, weight: .bold))
-//                                .padding(.horizontal, geo.size.width > 320 ? 20 : 10)
+                            //                                .padding(.horizontal, geo.size.width > 320 ? 20 : 10)
                                 .frame(width: geo.size.width/2.5, height: geo.size.width/50)
                                 .padding()
                                 .font(.title3)
@@ -382,7 +359,7 @@ struct ContentView: View {
                     }
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                     
-
+                    
                     Button(action: {
                         
                         switch shouldAllowAd() {
@@ -522,7 +499,7 @@ struct ContentView: View {
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
                             })
-
+                        
                     case .tooSoon:
                         CustomAlertView(
                             title: "Not Yet",
@@ -559,7 +536,7 @@ struct ContentView: View {
                                 sharedAlertVM.currentAlertType = nil
                             },
                             dismissAction: {
-                                sharedAlertVM.currentAlertType = .streakReward // Makes sure user cannot be scammed 
+                                sharedAlertVM.currentAlertType = .streakReward // Makes sure user cannot be scammed
                             }
                         )
                     case .showNotEnoughStreakAlert:
@@ -574,7 +551,7 @@ struct ContentView: View {
                                 sharedAlertVM.currentAlertType = nil
                             }
                         )
-
+                        
                     default:
                         CustomAlertView(
                             title: "Mr. Dev Man Broke Something",
@@ -590,8 +567,8 @@ struct ContentView: View {
             .sheet(isPresented: $howInstructions) {
                 InstructionsView()
             }
-  
-
+            
+            
             //MARK: User Profile
             .sheet(item: $activeSheet) { sheet in
                 
@@ -654,8 +631,13 @@ struct ContentView: View {
             .alert(isPresented: $showLocationAccessAlert) {
                 Alert(
                     title: Text("Location Access Required"),
-                    message: Text("To give local recommendations, Brewies needs access to your location. Please go to Settings > Privacy > Location Services, find Brewies, and allow location access."),
-                    dismissButton: .default(Text("OK"))
+                    message: Text("To give local recommendations, Brewies needs access to your location. You can enable location services for Brewies in the Settings app."),
+                    primaryButton: .default(Text("Settings"), action: {
+                        // This line opens the Settings app
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+
+                    }),
+                    secondaryButton: .cancel()
                 )
             }
             
@@ -680,11 +662,11 @@ struct ContentView: View {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { (placemarks, error) in
             guard error == nil else {
-             
+                
                 return
             }
             guard let placemark = placemarks?.first, let location = placemark.location else {
-              
+                
                 return
             }
             
