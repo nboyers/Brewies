@@ -7,7 +7,8 @@
 import SwiftUI
 import StoreKit
 struct SubscriptionView: View {
-    @EnvironmentObject var storeVM: StoreKitManager
+    @EnvironmentObject var storeKitManager: StoreKitManager
+    
     @StateObject var userVM = UserViewModel.shared
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) var openURL
@@ -15,7 +16,8 @@ struct SubscriptionView: View {
     @State var isPurchased = false
     @State var purchasedProduct: Product?
     let signInCoordinator = SignInWithAppleCoordinator()
-    
+//    let subscriptionIDs = Set(["com.nobos.AnnualBrewies", "com.nobos.Biannual", "com.nobos.Brewies"])
+
     var body: some View {
         if userVM.user.isLoggedIn {
             VStack(spacing: 20) { // Add spacing between VStack elements
@@ -52,7 +54,10 @@ struct SubscriptionView: View {
                         
                         
                         Section() {
-                            ForEach(storeVM.subscriptions.sorted(by: { $0.displayName < $1.displayName })) { product in
+                            ForEach(storeKitManager.storeStatus.storeProducts.sorted(by: { $0.displayName < $1.displayName }).filter({ product in
+                                // Assuming 'adRemovalProductId', 'creditsProductId', and 'favoritesSlotId' are non-subscription products
+                                [StoreKitManager.monthlyID, StoreKitManager.semiYearlyID, StoreKitManager.yearlyID].contains(product.id)
+                            })) { product in
                                 Button(action: {
                                     Task {
                                         await buy(product: product)
@@ -133,9 +138,9 @@ struct SubscriptionView: View {
     }
     
 
-    func buy(product: Product) async {
+   private func buy(product: Product) async {
         do {
-            if try await storeVM.purchase(product) != nil {
+            if try await storeKitManager.purchase(product) != nil {
                 // Purchase successful
                 userVM.user.isSubscribed = true
                 purchasedProduct = product

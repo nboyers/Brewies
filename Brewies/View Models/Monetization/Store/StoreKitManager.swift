@@ -5,75 +5,63 @@
 //  Created by Noah Boyers on 7/3/23.
 //
 import Foundation
+import Foundation
 import StoreKit
+
+// Add your RenewalState definition here if it's not already defined elsewhere
+typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
 
 public enum StoreError: Error {
     case failedVerification
 }
 
-typealias RenewalInfo = StoreKit.Product.SubscriptionInfo.RenewalInfo
-typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
-
 class StoreKitManager: ObservableObject {
-    @Published var storeProducts: [Product] = []
-    @Published var purchasedCourses: [Product] = []
-    @Published var isAdRemovalPurchased: Bool = false
-    @Published private(set) var subscriptions: [Product] = []
-    @Published private(set) var purchasedSubscriptions: [Product] = []
-    @Published private(set) var subscriptionGroupStatus: RenewalState?
+    @Published var storeStatus = StoreStatus()
+    
+    // Define product identifiers directly in the class
+    static let adRemovalProductId = "com.nobosoftware.removeAds"
+    static let creditsProductId = "com.nobosoftware.BuyableRequests"
+    static let favoritesSlotId = "com.nobosoftware.FavoriteSlot"
+    
+    static let yearlyID = "com.nobos.AnnualBrewies"
+    static let semiYearlyID = "com.nobos.Biannual"
+    static let monthlyID = "com.nobos.Brewies"
     
     var userViewModel = UserViewModel.shared
     var updateListenerTask: Task<Void, Error>? = nil
     let subscriptionSlots = 20
     
-    // Product and Subscription Identifiers
-    let adRemovalProductId = "com.nobosoftware.removeAds"
-    let creditsProductId = "com.nobosoftware.BuyableRequests"
-    let favoritesSlotId = "com.nobosoftware.FavoriteSlot"
-    
-    let yearlyID = "com.nobos.AnnualBrewies"
-    let semiYearlyID = "com.nobos.Biannual"
-    let monthlyID = "com.nobos.Brewies"
-    
-    private var productDict: [String: String] = [:]
-    private var subscriptionsDict: [String: String] = [:]
-    private var productLookup: [String: Product] = [:]
-    private var subscriptionLookup: [String: Product] = [:]
+    var productLookup: [String: Product] = [:]
+    var subscriptionLookup: [String: Product] = [:]
     
     init() {
-        setupProductLists()
-        productLookup = Dictionary(uniqueKeysWithValues: storeProducts.map { ($0.id, $0) })
-        subscriptionLookup = Dictionary(uniqueKeysWithValues: subscriptions.map { ($0.id, $0) })
-        updateListenerTask = listenForTransactions()
-        
         Task {
             await requestProducts()
             await updateCustomerProductStatus()
+            updateListenerTask = listenForTransactions()
         }
-        
     }
     
     deinit {
         updateListenerTask?.cancel()
     }
     
-    private func setupProductLists() {
-        if let slistPath = Bundle.main.path(forResource: "SubscriptionsList", ofType: "plist"),
-           let plist = FileManager.default.contents(atPath: slistPath) {
-            subscriptionsDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String: String]) ?? [:]
-        }
+    private func setupProductLists() async {
+        await requestProducts()
         
-        if let plistPath = Bundle.main.path(forResource: "ProductList", ofType: "plist"),
-           let plist = FileManager.default.contents(atPath: plistPath) {
-            productDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String: String]) ?? [:]
+        DispatchQueue.main.async {
+            // Populate lookups after ensuring 'storeProducts' and 'subscriptions' are fetched.
+            self.productLookup = Dictionary(uniqueKeysWithValues: self.storeStatus.storeProducts.map { ($0.id, $0) })
+            self.subscriptionLookup = Dictionary(uniqueKeysWithValues: self.storeStatus.subscriptions.map { ($0.id, $0) })
         }
     }
     
+    
     func checkIfAdsRemoved() async {
-        if let product = storeProducts.first(where: { $0.id == adRemovalProductId }) {
-            DispatchQueue.main.async {
+        if let product = storeStatus.storeProducts.first(where: { $0.id == StoreKitManager.adRemovalProductId }) {
+            DispatchQueue.main.async { [self] in
                 Task {
-                    self.isAdRemovalPurchased = (try? await self.isPurchased(product)) ?? false
+                    storeStatus.isAdRemovalPurchased = (try? await self.isPurchased(product)) ?? false
                 }
             }
         }
@@ -84,22 +72,22 @@ class StoreKitManager: ObservableObject {
         let defaults = UserDefaults.standard
         
         switch productId {
-        case monthlyID:
+        case StoreKitManager.monthlyID:
             userViewModel.addCredits(25)
             userViewModel.subscribe(tier: .monthly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
             
-        case semiYearlyID:
+        case StoreKitManager.semiYearlyID:
             userViewModel.addCredits(40)
             userViewModel.subscribe(tier: .semiYearly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
             
-        case yearlyID:
+        case StoreKitManager.yearlyID:
             userViewModel.addCredits(50)
             userViewModel.subscribe(tier: .yearly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
             
-        case creditsProductId:
+        case StoreKitManager.creditsProductId:
             userViewModel.addCredits(5)
             
         default:
@@ -120,9 +108,6 @@ class StoreKitManager: ObservableObject {
             userViewModel.syncCredits(accountStatus: "login")
         }
     }
-    
-    
-    
     
     
     //MARK: listen for transactions - start this early in the app
@@ -151,15 +136,31 @@ class StoreKitManager: ObservableObject {
     @MainActor
     func requestProducts() async {
         do {
-            //using the Product static method products to retrieve the list of products
-            storeProducts = try await Product.products(for: productDict.values)
+            // Request only the hardcoded products
+            let productIdentifiers: Set<String> = [
+                StoreKitManager.adRemovalProductId,
+                StoreKitManager.creditsProductId,
+                StoreKitManager.favoritesSlotId,
+                StoreKitManager.yearlyID,
+                StoreKitManager.semiYearlyID,
+                StoreKitManager.monthlyID
+            ]
             
-            // request from the app store using the product ids from list
-            subscriptions = try await Product.products(for: subscriptionsDict.values)
+            // Fetch products using the hardcoded identifiers
+            storeStatus.storeProducts = try await Product.products(for: productIdentifiers)
+            storeStatus.subscriptions = storeStatus.storeProducts.filter { product in
+                productIdentifiers.contains(product.id)
+            }
+            
+            // Create lookups from the fetched products
+            productLookup = Dictionary(uniqueKeysWithValues: storeStatus.storeProducts.map { ($0.id, $0) })
+            subscriptionLookup = Dictionary(uniqueKeysWithValues: storeStatus.subscriptions.map { ($0.id, $0) })
         } catch {
-            //            print("Failed - error retrieving products \(error)")
+            // Handle errors appropriately
+            print("Failed to retrieve products: \(error)")
         }
     }
+    
     
     
     //MARK: Generics - check the verificationResults
@@ -185,8 +186,8 @@ class StoreKitManager: ObservableObject {
             do {
                 let transaction = try checkVerified(result)
                 
-                if transaction.productID == adRemovalProductId {
-                    isAdRemovalPurchased = true
+                if transaction.productID == StoreKitManager.adRemovalProductId {
+                    storeStatus.isAdRemovalPurchased = true
                 }
                 
                 if let course = productLookup[transaction.productID] {
@@ -195,7 +196,7 @@ class StoreKitManager: ObservableObject {
                 
                 if transaction.productType == .autoRenewable,
                    let subscription = subscriptionLookup[transaction.productID] {
-                    purchasedSubscriptions.append(subscription)
+                    storeStatus.purchasedSubscriptions.append(subscription)
                 }
                 
                 // Collect transactions to be finished after the loop
@@ -205,7 +206,7 @@ class StoreKitManager: ObservableObject {
             }
         }
         
-        self.purchasedCourses = purchasedCoursesTemp
+        storeStatus.purchasedCourses = purchasedCoursesTemp
         
         // Finish all transactions after updating purchase status to avoid delays
         for transaction in transactionsToFinish {
@@ -215,8 +216,10 @@ class StoreKitManager: ObservableObject {
         handleSubscriptionStatusChange()
     }
     
-    // ... (rest of your class code)
-    
+    func refreshData() async {
+        await requestProducts()
+        await updateCustomerProductStatus()
+    }
     
     //MARK: Purchase and returns an optional transaction
     func purchase(_ product: Product) async throws -> Transaction? {
@@ -230,23 +233,23 @@ class StoreKitManager: ObservableObject {
             
             DispatchQueue.main.async {
                 switch product.id {
-                case self.creditsProductId:
+                case StoreKitManager.creditsProductId:
                     self.getCreditsForSubscription(product.id)
                     break
                     
-                case self.yearlyID:
+                case StoreKitManager.yearlyID:
                     self.getCreditsForSubscription(product.id)
                     break
                     
-                case self.semiYearlyID:
+                case StoreKitManager.semiYearlyID:
                     self.getCreditsForSubscription(product.id)
                     break
                     
-                case self.monthlyID:
+                case StoreKitManager.monthlyID:
                     self.getCreditsForSubscription(product.id)
                     break
                     
-                case self.favoritesSlotId:
+                case StoreKitManager.favoritesSlotId:
                     CoffeeShopData.shared.addFavoriteSlots(1)
                     break
                     
@@ -277,14 +280,14 @@ class StoreKitManager: ObservableObject {
         let defaults = UserDefaults.standard
         
         // Determine the new subscription status
-        let purchasedSubscriptionIDs = purchasedSubscriptions.map { $0.id }
+        let purchasedSubscriptionIDs = storeStatus.purchasedSubscriptions.map { $0.id }
         var newTier: SubscriptionTier? = nil
         
-        if purchasedSubscriptionIDs.contains(yearlyID) {
+        if purchasedSubscriptionIDs.contains(StoreKitManager.yearlyID) {
             newTier = .yearly
-        } else if purchasedSubscriptionIDs.contains(semiYearlyID) {
+        } else if purchasedSubscriptionIDs.contains(StoreKitManager.semiYearlyID) {
             newTier = .semiYearly
-        } else if purchasedSubscriptionIDs.contains(monthlyID) {
+        } else if purchasedSubscriptionIDs.contains(StoreKitManager.monthlyID) {
             newTier = .monthly
         }
         
@@ -303,8 +306,16 @@ class StoreKitManager: ObservableObject {
     
     
     
-    //check if product has already been purchased
     func isPurchased(_ product: Product) async throws -> Bool {
-        return purchasedCourses.contains(product)
+        return storeStatus.purchasedCourses.contains(product)
+    }
+    
+    struct StoreStatus {
+        var storeProducts: [Product] = []
+        var purchasedCourses: [Product] = []
+        var isAdRemovalPurchased: Bool = false
+        var subscriptions: [Product] = []
+        var purchasedSubscriptions: [Product] = []
+        var subscriptionGroupStatus: RenewalState?
     }
 }

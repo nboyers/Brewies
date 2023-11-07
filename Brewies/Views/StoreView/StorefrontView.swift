@@ -8,24 +8,24 @@
 import SwiftUI
 
 struct StorefrontView: View {
-    @StateObject var storeKit = StoreKitManager()
+    @StateObject var storeKitManager = StoreKitManager()
     
     var body: some View {
         VStack {
             SubscriptionView()
+                .environmentObject(storeKitManager) // Pass the environment object to the SubscriptionView
             ProductStoreView()
+                .environmentObject(storeKitManager) // Pass the environment object to the ProductStoreView
         }
         .onAppear {
+            // Call the refresh method here
             Task {
-                await storeKit.requestProducts()
-                await storeKit.updateCustomerProductStatus()
+                await storeKitManager.refreshData()
             }
         }
-        .environmentObject(storeKit)
     }
 }
 
-
 #Preview {
-    StorefrontView(storeKit: StoreKitManager())
+    StorefrontView()
 }

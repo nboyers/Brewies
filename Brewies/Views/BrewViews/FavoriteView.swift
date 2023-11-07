@@ -88,7 +88,7 @@ struct FavoritesView: View {
                         }
                         .navigationBarBackButtonHidden(true)
                     }
-                    if !storeKit.isAdRemovalPurchased && !userVM.user.isSubscribed {
+                    if !storeKit.storeStatus.isAdRemovalPurchased && !userVM.user.isSubscribed {
                         AdBannerView()
                             .frame(width: 320, height: 50)
                     }
