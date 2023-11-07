@@ -21,11 +21,11 @@ class StoreKitManager: ObservableObject {
     @Published private(set) var subscriptions: [Product] = []
     @Published private(set) var purchasedSubscriptions: [Product] = []
     @Published private(set) var subscriptionGroupStatus: RenewalState?
-
+    
     var userViewModel = UserViewModel.shared
     var updateListenerTask: Task<Void, Error>? = nil
     let subscriptionSlots = 20
-
+    
     // Product and Subscription Identifiers
     let adRemovalProductId = "com.nobosoftware.removeAds"
     let creditsProductId = "com.nobosoftware.BuyableRequests"
@@ -33,40 +33,42 @@ class StoreKitManager: ObservableObject {
     
     let yearlyID = "com.nobos.AnnualBrewies"
     let semiYearlyID = "com.nobos.Biannual"
-    let monthlyID = "com.nobosoftware.Brewies"
-
+    let monthlyID = "com.nobos.Brewies"
+    
     private var productDict: [String: String] = [:]
     private var subscriptionsDict: [String: String] = [:]
     private var productLookup: [String: Product] = [:]
     private var subscriptionLookup: [String: Product] = [:]
-
+    
     init() {
         setupProductLists()
         productLookup = Dictionary(uniqueKeysWithValues: storeProducts.map { ($0.id, $0) })
         subscriptionLookup = Dictionary(uniqueKeysWithValues: subscriptions.map { ($0.id, $0) })
         updateListenerTask = listenForTransactions()
+        
         Task {
             await requestProducts()
             await updateCustomerProductStatus()
         }
+        
     }
-
+    
     deinit {
         updateListenerTask?.cancel()
     }
-
+    
     private func setupProductLists() {
         if let slistPath = Bundle.main.path(forResource: "SubscriptionsList", ofType: "plist"),
            let plist = FileManager.default.contents(atPath: slistPath) {
             subscriptionsDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String: String]) ?? [:]
         }
-
+        
         if let plistPath = Bundle.main.path(forResource: "ProductList", ofType: "plist"),
            let plist = FileManager.default.contents(atPath: plistPath) {
             productDict = (try? PropertyListSerialization.propertyList(from: plist, format: nil) as? [String: String]) ?? [:]
         }
     }
-
+    
     func checkIfAdsRemoved() async {
         if let product = storeProducts.first(where: { $0.id == adRemovalProductId }) {
             DispatchQueue.main.async {
@@ -76,51 +78,49 @@ class StoreKitManager: ObservableObject {
             }
         }
     }
-
+    
     
     @Sendable func getCreditsForSubscription(_ productId: String) {
         let defaults = UserDefaults.standard
         
-        
         switch productId {
         case monthlyID:
             userViewModel.addCredits(25)
-            
+            userViewModel.subscribe(tier: .monthly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
             
-            
-            break
         case semiYearlyID:
             userViewModel.addCredits(40)
-            
+            userViewModel.subscribe(tier: .semiYearly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
             
-            break
         case yearlyID:
             userViewModel.addCredits(50)
-            
+            userViewModel.subscribe(tier: .yearly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
             
-            break
         case creditsProductId:
             userViewModel.addCredits(5)
-            break
-        default:
             
+        default:
+            // Handle other products or errors
             break
         }
         
-        // Save that user has received credits for this purchase
+        // Save the subscription status
         defaults.set(true, forKey: productId)
         
         // Update the current subscription ID
         defaults.set(productId, forKey: "CurrentSubscriptionID")
+        
+        // This should be handled according to the login status of the user to sync credits
         if userViewModel.user.isLoggedIn {
             userViewModel.syncCredits(accountStatus: "signOut")
         } else {
             userViewModel.syncCredits(accountStatus: "login")
         }
     }
+    
     
     
     
@@ -157,7 +157,7 @@ class StoreKitManager: ObservableObject {
             // request from the app store using the product ids from list
             subscriptions = try await Product.products(for: subscriptionsDict.values)
         } catch {
-//            print("Failed - error retrieving products \(error)")
+            //            print("Failed - error retrieving products \(error)")
         }
     }
     
@@ -175,10 +175,11 @@ class StoreKitManager: ObservableObject {
         }
     }
     
-    //MARK: Update the customers products
+    // MARK: Update the customers products
     @MainActor
     func updateCustomerProductStatus() async {
-        var purchasedCourses: [Product] = []
+        var purchasedCoursesTemp: [Product] = []
+        var transactionsToFinish: [Transaction] = []
         
         for await result in Transaction.currentEntitlements {
             do {
@@ -189,36 +190,33 @@ class StoreKitManager: ObservableObject {
                 }
                 
                 if let course = productLookup[transaction.productID] {
-                    purchasedCourses.append(course)
+                    purchasedCoursesTemp.append(course)
                 }
                 
-                switch transaction.productType {
-                case .autoRenewable:
-                    if let subscription = subscriptionLookup[transaction.productID] {
-                        purchasedSubscriptions.append(subscription)
-                    }
-                    if UserDefaults.standard.bool(forKey: "isSubscribed") {
-                        if let product = productLookup[yearlyID] {
-                            purchasedCourses.append(product)
-                        } else if let product = productLookup[semiYearlyID] {
-                            purchasedCourses.append(product)
-                        } else if let product = productLookup[monthlyID] {
-                            purchasedCourses.append(product)
-                        }
-                    }
-                default:
-                    break
+                if transaction.productType == .autoRenewable,
+                   let subscription = subscriptionLookup[transaction.productID] {
+                    purchasedSubscriptions.append(subscription)
                 }
-
-                self.purchasedCourses = purchasedCourses
                 
-                await transaction.finish()
+                // Collect transactions to be finished after the loop
+                transactionsToFinish.append(transaction)
             } catch {
-                // handle errors
+                // Handle errors
             }
         }
+        
+        self.purchasedCourses = purchasedCoursesTemp
+        
+        // Finish all transactions after updating purchase status to avoid delays
+        for transaction in transactionsToFinish {
+            await transaction.finish()
+        }
+        
         handleSubscriptionStatusChange()
     }
+    
+    // ... (rest of your class code)
+    
     
     //MARK: Purchase and returns an optional transaction
     func purchase(_ product: Product) async throws -> Transaction? {
@@ -238,15 +236,20 @@ class StoreKitManager: ObservableObject {
                     
                 case self.yearlyID:
                     self.getCreditsForSubscription(product.id)
+                    break
+                    
                 case self.semiYearlyID:
                     self.getCreditsForSubscription(product.id)
                     break
+                    
                 case self.monthlyID:
                     self.getCreditsForSubscription(product.id)
                     break
+                    
                 case self.favoritesSlotId:
                     CoffeeShopData.shared.addFavoriteSlots(1)
                     break
+                    
                 default:
                     break
                 }
@@ -272,24 +275,32 @@ class StoreKitManager: ObservableObject {
     func handleSubscriptionStatusChange() {
         // Retrieve the user's subscription status from UserDefaults
         let defaults = UserDefaults.standard
-        let isSubscribed = defaults.bool(forKey: "isSubscribed")
         
         // Determine the new subscription status
-        let newIsSubscribed = purchasedSubscriptions.contains { product in
-            return product.id == yearlyID || product.id == semiYearlyID || product.id == monthlyID
+        let purchasedSubscriptionIDs = purchasedSubscriptions.map { $0.id }
+        var newTier: SubscriptionTier? = nil
+        
+        if purchasedSubscriptionIDs.contains(yearlyID) {
+            newTier = .yearly
+        } else if purchasedSubscriptionIDs.contains(semiYearlyID) {
+            newTier = .semiYearly
+        } else if purchasedSubscriptionIDs.contains(monthlyID) {
+            newTier = .monthly
         }
         
-        if isSubscribed && !newIsSubscribed {
-            // User was subscribed but is no longer. Remove slots.
-            CoffeeShopData.shared.removeSubscriptionSlots(self.subscriptionSlots)
-        } else if !isSubscribed && newIsSubscribed {
-            // User was not subscribed but now is. Add slots.
-            CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
+        if let newTier = newTier {
+            // If there is a new tier, save it and update the subscription status to true
+            defaults.set(true, forKey: "isSubscribed")
+            defaults.set(newTier.rawValue, forKey: UserKeys.subscriptionTier)
+            userViewModel.subscribe(tier: newTier)
+        } else {
+            // If there's no valid subscription, set the status to false and tier to none
+            defaults.set(false, forKey: "isSubscribed")
+            defaults.set(SubscriptionTier.none.rawValue, forKey: UserKeys.subscriptionTier)
+            userViewModel.unsubscribe()
         }
-        
-        // Update the subscription status in UserDefaults
-        defaults.set(newIsSubscribed, forKey: "isSubscribed")
     }
+    
     
     
     //check if product has already been purchased

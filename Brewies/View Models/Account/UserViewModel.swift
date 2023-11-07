@@ -8,6 +8,15 @@
 import Foundation
 import SwiftUI
 
+
+enum SubscriptionTier: String {
+    case monthly = "Monthly"
+    case semiYearly = "SemiYearly"
+    case yearly = "Yearly"
+    case none = "None"
+}
+
+
 // Define a struct to hold your UserDefaults keys
 struct UserKeys {
     static let isLoggedIn = "isLoggedIn"
@@ -17,6 +26,7 @@ struct UserKeys {
     static let lastName = "UserLastName"
     static let userStreakCount = "UserStreakCount"
     static let userStreakContentViewed = "UserStreakContentViewed"
+    static let subscriptionTier = "SubscriptionTier"
 
     // Computed properties for user-specific keys
     static func userCredits(_ userID: String) -> String { "UserCredits_\(userID)" }
@@ -104,17 +114,20 @@ class UserViewModel: ObservableObject {
         UserDefaults.standard.set(user.credits, forKey: key)
     }
     
-    func subscribe() {
-        // Subscription logic here...
+    func subscribe(tier: SubscriptionTier) {
         user.isSubscribed = true
+        user.subscriptionTier = tier
         UserDefaults.standard.set(true, forKey: UserKeys.isSubscribed)
+        UserDefaults.standard.set(tier.rawValue, forKey: UserKeys.subscriptionTier)
     }
-    
+
     func unsubscribe() {
-        // Unsubscription logic here...
         user.isSubscribed = false
+        user.subscriptionTier = .none
         UserDefaults.standard.set(false, forKey: UserKeys.isSubscribed)
+        UserDefaults.standard.set(SubscriptionTier.none.rawValue, forKey: UserKeys.subscriptionTier)
     }
+
     
     func addToFavorites(_ coffeeShop: CoffeeShop) {
         user.favorites.append(coffeeShop)

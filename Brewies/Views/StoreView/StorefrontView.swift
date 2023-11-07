@@ -8,18 +8,24 @@
 import SwiftUI
 
 struct StorefrontView: View {
-    @StateObject var storeVM = StoreKitManager()
+    @StateObject var storeKit = StoreKitManager()
     
     var body: some View {
         VStack {
             SubscriptionView()
             ProductStoreView()
         }
-        .environmentObject(storeVM)
+        .onAppear {
+            Task {
+                await storeKit.requestProducts()
+                await storeKit.updateCustomerProductStatus()
+            }
+        }
+        .environmentObject(storeKit)
     }
 }
 
 
 #Preview {
-    StorefrontView(storeVM: StoreKitManager())
+    StorefrontView(storeKit: StoreKitManager())
 }

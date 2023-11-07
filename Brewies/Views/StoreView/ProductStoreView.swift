@@ -17,7 +17,7 @@ struct ProductStoreView: View {
             Text("In-App Purchases")
                 .bold()
             Divider()
-            ForEach(storeKit.storeProducts) { product in
+            ForEach(storeKit.storeProducts.sorted(by: { $0.displayName < $1.displayName })) { product in
                 HStack {
                     Text(product.displayName)
                         .foregroundColor(colorScheme == .dark ? .white : .black)
@@ -32,8 +32,6 @@ struct ProductStoreView: View {
                     }
                 }
             }
-
-            
             Divider()
             HStack {
                 Spacer()
@@ -51,38 +49,61 @@ struct ProductStoreView: View {
 }
 
 struct CourseItem: View {
-   
-    @ObservedObject var storeKit : StoreKitManager
+    @ObservedObject var storeKit: StoreKitManager
+    
     @State var isPurchased: Bool = false
     var product: Product
     
+    // We use this to get access to the colorScheme to set the color conditionally
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
-        VStack {
-            if isPurchased {
-                Text(Image(systemName: "checkmark"))
-                    .bold()
+        Group {
+            if storeKit.isAdRemovalPurchased && product.id == storeKit.adRemovalProductId {
+                // If ad removal is purchased and this product is the ad removal product
+                // Then show "BOUGHT" and gray it out.
+                Text("BOUGHT")
+                    .foregroundColor(.gray)
                     .padding(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 10)
+                            .strokeBorder(Color.gray, lineWidth: 2)
+                            .disabled(true)
+                    )
             } else {
-                Text(product.displayPrice)
-//                    .foregroundColor(colorScheme == .dark ? .primary : .black)
-                    .padding(10)
+                // Otherwise, show the price and allow interaction.
+                Button(action: {
+                    // Purchase this product
+                    Task {
+                        try await storeKit.purchase(product)
+                    }
+                }) {
+                    Text(product.displayPrice)
+                        .padding(10)
+                        .foregroundColor(colorScheme == .dark ? .white : .black)
+                        .background(
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(colorScheme == .dark ? .white : .black, lineWidth: 2)
+                        )
+                }
+                // Disable button if the product is already purchased
+                .disabled(isPurchased)
+                .onReceive(storeKit.$purchasedCourses) { _ in
+                    // Update isPurchased when purchasedCourses changes
+                    isPurchased = storeKit.purchasedCourses.contains(where: { $0.id == product.id })
+                }
             }
         }
-        .onChange(of: storeKit.isAdRemovalPurchased) { value in
-            isPurchased = value
-        }
-        .onChange(of: storeKit.purchasedCourses) { course in
-            Task {
-                isPurchased = (try? await storeKit.isPurchased(product)) ?? false
-            }
+        
+        .onChange(of: storeKit.isAdRemovalPurchased) { _ in
+            // If the ad removal purchase status changes, update isPurchased
+            isPurchased = storeKit.isAdRemovalPurchased && product.id == storeKit.adRemovalProductId
         }
     }
 }
 
-
-struct ProductStoreView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProductStoreView()
-            .environmentObject(StoreKitManager())
-    }
+#Preview {
+    ProductStoreView()
+        .environmentObject(StoreKitManager())
 }
+

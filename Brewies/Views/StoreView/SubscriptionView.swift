@@ -52,7 +52,7 @@ struct SubscriptionView: View {
                         
                         
                         Section() {
-                            ForEach(storeVM.subscriptions) { product in
+                            ForEach(storeVM.subscriptions.sorted(by: { $0.displayName < $1.displayName })) { product in
                                 Button(action: {
                                     Task {
                                         await buy(product: product)
@@ -60,9 +60,8 @@ struct SubscriptionView: View {
                                 }) {
                                     HStack {
                                         Text(product.displayName)
-                                         
-                                        if product == purchasedProduct {
-                                            Spacer()
+                                        
+                                        if UserDefaults.standard.string(forKey: "CurrentSubscriptionID") == product.id {
                                             Image(systemName: "checkmark.circle.fill")
                                                 .foregroundColor(.green)
                                         }
@@ -72,32 +71,32 @@ struct SubscriptionView: View {
                                     .padding()
                                     .background(.brown)
                                     .cornerRadius(15.0)
-                    
+                                    
                                 }
- 
+                                
                                 
                                 Text(product.description)
                                     .font(.caption)
                                     .padding(.horizontal, 10) // Add some padding
-    
+                                
                             }
                         }
                         Spacer()
                         HStack {
                             Spacer()
                             Button(action: {
-                                  openURL(URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-                              }) {
-                                  Text("terms of service")
-                                      .font(.footnote)
-                              }
-                              Spacer()
-                              Button(action: {
-                                  openURL(URL(string: "https://nobosoftware.com/privacy")!)
-                              }) {
-                                  Text("privacy policy")
-                                      .font(.footnote)
-                              }
+                                openURL(URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
+                            }) {
+                                Text("terms of service")
+                                    .font(.footnote)
+                            }
+                            Spacer()
+                            Button(action: {
+                                openURL(URL(string: "https://nobosoftware.com/privacy")!)
+                            }) {
+                                Text("privacy policy")
+                                    .font(.footnote)
+                            }
                             Spacer()
                         }
                         Spacer()
@@ -108,7 +107,7 @@ struct SubscriptionView: View {
                 .cornerRadius(10)
                 .shadow(radius: 5)
             }
-            .onAppear(perform: setup)
+//            .onAppear(perform: setup)
         } else {
             VStack {
                 Text("Sign in to Subscribe")
@@ -133,12 +132,7 @@ struct SubscriptionView: View {
         }
     }
     
-    func setup() {
-        Task {
-            await storeVM.updateCustomerProductStatus()
-        }
-    }
-    
+
     func buy(product: Product) async {
         do {
             if try await storeVM.purchase(product) != nil {
@@ -152,9 +146,3 @@ struct SubscriptionView: View {
     }
 }
 
-struct SubscriptionView_Previews: PreviewProvider {
-    static var previews: some View {
-        SubscriptionView()
-            .environmentObject(StoreKitManager())
-    }
-}

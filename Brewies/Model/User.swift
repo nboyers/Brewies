@@ -22,6 +22,7 @@ struct User {
     var hasClaimedWeeklyReward: Bool
     var streakCount: Int
     var streakViewedDate: Date?
+    var subscriptionTier: SubscriptionTier = .none
 }
 
 
