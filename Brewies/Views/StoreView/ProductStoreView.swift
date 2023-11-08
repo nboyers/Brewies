@@ -9,8 +9,7 @@ import SwiftUI
 import StoreKit
 
 struct ProductStoreView: View {
-    @StateObject var storeKitManager = StoreKitManager()
-//    @EnvironmentObject var storeKitManager: StoreKitManager
+    @EnvironmentObject var storeKitManager: StoreKitManager // Use the shared instance provided by the environment.
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -18,35 +17,10 @@ struct ProductStoreView: View {
             Text("In-App Purchases")
                 .bold()
             Divider()
-            // Filtering out subscription products based on their ID
             ForEach(storeKitManager.storeStatus.storeProducts.sorted(by: { $0.displayName < $1.displayName }).filter({ product in
-                // Assuming 'adRemovalProductId', 'creditsProductId', and 'favoritesSlotId' are non-subscription products
                 [StoreKitManager.adRemovalProductId, StoreKitManager.creditsProductId, StoreKitManager.favoritesSlotId].contains(product.id)
             })) { product in
-                HStack {
-                    Text(product.displayName)
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                    Spacer()
-                    Button(action: {
-                        // Purchase this product
-                        Task {
-                            do {
-                                _ = try await storeKitManager.purchase(product)
-                            } catch {
-                                // Handle errors if needed
-                            }
-                        }
-                    }) {
-                        Text(product.displayPrice)
-                            .padding(10)
-                            .foregroundColor(colorScheme == .dark ? .white : .black)
-                            .background(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .strokeBorder(colorScheme == .dark ? .white : .black, lineWidth: 2)
-                            )
-                    }
-                    .buttonStyle(PlainButtonStyle()) // To remove default button styling
-                }
+                ProductItem(storeKit: storeKitManager, product: product)
             }
             Divider()
             HStack {
@@ -61,17 +35,21 @@ struct ProductStoreView: View {
             }
         }
         .padding()
+        .onReceive(storeKitManager.$storeStatus) { _ in
+            // Action to be taken when store status changes.
+        }
     }
 }
-
-struct CourseItem: View {
+struct ProductItem: View {
     @ObservedObject var storeKit: StoreKitManager
-    @State var isPurchased: Bool = false
     var product: Product
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack {
+        HStack {
+            Text(product.displayName)
+                .foregroundColor(colorScheme == .dark ? .white : .black)
+            Spacer()
             if storeKit.storeStatus.isAdRemovalPurchased && product.id == StoreKitManager.adRemovalProductId {
                 Text("BOUGHT")
                     .foregroundColor(.gray)
@@ -82,9 +60,12 @@ struct CourseItem: View {
                     )
             } else {
                 Button(action: {
-                    // Purchase this product
                     Task {
-                        try await storeKit.purchase(product)
+                        do {
+                            _ = try await storeKit.purchase(product)
+                        } catch {
+                            // Handle errors if needed
+                        }
                     }
                 }) {
                     Text(product.displayPrice)
@@ -95,15 +76,11 @@ struct CourseItem: View {
                                 .strokeBorder(colorScheme == .dark ? .white : .black, lineWidth: 2)
                         )
                 }
-                .disabled(isPurchased)
+                .buttonStyle(PlainButtonStyle())
             }
-        }
-        .onChange(of: storeKit.storeStatus.isAdRemovalPurchased) { _ in
-            isPurchased = storeKit.storeStatus.isAdRemovalPurchased && product.id == StoreKitManager.adRemovalProductId
         }
     }
 }
-
 
 #Preview {
     ProductStoreView()
