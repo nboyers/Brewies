@@ -9,8 +9,8 @@ import SwiftUI
 import StoreKit
 
 struct ProductStoreView: View {
-//    @StateObject var storeKitManager = StoreKitManager()
-    @EnvironmentObject var storeKitManager: StoreKitManager
+    @StateObject var storeKitManager = StoreKitManager()
+//    @EnvironmentObject var storeKitManager: StoreKitManager
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {

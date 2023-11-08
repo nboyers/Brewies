@@ -7,6 +7,7 @@
 import Foundation
 import Foundation
 import StoreKit
+import Combine
 
 // Add your RenewalState definition here if it's not already defined elsewhere
 typealias RenewalState = StoreKit.Product.SubscriptionInfo.RenewalState
@@ -34,12 +35,25 @@ class StoreKitManager: ObservableObject {
     var productLookup: [String: Product] = [:]
     var subscriptionLookup: [String: Product] = [:]
     
+    private var refreshDataCancellable: AnyCancellable?
+      private let refreshDataSubject = PassthroughSubject<Void, Never>()
+
     init() {
-        Task {
-            await requestProducts()
-            await updateCustomerProductStatus()
-            updateListenerTask = listenForTransactions()
+        
+        Task { [weak self] in
+            await self?.requestProducts()
+            await self?.updateCustomerProductStatus()
+            self?.updateListenerTask = self?.listenForTransactions()
         }
+
+        // Debounce the refresh data calls
+        refreshDataCancellable = refreshDataSubject
+            .debounce(for: .seconds(1), scheduler: RunLoop.main)
+            .sink { [weak self] in
+                Task { [weak self] in
+                    await self?.performRefreshData()
+                }
+            }
     }
     
     deinit {
@@ -215,10 +229,14 @@ class StoreKitManager: ObservableObject {
         
         handleSubscriptionStatusChange()
     }
+    func refreshData() {
+        refreshDataSubject.send()
+    }
     
-    func refreshData() async {
+    private func performRefreshData() async {
         await requestProducts()
         await updateCustomerProductStatus()
+        updateListenerTask = listenForTransactions()
     }
     
     //MARK: Purchase and returns an optional transaction

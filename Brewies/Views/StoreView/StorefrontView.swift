@@ -13,16 +13,10 @@ struct StorefrontView: View {
     var body: some View {
         VStack {
             SubscriptionView()
-                .environmentObject(storeKitManager) // Pass the environment object to the SubscriptionView
             ProductStoreView()
-                .environmentObject(storeKitManager) // Pass the environment object to the ProductStoreView
+            
         }
-        .onAppear {
-            // Call the refresh method here
-            Task {
-                await storeKitManager.refreshData()
-            }
-        }
+
     }
 }
 
