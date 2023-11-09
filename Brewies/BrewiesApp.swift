@@ -20,7 +20,13 @@ struct BrewiesApp: App {
     @StateObject private var selectedCoffeeShop = SelectedCoffeeShop()
     
     init() {
-        self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
+   self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
+        
+        // Perform any setup that doesn't require the UI to be loaded.
+        DispatchQueue.global(qos: .background).async {
+            GADMobileAds.sharedInstance().start(completionHandler: nil)
+//            self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
+        }
     }
     
     var body: some Scene {
@@ -32,10 +38,7 @@ struct BrewiesApp: App {
                 .environmentObject(contentViewModel)
                 .environmentObject(SharedAlertViewModel())
                 .environmentObject(sharedViewModel)
-                .onAppear {
-                    GADMobileAds.sharedInstance().start(completionHandler: nil)
-                    rewardAd.loadRewardedAd()
-                }
+        
         }
     }
 }

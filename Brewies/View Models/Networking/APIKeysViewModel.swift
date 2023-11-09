@@ -37,18 +37,18 @@ class APIKeysViewModel: ObservableObject {
             return
         }
         
-        /// Fetch the API key directly within this function.
-        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
-            fatalError("API Key not found in Info.plist")
-        }
+        /// Fetch the API key safely.
+          guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
+              errorMessage = "API Key not found in Info.plist"
+              completion(nil)
+              return
+          }
         
         /// URL string pointing to the API endpoint.
         let urlString = "https://kwahtvg02a.execute-api.us-east-1.amazonaws.com/Prod"
         
         /// HTTP headers to be included in the request, including the API key.
-        let headers: HTTPHeaders = [
-            "x-api-key": apiKey
-        ]
+        let headers: HTTPHeaders = ["x-api-key": apiKey]
         
         /// Alamofire request to fetch data from the API.
         AF.request(urlString, headers: headers).response { response in

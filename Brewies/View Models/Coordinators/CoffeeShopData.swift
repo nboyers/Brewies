@@ -18,92 +18,69 @@ class CoffeeShopData: ObservableObject {
     
     @Published var maxFavoriteSlots: Int = UserDefaults.standard.integer(forKey: "MaxFavoriteSlots") {
         didSet {
-            // print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
             UserDefaults.standard.set(maxFavoriteSlots, forKey: "MaxFavoriteSlots")
-            // print("maxFavoriteSlots changed to \(maxFavoriteSlots)")
         }
     }
-
-
-
     
     @Published var cachedShops: [CoffeeShop] = []
 
     var numberOfFavoriteShops: Int {
-        return favoriteShops.count
+        favoriteShops.count
     }
-
     
     init() {
-        // Load from UserDefaults when the app starts
         loadFavoriteShops()
-        loadMaxFavoriteSlots()
-
     }
     
     func addToFavorites(_ coffeeShop: CoffeeShop) -> Bool {
-        if favoriteShops.count >= maxFavoriteSlots {
+        guard favoriteShops.count < maxFavoriteSlots, !favoriteShops.contains(coffeeShop) else {
             return false
         }
-        
-        if !favoriteShops.contains(coffeeShop) {
-            favoriteShops.append(coffeeShop)
-        }
-        removeExpiredCachedShops()
+        favoriteShops.append(coffeeShop)
         return true
     }
     
     func removeFromFavorites(_ coffeeShop: CoffeeShop) {
-        if let index = favoriteShops.firstIndex(of: coffeeShop) {
-            favoriteShops.remove(at: index)
-        }
+        favoriteShops.removeAll { $0 == coffeeShop }
+        addShopToCache(coffeeShop)
+    }
+
+    private func addShopToCache(_ coffeeShop: CoffeeShop) {
         if !cachedShops.contains(coffeeShop) {
             var mutableCoffeeShop = coffeeShop
             mutableCoffeeShop.lastAccessDate = Date()
             cachedShops.append(mutableCoffeeShop)
         }
-        removeExpiredCachedShops()
-    }
-
-    
-    private func removeExpiredCachedShops() {
-        let currentDate = Date()
-        cachedShops.removeAll(where: { Calendar.current.date(byAdding: .month, value: 6, to: $0.lastAccessDate ?? Date.now)! < currentDate })
+        cachedShops = cachedShops.filter { Date().timeIntervalSince($0.lastAccessDate ?? Date()) < 6 * 30 * 24 * 60 * 60 } // 6 months in seconds
     }
     
     private func saveFavoriteShops() {
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(favoriteShops) {
-            UserDefaults.standard.set(encoded, forKey: "FavoriteShops")
+        DispatchQueue.global(qos: .background).async {
+            let encoder = JSONEncoder()
+            if let encoded = try? encoder.encode(self.favoriteShops) {
+                UserDefaults.standard.set(encoded, forKey: "FavoriteShops")
+            }
         }
     }
     
     private func loadFavoriteShops() {
-        if let savedShops = UserDefaults.standard.data(forKey: "FavoriteShops") {
-            let decoder = JSONDecoder()
-            if let loadedShops = try? decoder.decode([CoffeeShop].self, from: savedShops) {
-                favoriteShops = loadedShops
+        if let savedShops = UserDefaults.standard.object(forKey: "FavoriteShops") as? Data {
+            DispatchQueue.global(qos: .background).async {
+                let decoder = JSONDecoder()
+                if let loadedShops = try? decoder.decode([CoffeeShop].self, from: savedShops) {
+                    DispatchQueue.main.async {
+                        self.favoriteShops = loadedShops
+                    }
+                }
             }
-        }
-    }
-    private func loadMaxFavoriteSlots() {
-        if let savedMaxFavoriteSlots = UserDefaults.standard.value(forKey: "MaxFavoriteSlots") as? Int {
-            maxFavoriteSlots = savedMaxFavoriteSlots
         }
     }
     
     func addFavoriteSlots(_ slots: Int) {
-        DispatchQueue.main.async {
-            self.maxFavoriteSlots += slots
-        }
-        UserDefaults.standard.set(self.maxFavoriteSlots, forKey: "MaxFavoriteSlots")
+        maxFavoriteSlots += slots
     }
 
     func removeSubscriptionSlots(_ slots: Int) {
-        DispatchQueue.main.async {
-            self.maxFavoriteSlots = max(0, self.maxFavoriteSlots - slots)  // Ensure it doesn't go negative
-        }
-        UserDefaults.standard.set(self.maxFavoriteSlots, forKey: "MaxFavoriteSlots")
+        maxFavoriteSlots = max(0, maxFavoriteSlots - slots)
     }
-
 }

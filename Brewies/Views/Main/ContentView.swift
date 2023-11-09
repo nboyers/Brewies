@@ -309,11 +309,11 @@ struct ContentView: View {
                         dismissButton: .default(Text("OK"))
                     )
                 }
-                .onAppear {
-                    contentVM.locationManager.requestLocationAccess()
-                    
-                }
-                
+//                .onAppear {
+//                    contentVM.locationManager.requestLocationAccess()
+//                    
+//                }
+//                
                 GeometryReader { geo in
                     VStack {
                         Button(action: {

@@ -33,7 +33,7 @@ class YelpAPI : ObservableObject {
     
     
     // Add excluded chain names here
-    private lazy var chainCompanyNames: Set<String> = [
+    private static var chainCompanyNames: Set<String> = [
         "Starbucks", "Starbucks Coffee", "Peets", "Coffee Bean",
         "McDonald's", "Tim Hortons", "Dunkin'",
         "Krispy Kreme", "First Watch", "Caribou Coffee",
@@ -65,7 +65,7 @@ class YelpAPI : ObservableObject {
         "Peet's Coffee", "Starbuck's"
     ]
     
-    private lazy var undesiredCatagories : Set<String> = [
+    private static var undesiredCatagories : Set<String> = [
         "wine_bars", "bars", "pizza",
         "servicestations","hotdogs","burgers",
         "donuts","caribbean","seafood",
@@ -164,13 +164,8 @@ class YelpAPI : ObservableObject {
     }
     
     func isExcludedChain(name: String, categories: [Category]) -> Bool {
-        for chain in chainCompanyNames {
-            if name.lowercased().contains(chain.lowercased()) { return true }
-        }
-        
-        for category in categories {
-            if undesiredCatagories.contains(category.alias) { return true }
-        }
-        return false
-    }
+           // Simplify the check using a Set operation
+           YelpAPI.chainCompanyNames.contains { name.lowercased().contains($0.lowercased()) } ||
+           categories.contains { YelpAPI.undesiredCatagories.contains($0.alias) }
+       }
 }

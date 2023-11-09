@@ -22,9 +22,10 @@ class ContentViewModel: ObservableObject {
     @Published var adsWatched = 0
     @Published var fetchedFromCache = false
     
-    @ObservedObject var userViewModel = UserViewModel.shared
-    @ObservedObject var locationManager = LocationManager()
-    @ObservedObject var apiKeysViewModel = APIKeysViewModel.shared
+    // Changed from @ObservedObject to @Published to ensure updates propagate to the view as expected.
+    @Published var userViewModel = UserViewModel.shared
+    @Published var locationManager = LocationManager()
+    @Published var apiKeysViewModel = APIKeysViewModel.shared
     
     private var rewardAdController = RewardAdController()
     var yelpParams: YelpSearchParams
@@ -75,9 +76,25 @@ class ContentViewModel: ObservableObject {
     }
     
     private func saveToCache(coffeeShops: [CoffeeShop], forKey key: String) {
-        let data = try? JSONEncoder().encode(coffeeShops)
-        UserDefaults.standard.set(data, forKey: key)
-        UserDefaults.standard.set(Date(), forKey: "\(key)-date")
+        // Use asynchronous saving to not block the main thread
+        DispatchQueue.global(qos: .background).async {
+            let data = try? JSONEncoder().encode(coffeeShops)
+            UserDefaults.standard.set(data, forKey: key)
+            UserDefaults.standard.set(Date(), forKey: "\(key)-date")
+        }
+    }
+    
+    private func clearOldCache() {
+        DispatchQueue.global(qos: .background).async {
+            let userDefaults = UserDefaults.standard
+            for key in userDefaults.dictionaryRepresentation().keys {
+                if key.contains("-date"), let cacheDate = userDefaults.object(forKey: key) as? Date, Date().timeIntervalSince(cacheDate) >= 86400 {
+                    let dataKey = key.replacingOccurrences(of: "-date", with: "")
+                    userDefaults.removeObject(forKey: dataKey)
+                    userDefaults.removeObject(forKey: key)
+                }
+            }
+        }
     }
     
     private func retrieveFromCache(forKey key: String) -> [CoffeeShop]? {
@@ -87,17 +104,6 @@ class ContentViewModel: ObservableObject {
         return nil
     }
 
-    
-    private func clearOldCache() {
-        let userDefaults = UserDefaults.standard
-        for key in userDefaults.dictionaryRepresentation().keys {
-            if key.contains("-date"), let cacheDate = userDefaults.object(forKey: key) as? Date, Date().timeIntervalSince(cacheDate) >= 86400 {
-                let dataKey = key.replacingOccurrences(of: "-date", with: "")
-                userDefaults.removeObject(forKey: dataKey)
-                userDefaults.removeObject(forKey: key)
-            }
-        }
-    }
     
     func handleRewardAd(reward: String) {
         DispatchQueue.main.async { [self] in // Make sure you're on the main thread
