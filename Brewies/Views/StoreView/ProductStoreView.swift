@@ -53,7 +53,7 @@ struct ProductItem: View {
             if storeKit.storeStatus.isAdRemovalPurchased && product.id == StoreKitManager.adRemovalProductId {
                 Text("BOUGHT")
                     .foregroundColor(.gray)
-                    .padding(10)
+                    .padding(5)
                     .background(
                         RoundedRectangle(cornerRadius: 10)
                             .strokeBorder(Color.gray, lineWidth: 2)
@@ -69,7 +69,7 @@ struct ProductItem: View {
                     }
                 }) {
                     Text(product.displayPrice)
-                        .padding(10)
+                        .padding(5)
                         .foregroundColor(colorScheme == .dark ? .white : .black)
                         .background(
                             RoundedRectangle(cornerRadius: 10)

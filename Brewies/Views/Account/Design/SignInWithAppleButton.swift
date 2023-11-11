@@ -14,12 +14,20 @@ struct SignInWithAppleButton: View {
     
     var body: some View {
         Button(action: action) {
-            Text(label)
-                .foregroundColor(.white)
-                .padding()
-                .background(Color.black)
-                .cornerRadius(8)
+            HStack {
+                Image(systemName: "apple.logo")
+                Text(label)   
+            }
+            .foregroundColor(.white)
+            .padding()
+            .background(Color.black)
+            .cornerRadius(8)
         }
         .signInWithAppleButtonStyle(.black)
     }
+}
+
+
+#Preview {
+    SignInWithAppleButton(action: {}, label: "Sign in with Apple")
 }

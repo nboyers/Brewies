@@ -25,7 +25,6 @@ struct BrewiesApp: App {
         // Perform any setup that doesn't require the UI to be loaded.
         DispatchQueue.global(qos: .background).async {
             GADMobileAds.sharedInstance().start(completionHandler: nil)
-//            self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
         }
     }
     

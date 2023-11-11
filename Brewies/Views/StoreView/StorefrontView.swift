@@ -18,7 +18,6 @@ struct StorefrontView: View {
                 .environmentObject(storeKitManager) // Pass the environment object to the ProductStoreView
         }
         .onAppear {
-            // Call the refresh method here
            storeKitManager.refreshData()
 
         }

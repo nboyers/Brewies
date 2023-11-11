@@ -15,11 +15,8 @@ struct SubscriptionView: View {
     
     @State var isPurchased = false
     @State var purchasedProduct: Product?
-    let signInCoordinator = SignInWithAppleCoordinator()
-//    let subscriptionIDs = Set(["com.nobos.AnnualBrewies", "com.nobos.Biannual", "com.nobos.Brewies"])
 
     var body: some View {
-        if userVM.user.isLoggedIn {
             VStack(spacing: 20) { // Add spacing between VStack elements
                 Spacer()
                 Text("Brewies+")
@@ -27,7 +24,7 @@ struct SubscriptionView: View {
                     .font(.largeTitle)
                 
                 GeometryReader { geo in
-                    VStack(alignment: .leading, spacing: 5) { // Add spacing between VStack elements
+                    VStack(alignment: .leading) { // Add spacing between VStack elements
                         Text("Features")
                             .bold()
                         Divider()
@@ -50,7 +47,7 @@ struct SubscriptionView: View {
                                 Text("20 Favorite's Slots")
                             }
                         }
-                        .font(.system(size: geo.size.width <= 350 ? 11 : 17))
+                        .font(.system(size: geo.size.width * 0.05 - 5))
                         
                         
                         Section() {
@@ -112,29 +109,6 @@ struct SubscriptionView: View {
                 .cornerRadius(10)
                 .shadow(radius: 5)
             }
-//            .onAppear(perform: setup)
-        } else {
-            VStack {
-                Text("Sign in to Subscribe")
-                    .font(.largeTitle)  // Using a larger font size for emphasis
-                    .fontWeight(.semibold)  // Adding some weight to the font for better readability
-                    .foregroundColor(Color.primary)  // Using the primary color which adapts to light/dark mode
-                    .padding()  // Adding some padding around the text for better spacing
-                    .multilineTextAlignment(.center)  // Center-aligning the text
-                Text("Enchance your Brewies Experience")
-                    .font(.footnote)
-                    .fontWeight(.semibold)  // Adding some weight to the font for better readability
-                    .foregroundColor(Color.primary)  // Using the primary color which adapts to light/dark mode
-                    .padding()  // Adding some padding around the text for better spacing
-                    .multilineTextAlignment(.center)  // Ce
-                
-                SignInWithAppleButton(action: {
-                    signInCoordinator.startSignInWithAppleFlow()
-                }, label: "Sign in with Apple")
-                .frame(width: 280, height: 45)
-                .padding(.top, 50)
-            }
-        }
     }
     
 
