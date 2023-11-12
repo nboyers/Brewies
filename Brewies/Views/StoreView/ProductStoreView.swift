@@ -16,7 +16,7 @@ struct ProductStoreView: View {
         VStack(alignment: .leading) {
             Text("In-App Purchases")
                 .bold()
-            Divider()
+//            Divider()
             ForEach(storeKitManager.storeStatus.storeProducts.sorted(by: { $0.displayName < $1.displayName }).filter({ product in
                 [StoreKitManager.adRemovalProductId, StoreKitManager.creditsProductId, StoreKitManager.favoritesSlotId].contains(product.id)
             })) { product in

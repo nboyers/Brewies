@@ -17,7 +17,7 @@ struct SubscriptionView: View {
     @State var purchasedProduct: Product?
 
     var body: some View {
-            VStack(spacing: 20) { // Add spacing between VStack elements
+            VStack(spacing: 15) { // Add spacing between VStack elements
                 Spacer()
                 Text("Brewies+")
                     .bold()
@@ -68,7 +68,7 @@ struct SubscriptionView: View {
                                                 .foregroundColor(.green)
                                         }
                                     }
-                                    .frame(width: geo.size.width - 40, height: geo.size.height/66) // Adjust height
+                                    .frame(width: geo.size.width - 50, height: geo.size.height/66) // Adjust height
                                     .foregroundColor(.white)
                                     .padding()
                                     .background(.brown)
@@ -83,7 +83,7 @@ struct SubscriptionView: View {
                                 
                             }
                         }
-                        Spacer()
+                      
                         HStack {
                             Spacer()
                             Button(action: {
