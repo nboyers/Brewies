@@ -43,7 +43,10 @@ class ContentViewModel: ObservableObject {
     }
     
     func fetchCoffeeShops(visibleRegionCenter: CLLocationCoordinate2D?) {
+        //Reduce the user credit regardless if it is cached or not 
         deductUserCredit()
+        
+        // Immediate deduction of credit is moved to where it's confirmed needed
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
             showAlert = true
             return
@@ -51,22 +54,28 @@ class ContentViewModel: ObservableObject {
         
         let cacheKey = "\(centerCoordinate.latitude),\(centerCoordinate.longitude)"
         
-        if let cachedShops = retrieveFromCache(forKey: cacheKey) {
-            self.coffeeShops = cachedShops
-            self.selectedCoffeeShop = cachedShops.first
-            self.showBrewPreview = true
-            self.fetchedFromCache = true
-            return
+        // Attempt to fetch from cache before making a network call
+        if let cachedShops = retrieveFromCache(forKey: cacheKey), !cachedShops.isEmpty {
+            // Use main thread for UI updates
+            DispatchQueue.main.async {
+                self.coffeeShops = cachedShops
+                self.selectedCoffeeShop = cachedShops.first
+                self.showBrewPreview = true
+                self.fetchedFromCache = true
+            }
+            return // Exit early if we have cache data
         }
         
-        apiKeysViewModel.fetchAPIKeys { [self] API in
-            let yelpAPI = YelpAPI(yelpParams: yelpParams)
-            yelpAPI.fetchIndependentCoffeeShops(apiKey: API?.YELP_API ?? "KEYLESS", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { [self] coffeeShops in
-                self.fetchedFromCache = false
-                processCoffeeShops(coffeeShops: coffeeShops, cacheKey: cacheKey)
+        // User credit deduction and API call are made only if cache is missing or empty
+        apiKeysViewModel.fetchAPIKeys { [weak self] API in
+            guard let self = self else { return }
+            let yelpAPI = YelpAPI(yelpParams: self.yelpParams)
+            yelpAPI.fetchIndependentCoffeeShops(apiKey: API?.YELP_API ?? "KEYLESS", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { shops in
+                self.processCoffeeShops(coffeeShops: shops, cacheKey: cacheKey)
             }
         }
     }
+
     
     private func processCoffeeShops(coffeeShops: [CoffeeShop], cacheKey: String) {
         saveToCache(coffeeShops: coffeeShops, forKey: cacheKey)
@@ -85,17 +94,19 @@ class ContentViewModel: ObservableObject {
     }
     
     private func clearOldCache() {
+        let userDefaults = UserDefaults.standard
+        let keys = userDefaults.dictionaryRepresentation().keys.filter { $0.contains("-date") }
+        // Perform date calculations on a background thread to prevent blocking the UI
         DispatchQueue.global(qos: .background).async {
-            let userDefaults = UserDefaults.standard
-            for key in userDefaults.dictionaryRepresentation().keys {
-                if key.contains("-date"), let cacheDate = userDefaults.object(forKey: key) as? Date, Date().timeIntervalSince(cacheDate) >= 86400 {
-                    let dataKey = key.replacingOccurrences(of: "-date", with: "")
-                    userDefaults.removeObject(forKey: dataKey)
+            keys.forEach { key in
+                if let cacheDate = userDefaults.object(forKey: key) as? Date, Date().timeIntervalSince(cacheDate) >= 86400 {
+                    userDefaults.removeObject(forKey: key.replacingOccurrences(of: "-date", with: ""))
                     userDefaults.removeObject(forKey: key)
                 }
             }
         }
     }
+
     
     private func retrieveFromCache(forKey key: String) -> [CoffeeShop]? {
         if let data = UserDefaults.standard.data(forKey: key) {
@@ -106,7 +117,7 @@ class ContentViewModel: ObservableObject {
 
     
     func handleRewardAd(reward: String) {
-        DispatchQueue.main.async { [self] in // Make sure you're on the main thread
+      
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let viewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
                 rewardAdController.rewardedAd?.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [weak self] in
@@ -130,7 +141,7 @@ class ContentViewModel: ObservableObject {
             } else {
                 self.showNoAdsAvailableAlert = true
             }
-        }
+        
     }
 
     func deductUserCredit() {

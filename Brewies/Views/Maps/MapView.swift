@@ -23,7 +23,6 @@ struct MapView: UIViewRepresentable {
     @Binding var coffeeShops: [CoffeeShop]
     @Binding var selectedCoffeeShop: CoffeeShop?
     @Binding var centeredOnUser: Bool
-    @Binding var mapView: MKMapView
     @Binding var userHasMoved: Bool
     @Binding var visibleRegionCenter: CLLocationCoordinate2D?
     @Binding var showUserLocationButton: Bool
@@ -60,7 +59,6 @@ struct MapView: UIViewRepresentable {
             self.setRegion = { region in
                 mapView.setRegion(region, animated: true)
             }
-            self.mapView = mapView
         }
         
         return mapView
@@ -88,15 +86,12 @@ struct MapView: UIViewRepresentable {
             let annotation = MKPointAnnotation()
             annotation.coordinate = searchedLocation
             annotation.title = searchQuery
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 mapView.addAnnotation(annotation)
                 self.setRegion?(MKCoordinateRegion(center: searchedLocation, latitudinalMeters: DISTANCE, longitudinalMeters: DISTANCE)) // Update here
                 self.searchedLocation = nil // Reset to allow for new searches
             }
         }
-        
-        
-        
         
         // Center map on user if requested
         if centeredOnUser {
@@ -115,24 +110,33 @@ struct MapView: UIViewRepresentable {
         }
     }
     
+    
     // Updates the annotations on the MKMapView based on the coffeeShops data
     private func updateAnnotations(for mapView: MKMapView) {
-        let existingAnnotations = Set(mapView.annotations.compactMap { $0 as? MKPointAnnotation })
-        let newAnnotations = Set(coffeeShops.map(coffeeShopToAnnotation))
-        
-        // Remove annotations not in the new set
-        let annotationsToRemove = existingAnnotations.subtracting(newAnnotations)
-        DispatchQueue.main.async {
-            mapView.removeAnnotations(Array(annotationsToRemove))
+        // Get all current annotations
+        let existingAnnotations = mapView.annotations.compactMap { $0 as? CoffeeShopAnnotation }
+
+        // Prepare a set of the current coffee shop IDs
+        let existingIDs = Set(existingAnnotations.map { $0.coffeeShop.id })
+
+        // Create a map of coffee shop IDs to CoffeeShops for quick lookup
+        let coffeeShopsMap = Dictionary(uniqueKeysWithValues: coffeeShops.map { ($0.id, $0) })
+
+        // Remove annotations that are not in the current coffeeShops array
+        for annotation in existingAnnotations {
+            if !coffeeShopsMap.keys.contains(annotation.coffeeShop.id) {
+                mapView.removeAnnotation(annotation)
+            }
         }
-        
-        // Add annotations not in the existing set
-        let annotationsToAdd = newAnnotations.subtracting(existingAnnotations)
-        DispatchQueue.main.async {
-            mapView.addAnnotations(Array(annotationsToAdd))
+
+        // Add annotations for coffee shops in the array that are not currently annotated
+        for coffeeShop in coffeeShops where !existingIDs.contains(coffeeShop.id) {
+            let annotation = CoffeeShopAnnotation(coffeeShop: coffeeShop)
+            mapView.addAnnotation(annotation)
         }
     }
-    
+
+
     // Converts a CoffeeShop object to an MKPointAnnotation
     private func coffeeShopToAnnotation(_ coffeeShop: CoffeeShop) -> MKPointAnnotation {
         let annotation = MKPointAnnotation()
@@ -201,5 +205,18 @@ extension CLLocationCoordinate2D {
         let from = CLLocation(latitude: self.latitude, longitude: self.longitude)
         let to = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
         return from.distance(from: to)
+    }
+}
+
+
+// Define an MKPointAnnotation subclass for CoffeeShop
+class CoffeeShopAnnotation: MKPointAnnotation {
+    var coffeeShop: CoffeeShop
+
+    init(coffeeShop: CoffeeShop) {
+        self.coffeeShop = coffeeShop
+        super.init()
+        self.title = coffeeShop.name
+        self.coordinate = CLLocationCoordinate2D(latitude: coffeeShop.latitude, longitude: coffeeShop.longitude)
     }
 }

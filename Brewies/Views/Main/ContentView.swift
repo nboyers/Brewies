@@ -36,8 +36,7 @@ struct ContentView: View {
     
     @State private var howInstructions = false
     @State private var swirlColors: (UIColor, UIColor)? = nil
-    
-    @State private var mapView = MKMapView()
+
     @State private var showLocationAccessAlert = false
     @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
@@ -61,22 +60,28 @@ struct ContentView: View {
         )
     }
     
+    // Inside ContentView
     private func updateStreakColor() {
-        if userVM.user.streakCount % 7 == 0 && userVM.user.streakCount != 0 {
-            let randomColor1 = getRandomColor()
-            let randomColor2 = userVM.user.streakCount >= 365 ? getRandomColor() : randomColor1
-            // Save the colors
-            let colorsData = try? NSKeyedArchiver.archivedData(withRootObject: [randomColor1, randomColor2], requiringSecureCoding: false)
-            UserDefaults.standard.set(colorsData, forKey: "streakColors")
-        } else if userVM.user.streakCount == 0 {
-            currentStreakColor = .cyan
-            UserDefaults.standard.removeObject(forKey: "streakColors")
-        }    else if let colorsData = UserDefaults.standard.data(forKey: "streakColors"),
-                     let savedColors = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: colorsData) as? [UIColor],
-                     savedColors.count == 2 {
-            self.swirlColors = (savedColors[0], savedColors[1])
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Perform UserDefaults work on a background thread
+            let defaults = UserDefaults.standard
+            if userVM.user.streakCount % 7 == 0 && userVM.user.streakCount != 0 {
+                let randomColor1 = self.getRandomColor()
+                let randomColor2 = userVM.user.streakCount >= 365 ? self.getRandomColor() : randomColor1
+                // Save the colors
+                if let colorsData = try? NSKeyedArchiver.archivedData(withRootObject: [randomColor1, randomColor2], requiringSecureCoding: false) {
+                    DispatchQueue.main.async {
+                        defaults.set(colorsData, forKey: "streakColors")
+                    }
+                }
+            } else if userVM.user.streakCount == 0 {
+                DispatchQueue.main.async {
+                    defaults.removeObject(forKey: "streakColors")
+                }
+            }
         }
     }
+
     
     
     
@@ -126,7 +131,6 @@ struct ContentView: View {
                         coffeeShops: $contentVM.coffeeShops,
                         selectedCoffeeShop: $contentVM.selectedCoffeeShop,
                         centeredOnUser: $centeredOnUser,
-                        mapView: $mapView,
                         userHasMoved: $userHasMoved,
                         visibleRegionCenter: $visibleRegionCenter,
                         showUserLocationButton: $showUserLocationButton,

@@ -44,9 +44,3 @@ struct IdentifiableCoordinate: Identifiable {
     let coordinate: CLLocationCoordinate2D
     let name: String
 }
-
-//struct SmallMap_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SmallMap()
-//    }
-//}
