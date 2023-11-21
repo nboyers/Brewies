@@ -10,15 +10,17 @@ import AppTrackingTransparency
 
 struct FavoritesView: View {
     @EnvironmentObject var contentVM: ContentViewModel
+    @ObservedObject var rewardAdController = RewardAdController()
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
-    
+    @StateObject var sharedAlertVM = SharedAlertViewModel()
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
     @ObservedObject var storeKit = StoreKitManager()
     
     @Binding var showPreview: Bool
     @State private var showRemovalConfirmationAlert = false
     @State private var toRemoveCoffeeShop: CoffeeShop?
+
     @Binding var activeSheet: ActiveSheet?
     
     var body: some View {
@@ -26,14 +28,15 @@ struct FavoritesView: View {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 16) {
                     VStack(spacing: 10) {
-                        Text("Ads Watched: \(contentVM.adsWatched)/3")
+                        Text("Ads Watched: \(coffeeShopData.adsWatchedCount)/3")
                             .font(.headline)
                         
-                        ProgressView(value: Float(contentVM.adsWatched), total: 3)
-                            .progressViewStyle(LinearProgressViewStyle(tint: Color.blue))
-                            .accentColor(Color.blue)
-                            .background(Color.gray.opacity(0.2).cornerRadius(5))
-                            .cornerRadius(5)
+                        ProgressView(value: Float(coffeeShopData.adsWatchedCount), total: 3)
+                                     .progressViewStyle(LinearProgressViewStyle(tint: Color.blue))
+                                     .accentColor(Color.blue)
+                                     .background(Color.gray.opacity(0.2).cornerRadius(5))
+                                     .cornerRadius(5)
+                                 
                         
                         Button(action: {
                             if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
@@ -54,8 +57,10 @@ struct FavoritesView: View {
                                         break
                                     }
                                 }
+                            } else {
+                                self.contentVM.handleRewardAd(reward: "favorites")
                             }
-                            contentVM.handleRewardAd(reward: "favorites")
+                            
                         }) {
                             HStack {
                                 Image(systemName: "video")
@@ -94,7 +99,7 @@ struct FavoritesView: View {
                     }
                 }
                 .padding(.all, 16)
-                .onChange(of: contentVM.adsWatched) { newValue in
+                .onChange(of: coffeeShopData.adsWatchedCount) { newValue in
                     if newValue >= 3 {
                         coffeeShopData.maxFavoriteSlots += 1  // Update the maxFavoriteSlots
                     }

@@ -63,21 +63,21 @@ class StoreKitManager: ObservableObject {
     private func setupProductLists() async {
         await requestProducts()
         
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
             // Populate lookups after ensuring 'storeProducts' and 'subscriptions' are fetched.
             self.productLookup = Dictionary(uniqueKeysWithValues: self.storeStatus.storeProducts.map { ($0.id, $0) })
             self.subscriptionLookup = Dictionary(uniqueKeysWithValues: self.storeStatus.subscriptions.map { ($0.id, $0) })
-        }
+//        }
     }
     
     
     func checkIfAdsRemoved() async {
         if let product = storeStatus.storeProducts.first(where: { $0.id == StoreKitManager.adRemovalProductId }) {
-            DispatchQueue.main.async { [self] in
+//            DispatchQueue.main.async { [self] in
                 Task {
                     storeStatus.isAdRemovalPurchased = (try? await self.isPurchased(product)) ?? false
                 }
-            }
+//            }
         }
     }
     
@@ -249,7 +249,7 @@ class StoreKitManager: ObservableObject {
         case .success(let verificationResult):
             let transaction = try checkVerified(verificationResult)
             
-            DispatchQueue.main.async {
+//            DispatchQueue.main.async {
                 switch product.id {
                 case StoreKitManager.creditsProductId:
                     self.getCreditsForSubscription(product.id)
@@ -274,7 +274,7 @@ class StoreKitManager: ObservableObject {
                 default:
                     break
                 }
-            }
+//            }
             
             //the transaction is verified, deliver the content to the user
             await updateCustomerProductStatus()

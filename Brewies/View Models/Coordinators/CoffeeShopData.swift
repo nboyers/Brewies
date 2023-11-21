@@ -9,19 +9,25 @@ import Foundation
 
 class CoffeeShopData: ObservableObject {
     static let shared = CoffeeShopData()
-    
+
     @Published var favoriteShops: [CoffeeShop] = [] {
         didSet {
             saveFavoriteShops()
         }
     }
-    
+
     @Published var maxFavoriteSlots: Int = UserDefaults.standard.integer(forKey: "MaxFavoriteSlots") {
         didSet {
             UserDefaults.standard.set(maxFavoriteSlots, forKey: "MaxFavoriteSlots")
         }
     }
-    
+
+    @Published var adsWatchedCount: Int = UserDefaults.standard.integer(forKey: "AdsWatchedCount") {
+        didSet {
+            UserDefaults.standard.set(adsWatchedCount, forKey: "AdsWatchedCount")
+        }
+    }
+
     @Published var cachedShops: [CoffeeShop] = []
 
     var numberOfFavoriteShops: Int {
@@ -55,24 +61,24 @@ class CoffeeShopData: ObservableObject {
     }
     
     private func saveFavoriteShops() {
-        DispatchQueue.global(qos: .background).async {
+//        DispatchQueue.global(qos: .background).async {
             let encoder = JSONEncoder()
             if let encoded = try? encoder.encode(self.favoriteShops) {
                 UserDefaults.standard.set(encoded, forKey: "FavoriteShops")
             }
-        }
+//        }
     }
     
     private func loadFavoriteShops() {
         if let savedShops = UserDefaults.standard.object(forKey: "FavoriteShops") as? Data {
-            DispatchQueue.global(qos: .background).async {
+//            DispatchQueue.global(qos: .background).async {
                 let decoder = JSONDecoder()
                 if let loadedShops = try? decoder.decode([CoffeeShop].self, from: savedShops) {
-                    DispatchQueue.main.async {
+//                    DispatchQueue.main.async {
                         self.favoriteShops = loadedShops
-                    }
+//                    }
                 }
-            }
+//            }
         }
     }
     
@@ -83,4 +89,12 @@ class CoffeeShopData: ObservableObject {
     func removeSubscriptionSlots(_ slots: Int) {
         maxFavoriteSlots = max(0, maxFavoriteSlots - slots)
     }
+    
+    func hadnleAdsWatchedCount() {
+         adsWatchedCount += 1
+        if adsWatchedCount >= 3 {
+            addFavoriteSlots(1)
+            adsWatchedCount = 0
+        }
+     }
 }

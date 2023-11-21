@@ -48,7 +48,7 @@ struct UserProfileView: View {
                     .padding([.top, .horizontal], 20)
                 }
                 .sheet(isPresented: $showSettings) {
-                    SettingsView()
+                    SettingsView(activeSheet: $activeSheet)
                 }
                 
                 Divider()

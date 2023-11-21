@@ -82,14 +82,14 @@ struct EditProfileView: View {
     func saveChanges() {
         isLoading = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             userViewModel.user.firstName = firstName
             userViewModel.user.lastName = lastName
             isLoading = false
             
             // Here, you would typically save the changes to persistent storage.
             userViewModel.saveUserLoginStatus()
-        }
+//        }
     }
 }
 

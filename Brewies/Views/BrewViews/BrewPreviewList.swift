@@ -15,14 +15,11 @@ struct BrewPreviewList: View {
     @Binding var selectedCoffeeShop: CoffeeShop?
     @Binding var showBrewPreview: Bool
     @State private var showAlert = false
-    
+    @ObservedObject var storeKit = StoreKitManager()
     @State var showStorefront = false
     @Binding var activeSheet: ActiveSheet?
-    
-
-    
     @ObservedObject var userViewModel = UserViewModel.shared
-    
+
     var body: some View {
         ScrollViewReader { scrollView in
             VStack {
@@ -202,11 +199,6 @@ struct BrewPreview: View {
                     .frame(width: 30, height: 30)
                 Spacer()
             }
-            
-        
-        
-        
-
     }
         .frame(width: 300, height: 300)
         .background(Color.white)
@@ -215,10 +207,10 @@ struct BrewPreview: View {
 }
 
 private func selectBrew() {
-    DispatchQueue.main.async {
+//    DispatchQueue.main.async {
         selectedCoffeeShop.coffeeShop = coffeeShop
         activeSheet = .detailBrew
-    }
+//    }
 }
 private func toggleFavorite() {
     if isFavorite {

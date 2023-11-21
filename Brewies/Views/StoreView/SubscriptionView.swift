@@ -120,7 +120,7 @@ struct SubscriptionView: View {
                 purchasedProduct = product
             }
         } catch {
-            // print("Purchase failed")
+            print("Purchase failed")
         }
     }
 }

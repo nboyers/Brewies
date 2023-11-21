@@ -36,7 +36,11 @@ struct InstructionsView: View {
                     .font(.headline)
                     .bold()
                 Text("- Missing a daily check-in resets your streak back to zero. You'll need to rebuild your streak to qualify for the weekly bonus again.")
-                
+                Divider()
+                Text("NOTE")
+                    .font(.headline)
+                    .bold()
+                Text("- SOMETIMES CHECK IN ARE NOT READY, AND THIS WILL APPEAR. JUST CLICK THE BUTTON AGAIN TO RETRY")
             }
             .padding()
         }

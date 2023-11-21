@@ -22,4 +22,6 @@ enum CustomAlertType {
     case showInstructions
     case streakReward
     case showNotEnoughStreakAlert
+    case noAdsAvailableAlert
+    case earnCredits
 }

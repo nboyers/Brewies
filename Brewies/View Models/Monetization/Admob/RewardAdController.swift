@@ -13,48 +13,77 @@ import AppTrackingTransparency
 import AdSupport
 import UIKit
 
-class RewardAdController: UIViewController, GADFullScreenContentDelegate {
+class RewardAdController: UIViewController, GADFullScreenContentDelegate, ObservableObject  {
+    @Published var userViewModel = UserViewModel.shared
+    @Published var adsWatched = 0
     
     var userVM = UserViewModel.shared
     var rewardedAd: GADRewardedAd?
     var onUserDidEarnReward: (() -> Void)?
     var onAdDidDismissFullScreenContent: (() -> Void)?
     
-
     func loadRewardedAd() {
         let request = GADRequest()
         GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY,
                            request: request,
                            completionHandler: { [self] ad, error in
-            if error != nil {
-                return
-            }
+            if error != nil { return }
             rewardedAd = ad
+            print("Rewarded ad loaded.")
             rewardedAd?.fullScreenContentDelegate = self
+            
         })
     }
     
-    func present(from viewController: UIViewController)  {
+    
+    
+    func present(from viewController: UIViewController, rewardType: String) {
         if let ad = rewardedAd {
             ad.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [weak self] in
-                // When the ad completes, call the callback function
-                self?.onUserDidEarnReward?()
+                guard let self = self else { return }
+                
+                switch rewardType {
+                case "credits":
+                    userViewModel.addCredits(1)
+                    
+                case "favorites":
+                    CoffeeShopData.shared.hadnleAdsWatchedCount()
+                    
+                    
+                case "check_in":
+                    userViewModel.saveStreakData()
+                    
+                default:
+                    break
+                }
+                loadRewardedAd() // Load a new ad
             })
         } else {
+            print("Rewarded ad not available, loading ad.")
             loadRewardedAd()
         }
     }
     
+    func isAdAvailable() -> Bool {
+        let adAvailable = rewardedAd != nil
+        print("Checking if ad is available: \(adAvailable)")
+        return adAvailable
+    }
+    
     // MARK: - GADFullScreenContentDelegate
     
+    /// Tells the delegate that the ad failed to present full screen content.
     func ad(_ ad: GADFullScreenPresentingAd, didFailToPresentFullScreenContentWithError error: Error) {
-        loadRewardedAd()  // Reload a new ad
+        print("Ad did fail to present full screen content.")
     }
     
+    /// Tells the delegate that the ad will present full screen content.
     func adWillPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        print("Ad will present full screen content.")
     }
     
+    /// Tells the delegate that the ad dismissed full screen content.
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        onAdDidDismissFullScreenContent?()
+        loadRewardedAd()
     }
 }

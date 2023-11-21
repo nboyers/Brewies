@@ -17,16 +17,16 @@ struct ContentView: View {
     @ObservedObject var locationManager = LocationManager()
     @StateObject var sharedAlertVM = SharedAlertViewModel()
     
-    private var rewardAd = RewardAdController()
+    
     let signInCoordinator = SignInWithAppleCoordinator()
     
     @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
-    @EnvironmentObject var sharedVM: SharedViewModel
     
+    @EnvironmentObject var sharedVM: SharedViewModel
+    @EnvironmentObject var rewardAd: RewardAdController
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var yelpParams: YelpSearchParams
     @EnvironmentObject var contentVM: ContentViewModel
-    
     @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
@@ -36,7 +36,6 @@ struct ContentView: View {
     
     @State private var howInstructions = false
     @State private var swirlColors: (UIColor, UIColor)? = nil
-
     @State private var showLocationAccessAlert = false
     @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
@@ -50,7 +49,7 @@ struct ContentView: View {
     @State private var searchQuery: String = ""
     @State private var isSearching = false
     @State private var currentStreakColor: Color = .cyan
-    
+    @State private var settingsView = false
     private func getRandomColor() -> UIColor {
         return UIColor(
             red: CGFloat.random(in: 0...1),
@@ -81,47 +80,41 @@ struct ContentView: View {
             }
         }
     }
-
     
-    
-    
-    
-    
-    
-    
-    private func shouldAllowAd() -> String {
-        if !userVM.user.isLoggedIn {
-            return "No_Login"
-        }
-        // Check if it's been 28 hours since the last check-in.
-        guard let lastDate = userVM.user.streakViewedDate else {
-            // It's the user's first time, or it hasn't been 28hrs
-            let hasCheckedInBefore = UserDefaults.standard.bool(forKey: "hasCheckedInBefore")
-            if hasCheckedInBefore {
-                return "Too_Soon"
-            } else {
-                // Set the flag to true for future reference
-                UserDefaults.standard.set(true, forKey: "hasCheckedInBefore")
-                return "Reward_User"
-            }
-        }
-        
-        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
-        
-        if elapsedHours <= 28 && elapsedHours >= 24 && userVM.user.isLoggedIn {
-            // It's been less than 28 hours, prompt to watch ad
-            return "Reward_User"
-        }
-        // It's been 24 hours or less, too soon to earn another streak point
-        return "Too_Soon"
-    }
-    
-    
+//    private func shouldAllowAd() -> String {
+//        if !userVM.user.isLoggedIn {
+//            return "No_Login"
+//        }
+//        // Check if it's been 28 hours since the last check-in.
+//        guard let lastDate = userVM.user.streakViewedDate else {
+//            // It's the user's first time, or it hasn't been 28hrs
+//            let hasCheckedInBefore = UserDefaults.standard.bool(forKey: "hasCheckedInBefore")
+//            if hasCheckedInBefore {
+//                return "Too_Soon"
+//            } else {
+//                if rewardAd.isAdAvailable() {
+//                    // Set the flag to true for future reference
+//                    UserDefaults.standard.set(true, forKey: "hasCheckedInBefore")
+//                    return "Reward_User"
+//                }
+//                return "Missing_Ad"
+//            }
+//        }
+//        
+//        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
+//        
+//        if elapsedHours <= 28 && elapsedHours >= 24 && userVM.user.isLoggedIn {
+//            // It's been less than 28 hours, prompt to watch ad
+//            return "Reward_User"
+//        }
+//        // It's been 24 hours or less, too soon to earn another streak point
+//        return "Too_Soon"
+//    }
     
     @FocusState var isInputActive: Bool
     
     let DISTANCE = CLLocationDistance(2500)
-    init() {}
+    
     var body: some View {
         TabView {
             ZStack {
@@ -141,7 +134,6 @@ struct ContentView: View {
                         searchQuery: $searchQuery,
                         shouldSearchInArea: $shouldSearchInArea
                     )
-                    
                     
                     // 2. User Location Button
                     if showUserLocationButton {
@@ -290,38 +282,18 @@ struct ContentView: View {
                             AdBannerView()
                                 .frame(width: 320, height: 50)
                         }
-
+                        
                     }
                 }
-                
                 .enableAppleScrollBehavior()
                 .enableBackgroundBlur()
                 .backgroundBlurMaterial(.systemDark)
-                .alert(isPresented: $contentVM.showNoCoffeeShopsAlert) {
-                    Alert(
-                        title: Text("No Coffee Shops Found"),
-                        message: Text("We could not find any coffee shops in your area."),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
                 
-                
-                .alert(isPresented: $contentVM.showNoAdsAvailableAlert) {
-                    Alert(
-                        title: Text("No Ads Available"),
-                        message: Text("There are currently no ads available. Please try again later."),
-                        dismissButton: .default(Text("OK"))
-                    )
-                }
-//                .onAppear {
-//                    contentVM.locationManager.requestLocationAccess()
-//                    
-//                }
-//                
                 GeometryReader { geo in
                     VStack {
                         Button(action: {
                             // Check if the user has enough credits to perform a search
+                            
                             if userVM.user.credits > 0 {
                                 // Perform the search
                                 contentVM.fetchCoffeeShops(visibleRegionCenter: visibleRegionCenter)
@@ -332,9 +304,8 @@ struct ContentView: View {
                             }
                         }) {
                             Text("Search this area")
-                            // .font(geometry.size.width > 320 ? .body : .footnote)
+                            
                                 .font(.system(size: geo.size.width <= 375 ? 17 : 20, weight: .bold))
-                            //                                .padding(.horizontal, geo.size.width > 320 ? 20 : 10)
                                 .frame(width: geo.size.width/2.5, height: geo.size.width/50)
                                 .padding()
                                 .font(.title3)
@@ -343,9 +314,8 @@ struct ContentView: View {
                         }
                         .cornerRadius(10)
                         .shadow(radius: 50)
-                        
                         Button(action: {
-                            activeSheet = .storefront
+                            sharedAlertVM.currentAlertType = .earnCredits
                             
                         }) {
                             Text("Discover Credits: \(userVM.user.credits)")
@@ -365,33 +335,37 @@ struct ContentView: View {
                     .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
                     
                     
-                    Button(action: {
-                        
-                        switch shouldAllowAd() {
-                        case "No_Login": // User is not logged in
-                            sharedAlertVM.currentAlertType = .notLoggedIn
-                            
-                        case "Too_Soon": // User comes before 24hrs
-                            sharedAlertVM.currentAlertType = .tooSoon
-                            
-                            
-                        case "Reward_User":  // User is logged in & over 24hrs since last checkin
-                            sharedAlertVM.currentAlertType = .streakCount
-                            
-                        default: // Show them how to use the System
-                            sharedAlertVM.currentAlertType = .showInstructions
-                            
-                        }
-                    }) {
-                        Text("\(userVM.user.streakCount)")
-                            .font(.callout)
-                            .bold()
-                            .padding()
-                            .background(Circle().fill(currentStreakColor))
-                            .foregroundColor(.white)
-                            .frame(width: 50, height: 50)
-                    }
-                    .offset(CGSize(width: geo.size.width*0.80, height: geo.size.height/13))
+//                    Button(action: {
+//                        
+//                        switch shouldAllowAd() {
+//                        case "No_Login": // User is not logged in
+//                            sharedAlertVM.currentAlertType = .notLoggedIn
+//                            
+//                        case "Too_Soon": // User comes before 24hrs
+//                            sharedAlertVM.currentAlertType = .tooSoon
+//                            
+//                            
+//                        case "Reward_User":  // User is logged in & over 24hrs since last checkin
+//                            sharedAlertVM.currentAlertType = .streakCount
+//                            
+//                        case "Missing_Ad":
+//                            rewardAd.loadRewardedAd()
+//                            sharedAlertVM.currentAlertType = .showInstructions
+//                            
+//                        default: // Show them how to use the System
+//                            sharedAlertVM.currentAlertType = .showInstructions
+//                            
+//                        }
+//                    }) {
+//                        Text("\(userVM.user.streakCount)")
+//                            .font(.callout)
+//                            .bold()
+//                            .padding()
+//                            .background(Circle().fill(currentStreakColor))
+//                            .foregroundColor(.white)
+//                            .frame(width: 50, height: 50)
+//                    }
+//                    .offset(CGSize(width: geo.size.width*0.80, height: geo.size.height/13))
                     
                     
                 }
@@ -429,10 +403,13 @@ struct ContentView: View {
                                         @unknown default:
                                             break
                                         }
+                                        
                                     }
+                                } else {
+                                    self.contentVM.handleRewardAd(reward: "favorites")
+                                    sharedAlertVM.currentAlertType = nil
                                 }
-                                self.contentVM.handleRewardAd(reward: "favorites")
-                                sharedAlertVM.currentAlertType = nil
+                                
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
@@ -454,17 +431,18 @@ struct ContentView: View {
                                             // Handle the case where permission is denied
                                             self.contentVM.handleRewardAd(reward: "credits")
                                             break
+                                            
                                         case .notDetermined:
                                             // The user has not decided on permission
-                                            self.contentVM.handleRewardAd(reward: "credits")
+                                            contentVM.handleRewardAd(reward: "credits")
                                             break
                                         @unknown default:
                                             break
                                         }
                                     }
+                                } else {
+                                    contentVM.handleRewardAd(reward: "credits")
                                 }
-                                self.contentVM.handleRewardAd(reward: "credits")
-                                sharedAlertVM.currentAlertType = nil
                             },
                             secondaryButtonTitle: "Go to Store",
                             secondaryAction: {
@@ -483,6 +461,10 @@ struct ContentView: View {
                             primaryAction: {
                                 self.contentVM.handleRewardAd(reward: "check_in")
                                 sharedAlertVM.currentAlertType = nil
+                            },
+                            secondaryButtonTitle: "Shop",
+                            secondaryAction: {
+                                
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
@@ -556,6 +538,39 @@ struct ContentView: View {
                                 sharedAlertVM.currentAlertType = nil
                             }
                         )
+                    case .noAdsAvailableAlert:
+                        CustomAlertView(
+                            title: "No Ad Available",
+                            message: "Sorry, there is no ad available to watch right now. Please try again later.",
+                            primaryButtonTitle: "OK",
+                            primaryAction: {
+                                sharedAlertVM.currentAlertType = nil
+                                rewardAd.loadRewardedAd()
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                                rewardAd.loadRewardedAd()
+                            }
+                        )
+                        
+                    case .earnCredits:
+                        CustomAlertView(
+                            title: "Earn Credits",
+                            message: "Watch ads to earn credits for free. An Ad will play if one is ready.",
+                            primaryButtonTitle: "Earn Credits",
+                            primaryAction: {
+                                contentVM.handleRewardAd(reward: "credits")
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            secondaryButtonTitle: "Store",
+                            secondaryAction: {
+                                activeSheet = .storefront
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                            }
+                        )
                         
                     default:
                         CustomAlertView(
@@ -597,6 +612,37 @@ struct ContentView: View {
                         
                         GeometryReader { geometry in
                             VStack {
+                                HStack {
+                                   
+                                    Button(action: {
+                                        activeSheet = nil
+                                        sharedAlertVM.currentAlertType =  nil
+                                        settingsView = true
+                                    }, label: {
+                                        Image(systemName: "gear")
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                    })
+                                    .padding()
+                                
+                                    Spacer()
+                                    Button(action: {
+                                        activeSheet = nil
+                                        sharedAlertVM.currentAlertType =  nil
+                                        presentationMode.wrappedValue.dismiss()
+                                    }, label: {
+                                        Image(systemName: "x.circle")
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
+                                       
+                                    })
+                                    .padding()
+                                }
+                           
+                                
+                                Divider()
                                 Spacer() // Pushes the content to the center vertically
                                 HStack {
                                     Spacer() // Pushes the content to the center horizontally
@@ -633,6 +679,12 @@ struct ContentView: View {
                     
                 }
             }
+            .sheet(isPresented: $settingsView) {
+                SettingsView(activeSheet: $activeSheet)
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.medium])
+                    
+            }
             .alert(isPresented: $showLocationAccessAlert) {
                 Alert(
                     title: Text("Location Access Required"),
@@ -640,7 +692,7 @@ struct ContentView: View {
                     primaryButton: .default(Text("Settings"), action: {
                         // This line opens the Settings app
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
-
+                        
                     }),
                     secondaryButton: .cancel()
                 )
@@ -654,7 +706,9 @@ struct ContentView: View {
             
             FavoritesView(showPreview: $contentVM.showBrewPreview,
                           activeSheet: $activeSheet)
+            .environmentObject(rewardAd)
             .environmentObject(userVM)
+            
             .tabItem {
                 Image(systemName: "star.fill")
                 Text("Favorites")

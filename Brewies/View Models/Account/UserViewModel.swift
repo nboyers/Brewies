@@ -38,6 +38,7 @@ class UserViewModel: ObservableObject {
     @Published var profileImage: Image?
     
     init() {
+        
         let isLoggedIn = UserDefaults.standard.bool(forKey: UserKeys.isLoggedIn)
         let userID = UserDefaults.standard.string(forKey: UserKeys.userID) ?? ""
         let key = isLoggedIn ? UserKeys.userCredits(userID) : UserKeys.userCredits("Guest")
@@ -102,8 +103,10 @@ class UserViewModel: ObservableObject {
         user.pastOrders.append(order)
     }
     
-    func addCredits(_ amount: Int = 1) {
+    func addCredits(_ amount: Int) {
+        print("Credits Added: \(amount)")
         user.credits += amount
+        print("Credits After: \(user.credits)")
         let key = user.isLoggedIn ? UserKeys.userCredits(user.userID) : UserKeys.userCredits("Guest")
         UserDefaults.standard.set(user.credits, forKey: key)
     }
