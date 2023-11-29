@@ -10,5 +10,5 @@ import BottomSheet
 
 class SharedViewModel: ObservableObject {
     @Published var bottomSheetPosition: BottomSheetPosition = .relative(0.20)
-    @Published var selectedCoffeeShop: CoffeeShop?
+    @Published var selectedBrew: BrewLocation?
 }

@@ -8,5 +8,5 @@
 import Foundation
 
 class SelectedCoffeeShop: ObservableObject {
-    @Published var coffeeShop: CoffeeShop?
+    @Published var coffeeShop: BrewLocation?
 }

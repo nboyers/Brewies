@@ -11,8 +11,8 @@ import Kingfisher
 
 //#warning("BREWPREVIEW is showing an empty sheet")
 struct BrewPreviewList: View {
-    @Binding var coffeeShops: [CoffeeShop]
-    @Binding var selectedCoffeeShop: CoffeeShop?
+    @Binding var coffeeShops: [BrewLocation]
+    @Binding var selectedCoffeeShop: BrewLocation?
     @Binding var showBrewPreview: Bool
     @State private var showAlert = false
     @ObservedObject var storeKit = StoreKitManager()
@@ -40,7 +40,7 @@ struct BrewPreviewList: View {
 }
 
 struct BrewPreview: View {
-    let coffeeShop: CoffeeShop
+    let coffeeShop: BrewLocation
     let BUTTON_WIDTH: CGFloat = 175
     let BUTTON_HEIGHT: CGFloat = 15
     

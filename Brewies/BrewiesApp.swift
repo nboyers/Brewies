@@ -22,12 +22,11 @@ struct BrewiesApp: App {
     init() {
    self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
         rewardAdController = RewardAdController()
-        
-        rewardAdController.loadRewardedAd()
         // Perform any setup that doesn't require the UI to be loaded.
-        DispatchQueue.global(qos: .background).async {
+//        DispatchQueue.global(qos: .background).async { [self] in
             GADMobileAds.sharedInstance().start(completionHandler: nil)
-        }
+//            rewardAdController.loadRewardedAd()
+//        }
     }
     
     var body: some Scene {

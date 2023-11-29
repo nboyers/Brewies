@@ -11,10 +11,9 @@ import Combine
 class YelpAPI : ObservableObject {
     @Published var yelpParam = YelpSearchParams() { didSet { updateParams() } }
     
-    var favoriteCoffeeShops: [CoffeeShop] = []
+    var favoriteCoffeeShops: [BrewLocation] = []
     var cancellables: Set<AnyCancellable> = []
     var radiusInMeters: Int = 5000
-    var businessType: String = "coffee shop"
     var sortBy: String = "distance"
     var price: [String] = []
     var priceForAPI: [Int] = []
@@ -26,7 +25,6 @@ class YelpAPI : ObservableObject {
     
     private func updateParams() {
         radiusInMeters = yelpParam.radiusInMeters
-        businessType = yelpParam.businessType
         sortBy = yelpParam.sortBy
         priceForAPI = yelpParam.priceForAPI
     }
@@ -74,53 +72,59 @@ class YelpAPI : ObservableObject {
         "salad","newamerican","breakfast_brunch","icecream",
         "grocery","intlgrocery","Food Trucks", "Indian", "Cannabis Dispensaries", "Cannabis Clinics", "candy store"
     ]
+    
     private lazy var desiredCatagories : Set<String> = [
-        "brewpubs", "breweries"
+        "breweries","brewpubs","beerbar","beergardens","beergarden",
+        "beerhall","beertours","wineries","winetastingroom","cideries","distilleries","winetours","pubs","wine_bars"
     ]
     
-    func fetchIndependentCoffeeShops (
-        apiKey : String,
+    func fetchIndependentBrewLocation (
+        apiKey: String,
         latitude: Double,
         longitude: Double,
+        term: String,
+        businessType: String,
         pricing: [Int]? = nil,
-        completion: @escaping ([CoffeeShop]) -> Void
+        completion: @escaping ([BrewLocation]) -> Void
     ) {
-        
         let url = "https://api.yelp.com/v3/businesses/search"
         var parameters: [String: Any] = [
-            "term": yelpParam.businessType,
             "latitude": latitude,
             "longitude": longitude,
+            "term" : term,
             "radius": radiusInMeters,
             "categories": businessType,
             "sort_by": sortBy
         ]
-        
+
+        // Determine if the search is for breweries or coffee shops
+        let isBrewerySelected = businessType.lowercased() != "coffee"
+
         if let pricing = pricing {
             let priceParameter = pricing.map { String($0) }.joined(separator: ",")
             parameters["price"] = priceParameter
         }
-        
+
         let headers: HTTPHeaders = [
             "Authorization": "Bearer \(String(describing: apiKey))"
         ]
-        
+
         AF.request(url, parameters: parameters, headers: headers).responseDecodable(of: YelpResponse.self) { response in
             switch response.result {
             case .success(let yelpResponse):
-                let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses)
+                let coffeeShops = self.parseCoffeeShops(businesses: yelpResponse.businesses, isBrewerySelected: isBrewerySelected)
                 completion(coffeeShops)
             case .failure(_):
                 completion([])
             }
         }
     }
+
     
-    
-    private func parseCoffeeShops(businesses: [YelpBusiness]) -> [CoffeeShop] {
-        var coffeeShops: [CoffeeShop] = []
-        for business in businesses where !isExcludedChain(name: business.name, categories: business.categories) {
-            let coffeeShop = CoffeeShop(
+    private func parseCoffeeShops(businesses: [YelpBusiness], isBrewerySelected: Bool) -> [BrewLocation] {
+        var coffeeShops: [BrewLocation] = []
+        for business in businesses where !isExcludedChain(name: business.name, categories: business.categories, isBrewerySelected:  isBrewerySelected) {
+            let coffeeShop = BrewLocation(
                 id: business.id,
                 name: business.name,
                 latitude: business.coordinates.latitude,
@@ -163,9 +167,23 @@ class YelpAPI : ObservableObject {
         }
     }
     
-    func isExcludedChain(name: String, categories: [Category]) -> Bool {
-           // Simplify the check using a Set operation
-           YelpAPI.chainCompanyNames.contains { name.lowercased().contains($0.lowercased()) } ||
-           categories.contains { YelpAPI.undesiredCatagories.contains($0.alias) }
-       }
+    func isExcludedChain(name: String, categories: [Category], isBrewerySelected: Bool) -> Bool {
+        let isChain = YelpAPI.chainCompanyNames.contains { name.lowercased().contains($0.lowercased()) }
+        
+        // Check if the business is in the desired categories (for breweries)
+        let isInDesiredCategory = categories.contains { desiredCatagories.contains($0.alias) }
+       
+        
+        if isBrewerySelected {
+            // If it's a brewery search, exclude businesses not in desired categories
+            return !isInDesiredCategory
+        } else {
+            // For coffee shop search, exclude chains and businesses in undesired categories
+            let isInUndesiredCategory = categories.contains { YelpAPI.undesiredCatagories.contains($0.alias) }
+          
+            return isChain || isInUndesiredCategory
+        }
+    }
+
+
 }

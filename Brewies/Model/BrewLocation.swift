@@ -1,13 +1,14 @@
 //
-//  CoffeeShop.swift
+//  BrewLocation.swift
 //  Brewies
 //
-//  Created by Noah Boyers on 4/14/23.
+//  Created by Noah Boyers on 11/27/23.
 //
 
 import Foundation
+import Foundation
 
-struct CoffeeShop: Identifiable, Equatable, Codable, Hashable {
+struct BrewLocation: Identifiable, Equatable, Codable, Hashable {
     let id: String
     let name: String
     let latitude: Double
@@ -45,8 +46,8 @@ struct CoffeeShop: Identifiable, Equatable, Codable, Hashable {
     }
 }
 
-extension CoffeeShop {
-    static func ==(lhs: CoffeeShop, rhs: CoffeeShop) -> Bool {
+extension BrewLocation {
+    static func ==(lhs: BrewLocation, rhs: BrewLocation) -> Bool {
         lhs.id == rhs.id
     }
     func hash(into hasher: inout Hasher) {

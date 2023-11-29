@@ -16,7 +16,7 @@ struct User {
     var email: String
     var isSubscribed: Bool
     var profileImage: Image?
-    var favorites: [CoffeeShop]
+    var favorites: [BrewLocation]
     var pastOrders: [Order]
     var credits: Int
     var hasClaimedWeeklyReward: Bool
@@ -29,7 +29,7 @@ struct User {
 //This will be used in a later date 
 struct Order: Identifiable, Codable {
     let id: String
-    let coffeeShop: CoffeeShop
+    let BrewLocation: BrewLocation
     let date: Date
     let amount: Double
     let items: [String] // Replace this with your specific order item model

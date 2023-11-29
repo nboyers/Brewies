@@ -50,6 +50,7 @@ struct ContentView: View {
     @State private var isSearching = false
     @State private var currentStreakColor: Color = .cyan
     @State private var settingsView = false
+    @State private var isCoffeeSelected = true
     private func getRandomColor() -> UIColor {
         return UIColor(
             red: CGFloat.random(in: 0...1),
@@ -81,35 +82,6 @@ struct ContentView: View {
         }
     }
     
-//    private func shouldAllowAd() -> String {
-//        if !userVM.user.isLoggedIn {
-//            return "No_Login"
-//        }
-//        // Check if it's been 28 hours since the last check-in.
-//        guard let lastDate = userVM.user.streakViewedDate else {
-//            // It's the user's first time, or it hasn't been 28hrs
-//            let hasCheckedInBefore = UserDefaults.standard.bool(forKey: "hasCheckedInBefore")
-//            if hasCheckedInBefore {
-//                return "Too_Soon"
-//            } else {
-//                if rewardAd.isAdAvailable() {
-//                    // Set the flag to true for future reference
-//                    UserDefaults.standard.set(true, forKey: "hasCheckedInBefore")
-//                    return "Reward_User"
-//                }
-//                return "Missing_Ad"
-//            }
-//        }
-//        
-//        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
-//        
-//        if elapsedHours <= 28 && elapsedHours >= 24 && userVM.user.isLoggedIn {
-//            // It's been less than 28 hours, prompt to watch ad
-//            return "Reward_User"
-//        }
-//        // It's been 24 hours or less, too soon to earn another streak point
-//        return "Too_Soon"
-//    }
     
     @FocusState var isInputActive: Bool
     
@@ -121,8 +93,8 @@ struct ContentView: View {
                 ZStack {
                     MapView(
                         locationManager: contentVM.locationManager,
-                        coffeeShops: $contentVM.coffeeShops,
-                        selectedCoffeeShop: $contentVM.selectedCoffeeShop,
+                        coffeeShops: $contentVM.brewLocations,
+                        selectedCoffeeShop: $contentVM.selectedBrewLocation,
                         centeredOnUser: $centeredOnUser,
                         userHasMoved: $userHasMoved,
                         visibleRegionCenter: $visibleRegionCenter,
@@ -177,103 +149,128 @@ struct ContentView: View {
                     }
                 }
                 //MARK: BREW PREVIEW
-                .bottomSheet(bottomSheetPosition: self.$sharedVM.bottomSheetPosition, switchablePositions: [
+                .bottomSheet(bottomSheetPosition: $sharedVM.bottomSheetPosition, switchablePositions: [
                     .relativeBottom(0.20), //Floor
                     .relative(0.70), // Mid swipe
                     .relativeTop(0.80) //Top full swipe
                 ], headerContent: { // the top portion
-                    HStack {
+          
+                    HStack(spacing: 20) { // Increased spacing for better visual separation
                         Spacer()
-                        HStack(alignment: .center, spacing: 10) {
-                            Button(action: {
-                                activeSheet = .filter
-                            }) {
-                                Image(systemName: "ellipsis.circle")
-                                    .resizable()
-                                    .foregroundColor(Color.accentColor)
-                                    .frame(width: 30, height: 30)
-                                    .clipShape(Circle())
-                            }.padding(.horizontal)
-                            
-                            
-                            TextField("Search the Area", text: $searchQuery, onEditingChanged: { isEditing in
-                                if isEditing {
-                                    isSearching = true
-                                    sharedVM.bottomSheetPosition = .relative(0.70)
-                                }
-                            }, onCommit: {
-                                searchLocation(for: searchQuery)
-                            })
-                            .focused($isInputActive)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.horizontal)
-                            .foregroundColor(.primary) // Use primary color for text to adapt to light/dark mode
-                            
-                            //MARK: Profile / Cancel Button
-                            Button(action: {
-                                if isSearching {
-                                    searchQuery = ""
-                                    isInputActive = false
-                                    isSearching = false
-                                    sharedVM.bottomSheetPosition = .relativeBottom(0.20)
+
+                        // Filter Button
+                        Button(action: {
+                            activeSheet = .filter
+                        }) {
+                            Image(systemName: "ellipsis.circle")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                                .background(Color.accentColor)
+                                .clipShape(Circle())
+                                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+
+                        // Toggle Coffee/Wine Button
+                        Button(action: {
+                            isCoffeeSelected.toggle()
+                        }) {
+                            Image(systemName: isCoffeeSelected ? "cup.and.saucer.fill" : "wineglass.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(isCoffeeSelected ? Color.brown : Color.purple)
+                                .background(Color.white)
+                                .clipShape(Circle())
+                                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                       
+                        Button(action: {
+                            // Check if the user has enough credits to perform a search
+                            if userVM.user.credits > 0 {
+                                if isCoffeeSelected {
+                                    // Perform the search
+                                    contentVM.fetchBrewies(visibleRegionCenter: visibleRegionCenter, brewType: "coffee", term: "Coffee")
                                 } else {
-                                    sharedVM.bottomSheetPosition = .relativeBottom(0.20)
-                                    if userVM.user.isLoggedIn {
-                                        // If user is logged in, show user profile view
-                                        activeSheet = .userProfile
-                                        
-                                    } else {
-                                        activeSheet = .signUpWithApple
-                                        
-                                    }
+                                    contentVM.fetchBrewies(visibleRegionCenter: visibleRegionCenter, brewType: "breweries", term: "Brewery")
                                 }
-                            })
-                            {
-                                if !isSearching {
-                                    if !userVM.user.isLoggedIn {
-                                        Image(systemName: "person.crop.circle.fill")
-                                            .resizable()
-                                            .foregroundColor(Color.accentColor)
-                                            .frame(width: 30, height: 30)
-                                            .clipShape(Circle())
-                                        
-                                    } else {
-                                        Text(String(userVM.user.firstName.prefix(1)))
-                                            .foregroundColor(.white)
-                                            .font(.system(size: 30, weight: .bold))
-                                            .frame(width: 30, height: 30)
-                                            .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
-                                            .clipShape(Circle())
-                                        
-                                    }
+                            } else {
+                                // When you want to show the "Insufficient Credits" alert
+                                sharedAlertVM.currentAlertType = .insufficientCredits
+                            }
+                        }) {
+                            Text("Search")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .frame(width: 125, height: 50)
+                                .background(isCoffeeSelected ? Color.brown : Color.purple)
+                                .cornerRadius(25)
+                                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        Spacer()
+
+                        Button(action: {
+                                if userVM.user.isLoggedIn {
+                                    // If user is logged in, show user profile view
+                                    activeSheet = .userProfile
+                                    
                                 } else {
-                                    Image(systemName: "x.circle.fill")
-                                        .resizable()
-                                        .frame(width: 25, height: 25)
-                                        .foregroundColor(.primary)
-                                        .padding()
+                                    activeSheet = .signUpWithApple
+                                }
+                        })
+                        {
+                                if !userVM.user.isLoggedIn {
+                                    Image(systemName: "person.crop.circle.fill")
+                                                   .resizable()
+                                                   .frame(width: 30, height: 30)
+                                                   .foregroundColor(Color.accentColor)
+                                                   .clipShape(Circle())
+                                    
+                                } else {
+                                    Text(String(userVM.user.firstName.prefix(1)))
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 30, weight: .bold))
+                                        .frame(width: 30, height: 30)
+                                        .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                        .clipShape(Circle())
                                     
                                 }
-                            }.padding(.horizontal)
-                        }.padding(.vertical)
+                             
+                        }
+                        .buttonStyle(PlainButtonStyle())
                         Spacer()
                     }
+                    .padding(.vertical)
+                    .background(Color(UIColor.secondarySystemBackground)) // Use a secondary background color
+                    .clipShape(RoundedRectangle(cornerRadius: 20)) // Apply rounded corners to the entire HStack
+                    .shadow(radius: 10)
+                    .padding(.horizontal)
+                    
+             
+                   
                 }) {
+                    Divider()
                     ScrollView {
-                        Divider()
-                        
-                        if contentVM.selectedCoffeeShop != nil && contentVM.showBrewPreview {
+
+    
+                        if contentVM.selectedBrewLocation != nil && contentVM.showBrewPreview {
                             
                             HStack() {
                                 GeometryReader { geo in
-                                    Text("\(contentVM.coffeeShops.count) Cafes In Map")
+                                    Text("\(contentVM.brewLocations.count) Brews In Map")
                                         .padding(.horizontal, geo.size.width*0.07)
                                 }
                                 Spacer()
                             }
                             
-                            BrewPreviewList(coffeeShops: $contentVM.coffeeShops,
-                                            selectedCoffeeShop: $contentVM.selectedCoffeeShop,
+                            BrewPreviewList(coffeeShops: $contentVM.brewLocations,
+                                            selectedCoffeeShop: $contentVM.selectedBrewLocation,
                                             showBrewPreview: $contentVM.showBrewPreview,
                                             activeSheet: $activeSheet)
                             
@@ -282,9 +279,10 @@ struct ContentView: View {
                             AdBannerView()
                                 .frame(width: 320, height: 50)
                         }
-                        
                     }
+                    
                 }
+                
                 .enableAppleScrollBehavior()
                 .enableBackgroundBlur()
                 .backgroundBlurMaterial(.systemDark)
@@ -292,82 +290,33 @@ struct ContentView: View {
                 GeometryReader { geo in
                     VStack {
                         Button(action: {
-                            // Check if the user has enough credits to perform a search
-                            
-                            if userVM.user.credits > 0 {
-                                // Perform the search
-                                contentVM.fetchCoffeeShops(visibleRegionCenter: visibleRegionCenter)
-                                
-                            } else {
-                                // When you want to show the "Insufficient Credits" alert
-                                sharedAlertVM.currentAlertType = .insufficientCredits
+                            DispatchQueue.global(qos: .background).async { [self] in
+                                rewardAd.loadRewardedAd()
                             }
-                        }) {
-                            Text("Search this area")
-                            
-                                .font(.system(size: geo.size.width <= 375 ? 17 : 20, weight: .bold))
-                                .frame(width: geo.size.width/2.5, height: geo.size.width/50)
-                                .padding()
-                                .font(.title3)
-                                .foregroundColor(.black)
-                                .background(.white)
-                        }
-                        .cornerRadius(10)
-                        .shadow(radius: 50)
-                        Button(action: {
                             sharedAlertVM.currentAlertType = .earnCredits
-                            
                         }) {
-                            Text("Discover Credits: \(userVM.user.credits)")
-                                .frame(minWidth: geo.size.width/3, idealWidth: geo.size.width/3, maxWidth: geo.size.width/3 + CGFloat(5 * String(userVM.user.credits).count), minHeight:geo.size.width/20, idealHeight: geo.size.width/20, maxHeight: geo.size.width/20)
-                                .padding(5)
-                                .background(.black)
-                                .font(.caption)
-                                .foregroundColor(Color.cyan)
-                                .cornerRadius(10)
-                                .shadow(radius: 50)
-                                .minimumScaleFactor(0.5)
-                            
+                            HStack {
+                                Text("Discover Credits: \(userVM.user.credits)")
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.vertical, 8)
+                                    .padding(.horizontal, 12) // Padding around the text
+                                    .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.85), Color.purple.opacity(0.85)]), startPoint: .leading, endPoint: .trailing))
+                                    .cornerRadius(15)
+                                    .shadow(color: .blue.opacity(0.5), radius: 10, x: 0, y: 5)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .stroke(Color.cyan.opacity(0.8), lineWidth: 1)
+                                    )
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity) // Button takes full width of the container
                         }
-                        
-                        
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    .offset(CGSize(width: geo.size.width*0.25, height: geo.size.width/6))
-                    
-                    
-//                    Button(action: {
-//                        
-//                        switch shouldAllowAd() {
-//                        case "No_Login": // User is not logged in
-//                            sharedAlertVM.currentAlertType = .notLoggedIn
-//                            
-//                        case "Too_Soon": // User comes before 24hrs
-//                            sharedAlertVM.currentAlertType = .tooSoon
-//                            
-//                            
-//                        case "Reward_User":  // User is logged in & over 24hrs since last checkin
-//                            sharedAlertVM.currentAlertType = .streakCount
-//                            
-//                        case "Missing_Ad":
-//                            rewardAd.loadRewardedAd()
-//                            sharedAlertVM.currentAlertType = .showInstructions
-//                            
-//                        default: // Show them how to use the System
-//                            sharedAlertVM.currentAlertType = .showInstructions
-//                            
-//                        }
-//                    }) {
-//                        Text("\(userVM.user.streakCount)")
-//                            .font(.callout)
-//                            .bold()
-//                            .padding()
-//                            .background(Circle().fill(currentStreakColor))
-//                            .foregroundColor(.white)
-//                            .frame(width: 50, height: 50)
-//                    }
-//                    .offset(CGSize(width: geo.size.width*0.80, height: geo.size.height/13))
-                    
-                    
+                    .padding() // Add padding around the VStack
+                   .cornerRadius(20)
+                   .shadow(radius: 10) // Card-like background for the VStack
+                   .offset(CGSize(width: geo.size.width*0.02 - 5, height: geo.size.width/7 - 20))
                 }
                 
                 if  sharedAlertVM.currentAlertType != nil {
@@ -426,14 +375,17 @@ struct ContentView: View {
                                         switch status {
                                         case .authorized:
                                             // Here, you can continue with ad loading as the user has given permission
+                                            sharedAlertVM.currentAlertType = nil
                                             self.contentVM.handleRewardAd(reward: "credits")
                                         case .denied, .restricted:
                                             // Handle the case where permission is denied
+                                            sharedAlertVM.currentAlertType = nil
                                             self.contentVM.handleRewardAd(reward: "credits")
                                             break
                                             
                                         case .notDetermined:
                                             // The user has not decided on permission
+                                            sharedAlertVM.currentAlertType = nil
                                             contentVM.handleRewardAd(reward: "credits")
                                             break
                                         @unknown default:
@@ -441,6 +393,7 @@ struct ContentView: View {
                                         }
                                     }
                                 } else {
+                                    sharedAlertVM.currentAlertType = nil
                                     contentVM.handleRewardAd(reward: "credits")
                                 }
                             },
@@ -452,24 +405,7 @@ struct ContentView: View {
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
                             })
-                        
-                    case .streakCount:
-                        CustomAlertView(
-                            title: "Watch an Ad",
-                            message: "Watch the ad to increase your streak count",
-                            primaryButtonTitle: "Watch Ad",
-                            primaryAction: {
-                                self.contentVM.handleRewardAd(reward: "check_in")
-                                sharedAlertVM.currentAlertType = nil
-                            },
-                            secondaryButtonTitle: "Shop",
-                            secondaryAction: {
-                                
-                            },
-                            dismissAction: {
-                                sharedAlertVM.currentAlertType = nil
-                            })
-                        
+
                     case .notLoggedIn:
                         CustomAlertView(
                             title: "Sign In Required",
@@ -545,11 +481,15 @@ struct ContentView: View {
                             primaryButtonTitle: "OK",
                             primaryAction: {
                                 sharedAlertVM.currentAlertType = nil
-                                rewardAd.loadRewardedAd()
+                                DispatchQueue.global(qos: .background).async { [self] in
+                                    rewardAd.loadRewardedAd()
+                                }
                             },
                             dismissAction: {
                                 sharedAlertVM.currentAlertType = nil
-                                rewardAd.loadRewardedAd()
+                                DispatchQueue.global(qos: .background).async { [self] in
+                                    rewardAd.loadRewardedAd()
+                                }
                             }
                         )
                         
@@ -613,7 +553,7 @@ struct ContentView: View {
                         GeometryReader { geometry in
                             VStack {
                                 HStack {
-                                   
+                                    
                                     Button(action: {
                                         activeSheet = nil
                                         sharedAlertVM.currentAlertType =  nil
@@ -625,7 +565,7 @@ struct ContentView: View {
                                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
                                     })
                                     .padding()
-                                
+                                    
                                     Spacer()
                                     Button(action: {
                                         activeSheet = nil
@@ -636,11 +576,11 @@ struct ContentView: View {
                                             .resizable()
                                             .frame(width: 30, height: 30)
                                             .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                       
+                                        
                                     })
                                     .padding()
                                 }
-                           
+                                
                                 
                                 Divider()
                                 Spacer() // Pushes the content to the center vertically
@@ -683,7 +623,7 @@ struct ContentView: View {
                 SettingsView(activeSheet: $activeSheet)
                     .presentationDragIndicator(.visible)
                     .presentationDetents([.medium])
-                    
+                
             }
             .alert(isPresented: $showLocationAccessAlert) {
                 Alert(

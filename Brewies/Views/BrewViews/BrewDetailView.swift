@@ -15,7 +15,7 @@ import MapKit
 
 
 struct BrewDetailView: View {
-    var coffeeShop: CoffeeShop
+    var coffeeShop: BrewLocation
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var showSafariView = false

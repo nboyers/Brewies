@@ -11,12 +11,12 @@ import Combine
 import CoreLocation
 
 class ContentViewModel: ObservableObject {
-    @Published var coffeeShops: [CoffeeShop] = []
-    @Published var selectedCoffeeShop: CoffeeShop?
+    @Published var brewLocations: [BrewLocation] = []
+    @Published var selectedBrewLocation: BrewLocation?
     @Published var showAlert = false
     @Published var showBrewPreview = false
     @Published var searchQuery: String = ""
-    @Published var showNoCoffeeShopsAlert = false
+    @Published var showNoBrewLocationsAlert = false
     @Published var showNoAdsAvailableAlert = false
     @Published var showNoCreditsAlert = false
     @Published var adsWatched = 0
@@ -40,48 +40,49 @@ class ContentViewModel: ObservableObject {
         clearOldCache()
     }
 
-    func fetchCoffeeShops(visibleRegionCenter: CLLocationCoordinate2D?) {
+    func fetchBrewies(visibleRegionCenter: CLLocationCoordinate2D?, brewType: String, term: String) {
         deductUserCredit()
         
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
-            DispatchQueue.main.async {
-                self.showAlert = true
-            }
-            return
-        }
-        
-        let cacheKey = "\(centerCoordinate.latitude),\(centerCoordinate.longitude)"
-        
-        if let cachedShops = retrieveFromCache(forKey: cacheKey), !cachedShops.isEmpty {
-            DispatchQueue.main.async {
-                self.coffeeShops = cachedShops
-                self.selectedCoffeeShop = cachedShops.first
-                self.showBrewPreview = true
-                self.fetchedFromCache = true
-            }
-            return
-        }
+               DispatchQueue.main.async {
+                   self.showAlert = true
+               }
+               return
+           }
+           
+//           // Include brewType and term in the cache key to differentiate between searches
+//           let cacheKey = "\(centerCoordinate.latitude),\(centerCoordinate.longitude),\(brewType),\(term)"
+//
+//        if let cachedShops = retrieveFromCache(forKey: cacheKey), !cachedShops.isEmpty {
+//                DispatchQueue.main.async {
+//                    self.brewLocations = cachedShops
+//                    self.selectedBrewLocation = cachedShops.first
+//                    self.showBrewPreview = true
+//                    self.fetchedFromCache = true
+//                }
+//                return
+//            }
         
         apiKeysViewModel.fetchAPIKeys { [weak self] API in
             guard let self = self else { return }
             let yelpAPI = YelpAPI(yelpParams: self.yelpParams)
-            yelpAPI.fetchIndependentCoffeeShops(apiKey: API?.YELP_API ?? "KEYLESS", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude) { shops in
+            yelpAPI.fetchIndependentBrewLocation(apiKey: API?.YELP_API ?? "KEYLESS", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude, term: term, businessType: brewType) { shops in
                 DispatchQueue.main.async {
-                    self.processCoffeeShops(coffeeShops: shops, cacheKey: cacheKey)
+                    self.processBrewLocations(BrewLocations: shops/*, cacheKey: cacheKey*/)
                 }
             }
         }
     }
     
-    private func processCoffeeShops(coffeeShops: [CoffeeShop], cacheKey: String) {
-        saveToCache(coffeeShops: coffeeShops, forKey: cacheKey)
-        self.coffeeShops = coffeeShops
-        self.selectedCoffeeShop = coffeeShops.first
+    private func processBrewLocations(BrewLocations: [BrewLocation]/*, cacheKey: String*/) {
+//        saveToCache(BrewLocations: BrewLocations, forKey: cacheKey)
+        self.brewLocations = BrewLocations
+        self.selectedBrewLocation = BrewLocations.first
         self.showBrewPreview = true
     }
     
-    private func saveToCache(coffeeShops: [CoffeeShop], forKey key: String) {
-        let data = try? JSONEncoder().encode(coffeeShops)
+    private func saveToCache(BrewLocations: [BrewLocation], forKey key: String) {
+        let data = try? JSONEncoder().encode(BrewLocations)
         UserDefaults.standard.set(data, forKey: key)
         UserDefaults.standard.set(Date(), forKey: "\(key)-date")
     }
@@ -104,9 +105,9 @@ class ContentViewModel: ObservableObject {
         }
     }
     
-    private func retrieveFromCache(forKey key: String) -> [CoffeeShop]? {
+    private func retrieveFromCache(forKey key: String) -> [BrewLocation]? {
         if let data = UserDefaults.standard.data(forKey: key) {
-            return try? JSONDecoder().decode([CoffeeShop].self, from: data)
+            return try? JSONDecoder().decode([BrewLocation].self, from: data)
         }
         return nil
     }

@@ -19,9 +19,9 @@ struct MapView: UIViewRepresentable {
     @ObservedObject var locationManager: LocationManager
     @EnvironmentObject var sharedVM: SharedViewModel
     
-    // Bindings
-    @Binding var coffeeShops: [CoffeeShop]
-    @Binding var selectedCoffeeShop: CoffeeShop?
+    // Bindings fetchIndependentBrewLocation
+    @Binding var coffeeShops: [BrewLocation]
+    @Binding var selectedCoffeeShop: BrewLocation?
     @Binding var centeredOnUser: Bool
     @Binding var userHasMoved: Bool
     @Binding var visibleRegionCenter: CLLocationCoordinate2D?
@@ -138,7 +138,7 @@ struct MapView: UIViewRepresentable {
 
 
     // Converts a CoffeeShop object to an MKPointAnnotation
-    private func coffeeShopToAnnotation(_ coffeeShop: CoffeeShop) -> MKPointAnnotation {
+    private func coffeeShopToAnnotation(_ coffeeShop: BrewLocation) -> MKPointAnnotation {
         let annotation = MKPointAnnotation()
         annotation.coordinate = CLLocationCoordinate2D(latitude: coffeeShop.latitude, longitude: coffeeShop.longitude)
         annotation.title = coffeeShop.name
@@ -211,9 +211,9 @@ extension CLLocationCoordinate2D {
 
 // Define an MKPointAnnotation subclass for CoffeeShop
 class CoffeeShopAnnotation: MKPointAnnotation {
-    var coffeeShop: CoffeeShop
+    var coffeeShop: BrewLocation
 
-    init(coffeeShop: CoffeeShop) {
+    init(coffeeShop: BrewLocation) {
         self.coffeeShop = coffeeShop
         super.init()
         self.title = coffeeShop.name

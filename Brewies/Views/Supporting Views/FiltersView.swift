@@ -34,6 +34,7 @@ struct FiltersView: View {
     @EnvironmentObject var userVM: UserViewModel
     @ObservedObject var contentVM: ContentViewModel
     @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
+    @ObservedObject var storeKit = StoreKitManager()
     
     @State private var activeSheet: ActiveSheet?
     @State private var applyChangesCount: Int = 0
@@ -253,36 +254,9 @@ struct FiltersView: View {
                
                 Divider()
                 
-                //MARK: Brew Type
-                Group {
-                    Text("Business Category")
-                        .font(.title2)
-                        .bold()
-                        .padding(.horizontal)
-                    ForEach(brewType, id: \.self) { brewOption in
-                        HStack {
-                            Text(brewOption)
-                                .font(.body)
-                            Spacer()
-                            Button(action: {
-                                if !userVM.user.isSubscribed {
-                                    sharedAlertVM.currentAlertType = .notSubscribed
-                                } else {
-                                    selectedBrew = brewOption
-                                    yelpParams.businessType = selectedBrew
-                                }
-                            }) {
-                                Circle()
-                                    .frame(width: 24, height: 24)
-                                    .foregroundColor(selectedBrew == brewOption ? .blue : .clear)
-                                    .overlay(
-                                        Capsule()
-                                            .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedBrew == brewOption ? 0 : 1)
-                                    )
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
+                if !storeKit.storeStatus.isAdRemovalPurchased && !userVM.user.isSubscribed {
+                    AdBannerView()
+                        .frame(width: 320, height: 50)
                 }
                
                 Spacer()

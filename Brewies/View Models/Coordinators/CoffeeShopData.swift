@@ -10,7 +10,7 @@ import Foundation
 class CoffeeShopData: ObservableObject {
     static let shared = CoffeeShopData()
 
-    @Published var favoriteShops: [CoffeeShop] = [] {
+    @Published var favoriteShops: [BrewLocation] = [] {
         didSet {
             saveFavoriteShops()
         }
@@ -28,7 +28,7 @@ class CoffeeShopData: ObservableObject {
         }
     }
 
-    @Published var cachedShops: [CoffeeShop] = []
+    @Published var cachedShops: [BrewLocation] = []
 
     var numberOfFavoriteShops: Int {
         favoriteShops.count
@@ -38,7 +38,7 @@ class CoffeeShopData: ObservableObject {
         loadFavoriteShops()
     }
     
-    func addToFavorites(_ coffeeShop: CoffeeShop) -> Bool {
+    func addToFavorites(_ coffeeShop: BrewLocation) -> Bool {
         guard favoriteShops.count < maxFavoriteSlots, !favoriteShops.contains(coffeeShop) else {
             return false
         }
@@ -46,12 +46,12 @@ class CoffeeShopData: ObservableObject {
         return true
     }
     
-    func removeFromFavorites(_ coffeeShop: CoffeeShop) {
+    func removeFromFavorites(_ coffeeShop: BrewLocation) {
         favoriteShops.removeAll { $0 == coffeeShop }
         addShopToCache(coffeeShop)
     }
 
-    private func addShopToCache(_ coffeeShop: CoffeeShop) {
+    private func addShopToCache(_ coffeeShop: BrewLocation) {
         if !cachedShops.contains(coffeeShop) {
             var mutableCoffeeShop = coffeeShop
             mutableCoffeeShop.lastAccessDate = Date()
@@ -73,7 +73,7 @@ class CoffeeShopData: ObservableObject {
         if let savedShops = UserDefaults.standard.object(forKey: "FavoriteShops") as? Data {
 //            DispatchQueue.global(qos: .background).async {
                 let decoder = JSONDecoder()
-                if let loadedShops = try? decoder.decode([CoffeeShop].self, from: savedShops) {
+                if let loadedShops = try? decoder.decode([BrewLocation].self, from: savedShops) {
 //                    DispatchQueue.main.async {
                         self.favoriteShops = loadedShops
 //                    }

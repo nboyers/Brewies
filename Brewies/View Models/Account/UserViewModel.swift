@@ -85,14 +85,18 @@ class UserViewModel: ObservableObject {
         case "login":
             let guestCredits = UserDefaults.standard.integer(forKey: UserKeys.userCredits("Guest"))
             UserDefaults.standard.set(guestCredits, forKey: UserKeys.userCredits(user.userID))
-            user.credits = guestCredits
-            
+            DispatchQueue.main.async {
+                self.user.credits = guestCredits
+            }
+            break
             
         case "signOut":
             let userCredits = UserDefaults.standard.integer(forKey: UserKeys.userCredits(user.userID))
             UserDefaults.standard.set(userCredits, forKey: UserKeys.userCredits("Guest"))
-            user.credits = userCredits
-            
+            DispatchQueue.main.async {
+                self.user.credits = userCredits
+            }
+            break
             
         default:
             break
@@ -105,7 +109,9 @@ class UserViewModel: ObservableObject {
     
     func addCredits(_ amount: Int) {
         print("Credits Added: \(amount)")
-        user.credits += amount
+        DispatchQueue.main.async {
+            self.user.credits += amount
+        }
         print("Credits After: \(user.credits)")
         let key = user.isLoggedIn ? UserKeys.userCredits(user.userID) : UserKeys.userCredits("Guest")
         UserDefaults.standard.set(user.credits, forKey: key)
@@ -132,12 +138,12 @@ class UserViewModel: ObservableObject {
     }
 
     
-    func addToFavorites(_ coffeeShop: CoffeeShop) {
+    func addToFavorites(_ coffeeShop: BrewLocation) {
         user.favorites.append(coffeeShop)
         // Persist the user's favorites to your storage
     }
     
-    func removeFromFavorites(_ coffeeShop: CoffeeShop) {
+    func removeFromFavorites(_ coffeeShop: BrewLocation) {
         if let index = user.favorites.firstIndex(of: coffeeShop) {
             user.favorites.remove(at: index)
             // Persist the user's favorites to your storage

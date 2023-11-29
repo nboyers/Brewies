@@ -24,16 +24,19 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate, Observ
     
     func loadRewardedAd() {
         let request = GADRequest()
-        GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY,
-                           request: request,
-                           completionHandler: { [self] ad, error in
-            if error != nil { return }
-            rewardedAd = ad
+        GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD_AD_KEY, request: request) { [weak self] ad, error in
+            if let error = error {
+                print("Failed to load rewarded ad with error: \(error.localizedDescription)")
+                // Optionally, handle the error by notifying the user or retrying
+                return
+            }
+            self?.rewardedAd = ad
             print("Rewarded ad loaded.")
-            rewardedAd?.fullScreenContentDelegate = self
+            self?.rewardedAd?.fullScreenContentDelegate = self
             
-        })
+        }
     }
+    
     
     
     

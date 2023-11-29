@@ -19,7 +19,7 @@ struct FavoritesView: View {
     
     @Binding var showPreview: Bool
     @State private var showRemovalConfirmationAlert = false
-    @State private var toRemoveCoffeeShop: CoffeeShop?
+    @State private var toRemoveCoffeeShop: BrewLocation?
 
     @Binding var activeSheet: ActiveSheet?
     
