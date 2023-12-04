@@ -67,6 +67,7 @@ class ContentViewModel: ObservableObject {
             guard let self = self else { return }
             let yelpAPI = YelpAPI(yelpParams: self.yelpParams)
             yelpAPI.fetchIndependentBrewLocation(apiKey: API?.YELP_API ?? "KEYLESS", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude, term: term, businessType: brewType) { shops in
+                
                 DispatchQueue.main.async {
                     self.processBrewLocations(BrewLocations: shops/*, cacheKey: cacheKey*/)
                 }

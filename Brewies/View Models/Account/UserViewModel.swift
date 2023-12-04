@@ -108,14 +108,14 @@ class UserViewModel: ObservableObject {
     }
     
     func addCredits(_ amount: Int) {
-        print("Credits Added: \(amount)")
         DispatchQueue.main.async {
+            let key = self.user.isLoggedIn ? UserKeys.userCredits(self.user.userID) : UserKeys.userCredits("Guest")
             self.user.credits += amount
+            UserDefaults.standard.set(self.user.credits, forKey: key)
+//            print("Credits After: \(self.user.credits)")
         }
-        print("Credits After: \(user.credits)")
-        let key = user.isLoggedIn ? UserKeys.userCredits(user.userID) : UserKeys.userCredits("Guest")
-        UserDefaults.standard.set(user.credits, forKey: key)
     }
+
     
     func subtractCredits(_ amount: Int) {
         user.credits -= amount
@@ -150,62 +150,9 @@ class UserViewModel: ObservableObject {
         }
     }
     
-    func saveStreakData() {
-        let lastWatchedDate = Date()
-        let elapsedHours = user.streakViewedDate != nil ? Calendar.current.dateComponents([.hour], from: user.streakViewedDate!, to: lastWatchedDate).hour ?? 0 : 28
-        let newStreakCount = (elapsedHours <= 28 && elapsedHours >= 24) ? user.streakCount + 1 : 0
-        
-        user.streakCount = newStreakCount
-        user.streakViewedDate = lastWatchedDate
-        
-        UserDefaults.standard.set(user.streakCount, forKey: UserKeys.userStreakCount)
-        UserDefaults.standard.set(user.streakViewedDate, forKey: UserKeys.userStreakContentViewed)
-    }
-    
-    func timeLeft() -> String {
-        guard let lastDate = user.streakViewedDate else {
-            // You could return a default value or handle the error in some way
-            return "No date available"
-        }
 
-        let elapsedHours = Calendar.current.dateComponents([.hour], from: lastDate, to: Date()).hour ?? 0
-        let remainingHours = 24 - elapsedHours
+    
 
-        guard let nextCheckInDate = Calendar.current.date(byAdding: .hour, value: remainingHours, to: lastDate) else {
-            return "Error computing next check-in time"
-        }
-
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a, EEEE, MMM d"
-        formatter.timeZone = TimeZone.current
-
-        let formattedString = formatter.string(from: nextCheckInDate)
-
-        return formattedString
-        
-    }
-    
-    //MARK: Reward checks for the Favorites slot and Discover credits
-    func isWeeklyRewardAvailable() -> Bool {
-        return user.streakCount % 7 == 0 && !user.hasClaimedWeeklyReward && user.streakCount != 0
-    }
-    
-    func claimDiscoverCreditsReward() {
-        addCredits(3)
-        user.hasClaimedWeeklyReward = true
-    }
-    
-    func claimFavoriteSlotsReward() {
-        CoffeeShopData.shared.addFavoriteSlots(2)
-        user.hasClaimedWeeklyReward = true
-    }
-    
-    func resetWeeklyRewardClaimStatus() {
-        if user.streakCount % 7 != 0 {
-            user.hasClaimedWeeklyReward = false
-        }
-    }
-    
     func deleteUserData() {
         // Remove user-related keys from UserDefaults
         UserDefaults.standard.removeObject(forKey: UserKeys.isLoggedIn)

@@ -73,16 +73,13 @@ struct SubscriptionView: View {
                                 .frame(width: geo.size.width - 50, height: geo.size.height/66) // Adjust height
                                 .foregroundColor(.white)
                                 .padding()
-                                .background(.brown)
+                                .background(Color(hex: "#f7b32b"))
                                 .cornerRadius(15.0)
                                 
                             }
-                            
-                            
                             Text(product.description)
                                 .font(.caption)
                                 .padding(.horizontal, 10) // Add some padding
-                            
                         }
                     }
                     
@@ -122,7 +119,7 @@ struct SubscriptionView: View {
                 purchasedProduct = product
             }
         } catch {
-            print("Purchase failed")
+//            print("Purchase failed")
         }
     }
 }

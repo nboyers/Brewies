@@ -24,7 +24,7 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate, Observ
     
     func loadRewardedAd() {
         let request = GADRequest()
-        GADRewardedAd.load(withAdUnitID: Secrets.TEST_REWARD_AD_KEY, request: request) { [weak self] ad, error in
+        GADRewardedAd.load(withAdUnitID: Secrets.REWARD_AD_KEY, request: request) { [weak self] ad, error in
             if let error = error {
                 print("Failed to load rewarded ad with error: \(error.localizedDescription)")
                 // Optionally, handle the error by notifying the user or retrying
@@ -38,8 +38,6 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate, Observ
     }
     
     
-    
-    
     func present(from viewController: UIViewController, rewardType: String) {
         if let ad = rewardedAd {
             ad.present(fromRootViewController: viewController, userDidEarnRewardHandler: { [weak self] in
@@ -51,10 +49,6 @@ class RewardAdController: UIViewController, GADFullScreenContentDelegate, Observ
                     
                 case "favorites":
                     CoffeeShopData.shared.hadnleAdsWatchedCount()
-                    
-                    
-                case "check_in":
-                    userViewModel.saveStreakData()
                     
                 default:
                     break

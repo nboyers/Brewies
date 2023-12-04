@@ -29,7 +29,7 @@ struct UserProfileView: View {
                                 .foregroundColor(.white)
                                 .font(.system(size: 30, weight: .bold))
                                 .frame(width: 30, height: 30)
-                                .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                .background(RadialGradient(gradient: Gradient(colors: [Color(hex: "#afece7"), Color(hex: "#8ba6a9"), Color(hex: "#75704e"), Color(hex: "#987284"), Color(hex: "#f4ebbe")]), center: .center, startRadius: 5, endRadius: 70))
                                 .clipShape(Circle())
                             Text("\(userViewModel.user.firstName) \(userViewModel.user.lastName)")
                             
@@ -104,7 +104,7 @@ struct UserProfileView: View {
                     Spacer() // Pushes the content to the center vertically
                     HStack {
                         Spacer() // Pushes the content to the center horizontally
-                        Image("Brewies_icon")
+                        Image("App_Logo.png")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: geometry.size.width * 0.5, height: geometry.size.width * 0.5) // 50% of the width of the GeometryReader

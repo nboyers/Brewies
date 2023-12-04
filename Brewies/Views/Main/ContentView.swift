@@ -34,8 +34,6 @@ struct ContentView: View {
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var activeSheet: ActiveSheet?
     
-    @State private var howInstructions = false
-    @State private var swirlColors: (UIColor, UIColor)? = nil
     @State private var showLocationAccessAlert = false
     @State private var centeredOnUser = false
     @State private var showingBrewPreviewList = false
@@ -47,41 +45,10 @@ struct ContentView: View {
     @State private var shouldSearchInArea = false
     @State var searchedLocation: CLLocationCoordinate2D?
     @State private var searchQuery: String = ""
-    @State private var isSearching = false
-    @State private var currentStreakColor: Color = .cyan
     @State private var settingsView = false
     @State private var isCoffeeSelected = true
-    private func getRandomColor() -> UIColor {
-        return UIColor(
-            red: CGFloat.random(in: 0...1),
-            green: CGFloat.random(in: 0...1),
-            blue: CGFloat.random(in: 0...1),
-            alpha: 1.0
-        )
-    }
-    
-    // Inside ContentView
-    private func updateStreakColor() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            // Perform UserDefaults work on a background thread
-            let defaults = UserDefaults.standard
-            if userVM.user.streakCount % 7 == 0 && userVM.user.streakCount != 0 {
-                let randomColor1 = self.getRandomColor()
-                let randomColor2 = userVM.user.streakCount >= 365 ? self.getRandomColor() : randomColor1
-                // Save the colors
-                if let colorsData = try? NSKeyedArchiver.archivedData(withRootObject: [randomColor1, randomColor2], requiringSecureCoding: false) {
-                    DispatchQueue.main.async {
-                        defaults.set(colorsData, forKey: "streakColors")
-                    }
-                }
-            } else if userVM.user.streakCount == 0 {
-                DispatchQueue.main.async {
-                    defaults.removeObject(forKey: "streakColors")
-                }
-            }
-        }
-    }
-    
+
+
     
     @FocusState var isInputActive: Bool
     
@@ -181,7 +148,7 @@ struct ContentView: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 30, height: 30)
-                                .foregroundColor(isCoffeeSelected ? Color.brown : Color.purple)
+                                .foregroundColor(isCoffeeSelected ? Color(hex: "#504b3a") : Color(hex: "#72195a"))
                                 .background(Color.white)
                                 .clipShape(Circle())
                                 .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
@@ -207,7 +174,7 @@ struct ContentView: View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(.white)
                                 .frame(width: 125, height: 50)
-                                .background(isCoffeeSelected ? Color.brown : Color.purple)
+                                .background(isCoffeeSelected ? Color(hex: "#504b3a") : Color(hex: "#72195a"))
                                 .cornerRadius(25)
                                 .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
                         }
@@ -237,7 +204,7 @@ struct ContentView: View {
                                         .foregroundColor(.white)
                                         .font(.system(size: 30, weight: .bold))
                                         .frame(width: 30, height: 30)
-                                        .background(RadialGradient(gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .pink]), center: .center, startRadius: 5, endRadius: 70))
+                                        .background(RadialGradient(gradient: Gradient(colors: [Color(hex: "#afece7"), Color(hex: "#8ba6a9"), Color(hex: "#75704e"), Color(hex: "#987284"), Color(hex: "#f4ebbe")]), center: .center, startRadius: 5, endRadius: 70))
                                         .clipShape(Circle())
                                     
                                 }
@@ -301,7 +268,7 @@ struct ContentView: View {
                                     .foregroundColor(.white)
                                     .padding(.vertical, 8)
                                     .padding(.horizontal, 12) // Padding around the text
-                                    .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.85), Color.purple.opacity(0.85)]), startPoint: .leading, endPoint: .trailing))
+                                    .background(LinearGradient(gradient: Gradient(colors: [Color(hex: "#afece7").opacity(0.85)]), startPoint: .leading, endPoint: .trailing))
                                     .cornerRadius(15)
                                     .shadow(color: .blue.opacity(0.5), radius: 10, x: 0, y: 5)
                                     .overlay(
@@ -406,74 +373,6 @@ struct ContentView: View {
                                 sharedAlertVM.currentAlertType = nil
                             })
 
-                    case .notLoggedIn:
-                        CustomAlertView(
-                            title: "Sign In Required",
-                            message: "Please sign in to use Daily Check In",
-                            primaryButtonTitle: "Sign In",
-                            primaryAction: {
-                                signInCoordinator.startSignInWithAppleFlow()
-                                sharedAlertVM.currentAlertType = nil
-                            },
-                            secondaryButtonTitle: "Explain",
-                            secondaryAction: {
-                                howInstructions = true
-                            },
-                            dismissAction: {
-                                sharedAlertVM.currentAlertType = nil
-                            })
-                        
-                    case .tooSoon:
-                        CustomAlertView(
-                            title: "Not Yet",
-                            message: "You can re-check in at \(userVM.timeLeft())",
-                            primaryButtonTitle: "Reward",
-                            primaryAction: {
-                                if userVM.isWeeklyRewardAvailable() {
-                                    sharedAlertVM.currentAlertType = .streakReward
-                                } else {
-                                    sharedAlertVM.currentAlertType = .showNotEnoughStreakAlert
-                                }
-                            },
-                            secondaryButtonTitle: "Explain",
-                            secondaryAction: {
-                                howInstructions = true
-                            },
-                            dismissAction: {
-                                sharedAlertVM.currentAlertType = nil
-                            }
-                        )
-                        
-                    case .streakReward:
-                        CustomAlertView(
-                            title: "Choose your Reward!",
-                            message: "Thank you for using Brewies",
-                            primaryButtonTitle: "Discover \nCredits",
-                            primaryAction: {
-                                userVM.claimDiscoverCreditsReward()
-                                sharedAlertVM.currentAlertType = nil
-                            },
-                            secondaryButtonTitle: "Favorite \nSlot",
-                            secondaryAction: {
-                                userVM.claimFavoriteSlotsReward()
-                                sharedAlertVM.currentAlertType = nil
-                            },
-                            dismissAction: {
-                                sharedAlertVM.currentAlertType = .streakReward // Makes sure user cannot be scammed
-                            }
-                        )
-                    case .showNotEnoughStreakAlert:
-                        CustomAlertView(
-                            title: "Not Enough Streak",
-                            message: "You don't have enough streak amount to claim a reward. Keep checking in daily to increase your streak count!",
-                            primaryButtonTitle: "OK",
-                            primaryAction: {
-                                sharedAlertVM.currentAlertType = nil
-                            },
-                            dismissAction: {
-                                sharedAlertVM.currentAlertType = nil
-                            }
-                        )
                     case .noAdsAvailableAlert:
                         CustomAlertView(
                             title: "No Ad Available",
@@ -523,11 +422,7 @@ struct ContentView: View {
                     }
                 }
             }
-            
-            .sheet(isPresented: $howInstructions) {
-                InstructionsView()
-            }
-            
+
             
             //MARK: User Profile
             .sheet(item: $activeSheet) { sheet in
