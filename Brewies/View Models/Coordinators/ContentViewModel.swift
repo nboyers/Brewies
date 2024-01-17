@@ -41,6 +41,7 @@ class ContentViewModel: ObservableObject {
     }
 
     func fetchBrewies(visibleRegionCenter: CLLocationCoordinate2D?, brewType: String, term: String) {
+        
         deductUserCredit()
         
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
@@ -50,19 +51,6 @@ class ContentViewModel: ObservableObject {
                return
            }
            
-//           // Include brewType and term in the cache key to differentiate between searches
-//           let cacheKey = "\(centerCoordinate.latitude),\(centerCoordinate.longitude),\(brewType),\(term)"
-//
-//        if let cachedShops = retrieveFromCache(forKey: cacheKey), !cachedShops.isEmpty {
-//                DispatchQueue.main.async {
-//                    self.brewLocations = cachedShops
-//                    self.selectedBrewLocation = cachedShops.first
-//                    self.showBrewPreview = true
-//                    self.fetchedFromCache = true
-//                }
-//                return
-//            }
-        
         apiKeysViewModel.fetchAPIKeys { [weak self] API in
             guard let self = self else { return }
             let yelpAPI = YelpAPI(yelpParams: self.yelpParams)

@@ -24,4 +24,5 @@ enum CustomAlertType {
     case showNotEnoughStreakAlert
     case noAdsAvailableAlert
     case earnCredits
+    case missingSearchCredits
 }

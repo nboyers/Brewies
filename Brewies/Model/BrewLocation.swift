@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 
 struct BrewLocation: Identifiable, Equatable, Codable, Hashable {
     let id: String

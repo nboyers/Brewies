@@ -12,34 +12,51 @@ struct ProductStoreView: View {
     @EnvironmentObject var storeKitManager: StoreKitManager // Use the shared instance provided by the environment.
     @Environment(\.colorScheme) var colorScheme
     
+    private var filteredProducts: [Product] {
+        storeKitManager.storeStatus.storeProducts
+            .sorted(by: { $0.displayName < $1.displayName })
+            .filter { product in
+                [StoreKitManager.adRemovalProductId, StoreKitManager.creditsProductId, StoreKitManager.favoritesSlotId].contains(product.id)
+            }
+    }
+    
     var body: some View {
         VStack(alignment: .leading) {
-            Text("In-App Purchases")
-                .bold()
-//            Divider()
-            ForEach(storeKitManager.storeStatus.storeProducts.sorted(by: { $0.displayName < $1.displayName }).filter({ product in
-                [StoreKitManager.adRemovalProductId, StoreKitManager.creditsProductId, StoreKitManager.favoritesSlotId].contains(product.id)
-            })) { product in
-                ProductItem(storeKit: storeKitManager, product: product)
-            }
-            Divider()
-            HStack {
-                Spacer()
-                Button("Restore Purchases", action: {
-                    Task {
-                        try? await AppStore.sync()
-                        await storeKitManager.checkIfAdsRemoved()
-                    }
-                })
-                Spacer()
-            }
+            headerView
+            productsListView
+            restorePurchasesButton
         }
         .padding()
         .onReceive(storeKitManager.$storeStatus) { _ in
             // Action to be taken when store status changes.
         }
     }
+    
+    private var headerView: some View {
+        Text("In-App Purchases")
+            .bold()
+    }
+    
+    private var productsListView: some View {
+        ForEach(filteredProducts) { product in
+            ProductItem(storeKit: storeKitManager, product: product)
+        }
+    }
+    
+    private var restorePurchasesButton: some View {
+        return HStack {
+            Spacer()
+            Button("Restore Purchases") {
+                Task {
+                    try? await AppStore.sync()
+                    await storeKitManager.checkIfAdsRemoved()
+                }
+            }
+            Spacer()
+        }
+    }
 }
+
 struct ProductItem: View {
     @ObservedObject var storeKit: StoreKitManager
     var product: Product
@@ -47,43 +64,63 @@ struct ProductItem: View {
     
     var body: some View {
         HStack {
-            Text(product.displayName)
-                .foregroundColor(colorScheme == .dark ? .white : .black)
+            productTitle
             Spacer()
+            purchaseOrBoughtView
+        }
+    }
+    
+    private var productTitle: some View {
+        Text(product.displayName)
+            .foregroundColor(colorScheme == .dark ? .white : .black)
+    }
+    
+    private var purchaseOrBoughtView: some View {
+        Group {
             if storeKit.storeStatus.isAdRemovalPurchased && product.id == StoreKitManager.adRemovalProductId {
-                Text("BOUGHT")
-                    .foregroundColor(.gray)
-                    .padding(5)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(Color.gray, lineWidth: 2)
-                    )
+                purchasedLabel
             } else {
-                Button(action: {
-                    Task {
-                        do {
-                            _ = try await storeKit.purchase(product)
-                        } catch {
-                            // Handle errors if needed
-                        }
-                    }
-                }) {
-                    Text(product.displayPrice)
-                        .padding(5)
-                        .foregroundColor(colorScheme == .dark ? .white : .black)
-                        .background(
-                            RoundedRectangle(cornerRadius: 10)
-                                .strokeBorder(colorScheme == .dark ? .white : .black, lineWidth: 2)
-                        )
-                }
-                .buttonStyle(PlainButtonStyle())
+                purchaseButton
+            }
+        }
+    }
+    
+    private var purchasedLabel: some View {
+        Text("BOUGHT")
+            .foregroundColor(.gray)
+            .padding(5)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(Color.gray, lineWidth: 2)
+            )
+    }
+    
+    private var purchaseButton: some View {
+        Button(action: purchaseAction) {
+            Text(product.displayPrice)
+                .padding(5)
+                .foregroundColor(colorScheme == .dark ? .white : .black)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .strokeBorder(colorScheme == .dark ? .white : .black, lineWidth: 2)
+                )
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+    
+    private func purchaseAction() {
+        Task {
+            do {
+                _ = try await storeKit.purchase(product)
+            } catch {
+                // Handle errors if needed
             }
         }
     }
 }
 
-#Preview {
-    ProductStoreView()
-        .environmentObject(StoreKitManager())
+struct ProductStoreView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProductStoreView().environmentObject(StoreKitManager())
+    }
 }
-

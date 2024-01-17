@@ -373,6 +373,48 @@ struct ContentView: View {
                                 sharedAlertVM.currentAlertType = nil
                             })
 
+                    case .missingSearchCredits:
+                        CustomAlertView(
+                            title: "Insufficient Credits",
+                            message: "Watch an ad to search for brew or go to the store.",
+                            primaryButtonTitle: "Watch Ad",
+                            primaryAction: {
+                                if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                                    ATTrackingManager.requestTrackingAuthorization { [self] status in
+                                        switch status {
+                                        case .authorized:
+                                            // Here, you can continue with ad loading as the user has given permission
+                                            sharedAlertVM.currentAlertType = nil
+                                            self.contentVM.handleRewardAd(reward: "searching")
+                                        case .denied, .restricted:
+                                            // Handle the case where permission is denied
+                                            sharedAlertVM.currentAlertType = nil
+                                            self.contentVM.handleRewardAd(reward: "searching")
+                                            break
+                                            
+                                        case .notDetermined:
+                                            // The user has not decided on permission
+                                            sharedAlertVM.currentAlertType = nil
+                                            self.contentVM.handleRewardAd(reward: "searching")
+                                            break
+                                        @unknown default:
+                                            break
+                                        }
+                                    }
+                                } else {
+                                    sharedAlertVM.currentAlertType = nil
+                                    self.contentVM.handleRewardAd(reward: "searching")
+                                }
+                            },
+                            secondaryButtonTitle: "Go to Store",
+                            secondaryAction: {
+                                activeSheet = .storefront
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                            })
+                        
                     case .noAdsAvailableAlert:
                         CustomAlertView(
                             title: "No Ad Available",
@@ -551,23 +593,24 @@ struct ContentView: View {
         }
     }
     
-    // Function to search for a location by address
-    func searchLocation(for address: String) {
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString(address) { (placemarks, error) in
-            guard error == nil else {
-                
-                return
-            }
-            guard let placemark = placemarks?.first, let location = placemark.location else {
-                
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.searchedLocation = location.coordinate
-            }
-        }
-    }
+//    // Function to search for a location by address
+//    func searchLocation(for address: String) {
+//        let geocoder = CLGeocoder()
+//        geocoder.geocodeAddressString(address) { (placemarks, error) in
+//            guard error == nil else {
+//                
+//                return
+//            }
+//            guard let placemark = placemarks?.first, let location = placemark.location else {
+//                
+//                return
+//            }
+//            
+//            DispatchQueue.main.async {
+//                self.searchedLocation = location.coordinate
+//            }
+//        }
+//    }
+    
 }
 

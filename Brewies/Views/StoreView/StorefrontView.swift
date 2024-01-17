@@ -11,18 +11,23 @@ struct StorefrontView: View {
     @StateObject var storeKitManager = StoreKitManager()
     
     var body: some View {
-        VStack {
-            SubscriptionView()
-                .environmentObject(storeKitManager) // Pass the environment object to the SubscriptionView
-            ProductStoreView()
-                .environmentObject(storeKitManager) // Pass the environment object to the ProductStoreView
+        GeometryReader { geometry in
+            VStack(spacing: 0) {
+                SubscriptionView()
+                    .environmentObject(storeKitManager)
+                    .frame(height: geometry.size.height / 2) // Half the height of the screen
+                
+                ProductStoreView()
+                    .environmentObject(storeKitManager)
+                    .frame(height: geometry.size.height / 2) // Half the height of the screen
+            }
         }
         .onAppear {
-           storeKitManager.refreshData()
-
+            storeKitManager.refreshData()
         }
     }
 }
+
 
 #Preview {
     StorefrontView()
