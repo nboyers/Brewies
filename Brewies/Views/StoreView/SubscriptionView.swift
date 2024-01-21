@@ -13,7 +13,8 @@ struct SubscriptionView: View {
     @StateObject var userVM = UserViewModel.shared
     @Environment(\.colorScheme) var colorScheme
  
-
+    let BUTTON_COLOR = Color.init(hex:"#826c3b")
+    let SUB_BACKGROUND = Color.init(hex: "#303c38")
     @State var isPurchased = false
     @State var purchasedProduct: Product?
     
@@ -36,6 +37,7 @@ struct SubscriptionView: View {
                                         VStack(alignment: .leading, spacing: 5) {
                                             Text("Features:")
                                                 .font(.headline)
+                                                .foregroundColor(.white)
                                                 .padding(.vertical, 5)
                                             
                                             FeatureView(iconName: "checkmark.circle.fill", featureText: "No banner ads")
@@ -43,6 +45,7 @@ struct SubscriptionView: View {
                                             FeatureView(iconName: "checkmark.circle.fill", featureText: "20 Favorite's Slots")
                                             Text(welcomeCreditsText(for: product))
                                                 .font(.subheadline)
+                                                .foregroundColor(.white)
                                                 .padding(.leading, 22)
                                         }
                                         .padding(.leading, 10)
@@ -53,11 +56,12 @@ struct SubscriptionView: View {
                                         
                                         Text(product.description)
                                             .font(.caption)
+                                            .foregroundColor(.white)
                                             .padding(.horizontal, 45)
                                             .padding(.bottom, 10)
                                     }
                                     .padding()
-                                    .background(Color.indigo.opacity(0.1))
+                                    .background(SUB_BACKGROUND)
                                     .cornerRadius(50)
                                     .shadow(radius: 5)
                                 }
@@ -70,7 +74,7 @@ struct SubscriptionView: View {
                 }
             }
             .padding()
-            .background(colorScheme == .dark ? Color.black : Color.white)
+//            .background(Color.init(hex: "#1b260a"))
             .cornerRadius(10)
         }
     }
@@ -122,7 +126,7 @@ struct SubscriptionView: View {
             .frame(width: geo.size.width - 75, height: geo.size.height / 30)
             .foregroundColor(.white)
             .padding()
-            .background(Color.indigo)
+            .background(BUTTON_COLOR)
             .cornerRadius(15.0)
         }
     }
@@ -137,6 +141,7 @@ struct FeatureView: View {
             Image(systemName: iconName)
                 .foregroundColor(Color.green)
             Text(featureText)
+                .foregroundColor(.white)
         }
     }
 }

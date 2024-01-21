@@ -22,15 +22,23 @@ struct ProductStoreView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            headerView
-            productsListView
-            restorePurchasesButton
-        }
-        .padding()
-        .onReceive(storeKitManager.$storeStatus) { _ in
-            // Action to be taken when store status changes.
-        }
-    }
+              headerView
+                  .padding(.bottom, 10) // Adds some space below the header
+              
+              productsListView
+                  .cardStyle() // Custom modifier for card styling
+              
+              restorePurchasesButton
+                  .padding(.top, 20) // Adds space between the list and the button
+          }
+        
+          .padding()
+          .cornerRadius(10) // Rounded corners for the whole container
+          .shadow(radius: 5) // Subtle shadow for depth
+          .onReceive(storeKitManager.$storeStatus) { _ in
+              // Action to be taken when store status changes.
+          }
+      }
     
     private var headerView: some View {
         Text("In-App Purchases")
@@ -40,22 +48,25 @@ struct ProductStoreView: View {
     private var productsListView: some View {
         ForEach(filteredProducts) { product in
             ProductItem(storeKit: storeKitManager, product: product)
+            
+            
         }
     }
     
     private var restorePurchasesButton: some View {
-        return HStack {
-            Spacer()
-            Button("Restore Purchases") {
-                Task {
-                    try? await AppStore.sync()
-                    await storeKitManager.checkIfAdsRemoved()
-                }
-            }
-            Spacer()
-        }
-    }
-}
+           return HStack {
+               Spacer()
+               Button("Restore Purchases") {
+                   Task {
+                       try? await AppStore.sync()
+                       await storeKitManager.checkIfAdsRemoved()
+                   }
+               }
+               .buttonStyle(ProfessionalButtonStyle()) // Custom button style
+               Spacer()
+           }
+       }
+   }
 
 struct ProductItem: View {
     @ObservedObject var storeKit: StoreKitManager
@@ -68,11 +79,12 @@ struct ProductItem: View {
             Spacer()
             purchaseOrBoughtView
         }
+       
     }
     
     private var productTitle: some View {
         Text(product.displayName)
-            .foregroundColor(colorScheme == .dark ? .white : .black)
+            .foregroundColor(Color.init(hex: "#ffffff"))
     }
     
     private var purchaseOrBoughtView: some View {
@@ -83,6 +95,7 @@ struct ProductItem: View {
                 purchaseButton
             }
         }
+        
     }
     
     private var purchasedLabel: some View {
@@ -91,7 +104,7 @@ struct ProductItem: View {
             .padding(5)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(Color.gray, lineWidth: 2)
+                    .strokeBorder(Color.init(hex: "#d94a24"), lineWidth: 2)
             )
     }
     
@@ -99,10 +112,10 @@ struct ProductItem: View {
         Button(action: purchaseAction) {
             Text(product.displayPrice)
                 .padding(5)
-                .foregroundColor(colorScheme == .dark ? .white : .black)
+                .foregroundColor(.white)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .strokeBorder(colorScheme == .dark ? .white : .black, lineWidth: 2)
+                        .strokeBorder(Color.init(hex: "#a2a49f"))
                 )
         }
         .buttonStyle(PlainButtonStyle())
@@ -119,8 +132,37 @@ struct ProductItem: View {
     }
 }
 
-struct ProductStoreView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProductStoreView().environmentObject(StoreKitManager())
+// MARK: - Custom Button Style
+struct ProfessionalButtonStyle: ButtonStyle {
+    func makeBody(configuration: Self.Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(Color.black) // Custom color
+            .foregroundColor(.white)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .scaleEffect(configuration.isPressed ? 0.95 : 1) // Slight shrink effect when pressed
     }
 }
+
+// MARK: - Entire Card Style Modifier
+struct CardStyle: ViewModifier {
+    let BUTTON_COLOR = Color.init(hex:"#947329")
+    func body(content: Content) -> some View {
+        content
+            .padding()
+            .background(BUTTON_COLOR)
+            .cornerRadius(8)
+            .shadow(radius: 3)
+    }
+}
+
+extension View {
+    func cardStyle() -> some View {
+        modifier(CardStyle())
+    }
+}
+
+#Preview {
+        ProductStoreView()
+            .environmentObject(StoreKitManager())
+    }

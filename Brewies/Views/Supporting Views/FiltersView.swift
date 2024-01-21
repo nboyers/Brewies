@@ -40,6 +40,8 @@ struct FiltersView: View {
     @State private var applyChangesCount: Int = 0
     
     @State private var showAlert = false
+    @State private var showSubscriptionsView = false
+    
     @State private var selectedSort: String = ""
     @State private var selectedOption: Int = 0
     @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186]
@@ -180,7 +182,7 @@ struct FiltersView: View {
                         Spacer()
                     }
                 }
-               
+                
                 
                 Divider()
                 
@@ -217,9 +219,9 @@ struct FiltersView: View {
                         .padding(.horizontal)
                     }
                 }
-              
                 
-            
+                
+                
                 
                 
                 Divider()
@@ -237,7 +239,7 @@ struct FiltersView: View {
                             
                         }
                     }
-
+                    
                     .padding(.horizontal)
                     .pickerStyle(SegmentedPickerStyle())
                     
@@ -251,14 +253,30 @@ struct FiltersView: View {
                     .padding(.horizontal)
                 }
                 .disabled(!userVM.user.isSubscribed)
-               
+                
                 Divider()
                 
-                if !storeKit.storeStatus.isAdRemovalPurchased && !userVM.user.isSubscribed {
-                    AdBannerView()
-                        .frame(width: 320, height: 50)
+                Button(action: {
+//                    self.presentationMode.wrappedValue.dismiss()
+                    // Trigger the presentation of the SubscriptionsView
+                    showSubscriptionsView = true
+                }) {
+                    // Your button content here
+                    Text("Store")
+                        .fontWeight(.semibold)
+                        .font(.system(size: 20))
+                        .padding()
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.85), Color.red]), startPoint: .leading, endPoint: .trailing))
+                        .foregroundColor(.white)
+                        .cornerRadius(40)
+                        .padding(.horizontal, 10)
+                        .shadow(color: .red.opacity(0.5), radius: 10, x: 0, y: 5)
                 }
-               
+                .sheet(isPresented: $showSubscriptionsView) {
+                   StorefrontView()
+                }
+                
                 Spacer()
                 
             }
@@ -274,21 +292,20 @@ struct FiltersView: View {
                         primaryAction: {
                             showAlert = true
                             sharedAlertVM.currentAlertType = nil
-                          
+                            
                         },
                         dismissAction: {
                             // Add your action for the dismiss button here
                             sharedAlertVM.currentAlertType = nil
-                          
+                            
                         }
                     )
-
-                    
                     .frame(width: 300, height: 200)  // Adjust the frame as needed
                     .background(VisualEffectBlur(blurStyle: .systemMaterial))  // Optional: Add a blur effect
                     .cornerRadius(20)
                     .shadow(radius: 20)
                 }
+                
             }
         }
         
@@ -313,14 +330,20 @@ struct FiltersView: View {
                         // Close the view
                         sharedAlertVM.currentAlertType = nil
                         self.presentationMode.wrappedValue.dismiss()
-                      
+                        
                     }
                 }) {
                     let changesCount = self.changesCount()
                     Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
-                        .frame(width: geo.size.width, height: 50)
-                        .background(.red)
+                        .fontWeight(.semibold)
+                        .font(.system(size: 20))
+                        .padding()
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.85), Color.red]), startPoint: .leading, endPoint: .trailing))
                         .foregroundColor(.white)
+                        .cornerRadius(40)
+                        .padding(.horizontal, 20)
+                        .shadow(color: .red.opacity(0.5), radius: 10, x: 0, y: 5)
                 }
                 
                 .cornerRadius(15)

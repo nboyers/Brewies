@@ -25,4 +25,5 @@ enum CustomAlertType {
     case noAdsAvailableAlert
     case earnCredits
     case missingSearchCredits
+    case storefront
 }
