@@ -12,7 +12,7 @@ struct SubscriptionView: View {
     
     @StateObject var userVM = UserViewModel.shared
     @Environment(\.colorScheme) var colorScheme
- 
+    
     let BUTTON_COLOR = Color.init(hex:"#826c3b")
     let SUB_BACKGROUND = Color.init(hex: "#303c38")
     @State var isPurchased = false
@@ -20,12 +20,11 @@ struct SubscriptionView: View {
     
     var body: some View {
         VStack(spacing: 15) {
-           
             GeometryReader { geo in
                 VStack(alignment: .leading) {
                     Spacer()
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 20) {
+                        HStack(alignment: .center, spacing: 20) {
                             Section {
                                 ForEach(storeKitManager.storeStatus.storeProducts.sorted(by: { $0.displayName < $1.displayName }).filter({ product in
                                     [StoreKitManager.monthlyID, StoreKitManager.yearlyID].contains(product.id)
@@ -34,48 +33,49 @@ struct SubscriptionView: View {
                                         SubscriptionOptionView(product: product, geo: geo)
                                         
                                         // Feature list for each subscription option
-                                        VStack(alignment: .leading, spacing: 5) {
+                                        VStack(alignment: .leading, spacing: 8) {  // Adjusted spacing
                                             Text("Features:")
                                                 .font(.headline)
                                                 .foregroundColor(.white)
-                                                .padding(.vertical, 5)
+                                                .padding([.horizontal, .vertical], 10)
                                             
                                             FeatureView(iconName: "checkmark.circle.fill", featureText: "No banner ads")
                                             FeatureView(iconName: "checkmark.circle.fill", featureText: "More Filtering Options")
                                             FeatureView(iconName: "checkmark.circle.fill", featureText: "20 Favorite's Slots")
+                                            
                                             Text(welcomeCreditsText(for: product))
                                                 .font(.subheadline)
+                                                .lineLimit(1)
                                                 .foregroundColor(.white)
                                                 .padding(.leading, 22)
                                         }
-                                        .padding(.leading, 10)
-                                        .font(.system(size: geo.size.width * 0.045))
+                                        .padding(.bottom, 10) // Extra padding at the bottom
                                         
                                         Divider()
                                             .padding(.vertical, 5)
                                         
                                         Text(product.description)
-                                            .font(.caption)
+                                            .lineLimit(1) // Ensure the text stays within one line
+                                            .truncationMode(.tail) // If the text doesn't fit, it will truncate at the end
                                             .foregroundColor(.white)
-                                            .padding(.horizontal, 45)
-                                            .padding(.bottom, 10)
+                                            .padding(.leading, 22)
+                                            .minimumScaleFactor(0.5) // Allow the font to scale down to 50% if necessary
                                     }
                                     .padding()
+                                    .frame(width: geo.size.width * 0.85)
                                     .background(SUB_BACKGROUND)
-                                    .cornerRadius(50)
+                                    .cornerRadius(10)
                                     .shadow(radius: 5)
                                 }
                             }
                         }
                     }
-                    .frame(height: geo.size.height / 2)
+                    .frame(minHeight: 0, maxHeight: .infinity) // Allow the ScrollView to take as much height as needed
                     .padding(.horizontal, 10)
                     Spacer()
                 }
             }
             .padding()
-//            .background(Color.init(hex: "#1b260a"))
-            .cornerRadius(10)
         }
     }
     
@@ -123,7 +123,7 @@ struct SubscriptionView: View {
             }
             .lineLimit(nil)
             .minimumScaleFactor(0.95)
-            .frame(width: geo.size.width - 75, height: geo.size.height / 30)
+            .frame(width: geo.size.width * 0.75, height: geo.size.height / 30)
             .foregroundColor(.white)
             .padding()
             .background(BUTTON_COLOR)
@@ -137,22 +137,20 @@ struct FeatureView: View {
     var iconName: String
     var featureText: String
     var body: some View {
-        HStack {
+        HStack(alignment: .center) {
             Image(systemName: iconName)
                 .foregroundColor(Color.green)
+                .padding(.horizontal)
             Text(featureText)
                 .foregroundColor(.white)
         }
+        
     }
 }
 
 
-#if DEBUG
-struct SubscriptionView_Previews: PreviewProvider {
-    static var previews: some View {
-        // Providing a mock StoreKitManager and setting the environment object
-        SubscriptionView()
-            .environmentObject(StoreKitManager())
-    }
+#Preview {
+    SubscriptionView()
+        .environmentObject(StoreKitManager())
 }
-#endif
+
