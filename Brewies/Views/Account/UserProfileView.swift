@@ -82,6 +82,7 @@ struct UserProfileView: View {
                 .background(.bar)
                 .cornerRadius(10)
                 .frame(width: 375)
+    
                  
                 Button(action: leaveReview) {
                     HStack {
@@ -96,6 +97,23 @@ struct UserProfileView: View {
                 .background(.bar)
                 .cornerRadius(10)
                 .frame(width: 375)
+    
+                
+                Button(action: openStore) {
+                    HStack {
+                        Spacer()
+                        Image(systemName: "storefront.fill")
+                        Text("Brewies Store")
+                        Spacer()
+                    }
+                }
+                .padding()
+                .foregroundColor(.primary)
+                .background(.bar)
+                .cornerRadius(10)
+                .frame(width: 375)
+    
+                
                 Spacer()
             }
         } else {
@@ -128,6 +146,9 @@ struct UserProfileView: View {
         activeSheet = .shareApp
     }
     
+    private func openStore() {
+        activeSheet = .storefront
+    }
     
     private func leaveReview() {
         let reviewURL = URL(string: "https://apps.apple.com/us/app/brewies/id6450864433?action=write-review")!

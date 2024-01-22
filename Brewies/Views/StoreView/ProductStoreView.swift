@@ -71,16 +71,25 @@ struct ProductStoreView: View {
 struct ProductItem: View {
     @ObservedObject var storeKit: StoreKitManager
     var product: Product
+    let BUTTON_COLOR = Color.init(hex:"#947329")
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        HStack {
-            productTitle
-            Spacer()
-            purchaseOrBoughtView
+        Button(action: purchaseAction) {
+            HStack {
+                productTitle
+                Spacer()
+                purchaseOrBoughtView
+            }
+            .frame(maxWidth: .infinity, alignment: .leading) // Ensure the button fills the entire width
+            .padding() // Add padding inside the button for better touch area
         }
-       
+        .buttonStyle(PlainButtonStyle())
+        .background(BUTTON_COLOR) // Background color for the button
+        .cornerRadius(10) // Rounded corners for the button
+        .shadow(radius: 5) // Shadow for the button
     }
+    
     
     private var productTitle: some View {
         Text(product.displayName)
@@ -92,33 +101,21 @@ struct ProductItem: View {
             if storeKit.storeStatus.isAdRemovalPurchased && product.id == StoreKitManager.adRemovalProductId {
                 purchasedLabel
             } else {
-                purchaseButton
+                Text(product.displayPrice)
+                    .padding(5)
+                    .foregroundColor(.white)
             }
         }
-        
     }
     
     private var purchasedLabel: some View {
         Text("BOUGHT")
-            .foregroundColor(.gray)
+            .foregroundColor(.white)
             .padding(5)
             .background(
                 RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(Color.init(hex: "#d94a24"), lineWidth: 2)
+                    .strokeBorder(.red, lineWidth: 2)
             )
-    }
-    
-    private var purchaseButton: some View {
-        Button(action: purchaseAction) {
-            Text(product.displayPrice)
-                .padding(5)
-                .foregroundColor(.white)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .strokeBorder(Color.init(hex: "#a2a49f"))
-                )
-        }
-        .buttonStyle(PlainButtonStyle())
     }
     
     private func purchaseAction() {
@@ -131,6 +128,7 @@ struct ProductItem: View {
         }
     }
 }
+
 
 // MARK: - Custom Button Style
 struct ProfessionalButtonStyle: ButtonStyle {
@@ -146,11 +144,10 @@ struct ProfessionalButtonStyle: ButtonStyle {
 
 // MARK: - Entire Card Style Modifier
 struct CardStyle: ViewModifier {
-    let BUTTON_COLOR = Color.init(hex:"#947329")
+
     func body(content: Content) -> some View {
         content
             .padding()
-            .background(BUTTON_COLOR)
             .cornerRadius(8)
             .shadow(radius: 3)
     }

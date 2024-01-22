@@ -257,27 +257,29 @@ struct FiltersView: View {
                 Divider()
                 
                 Button(action: {
-//                    self.presentationMode.wrappedValue.dismiss()
                     // Trigger the presentation of the SubscriptionsView
                     showSubscriptionsView = true
                 }) {
-                    // Your button content here
                     Text("Store")
                         .fontWeight(.semibold)
-                        .font(.system(size: 20))
-                        .padding()
+                        .font(.system(size: 16)) // Smaller font size for a more refined look
+                        .padding(10) // Adjust padding to suit the new size
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.85), Color.red]), startPoint: .leading, endPoint: .trailing))
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.6), Color.red.opacity(0.7)]), startPoint: .leading, endPoint: .trailing))
                         .foregroundColor(.white)
-                        .cornerRadius(40)
-                        .padding(.horizontal, 10)
-                        .shadow(color: .red.opacity(0.5), radius: 10, x: 0, y: 5)
+                        .cornerRadius(15) // Matching corner radius with the "Store" button
+                        .padding(.horizontal, 20) // Adjust horizontal padding to balance the button within the layout
+                        .shadow(color: .red.opacity(0.3), radius: 3, x: 0, y: 2) // Softer shadow for a cleaner look
+                    
                 }
+//                .padding(.bottom, 10) // Add some space below the button, if needed
+
+
                 .sheet(isPresented: $showSubscriptionsView) {
                    StorefrontView()
                 }
                 
-                Spacer()
+//                Spacer()
                 
             }
         }
@@ -321,7 +323,7 @@ struct FiltersView: View {
             Spacer()
                 .frame(width: 25)
             
-            GeometryReader { geo in
+//            GeometryReader { geo in
                 Button(action: {
                     if !userVM.user.isSubscribed {
                         sharedAlertVM.currentAlertType = .notSubscribed
@@ -330,24 +332,24 @@ struct FiltersView: View {
                         // Close the view
                         sharedAlertVM.currentAlertType = nil
                         self.presentationMode.wrappedValue.dismiss()
-                        
                     }
                 }) {
                     let changesCount = self.changesCount()
                     Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
+                    
                         .fontWeight(.semibold)
-                        .font(.system(size: 20))
-                        .padding()
+                        .font(.system(size: 16)) // Smaller font size
+                        .padding(15) // Reduced padding
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.85), Color.red]), startPoint: .leading, endPoint: .trailing))
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5), Color.blue.opacity(0.7)]), startPoint: .leading, endPoint: .trailing))
                         .foregroundColor(.white)
-                        .cornerRadius(40)
-                        .padding(.horizontal, 20)
-                        .shadow(color: .red.opacity(0.5), radius: 10, x: 0, y: 5)
+                        .cornerRadius(15) // Smaller corner radius
+                        .padding(.horizontal, 20) // Adjust horizontal padding as needed
+                        .shadow(color: .blue.opacity(0.3), radius: 3, x: 0, y: 2) // Less aggressive shadow
                 }
-                
+                .padding(.bottom, 10) // Add space below the button if needed
                 .cornerRadius(15)
-            }
+//            }
             Spacer()
                 .frame(width: 25)
         }
