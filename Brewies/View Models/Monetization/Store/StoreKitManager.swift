@@ -77,17 +77,13 @@ class StoreKitManager: ObservableObject {
         
         switch productId {
         case StoreKitManager.monthlyID:
-            userViewModel.addCredits(25)
+            userViewModel.addCredits(100)
             userViewModel.subscribe(tier: .monthly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
-            
-        case StoreKitManager.semiYearlyID:
-            userViewModel.addCredits(40)
-            userViewModel.subscribe(tier: .semiYearly) // Update the subscription tier here
-            CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
-            
+        
+
         case StoreKitManager.yearlyID:
-            userViewModel.addCredits(50)
+            userViewModel.addCredits(250)
             userViewModel.subscribe(tier: .yearly) // Update the subscription tier here
             CoffeeShopData.shared.addFavoriteSlots(self.subscriptionSlots)
             
