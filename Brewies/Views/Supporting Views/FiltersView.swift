@@ -265,7 +265,7 @@ struct FiltersView: View {
                         .font(.system(size: 16)) // Smaller font size for a more refined look
                         .padding(10) // Adjust padding to suit the new size
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.6), Color.red.opacity(0.7)]), startPoint: .leading, endPoint: .trailing))
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.init(hex: "#303c38").opacity(0.6), Color.init(hex: "#303c38").opacity(0.7)]), startPoint: .leading, endPoint: .trailing))
                         .foregroundColor(.white)
                         .cornerRadius(15) // Matching corner radius with the "Store" button
                         .padding(.horizontal, 20) // Adjust horizontal padding to balance the button within the layout
@@ -341,7 +341,7 @@ struct FiltersView: View {
                         .font(.system(size: 16)) // Smaller font size
                         .padding(15) // Reduced padding
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5), Color.blue.opacity(0.7)]), startPoint: .leading, endPoint: .trailing))
+                        .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.5), Color.red.opacity(0.7)]), startPoint: .leading, endPoint: .trailing))
                         .foregroundColor(.white)
                         .cornerRadius(15) // Smaller corner radius
                         .padding(.horizontal, 20) // Adjust horizontal padding as needed
