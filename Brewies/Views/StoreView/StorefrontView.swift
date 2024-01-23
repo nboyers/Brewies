@@ -20,9 +20,6 @@ struct StorefrontView: View {
                     .environmentObject(storeKitManager)
             }
         }
-        .onAppear {
-            storeKitManager.refreshData()
-        }
     }
 }
 

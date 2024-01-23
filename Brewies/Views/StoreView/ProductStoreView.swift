@@ -70,6 +70,8 @@ struct ProductStoreView: View {
 
 struct ProductItem: View {
     @ObservedObject var storeKit: StoreKitManager
+    @State private var isPurchasing: Bool = false // Add a loading state
+
     var product: Product
     let BUTTON_COLOR = Color.init(hex:"#947329")
     @Environment(\.colorScheme) var colorScheme
@@ -100,6 +102,9 @@ struct ProductItem: View {
         Group {
             if storeKit.storeStatus.isAdRemovalPurchased && product.id == StoreKitManager.adRemovalProductId {
                 purchasedLabel
+            } else if isPurchasing {
+                ProgressView() // Show loading indicator while purchasing
+                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
             } else {
                 Text(product.displayPrice)
                     .padding(5)
@@ -119,14 +124,17 @@ struct ProductItem: View {
     }
     
     private func purchaseAction() {
-        Task {
-            do {
-                _ = try await storeKit.purchase(product)
-            } catch {
-                // Handle errors if needed
-            }
-        }
-    }
+           guard !isPurchasing else { return } // Prevent multiple taps
+           isPurchasing = true
+           Task {
+               do {
+                   _ = try await storeKit.purchase(product)
+               } catch {
+                   // Handle errors if needed
+               }
+               isPurchasing = false
+           }
+       }
 }
 
 

@@ -16,13 +16,13 @@ struct BrewiesApp: App {
     private let contentViewModel: ContentViewModel
     private let sharedViewModel = SharedViewModel()
     private let locationManager = LocationManager()
-
+    let storeKitManager = StoreKitManager()
     @StateObject private var selectedCoffeeShop = SelectedCoffeeShop()
     
     init() {
-   self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
+        self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
         rewardAdController = RewardAdController()
-            GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
     }
     
     var body: some Scene {
@@ -35,7 +35,12 @@ struct BrewiesApp: App {
                 .environmentObject(contentViewModel)
                 .environmentObject(SharedAlertViewModel())
                 .environmentObject(sharedViewModel)
-              
+                .environmentObject(storeKitManager)
+                .onAppear {
+                    _=storeKitManager.listenForTransactions()
+                }
+            
+            
         }
     }
 }
