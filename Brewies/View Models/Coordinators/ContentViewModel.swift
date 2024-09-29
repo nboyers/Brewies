@@ -21,16 +21,23 @@ class ContentViewModel: ObservableObject {
     @Published var showNoCreditsAlert = false
     @Published var adsWatched = 0
     @Published var fetchedFromCache = false
-    
+
     @Published var userViewModel = UserViewModel.shared
-    @Published var locationManager = LocationManager()
     @Published var apiKeysViewModel = APIKeysViewModel.shared
-    
+
     private var rewardAdController = RewardAdController()
-    var yelpParams: YelpSearchParams
-    
-    init(yelpParams: YelpSearchParams) {
-        self.yelpParams = yelpParams
+    private var googlePlacesAPI = GooglePlacesAPI(googlePlacesParams: GooglePlacesSearchParams()) // Initialize Google Places API
+
+    // Define the available brew types
+    enum BrewType: String {
+        case coffee = "Coffee"
+        case alcohol = "Alcohol"
+    }
+
+    // State to control the selected brew type
+    @Published var selectedBrewType: BrewType = .coffee
+
+    init() {
         rewardAdController.onUserDidEarnReward = { [weak self] in
             DispatchQueue.main.async {
                 self?.userViewModel.addCredits(1)
@@ -40,67 +47,96 @@ class ContentViewModel: ObservableObject {
         clearOldCache()
     }
 
-    func fetchBrewies(visibleRegionCenter: CLLocationCoordinate2D?, brewType: String, term: String) {
-        
+    // Main method to fetch either coffee shops or alcohol venues using Google Places API
+    func fetchBrewies(locationManager: LocationManager, visibleRegionCenter: CLLocationCoordinate2D?, brewType: String = "cafe", term: String = "coffee") {
         deductUserCredit()
-        
-        guard let centerCoordinate = visibleRegionCenter ?? locationManager.getCurrentLocation() else {
-               DispatchQueue.main.async {
-                   self.showAlert = true
-               }
-               return
-           }
-           
-        apiKeysViewModel.fetchAPIKeys { [weak self] API in
-            guard let self = self else { return }
-            let yelpAPI = YelpAPI(yelpParams: self.yelpParams)
-            yelpAPI.fetchIndependentBrewLocation(apiKey: API?.YELP_API ?? "KEYLESS", latitude: centerCoordinate.latitude, longitude: centerCoordinate.longitude, term: term, businessType: brewType) { shops in
-                
-                DispatchQueue.main.async {
-                    self.processBrewLocations(BrewLocations: shops/*, cacheKey: cacheKey*/)
+
+        guard let centerCoordinate = visibleRegionCenter ?? locationManager.userLocation else {
+            DispatchQueue.main.async {
+                self.showAlert = true
+            }
+            return
+        }
+
+        // Using async/await to fetch the API keys
+        Task {
+            do {
+                guard let apiKey = await apiKeysViewModel.fetchAPIKeys()?.GOOGLE_PLACES_API else {
+                    DispatchQueue.main.async {
+                        self.showAlert = true
+                    }
+                    return
                 }
+
+                // Use the Google Places API to fetch nearby locations asynchronously
+                let shops = try await self.googlePlacesAPI.fetchNearbyPlaces(
+                    apiKey: apiKey,
+                    latitude: centerCoordinate.latitude,
+                    longitude: centerCoordinate.longitude,
+                    query: term
+                )
+
+                DispatchQueue.main.async {
+                    self.processBrewLocations(brewLocations: shops)
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.showAlert = true
+                }
+                print("Error fetching brew locations: \(error)")
             }
         }
     }
-    
-    private func processBrewLocations(BrewLocations: [BrewLocation]/*, cacheKey: String*/) {
-//        saveToCache(BrewLocations: BrewLocations, forKey: cacheKey)
-        self.brewLocations = BrewLocations
-        self.selectedBrewLocation = BrewLocations.first
-        self.showBrewPreview = true
+
+    private func processBrewLocations(brewLocations: [BrewLocation]) {
+        self.brewLocations = brewLocations
+        self.selectedBrewLocation = brewLocations.first
+        self.showBrewPreview = !brewLocations.isEmpty
     }
-    
-    private func saveToCache(BrewLocations: [BrewLocation], forKey key: String) {
-        let data = try? JSONEncoder().encode(BrewLocations)
+
+    private func saveToCache(brewLocations: [BrewLocation], forKey key: String) {
+        let data = try? JSONEncoder().encode(brewLocations)
         UserDefaults.standard.set(data, forKey: key)
         UserDefaults.standard.set(Date(), forKey: "\(key)-date")
     }
-    
+
     private func clearOldCache() {
         let userDefaults = UserDefaults.standard
         let cacheKeys = userDefaults.dictionaryRepresentation().keys.filter { $0.hasSuffix("-date") }
         let currentDate = Date()
         let expirationInterval: TimeInterval = 86400 // 24 hours
-        
+
+        // Prepare a copy of data before using it inside the async closure
+        let cacheData = cacheKeys.compactMap { key -> (key: String, date: Date)? in
+            if let cacheDate = userDefaults.object(forKey: key) as? Date {
+                return (key: key, date: cacheDate)
+            }
+            return nil
+        }
+
+        // Perform the cleanup in a background thread
         DispatchQueue.global(qos: .background).async {
-            for key in cacheKeys {
-                if let cacheDate = userDefaults.object(forKey: key) as? Date,
-                   currentDate.timeIntervalSince(cacheDate) > expirationInterval {
-                    let dataKey = String(key.dropLast("-date".count))
-                    userDefaults.removeObject(forKey: dataKey)
-                    userDefaults.removeObject(forKey: key)
+            for cacheItem in cacheData {
+                if currentDate.timeIntervalSince(cacheItem.date) > expirationInterval {
+                    let dataKey = String(cacheItem.key.dropLast("-date".count))
+                    
+                    // Remove from UserDefaults in the main thread to avoid thread safety issues
+                    Task {
+                        userDefaults.removeObject(forKey: dataKey)
+                        userDefaults.removeObject(forKey: cacheItem.key)
+                    }
                 }
             }
         }
     }
-    
+
     private func retrieveFromCache(forKey key: String) -> [BrewLocation]? {
         if let data = UserDefaults.standard.data(forKey: key) {
             return try? JSONDecoder().decode([BrewLocation].self, from: data)
         }
         return nil
     }
-    
+
     func handleRewardAd(reward: String) {
         DispatchQueue.main.async { [self] in
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
@@ -109,7 +145,7 @@ class ContentViewModel: ObservableObject {
             }
         }
     }
-    
+
     func deductUserCredit() {
         DispatchQueue.main.async { [self] in
             if userViewModel.user.credits > 0 {

@@ -166,7 +166,5 @@ class UserViewModel: ObservableObject {
         
         // Reset in-memory user data
         user = User(isLoggedIn: false, userID: "", firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: 0, hasClaimedWeeklyReward: false, streakCount: 0, streakViewedDate: nil)
-    }
-    
-    
+    }    
 }

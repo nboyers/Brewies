@@ -14,4 +14,5 @@ struct APIResponse: Decodable {
 
 struct APIKeys: Decodable {
     let YELP_API: String
+    let GOOGLE_PLACES_API: String
 }

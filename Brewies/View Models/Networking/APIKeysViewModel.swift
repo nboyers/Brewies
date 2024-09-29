@@ -4,9 +4,7 @@
 //
 //  Created by Noah Boyers on 10/12/23.
 //
-
 import Foundation
-import Alamofire
 
 /// `APIKeysViewModel` is a class responsible for fetching and managing API keys.
 class APIKeysViewModel: ObservableObject {
@@ -29,44 +27,73 @@ class APIKeysViewModel: ObservableObject {
     private var apiKeysCache: APIKeys?
     
     /// Function to fetch API keys from a specified URL.
-    /// - Parameter completion: A closure to be executed once the request is finished, returning optional `APIKeys`.
-    func fetchAPIKeys(completion: @escaping (APIKeys?) -> Void) {
+    func fetchAPIKeys() async -> APIKeys? {
         if let cachedKeys = apiKeysCache {
-            // If we have cached keys, return them and do not make a network request.
-            completion(cachedKeys)
-            return
+            return cachedKeys // Return cached keys to avoid redundant requests
         }
         
-        /// Fetch the API key safely.
-          guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
-              errorMessage = "API Key not found in Info.plist"
-              completion(nil)
-              return
-          }
+        // Fetch the API key safely from Info.plist
+        guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
+            errorMessage = "API Key not found in Info.plist"
+            return nil
+        }
         
-        /// URL string pointing to the API endpoint.
+        // URL string pointing to the API endpoint.
         let urlString = "https://kwahtvg02a.execute-api.us-east-1.amazonaws.com/Prod"
+        guard let url = URL(string: urlString) else {
+            errorMessage = "Invalid URL"
+            return nil
+        }
         
-        /// HTTP headers to be included in the request, including the API key.
-        let headers: HTTPHeaders = ["x-api-key": apiKey]
+        // Create the request and add the API key header
+        var request = URLRequest(url: url)
+        request.addValue(apiKey, forHTTPHeaderField: "x-api-key")
         
-        /// Alamofire request to fetch data from the API.
-        AF.request(urlString, headers: headers).response { response in
-            switch response.result {
-            case .success(let data):
-                guard let data = data else {
-                    self.errorMessage = "Data is nil"
-                    completion(nil)
-                    return
-                }
-                self.decodeAPIResponse(data: data, completion: completion)
-            case .failure(let error):
-                self.errorMessage = "Error fetching data: \(error)"
-                completion(nil)
+        do {
+            // Use URLSession to make the network request
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            // Check if the response is valid and the status code is 200
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                errorMessage = "Failed to fetch API keys: Invalid response"
+                return nil
             }
+            
+            // Decode the response data
+            return try await decodeAPIResponse(data: data)
+            
+        } catch {
+            // Handle errors, such as network or decoding issues
+            errorMessage = "Error fetching API keys: \(error.localizedDescription)"
+            return nil
         }
     }
     
+    /// Function to decode the API response and assign the API keys to `apiKeys`.
+    /// - Parameter data: The data returned from the API.
+    /// - Returns: Optional `APIKeys` if decoding is successful.
+    private func decodeAPIResponse(data: Data) async throws -> APIKeys? {
+        do {
+            let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
+            guard apiResponse.statusCode == 200 else {
+                self.errorMessage = "Failed to fetch API keys: status code \(apiResponse.statusCode)"
+                return nil
+            }
+            
+            let cleanedJSONString = cleanJSONString(apiResponse.body)
+            guard let bodyData = cleanedJSONString.data(using: .utf8) else {
+                self.errorMessage = "Failed to convert cleaned body to data"
+                return nil
+            }
+            
+            // Decode the final APIKeys from the body data
+            let keys = try JSONDecoder().decode(APIKeys.self, from: bodyData)
+            self.apiKeys = keys
+            return keys
+        } catch {
+            throw error
+        }
+    }
 
     /// Function to clean a JSON string from unwanted characters.
     /// - Parameter jsonString: The original JSON string.
@@ -76,33 +103,5 @@ class APIKeysViewModel: ObservableObject {
         cleanedString = cleanedString.replacingOccurrences(of: "\n", with: "")
         cleanedString = cleanedString.replacingOccurrences(of: "\\n", with: "")
         return cleanedString
-    }
-    
-    /// Function to decode the API response and assign the API keys to `apiKeys`.
-    /// - Parameters:
-    ///   - data: The data returned from the API.
-    ///   - completion: A closure to be executed once the decoding is finished, returning optional `APIKeys`.
-    private func decodeAPIResponse(data: Data, completion: @escaping (APIKeys?) -> Void) {
-        do {
-            let apiResponse = try JSONDecoder().decode(APIResponse.self, from: data)
-            guard apiResponse.statusCode == 200 else {
-                self.errorMessage = "Failed to fetch API keys: status code \(apiResponse.statusCode)"
-                completion(nil)
-                return
-            }
-            
-            let cleanedJSONString = cleanJSONString(apiResponse.body)
-            guard let bodyData = cleanedJSONString.data(using: .utf8) else {
-                self.errorMessage = "Failed to convert cleaned body to data"
-                completion(nil)
-                return
-            }
-            
-            self.apiKeys = try JSONDecoder().decode(APIKeys.self, from: bodyData)
-            completion(self.apiKeys)
-        } catch {
-            self.errorMessage = "Failed to decode JSON: \(error)"
-            completion(nil)
-        }
     }
 }

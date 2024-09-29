@@ -8,21 +8,25 @@
 import SwiftUI
 import GoogleMobileAds
 import StoreKit
+import GooglePlaces
 
 @main
 struct BrewiesApp: App {
-    private let rewardAdController : RewardAdController
-    private let yelpParams = YelpSearchParams()
+    private let rewardAdController: RewardAdController
     private let contentViewModel: ContentViewModel
     private let sharedViewModel = SharedViewModel()
-    private let locationManager = LocationManager()
+    @StateObject private var locationManager = LocationManager() // Use @StateObject for LocationManager
     let storeKitManager = StoreKitManager()
     @StateObject private var selectedCoffeeShop = SelectedCoffeeShop()
-    
+
     init() {
-        self.contentViewModel = ContentViewModel(yelpParams: yelpParams)
+        GADMobileAds.sharedInstance().start { status in
+            print("Google Mobile Ads SDK initialized with status: \(status)")
+        }
+
+        self.contentViewModel = ContentViewModel()
         rewardAdController = RewardAdController()
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GMSPlacesClient.provideAPIKey(Secrets.PLACES_API)
     }
     
     var body: some Scene {
@@ -30,17 +34,15 @@ struct BrewiesApp: App {
             ContentView()
                 .environmentObject(rewardAdController)
                 .environmentObject(UserViewModel.shared)
-                .environmentObject(yelpParams)
                 .environmentObject(selectedCoffeeShop)
                 .environmentObject(contentViewModel)
                 .environmentObject(SharedAlertViewModel())
                 .environmentObject(sharedViewModel)
                 .environmentObject(storeKitManager)
+                .environmentObject(locationManager) // Pass locationManager to environment
                 .onAppear {
-                    _=storeKitManager.listenForTransactions()
+                    _ = storeKitManager.listenForTransactions()
                 }
-            
-            
         }
     }
 }

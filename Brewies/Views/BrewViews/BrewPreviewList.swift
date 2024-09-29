@@ -1,15 +1,6 @@
-//
-//  BrewPreviewList.swift
-//  Brewies
-//
-//  Created by Noah Boyers on 5/9/23.
-//
 import SwiftUI
 import Kingfisher
 
-
-
-//#warning("BREWPREVIEW is showing an empty sheet")
 struct BrewPreviewList: View {
     @Binding var coffeeShops: [BrewLocation]
     @Binding var selectedCoffeeShop: BrewLocation?
@@ -45,13 +36,6 @@ struct BrewPreview: View {
     let BUTTON_HEIGHT: CGFloat = 15
     
     @Binding var activeSheet: ActiveSheet?
-    
-
-    var textColor: Color {
-        return colorScheme == .dark ? .white : .black
-    }
-
-    
     @Binding var showBrewPreview: Bool
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
     @ObservedObject var userViewModel = UserViewModel.shared
@@ -71,44 +55,23 @@ struct BrewPreview: View {
         VStack(alignment: .leading) {
             GeometryReader { geo in
                 ZStack {
-                    HStack {
-                        ForEach(coffeeShop.displayImageUrls, id: \.self) { imageUrl in
-                            if !imageUrl.isEmpty {
-                                KFImage(URL(string: imageUrl))
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: geo.size.width * 0.9, height: geo.size.height * 0.66)
-                                    .clipped()
-                            } else {
-                                Text("Image not available")
-                                    .foregroundColor(.red)
-                            }
-                        }
-                    }
-                    .frame(width: geo.size.width, height: geo.size.height / 2)
-                    .clipped()
-                    .cornerRadius(8)
-                    .shadow(radius: 4)
-                    
-                    if coffeeShop.photos.count > 3 {
-                        VStack {
-                            HStack {
-                                Spacer()
-                                Text("See all")
-                                    .padding(8)
-                                    .background(Color.black.opacity(0.5))
-                                    .foregroundColor(.white)
-                                    .overlay(Rectangle().stroke(Color.white, lineWidth: 2))
-                                    .cornerRadius(8)
-                            }
-                            Spacer()
-                        }
+                    // Google Places uses photo references, not URLs. Use a helper function to build the full image URL.
+                    if let imageURL = buildGooglePhotoURL(photoReference: coffeeShop.photos?.first) {
+                        KFImage(URL(string: imageURL))
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: geo.size.width * 0.9, height: geo.size.height * 0.66)
+                            .clipped()
+                            .cornerRadius(8)
+                            .shadow(radius: 4)
+                    } else {
+                        Text("Image not available")
+                            .foregroundColor(.red)
                     }
                 }
                 
                 VStack(alignment: .leading) {
-                    Spacer()
-                        .frame(height: geo.size.height / 2)
+                    Spacer().frame(height: geo.size.height / 2)
                     HStack {
                         VStack(alignment: .leading, spacing: 0) {
                             Text(coffeeShop.name)
@@ -117,8 +80,6 @@ struct BrewPreview: View {
                                 .lineLimit(nil)  // Allows text to wrap to the next line
                                 .fixedSize(horizontal: false, vertical: true) // Properly wraps text inside a ScrollView
                         }
-                        
-                        
                         
                         Button(action: {
                             toggleFavorite()
@@ -132,56 +93,18 @@ struct BrewPreview: View {
                     }
                     
                     HStack(spacing: 1) {
-                        Text("\(coffeeShop.city), \(coffeeShop.state)")
-                        Text("• \(coffeeShop.price ?? "Unknown price range")")
+                        Text(coffeeShop.address ?? "Address not available")
+                        Text("• \(convertGooglePriceToRange(priceLevel: coffeeShop.priceLevel ?? -1))")
                         Spacer()
                     }
+
                     .foregroundColor(.gray)
                     .font(.caption)
-                    Text(coffeeShop.displayPhone.isEmpty ? "Phone number unavailable" : coffeeShop.displayPhone)
+                    Text(coffeeShop.phoneNumber ?? "Phone number unavailable")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
-                    
-                    //                      TODO: This will be a later update...maybe
-                    //                                        HStack { // Center the buttons to the middle
-                    //                                            Spacer()
-                    //                                            if coffeeShop.transactions.contains("delivery") || coffeeShop.transactions.contains("pickup") {
-                    //                                                Button(action: {
-                    //                                                    // Stub functionality for mobile order
-                    //                                                    print("Mobile Order UI")
-                    //
-                    //                                                }) {
-                    //                                                    Text("Mobile Order")
-                    //                                                        .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-                    //                                                        .font(.headline)
-                    //                                                        .foregroundColor(.white)
-                    //                                                        .padding()
-                    //                                                        .background(Color.blue)
-                    //                                                        .cornerRadius(10)
-                    //                                                }
-                    //                                            } else {
-                    //                                                Button(action: {
-                    //                                                    // Stub functionality for calling
-                    //                                                    print("Calling....")
-                    //
-                    //                                                }) {
-                    //                                                    HStack {
-                    //                                                        Image(systemName: "phone.circle")
-                    //                                                        Text("Call")
-                    //                                                    }
-                    //                                                    .frame(width: BUTTON_WIDTH, height: BUTTON_HEIGHT)
-                    //                                                    .font(.headline)
-                    //                                                    .foregroundColor(.white)
-                    //                                                    .padding()
-                    //                                                    .background(Color.black)
-                    //                                                    .cornerRadius(10)
-                    //                                                }
-                    //                                            }
-                    //                                            Spacer()
-                    //                                        }
                     Spacer()
-                    
                 }
             }
             .onTapGesture {
@@ -191,43 +114,56 @@ struct BrewPreview: View {
             
             HStack {
                 Spacer()
-                RatingView(rating: coffeeShop.rating, review_count: String(coffeeShop.review_count), colorScheme: .black)
-                   
-                Image("yelp")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 30, height: 30)
+                RatingView(rating: coffeeShop.rating ?? 0, review_count: String(coffeeShop.userRatingsTotal ?? 0), colorScheme: .black)
                 Spacer()
             }
-    }
+        }
         .frame(width: 300, height: 300)
         .background(Color.white)
         .cornerRadius(8)
         .shadow(radius: 4)
-}
+    }
 
-private func selectBrew() {
-//    DispatchQueue.main.async {
+    private func selectBrew() {
         selectedCoffeeShop.coffeeShop = coffeeShop
         activeSheet = .detailBrew
-//    }
-}
-private func toggleFavorite() {
-    if isFavorite {
-        userViewModel.removeFromFavorites(coffeeShop)
-        coffeeShopData.removeFromFavorites(coffeeShop)
-        // Decrement favoriteSlotsUsed
-        favoriteSlotsUsed -= 1
-    } else {
-        // Check if adding a new favorite would exceed the maximum allowed
-        if coffeeShopData.addToFavorites(coffeeShop) {
-            userViewModel.addToFavorites(coffeeShop)
-            // Increment favoriteSlotsUsed
-            favoriteSlotsUsed += 1
+    }
+
+    private func toggleFavorite() {
+        if isFavorite {
+            userViewModel.removeFromFavorites(coffeeShop)
+            coffeeShopData.removeFromFavorites(coffeeShop)
+            favoriteSlotsUsed -= 1
         } else {
-            sharedAlertVM.currentAlertType = .maxFavoritesReached
-            //                sharedAlertVM.showCustomAlert = true
+            if coffeeShopData.addToFavorites(coffeeShop) {
+                userViewModel.addToFavorites(coffeeShop)
+                favoriteSlotsUsed += 1
+            } else {
+                sharedAlertVM.currentAlertType = .maxFavoritesReached
+            }
         }
     }
-}
+
+    private func buildGooglePhotoURL(photoReference: String?) -> String? {
+        guard let photoReference = photoReference else { return nil }
+        let apiKey = Secrets.PLACES_API // Replace this with your actual API key management
+        return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=\(photoReference)&key=\(apiKey)"
+    }
+
+    private func convertGooglePriceToRange(priceLevel: Int) -> String {
+        switch priceLevel {
+        case 0:
+            return "Free"
+        case 1:
+            return "Inexpensive"
+        case 2:
+            return "Moderate"
+        case 3:
+            return "Expensive"
+        case 4:
+            return "Very Expensive"
+        default:
+            return "Unknown price range"
+        }
+    }
 }

@@ -31,11 +31,10 @@ struct SmallMap: View {
                         .shadow(radius: 10)
                         .bold()
                         .foregroundColor(.white)
-                   
                 }
             }
         }
-        .disabled(true)
+        .disabled(true) // Disable interaction if needed
     }
 }
 

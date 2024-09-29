@@ -20,7 +20,7 @@ struct FavoritesView: View {
     @Binding var showPreview: Bool
     @State private var showRemovalConfirmationAlert = false
     @State private var toRemoveCoffeeShop: BrewLocation?
-
+    
     @Binding var activeSheet: ActiveSheet?
     
     var body: some View {
@@ -32,11 +32,11 @@ struct FavoritesView: View {
                             .font(.headline)
                         
                         ProgressView(value: Float(coffeeShopData.adsWatchedCount), total: 3)
-                                     .progressViewStyle(LinearProgressViewStyle(tint: Color.blue))
-                                     .accentColor(Color.blue)
-                                     .background(Color.gray.opacity(0.2).cornerRadius(5))
-                                     .cornerRadius(5)
-                                 
+                            .progressViewStyle(LinearProgressViewStyle(tint: Color.blue))
+                            .accentColor(Color.blue)
+                            .background(Color.gray.opacity(0.2).cornerRadius(5))
+                            .cornerRadius(5)
+                        
                         
                         Button(action: {
                             if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
