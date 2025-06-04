@@ -1,6 +1,8 @@
 # Brewies
 Brewies is an iOS app that helps users discover the best local, hole-in-the-wall coffee shops in their area.
 
+The application sources its location data from the **Google Places API** to provide accurate information about nearby venues.
+
 ## Development Status 
 Brewies is currently in development and is not yet available for download. We are actively working on the app and plan to release it in the near future. Please check back for updates and follow us on [YouTube](https://www.youtube.com/channel/UCeoyZriTOUo1sLlV3evZaug) for the latest news and announcements.
 
@@ -19,6 +21,9 @@ Brewies is open-source and we welcome contributions from the community.
 If you have an idea for a new feature or want to report a bug, 
 please open an issue on our [GitHub page](https://github.com/nboyers/Brewies/issues). 
 If you want to contribute code, please fork the repository and submit a pull request.
+## Development Setup
+To open the project in Xcode, double-click `Brewies.xcodeproj`. This workspace contains all the source files and resources needed to build the app.
+
 
 ## License
 Brewies is released under the MIT license. See [LICENSE](https://choosealicense.com/licenses/mit/) for more information.
