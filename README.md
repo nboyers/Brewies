@@ -1,6 +1,8 @@
 # Brewies
 Brewies is an iOS app that helps users discover the best local, hole-in-the-wall coffee shops in their area.
 
+The application sources its location data from the **Google Places API** to provide accurate information about nearby venues.
+
 ## Development Status 
 Brewies is currently in development and is not yet available for download. We are actively working on the app and plan to release it in the near future. Please check back for updates and follow us on [YouTube](https://www.youtube.com/channel/UCeoyZriTOUo1sLlV3evZaug) for the latest news and announcements.
 
