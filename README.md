@@ -21,6 +21,9 @@ Brewies is open-source and we welcome contributions from the community.
 If you have an idea for a new feature or want to report a bug, 
 please open an issue on our [GitHub page](https://github.com/nboyers/Brewies/issues). 
 If you want to contribute code, please fork the repository and submit a pull request.
+## Development Setup
+To open the project in Xcode, double-click `Brewies.xcodeproj`. This workspace contains all the source files and resources needed to build the app.
+
 
 ## License
 Brewies is released under the MIT license. See [LICENSE](https://choosealicense.com/licenses/mit/) for more information.

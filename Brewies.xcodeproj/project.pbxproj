@@ -1,0 +1,1238 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946DF2A0EE49100F705CB /* UserCache.swift */; };
+		FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E12A0EE7C300F705CB /* FavoriteView.swift */; };
+		FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */; };
+		FF149FED2A6EC8AA008D44CE /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF149FEC2A6EC8AA008D44CE /* MenuView.swift */; };
+		FF15EAA12AD0C79300F5F9FE /* VisualEffectBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF15EAA02AD0C79300F5F9FE /* VisualEffectBlur.swift */; };
+		FF16384C2ABA43F100E1E884 /* ActiveSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */; };
+		FF188E912AA0F1B500C62791 /* Brewies Storefront.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF188E902AA0F1B500C62791 /* Brewies Storefront.storekit */; };
+		FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */; };
+		FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */; };
+		FF1B5F2C2A2FFAE7000B6D6F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */; };
+		FF2467832A78824500B04BBE /* FoodDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2467822A78824500B04BBE /* FoodDetailView.swift */; };
+		FF2467852A78881600B04BBE /* CoffeeModiferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2467842A78881600B04BBE /* CoffeeModiferView.swift */; };
+		FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2F263B2A256EB5000D922E /* Date+Extension.swift */; };
+		FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637A52A55C68A00A33899 /* ProductList.plist */; };
+		FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */; };
+		FF3637B12A55FD0500A33899 /* SubscriptionsList.plist in Resources */ = {isa = PBXBuildFile; fileRef = FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */; };
+		FF3637B52A560AB800A33899 /* ProductStoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637B42A560AB800A33899 /* ProductStoreView.swift */; };
+		FF3637B92A5749F800A33899 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637B82A5749F800A33899 /* UserViewModel.swift */; };
+		FF3637BB2A57521400A33899 /* StorefrontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637BA2A57521400A33899 /* StorefrontView.swift */; };
+		FF380E6A2AABCCCC00D327CD /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF380E692AABCCCC00D327CD /* SharedViewModel.swift */; };
+		FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */; };
+		FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF29329EA0D2300510FCD /* ContentView.swift */; };
+		FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29529EA0D2600510FCD /* Assets.xcassets */; };
+		FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF29929EA0D2600510FCD /* Preview Assets.xcassets */; };
+		FF3FF2A429EA0D2600510FCD /* BrewiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */; };
+		FF3FF2AE29EA0D2600510FCD /* BrewiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */; };
+		FF3FF2B029EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */; };
+		FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF3FF2C029EA0E5200510FCD /* Alamofire */; };
+		FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */; };
+		FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C729EA0F2600510FCD /* LocationManager.swift */; };
+		FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */; };
+		FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2CE29EA11E700510FCD /* MapView.swift */; };
+		FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2D229EA183900510FCD /* Secrets.swift */; };
+		FF3FF2D529EA1C0300510FCD /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF2D429EA1C0300510FCD /* readme.md */; };
+		FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */; };
+		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
+		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
+		FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CC92A4624C5003894D9 /* FiltersView.swift */; };
+		FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */; };
+		FF5AAB222AC6490300E7213F /* SelectedCoffeeShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */; };
+		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
+		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
+		FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */; };
+		FF8E43852A33D51800CEC800 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43842A33D51800CEC800 /* User.swift */; };
+		FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43912A34F5C100CEC800 /* PhotosView.swift */; };
+		FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43942A34F9B500CEC800 /* SmallMap.swift */; };
+		FF8E43982A37BED500CEC800 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43972A37BED500CEC800 /* RatingView.swift */; };
+		FFB0A0E62A6F114A003E79E4 /* MultipleSelectionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB0A0E52A6F114A003E79E4 /* MultipleSelectionList.swift */; };
+		FFB0A0EA2A6F119A003E79E4 /* CoffeeOrder.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB0A0E92A6F119A003E79E4 /* CoffeeOrder.swift */; };
+		FFB0A0EE2A6F11F5003E79E4 /* CartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB0A0ED2A6F11F5003E79E4 /* CartView.swift */; };
+		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
+		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
+		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
+		FFBC5B572ABCB61700FA3C74 /* APIKeyProvider .swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC5B562ABCB61700FA3C74 /* APIKeyProvider .swift */; };
+		FFBFFD282A59D28D004576EC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD272A59D28D004576EC /* SettingsView.swift */; };
+		FFBFFD2D2A59DCD9004576EC /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */; };
+		FFC575CC2A9C2549008EB5E2 /* ApplePay.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */; };
+		FFC575CE2A9C258A008EB5E2 /* ApplyPayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */; };
+		FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */; };
+		FFC575DB2A9C273E008EB5E2 /* BackendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */; };
+		FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = FFC5D12C2A44E608007D9F52 /* Introspect */; };
+		FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */; };
+		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
+		FFD6F86F2A5B50A600575585 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD6F86E2A5B50A600575585 /* ShareSheet.swift */; };
+		FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF424912A528A640088AC1D /* StoreKitManager.swift */; };
+		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
+		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
+		FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */; };
+		FFFC118C2AA64BFD00849AAD /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFC118B2AA64BFD00849AAD /* CustomAlertView.swift */; };
+		FFFC118F2AA6557E00849AAD /* SharedAlertViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFC118E2AA6557E00849AAD /* SharedAlertViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FF3FF2A029EA0D2600510FCD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF3FF28629EA0D2300510FCD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF3FF28D29EA0D2300510FCD;
+			remoteInfo = Brewies;
+		};
+		FF3FF2AA29EA0D2600510FCD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FF3FF28629EA0D2300510FCD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FF3FF28D29EA0D2300510FCD;
+			remoteInfo = Brewies;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FF0946DF2A0EE49100F705CB /* UserCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCache.swift; sourceTree = "<group>"; };
+		FF0946E12A0EE7C300F705CB /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
+		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
+		FF149FEC2A6EC8AA008D44CE /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		FF15EAA02AD0C79300F5F9FE /* VisualEffectBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBlur.swift; sourceTree = "<group>"; };
+		FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSheet.swift; sourceTree = "<group>"; };
+		FF188E902AA0F1B500C62791 /* Brewies Storefront.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Brewies Storefront.storekit"; sourceTree = "<group>"; };
+		FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpResponse.swift; sourceTree = "<group>"; };
+		FF2467822A78824500B04BBE /* FoodDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodDetailView.swift; sourceTree = "<group>"; };
+		FF2467842A78881600B04BBE /* CoffeeModiferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeModiferView.swift; sourceTree = "<group>"; };
+		FF2F263B2A256EB5000D922E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		FF3637A52A55C68A00A33899 /* ProductList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ProductList.plist; sourceTree = "<group>"; };
+		FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
+		FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = SubscriptionsList.plist; sourceTree = "<group>"; };
+		FF3637B42A560AB800A33899 /* ProductStoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductStoreView.swift; sourceTree = "<group>"; };
+		FF3637B82A5749F800A33899 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
+		FF3637BA2A57521400A33899 /* StorefrontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontView.swift; sourceTree = "<group>"; };
+		FF380E692AABCCCC00D327CD /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViewModel.swift; sourceTree = "<group>"; };
+		FF3FF28E29EA0D2300510FCD /* Brewies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brewies.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesApp.swift; sourceTree = "<group>"; };
+		FF3FF29329EA0D2300510FCD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FF3FF29529EA0D2600510FCD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FF3FF29729EA0D2600510FCD /* Brewies.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Brewies.entitlements; sourceTree = "<group>"; };
+		FF3FF29929EA0D2600510FCD /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FF3FF29F29EA0D2600510FCD /* BrewiesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrewiesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesTests.swift; sourceTree = "<group>"; };
+		FF3FF2A929EA0D2600510FCD /* BrewiesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrewiesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesUITests.swift; sourceTree = "<group>"; };
+		FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewiesUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		FF3FF2C229EA0EC100510FCD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShop.swift; sourceTree = "<group>"; };
+		FF3FF2C729EA0F2600510FCD /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YelpAPI.swift; sourceTree = "<group>"; };
+		FF3FF2CE29EA11E700510FCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		FF3FF2D229EA183900510FCD /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
+		FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
+		FF5A6CC92A4624C5003894D9 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
+		FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleButton.swift; sourceTree = "<group>"; };
+		FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCoffeeShop.swift; sourceTree = "<group>"; };
+		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
+		FF8E43462A339FA700CEC800 /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardAdController.swift; sourceTree = "<group>"; };
+		FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
+		FF8E43842A33D51800CEC800 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		FF8E43912A34F5C100CEC800 /* PhotosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotosView.swift; sourceTree = "<group>"; };
+		FF8E43942A34F9B500CEC800 /* SmallMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallMap.swift; sourceTree = "<group>"; };
+		FF8E43972A37BED500CEC800 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		FFB0A0E52A6F114A003E79E4 /* MultipleSelectionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleSelectionList.swift; sourceTree = "<group>"; };
+		FFB0A0E92A6F119A003E79E4 /* CoffeeOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeOrder.swift; sourceTree = "<group>"; };
+		FFB0A0ED2A6F11F5003E79E4 /* CartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartView.swift; sourceTree = "<group>"; };
+		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
+		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
+		FFBC5B562ABCB61700FA3C74 /* APIKeyProvider .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIKeyProvider .swift"; sourceTree = "<group>"; };
+		FFBFFD272A59D28D004576EC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplePay.swift; sourceTree = "<group>"; };
+		FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPayModel.swift; sourceTree = "<group>"; };
+		FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentButton.swift; sourceTree = "<group>"; };
+		FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendModel.swift; sourceTree = "<group>"; };
+		FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompleter.swift; sourceTree = "<group>"; };
+		FFD6F86E2A5B50A600575585 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		FFF424912A528A640088AC1D /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
+		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
+		FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerKey.swift; sourceTree = "<group>"; };
+		FFFC118B2AA64BFD00849AAD /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
+		FFFC118E2AA6557E00849AAD /* SharedAlertViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedAlertViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FF3FF28B29EA0D2300510FCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */,
+				FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */,
+				FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */,
+				FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */,
+				FF3FF2C129EA0E5200510FCD /* Alamofire in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF29C29EA0D2600510FCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */,
+				FF1B5F2C2A2FFAE7000B6D6F /* Alamofire in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF2A629EA0D2600510FCD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FF149FEB2A6EC7F1008D44CE /* Mobile Ordering */ = {
+			isa = PBXGroup;
+			children = (
+				FFC575CA2A9C2534008EB5E2 /* Payment Methods */,
+				FFB0A0E42A6F113E003E79E4 /* Styling */,
+				FF149FEC2A6EC8AA008D44CE /* MenuView.swift */,
+				FFB0A0ED2A6F11F5003E79E4 /* CartView.swift */,
+				FF2467822A78824500B04BBE /* FoodDetailView.swift */,
+				FF2467842A78881600B04BBE /* CoffeeModiferView.swift */,
+			);
+			path = "Mobile Ordering";
+			sourceTree = "<group>";
+		};
+		FF2F263A2A256E9C000D922E /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				FF2F263B2A256EB5000D922E /* Date+Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		FF3637A92A55C9ED00A33899 /* StoreView */ = {
+			isa = PBXGroup;
+			children = (
+				FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */,
+				FF3637B42A560AB800A33899 /* ProductStoreView.swift */,
+				FF3637BA2A57521400A33899 /* StorefrontView.swift */,
+			);
+			path = StoreView;
+			sourceTree = "<group>";
+		};
+		FF3637AD2A55CAAC00A33899 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				FFF424912A528A640088AC1D /* StoreKitManager.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		FF3FF28529EA0D2300510FCD = {
+			isa = PBXGroup;
+			children = (
+				FF188E902AA0F1B500C62791 /* Brewies Storefront.storekit */,
+				FF3FF29029EA0D2300510FCD /* Brewies */,
+				FF3FF2A229EA0D2600510FCD /* BrewiesTests */,
+				FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */,
+				FF3FF28F29EA0D2300510FCD /* Products */,
+				FFB360D42A26C91F0099017F /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		FF3FF28F29EA0D2300510FCD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF28E29EA0D2300510FCD /* Brewies.app */,
+				FF3FF29F29EA0D2600510FCD /* BrewiesTests.xctest */,
+				FF3FF2A929EA0D2600510FCD /* BrewiesUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FF3FF29029EA0D2300510FCD /* Brewies */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
+				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
+				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
+				FF3637A52A55C68A00A33899 /* ProductList.plist */,
+				FF3637B02A55FD0500A33899 /* SubscriptionsList.plist */,
+				FF3FF2C229EA0EC100510FCD /* Info.plist */,
+				FF2F263A2A256E9C000D922E /* Extension */,
+				FF3FF2D729EA1C3D00510FCD /* Misc */,
+				FF3FF2D629EA1C1A00510FCD /* Supporting Assets */,
+				FF3FF2C329EA0EE100510FCD /* Model */,
+				FF3FF2C629EA0F0800510FCD /* View Models */,
+				FF3FF2CB29EA107700510FCD /* Views */,
+				FF3FF29829EA0D2600510FCD /* Preview Content */,
+			);
+			path = Brewies;
+			sourceTree = "<group>";
+		};
+		FF3FF29829EA0D2600510FCD /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF29929EA0D2600510FCD /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FF3FF2A229EA0D2600510FCD /* BrewiesTests */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2A329EA0D2600510FCD /* BrewiesTests.swift */,
+			);
+			path = BrewiesTests;
+			sourceTree = "<group>";
+		};
+		FF3FF2AC29EA0D2600510FCD /* BrewiesUITests */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2AD29EA0D2600510FCD /* BrewiesUITests.swift */,
+				FF3FF2AF29EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift */,
+			);
+			path = BrewiesUITests;
+			sourceTree = "<group>";
+		};
+		FF3FF2C329EA0EE100510FCD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FFB0A0E12A6F10F4003E79E4 /* Mobile Order Models */,
+				FF3FF2C429EA0EFB00510FCD /* CoffeeShop.swift */,
+				FF1B5F252A2FEC33000B6D6F /* YelpResponse.swift */,
+				FF8E43842A33D51800CEC800 /* User.swift */,
+				FF380E692AABCCCC00D327CD /* SharedViewModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		FF3FF2C629EA0F0800510FCD /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				FF5AAB202AC648D800E7213F /* Environment Object */,
+				FFBFFD212A598EA2004576EC /* Account */,
+				FF5BC28C2A4521DB00759BFA /* Maps */,
+				FF5BC28B2A4521CD00759BFA /* Networking */,
+				FF8E43812A33CE5300CEC800 /* Coordinators */,
+				FFB360D52A26D5730099017F /* Monetization */,
+			);
+			path = "View Models";
+			sourceTree = "<group>";
+		};
+		FF3FF2CB29EA107700510FCD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FF149FEB2A6EC7F1008D44CE /* Mobile Ordering */,
+				FFBFFD232A598F25004576EC /* Main */,
+				FF3637A92A55C9ED00A33899 /* StoreView */,
+				FF8E43932A34F99C00CEC800 /* Maps */,
+				FF8E43962A37BEBB00CEC800 /* Supporting Views */,
+				FF8E43412A339E6700CEC800 /* Monetization */,
+				FF8E433E2A339D9E00CEC800 /* Account */,
+				FF77393B2A1318B3007B603F /* BrewViews */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FF3FF2D629EA1C1A00510FCD /* Supporting Assets */ = {
+			isa = PBXGroup;
+			children = (
+				FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */,
+			);
+			path = "Supporting Assets";
+			sourceTree = "<group>";
+		};
+		FF3FF2D729EA1C3D00510FCD /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2D429EA1C0300510FCD /* readme.md */,
+				FF3FF2D229EA183900510FCD /* Secrets.swift */,
+				FFBC5B562ABCB61700FA3C74 /* APIKeyProvider .swift */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		FF5AAB202AC648D800E7213F /* Environment Object */ = {
+			isa = PBXGroup;
+			children = (
+				FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */,
+				FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */,
+			);
+			path = "Environment Object";
+			sourceTree = "<group>";
+		};
+		FF5BC28B2A4521CD00759BFA /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2C929EA0F3E00510FCD /* YelpAPI.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		FF5BC28C2A4521DB00759BFA /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */,
+				FF3FF2C729EA0F2600510FCD /* LocationManager.swift */,
+			);
+			path = Maps;
+			sourceTree = "<group>";
+		};
+		FF77393B2A1318B3007B603F /* BrewViews */ = {
+			isa = PBXGroup;
+			children = (
+				FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */,
+				FF0946E12A0EE7C300F705CB /* FavoriteView.swift */,
+				FF7739382A1316D2007B603F /* BrewDetailView.swift */,
+			);
+			path = BrewViews;
+			sourceTree = "<group>";
+		};
+		FF8E433E2A339D9E00CEC800 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */,
+				FFD6F86C2A5B466400575585 /* Settings */,
+				FFBFFD292A59D297004576EC /* Design */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		FF8E43412A339E6700CEC800 /* Monetization */ = {
+			isa = PBXGroup;
+			children = (
+				FFB360D22A26C8480099017F /* AdmobBanner.swift */,
+			);
+			path = Monetization;
+			sourceTree = "<group>";
+		};
+		FF8E43812A33CE5300CEC800 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				FFFC118D2AA6556900849AAD /* Custom Alert */,
+				FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */,
+				FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		FF8E43932A34F99C00CEC800 /* Maps */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF2CE29EA11E700510FCD /* MapView.swift */,
+				FF8E43942A34F9B500CEC800 /* SmallMap.swift */,
+			);
+			path = Maps;
+			sourceTree = "<group>";
+		};
+		FF8E43962A37BEBB00CEC800 /* Supporting Views */ = {
+			isa = PBXGroup;
+			children = (
+				FF5A6CC92A4624C5003894D9 /* FiltersView.swift */,
+				FF8E43912A34F5C100CEC800 /* PhotosView.swift */,
+				FFB360CE2A26B09F0099017F /* SafariView.swift */,
+				FF8E43972A37BED500CEC800 /* RatingView.swift */,
+				FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */,
+				FFFC118B2AA64BFD00849AAD /* CustomAlertView.swift */,
+			);
+			path = "Supporting Views";
+			sourceTree = "<group>";
+		};
+		FFB0A0E12A6F10F4003E79E4 /* Mobile Order Models */ = {
+			isa = PBXGroup;
+			children = (
+				FFB0A0E92A6F119A003E79E4 /* CoffeeOrder.swift */,
+				FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */,
+				FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */,
+			);
+			path = "Mobile Order Models";
+			sourceTree = "<group>";
+		};
+		FFB0A0E42A6F113E003E79E4 /* Styling */ = {
+			isa = PBXGroup;
+			children = (
+				FFB0A0E52A6F114A003E79E4 /* MultipleSelectionList.swift */,
+			);
+			path = Styling;
+			sourceTree = "<group>";
+		};
+		FFB360D42A26C91F0099017F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FFB360D52A26D5730099017F /* Monetization */ = {
+			isa = PBXGroup;
+			children = (
+				FFBFFD222A598ED5004576EC /* Admob */,
+				FF3637AD2A55CAAC00A33899 /* Store */,
+			);
+			path = Monetization;
+			sourceTree = "<group>";
+		};
+		FFBFFD212A598EA2004576EC /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */,
+				FF0946DF2A0EE49100F705CB /* UserCache.swift */,
+				FF3637B82A5749F800A33899 /* UserViewModel.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		FFBFFD222A598ED5004576EC /* Admob */ = {
+			isa = PBXGroup;
+			children = (
+				FF8E43462A339FA700CEC800 /* RewardAdController.swift */,
+				FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */,
+			);
+			path = Admob;
+			sourceTree = "<group>";
+		};
+		FFBFFD232A598F25004576EC /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		FFBFFD292A59D297004576EC /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */,
+				FF15EAA02AD0C79300F5F9FE /* VisualEffectBlur.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		FFC575CA2A9C2534008EB5E2 /* Payment Methods */ = {
+			isa = PBXGroup;
+			children = (
+				FFC575CB2A9C2549008EB5E2 /* ApplePay.swift */,
+			);
+			path = "Payment Methods";
+			sourceTree = "<group>";
+		};
+		FFD6F86C2A5B466400575585 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FFD6F86D2A5B509700575585 /* Helper */,
+				FFBFFD272A59D28D004576EC /* SettingsView.swift */,
+				FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		FFD6F86D2A5B509700575585 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				FFD6F86E2A5B50A600575585 /* ShareSheet.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		FFFC118D2AA6556900849AAD /* Custom Alert */ = {
+			isa = PBXGroup;
+			children = (
+				FFFC118E2AA6557E00849AAD /* SharedAlertViewModel.swift */,
+			);
+			path = "Custom Alert";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FF3FF28D29EA0D2300510FCD /* Brewies */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF3FF2B329EA0D2600510FCD /* Build configuration list for PBXNativeTarget "Brewies" */;
+			buildPhases = (
+				FF3FF28A29EA0D2300510FCD /* Sources */,
+				FF3FF28B29EA0D2300510FCD /* Frameworks */,
+				FF3FF28C29EA0D2300510FCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Brewies;
+			packageProductDependencies = (
+				FF3FF2C029EA0E5200510FCD /* Alamofire */,
+				FF5377A62A0B1E5E0038E5E7 /* Kingfisher */,
+				FFCB2A562A2141E00051B957 /* BottomSheet */,
+				FFB360CC2A26A5830099017F /* GoogleMobileAds */,
+				FFC5D12C2A44E608007D9F52 /* Introspect */,
+			);
+			productName = Brewies;
+			productReference = FF3FF28E29EA0D2300510FCD /* Brewies.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FF3FF29E29EA0D2600510FCD /* BrewiesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF3FF2B629EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesTests" */;
+			buildPhases = (
+				FF3FF29B29EA0D2600510FCD /* Sources */,
+				FF3FF29C29EA0D2600510FCD /* Frameworks */,
+				FF3FF29D29EA0D2600510FCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF3FF2A129EA0D2600510FCD /* PBXTargetDependency */,
+			);
+			name = BrewiesTests;
+			packageProductDependencies = (
+				FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */,
+				FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */,
+			);
+			productName = BrewiesTests;
+			productReference = FF3FF29F29EA0D2600510FCD /* BrewiesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FF3FF2A829EA0D2600510FCD /* BrewiesUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FF3FF2B929EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesUITests" */;
+			buildPhases = (
+				FF3FF2A529EA0D2600510FCD /* Sources */,
+				FF3FF2A629EA0D2600510FCD /* Frameworks */,
+				FF3FF2A729EA0D2600510FCD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FF3FF2AB29EA0D2600510FCD /* PBXTargetDependency */,
+			);
+			name = BrewiesUITests;
+			productName = BrewiesUITests;
+			productReference = FF3FF2A929EA0D2600510FCD /* BrewiesUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FF3FF28629EA0D2300510FCD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					FF3FF28D29EA0D2300510FCD = {
+						CreatedOnToolsVersion = 14.3;
+					};
+					FF3FF29E29EA0D2600510FCD = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = FF3FF28D29EA0D2300510FCD;
+					};
+					FF3FF2A829EA0D2600510FCD = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = FF3FF28D29EA0D2300510FCD;
+					};
+				};
+			};
+			buildConfigurationList = FF3FF28929EA0D2300510FCD /* Build configuration list for PBXProject "Brewies" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FF3FF28529EA0D2300510FCD;
+			packageReferences = (
+				FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */,
+				FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */,
+				FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
+				FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+			);
+			productRefGroup = FF3FF28F29EA0D2300510FCD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FF3FF28D29EA0D2300510FCD /* Brewies */,
+				FF3FF29E29EA0D2600510FCD /* BrewiesTests */,
+				FF3FF2A829EA0D2600510FCD /* BrewiesUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FF3FF28C29EA0D2300510FCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF188E912AA0F1B500C62791 /* Brewies Storefront.storekit in Resources */,
+				FF3637A62A55C68A00A33899 /* ProductList.plist in Resources */,
+				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
+				FF3FF2D529EA1C0300510FCD /* readme.md in Resources */,
+				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
+				FF3637B12A55FD0500A33899 /* SubscriptionsList.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF29D29EA0D2600510FCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF2A729EA0D2600510FCD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FF3FF28A29EA0D2300510FCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FFBFFD282A59D28D004576EC /* SettingsView.swift in Sources */,
+				FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */,
+				FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */,
+				FF1B5F262A2FEC33000B6D6F /* YelpResponse.swift in Sources */,
+				FF149FED2A6EC8AA008D44CE /* MenuView.swift in Sources */,
+				FF16384C2ABA43F100E1E884 /* ActiveSheet.swift in Sources */,
+				FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */,
+				FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */,
+				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
+				FF3637B52A560AB800A33899 /* ProductStoreView.swift in Sources */,
+				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
+				FFC575CC2A9C2549008EB5E2 /* ApplePay.swift in Sources */,
+				FF8E43982A37BED500CEC800 /* RatingView.swift in Sources */,
+				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
+				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
+				FF3FF2D329EA183900510FCD /* Secrets.swift in Sources */,
+				FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */,
+				FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */,
+				FF5AAB222AC6490300E7213F /* SelectedCoffeeShop.swift in Sources */,
+				FFC575CE2A9C258A008EB5E2 /* ApplyPayModel.swift in Sources */,
+				FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */,
+				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
+				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
+				FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */,
+				FFFC118F2AA6557E00849AAD /* SharedAlertViewModel.swift in Sources */,
+				FF2467832A78824500B04BBE /* FoodDetailView.swift in Sources */,
+				FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */,
+				FFBC5B572ABCB61700FA3C74 /* APIKeyProvider .swift in Sources */,
+				FF0946E02A0EE49100F705CB /* UserCache.swift in Sources */,
+				FF2467852A78881600B04BBE /* CoffeeModiferView.swift in Sources */,
+				FF8E43952A34F9B500CEC800 /* SmallMap.swift in Sources */,
+				FFB0A0EE2A6F11F5003E79E4 /* CartView.swift in Sources */,
+				FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */,
+				FF3FF2C529EA0EFB00510FCD /* CoffeeShop.swift in Sources */,
+				FFFC118C2AA64BFD00849AAD /* CustomAlertView.swift in Sources */,
+				FFB0A0E62A6F114A003E79E4 /* MultipleSelectionList.swift in Sources */,
+				FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */,
+				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
+				FFBFFD2D2A59DCD9004576EC /* EditProfileView.swift in Sources */,
+				FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */,
+				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
+				FF3637BB2A57521400A33899 /* StorefrontView.swift in Sources */,
+				FFB0A0EA2A6F119A003E79E4 /* CoffeeOrder.swift in Sources */,
+				FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */,
+				FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */,
+				FFD6F86F2A5B50A600575585 /* ShareSheet.swift in Sources */,
+				FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */,
+				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
+				FF3FF2CA29EA0F3E00510FCD /* YelpAPI.swift in Sources */,
+				FF3637B92A5749F800A33899 /* UserViewModel.swift in Sources */,
+				FFC575DB2A9C273E008EB5E2 /* BackendModel.swift in Sources */,
+				FF15EAA12AD0C79300F5F9FE /* VisualEffectBlur.swift in Sources */,
+				FF8E43852A33D51800CEC800 /* User.swift in Sources */,
+				FF380E6A2AABCCCC00D327CD /* SharedViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF29B29EA0D2600510FCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF3FF2A429EA0D2600510FCD /* BrewiesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FF3FF2A529EA0D2600510FCD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FF3FF2B029EA0D2600510FCD /* BrewiesUITestsLaunchTests.swift in Sources */,
+				FF3FF2AE29EA0D2600510FCD /* BrewiesUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FF3FF2A129EA0D2600510FCD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF3FF28D29EA0D2300510FCD /* Brewies */;
+			targetProxy = FF3FF2A029EA0D2600510FCD /* PBXContainerItemProxy */;
+		};
+		FF3FF2AB29EA0D2600510FCD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FF3FF28D29EA0D2300510FCD /* Brewies */;
+			targetProxy = FF3FF2AA29EA0D2600510FCD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FF3FF2B129EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FF3FF2B229EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		FF3FF2B429EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Brewies/Brewies.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Brewies/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Brewies;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Brewies requires access to your location to find nearby coffee shops";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"@executable_path/../Frameworks",
+					"-ObjC",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FF3FF2B529EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Brewies/Brewies.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Brewies/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Brewies;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Brewies requires access to your location to find nearby coffee shops";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "This identifier will be used to deliver personalized ads to you.";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"-ObjC",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MARKETING_VERSION = 1.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FF3FF2B729EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Brewies.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Brewies";
+			};
+			name = Debug;
+		};
+		FF3FF2B829EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Brewies.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Brewies";
+			};
+			name = Release;
+		};
+		FF3FF2BA29EA0D2600510FCD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Brewies;
+			};
+			name = Debug;
+		};
+		FF3FF2BB29EA0D2600510FCD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = JCL982F3T2;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MACOSX_DEPLOYMENT_TARGET = 13.3;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.BrewiesUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Brewies;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FF3FF28929EA0D2300510FCD /* Build configuration list for PBXProject "Brewies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2B129EA0D2600510FCD /* Debug */,
+				FF3FF2B229EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF3FF2B329EA0D2600510FCD /* Build configuration list for PBXNativeTarget "Brewies" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2B429EA0D2600510FCD /* Debug */,
+				FF3FF2B529EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF3FF2B629EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2B729EA0D2600510FCD /* Debug */,
+				FF3FF2B829EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FF3FF2B929EA0D2600510FCD /* Build configuration list for PBXNativeTarget "BrewiesUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FF3FF2BA29EA0D2600510FCD /* Debug */,
+				FF3FF2BB29EA0D2600510FCD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.6.4;
+			};
+		};
+		FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.0;
+			};
+		};
+		FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.6.2;
+			};
+		};
+		FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lucaszischka/BottomSheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		FF3FF2C029EA0E5200510FCD /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF3FF2BF29EA0E5200510FCD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		FF5377A62A0B1E5E0038E5E7 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5377A52A0B1E5E0038E5E7 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		FFB360CC2A26A5830099017F /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFB360CB2A26A5830099017F /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+		FFC5D12C2A44E608007D9F52 /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
+		};
+		FFCB2A562A2141E00051B957 /* BottomSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FFCB2A552A2141E00051B957 /* XCRemoteSwiftPackageReference "BottomSheet" */;
+			productName = BottomSheet;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = FF3FF28629EA0D2300510FCD /* Project object */;
+}
