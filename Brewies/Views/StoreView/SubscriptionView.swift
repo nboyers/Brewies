@@ -13,8 +13,8 @@ struct SubscriptionView: View {
     @StateObject var userVM = UserViewModel.shared
     @Environment(\.colorScheme) var colorScheme
     
-    let BUTTON_COLOR = Color.init(hex:"#826c3b")
-    let SUB_BACKGROUND = Color.init(hex: "#303c38")
+    let BUTTON_COLOR = Color.init("#826c3b")
+    let SUB_BACKGROUND = Color.init("#303c38")
     @State var isPurchased = false
     @State var purchasedProduct: Product?
     

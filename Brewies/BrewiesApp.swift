@@ -14,7 +14,6 @@ import GooglePlaces
 struct BrewiesApp: App {
     private let rewardAdController: RewardAdController
     private let contentViewModel: ContentViewModel
-    private let sharedViewModel = SharedViewModel()
     @StateObject private var locationManager = LocationManager() // Use @StateObject for LocationManager
     let storeKitManager = StoreKitManager()
     @StateObject private var selectedCoffeeShop = SelectedCoffeeShop()
@@ -36,8 +35,7 @@ struct BrewiesApp: App {
                 .environmentObject(UserViewModel.shared)
                 .environmentObject(selectedCoffeeShop)
                 .environmentObject(contentViewModel)
-                .environmentObject(SharedAlertViewModel())
-                .environmentObject(sharedViewModel)
+    
                 .environmentObject(storeKitManager)
                 .environmentObject(locationManager) // Pass locationManager to environment
                 .onAppear {
