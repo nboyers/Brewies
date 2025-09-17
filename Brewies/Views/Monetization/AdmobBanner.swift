@@ -12,17 +12,17 @@ import UIKit
 
 struct AdBannerView: UIViewRepresentable {
     
-    func makeUIView(context: Context) -> GADBannerView {
-        let banner = GADBannerView(adSize: GADAdSizeBanner)
+    func makeUIView(context: Context) -> BannerView {
+        let banner = BannerView(adSize: AdSizeBanner)
         banner.adUnitID = Secrets.BANNER_AD_KEY
         
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let rootViewController = windowScene.windows.first?.rootViewController {
             banner.rootViewController = rootViewController
         }
-        banner.load(GADRequest())
+        banner.load(Request())
         return banner
     }
     
-    func updateUIView(_ uiView: GADBannerView, context: Context) {}
+    func updateUIView(_ uiView: BannerView, context: Context) {}
 }

@@ -39,27 +39,27 @@ struct FavoritesView: View {
                         
                         
                         Button(action: {
-                            if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                                ATTrackingManager.requestTrackingAuthorization { [self] status in
-                                    switch status {
-                                    case .authorized:
-                                        // Here, you can continue with ad loading as the user has given permission
-                                        self.contentVM.handleRewardAd(reward: "favorites")
-                                    case .denied, .restricted:
-                                        // Handle the case where permission is denied
-                                        self.contentVM.handleRewardAd(reward: "favorites")
-                                        break
-                                    case .notDetermined:
-                                        // The user has not decided on permission
-                                        self.contentVM.handleRewardAd(reward: "favorites")
-                                        break
-                                    @unknown default:
-                                        break
-                                    }
-                                }
-                            } else {
-                                self.contentVM.handleRewardAd(reward: "favorites")
-                            }
+                                    if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                                            ATTrackingManager.requestTrackingAuthorization { [self] status in
+                                                           switch status {
+                                                           case .authorized:
+                                                               // Here, you can continue with ad loading as the user has given permission
+                                                               self.contentVM.handleRewardAd(reward: "favorites", rewardAdController: rewardAdController)
+                                                           case .denied, .restricted:
+                                                               // Handle the case where permission is denied
+                                                               self.contentVM.handleRewardAd(reward: "favorites", rewardAdController: rewardAdController)
+                                                               break
+                                                           case .notDetermined:
+                                                               // The user has not decided on permission
+                                                               self.contentVM.handleRewardAd(reward: "favorites", rewardAdController: rewardAdController)
+                                                               break
+                                                           @unknown default:
+                                                               break
+                                                           }
+                                                       }
+                                                   } else {
+                                                       self.contentVM.handleRewardAd(reward: "favorites", rewardAdController: rewardAdController)
+                                                   }
                             
                         }) {
                             HStack {
@@ -99,8 +99,8 @@ struct FavoritesView: View {
                     }
                 }
                 .padding(.all, 16)
-                .onChange(of: coffeeShopData.adsWatchedCount) { newValue in
-                    if newValue >= 3 {
+                .onChange(of: coffeeShopData.adsWatchedCount) {
+                    if coffeeShopData.adsWatchedCount >= 3 {
                         coffeeShopData.maxFavoriteSlots += 1  // Update the maxFavoriteSlots
                     }
                 }

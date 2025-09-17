@@ -29,7 +29,7 @@ struct UserProfileView: View {
                                 .foregroundColor(.white)
                                 .font(.system(size: 30, weight: .bold))
                                 .frame(width: 30, height: 30)
-                                .background(RadialGradient(gradient: Gradient(colors: [Color(hex: "#afece7"), Color(hex: "#8ba6a9"), Color(hex: "#75704e"), Color(hex: "#987284"), Color(hex: "#f4ebbe")]), center: .center, startRadius: 5, endRadius: 70))
+                                .background(RadialGradient(gradient: Gradient(colors: [Color( "#afece7"), Color( "#8ba6a9"), Color( "#75704e"), Color( "#987284"), Color( "#f4ebbe")]), center: .center, startRadius: 5, endRadius: 70))
                                 .clipShape(Circle())
                             Text("\(userViewModel.user.firstName) \(userViewModel.user.lastName)")
                             

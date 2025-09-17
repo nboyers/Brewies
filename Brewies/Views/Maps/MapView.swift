@@ -75,11 +75,10 @@ struct MapView: UIViewRepresentable {
         guard let userLocation = locationManager.userLocation else { return }
         
         // Center map on user if permission is granted and centeredOnUser is true
-        
         if locationManager.isLocationAccessGranted && centeredOnUser {
             setRegion(to: userLocation, on: mapView) // Set the region to user location
-            centeredOnUser = false // Reset after centering
-            showUserLocationButton = false
+            context.coordinator.addRadiusOverlay(to: mapView, center: userLocation, radius: DISTANCE)
+            context.coordinator.resetCenteringState()
         }
         
         // Handle searched location or other updates...
@@ -90,7 +89,9 @@ struct MapView: UIViewRepresentable {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 mapView.addAnnotation(annotation)
                 self.setRegion?(MKCoordinateRegion(center: searchedLocation, latitudinalMeters: DISTANCE, longitudinalMeters: DISTANCE)) // Update region
-                self.searchedLocation = nil // Reset for new searches
+                DispatchQueue.main.async {
+                    self.searchedLocation = nil // Reset for new searches
+                }
             }
         }
         
@@ -173,39 +174,63 @@ struct MapView: UIViewRepresentable {
             parent.mapTapped = true
         }
         
-        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-            parent.visibleRegionCenter = mapView.centerCoordinate
+        func resetCenteringState() {
+            DispatchQueue.main.async {
+                self.parent.centeredOnUser = false
+                self.parent.showUserLocationButton = false
+            }
+        }
+        
+        func addRadiusOverlay(to mapView: MKMapView, center: CLLocationCoordinate2D, radius: CLLocationDistance) {
+            // Remove existing radius overlay
+            let existingOverlays = mapView.overlays.filter { $0 is MKCircle }
+            mapView.removeOverlays(existingOverlays)
             
-            // Create CLLocation instances for the user's location and the center of the map
-            if let userLocation = parent.locationManager.userLocation {
-                let userCLLocation = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
-                let centerCLLocation = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
+            // Add new radius circle
+            let circle = MKCircle(center: center, radius: radius)
+            mapView.addOverlay(circle)
+        }
+        
+        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            if let circle = overlay as? MKCircle {
+                let renderer = MKCircleRenderer(circle: circle)
+                renderer.fillColor = UIColor.systemBlue.withAlphaComponent(0.1)
+                renderer.strokeColor = UIColor.systemBlue
+                renderer.lineWidth = 2
+                return renderer
+            }
+            return MKOverlayRenderer(overlay: overlay)
+        }
+        
+        func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+            DispatchQueue.main.async {
+                self.parent.visibleRegionCenter = mapView.centerCoordinate
                 
-                // Calculate the distance between the user's location and the center of the map
-                let distanceFromUser = centerCLLocation.distance(from: userCLLocation)
-                
-                // Update the state based on the distance
-                parent.userHasMoved = distanceFromUser > parent.DISTANCE / 2
-                parent.showUserLocationButton = parent.userHasMoved
-                parent.shouldSearchInArea = true // Signal search in this area
+                // Create CLLocation instances for the user's location and the center of the map
+                if let userLocation = self.parent.locationManager.userLocation {
+                    let userCLLocation = CLLocation(latitude: userLocation.latitude, longitude: userLocation.longitude)
+                    let centerCLLocation = CLLocation(latitude: mapView.centerCoordinate.latitude, longitude: mapView.centerCoordinate.longitude)
+                    
+                    // Calculate the distance between the user's location and the center of the map
+                    let distanceFromUser = centerCLLocation.distance(from: userCLLocation)
+                    
+                    // Update the state based on the distance
+                    self.parent.userHasMoved = distanceFromUser > self.parent.DISTANCE / 2
+                    self.parent.showUserLocationButton = self.parent.userHasMoved
+                    self.parent.shouldSearchInArea = true // Signal search in this area
+                }
             }
         }
         
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if let brewLocation = parent.coffeeShops.first(where: {
-                $0.latitude == view.annotation?.coordinate.latitude && $0.longitude == view.annotation?.coordinate.longitude
-            }) {
-                parent.selectedCoffeeShop = brewLocation
-                parent.showBrewPreview = true
+            if let brewAnnotation = view.annotation as? BrewLocationAnnotation {
+                parent.selectedCoffeeShop = brewAnnotation.brewLocation
                 
-                if let index = parent.coffeeShops.firstIndex(of: brewLocation) {
-                    parent.coffeeShops.remove(at: index)
-                    parent.coffeeShops.insert(brewLocation, at: 0)
-                }
-                
-                DispatchQueue.main.async {
-                    self.updateBottomSheetPosition.wrappedValue = .relative(0.70)
-                }
+                // Post notification to show detail sheet
+                NotificationCenter.default.post(
+                    name: NSNotification.Name("MapAnnotationTapped"),
+                    object: brewAnnotation.brewLocation
+                )
             }
         }
     }

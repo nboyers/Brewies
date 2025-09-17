@@ -15,11 +15,13 @@ struct BrewiesApp: App {
     private let rewardAdController: RewardAdController
     private let contentViewModel: ContentViewModel
     @StateObject private var locationManager = LocationManager() // Use @StateObject for LocationManager
+    @StateObject private var sharedViewModel = SharedViewModel()
+    @StateObject private var sharedAlertVM = SharedAlertViewModel()
     let storeKitManager = StoreKitManager()
     @StateObject private var selectedCoffeeShop = SelectedCoffeeShop()
 
     init() {
-        GADMobileAds.sharedInstance().start { status in
+        MobileAds.shared.start { status in
             print("Google Mobile Ads SDK initialized with status: \(status)")
         }
 
@@ -35,7 +37,8 @@ struct BrewiesApp: App {
                 .environmentObject(UserViewModel.shared)
                 .environmentObject(selectedCoffeeShop)
                 .environmentObject(contentViewModel)
-    
+                .environmentObject(sharedViewModel)
+                .environmentObject(sharedAlertVM)
                 .environmentObject(storeKitManager)
                 .environmentObject(locationManager) // Pass locationManager to environment
                 .onAppear {

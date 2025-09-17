@@ -17,244 +17,183 @@ struct BrewDetailView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State private var showSafariView = false
     @State private var showHoursSheet = false
-    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.0) // Starting position for bottomSheet
-    @Environment(\.colorScheme) var colorScheme // Detect current color scheme (dark or light mode)
+    @State private var bottomSheetPosition: BottomSheetPosition = .relative(0.0)
+    @Environment(\.colorScheme) var colorScheme
     @State private var activeSheet: ActiveSheet?
 
     @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
 
     var body: some View {
-        GeometryReader { geo in
+        NavigationView {
             ScrollView {
-                VStack(alignment: .leading) {
-                    ZStack(alignment: .topLeading) {
-                        // MARK: Header image
+                VStack(spacing: 0) {
+                    // MARK: Header Section
+                    VStack(spacing: 16) {
                         if let imageURL = buildGooglePhotoURL(photoReference: coffeeShop.photos?.first) {
                             KFImage(URL(string: imageURL))
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(maxWidth: .infinity, maxHeight: geo.size.height * 0.4)
+                                .frame(height: 200)
                                 .clipped()
-                                .edgesIgnoringSafeArea(.top)
+                                .cornerRadius(12)
                         }
-                        // Dismiss Button
-                        Button(action: {
-                            activeSheet = nil
-                            self.presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(systemName: "arrow.uturn.left")
-                                .font(.system(size: 30))
-                                .foregroundColor(.white)
-                                .padding(10)
-                                .background(Color.red.opacity(0.6))
-                                .clipShape(Circle())
-                                .padding(.top, 50)
-                                .padding(.leading, 20)
-                        }
-                        VStack(alignment: .leading) {
-                            Spacer()
-                            // MARK: Coffee shop name
+                        
+                        VStack(alignment: .leading, spacing: 8) {
                             Text(coffeeShop.name)
-                                .padding(.horizontal)
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.primary)
+                            
+                            if let address = coffeeShop.address {
+                                Text(address)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(2)
+                            }
+                            
+                            HStack(spacing: 12) {
+                                RatingView(rating: coffeeShop.rating ?? 0, review_count: String(coffeeShop.userRatingsTotal ?? 0), colorScheme: .primary)
+                                
+                                if let priceLevel = coffeeShop.priceLevel {
+                                    Text(convertGooglePriceToRange(priceLevel: priceLevel))
+                                        .font(.caption)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(Color.gray.opacity(0.1))
+                                        .cornerRadius(6)
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(20)
+                    .background(Color(.systemBackground))
+
+                    // MARK: Action Buttons
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 2), spacing: 12) {
+                        Button(action: { openMapsAppWithDirections() }) {
+                            HStack {
+                                Image(systemName: "location.fill")
+                                Text("Directions")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
+                        }
+                        
+                        if coffeeShop.phoneNumber != nil {
+                            Button(action: { callCoffeeShop() }) {
+                                HStack {
+                                    Image(systemName: "phone.fill")
+                                    Text("Call")
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.green)
                                 .foregroundColor(.white)
-                                .bold()
-                                .font(.title)
-                                .shadow(color: .black, radius: 3, x: 0, y: 0)
+                                .cornerRadius(8)
+                            }
+                        }
+                        
+                        if coffeeShop.website != nil {
+                            Button(action: { showSafariView = true }) {
+                                HStack {
+                                    Image(systemName: "globe")
+                                    Text("Website")
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.orange)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                            }
+                        }
+                        
+                        Button(action: { UIPasteboard.general.string = coffeeShop.address }) {
+                            HStack {
+                                Image(systemName: "doc.on.doc")
+                                Text("Copy Address")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray)
+                            .foregroundColor(.white)
+                            .cornerRadius(8)
                         }
                     }
+                    .padding(.horizontal, 20)
 
-                    VStack {
-                        // MARK: Rating and Photos
-                        VStack(alignment: .leading, spacing: 5) {
-                            HStack {
-                                RatingView(rating: coffeeShop.rating ?? 0, review_count: String(coffeeShop.userRatingsTotal ?? 0), colorScheme: colorScheme == .dark ? .white : .black)
-                                    .padding(.horizontal)
-                                Spacer()
-                            }
+                    // MARK: Map Section
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Location")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .padding(.horizontal, 20)
+                        
+                        SmallMap(coordinate: CLLocationCoordinate2D(latitude: coffeeShop.latitude, longitude: coffeeShop.longitude), name: coffeeShop.name)
+                            .frame(height: 200)
+                            .cornerRadius(12)
+                            .padding(.horizontal, 20)
+                    }
+                    .padding(.top, 20)
 
-                            if let photos = coffeeShop.photos, !photos.isEmpty {
-                                Text("Photos")
-                                    .padding(.horizontal)
-                                    .foregroundColor(.white)
-                                    .bold()
-                                    .font(.title)
-                                    .shadow(color: .black, radius: 3, x: 0, y: 0)
-                                
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack {
-                                        ForEach(photos.prefix(3), id: \.self) { photoReference in
-                                            if let imageURL = buildGooglePhotoURL(photoReference: photoReference) {
-                                                KFImage(URL(string: imageURL))
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fit)
-                                                    .frame(width: 50, height: 50)
-                                                    .clipped()
-                                                    .cornerRadius(10)
-                                                    .padding(.horizontal)
-                                            }
+                    // MARK: Photos Section
+                    if let photos = coffeeShop.photos, !photos.isEmpty {
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Photos (\(photos.count))")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                                .padding(.horizontal, 20)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 12) {
+                                    ForEach(photos.prefix(5), id: \.self) { photoReference in
+                                        AsyncImage(url: buildGooglePhotoURL(photoReference: photoReference)) { image in
+                                            image
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                        } placeholder: {
+                                            Rectangle()
+                                                .fill(Color.gray.opacity(0.3))
                                         }
-                                    }
-                                }
-
-                                // "See all" button
-                                if photos.count > 3 {
-                                    NavigationLink(destination: PhotosView(photoUrls: Array(photos.dropFirst(3)).compactMap { buildGooglePhotoURL(photoReference: $0) })) {
-                                        HStack {
-                                            Spacer()
-                                            Text("See all")
-                                            Spacer()
-                                        }
-                                        .padding()
-                                        .foregroundColor(.white)
-                                        .background(Color.blue)
+                                        .frame(width: 120, height: 80)
+                                        .clipped()
                                         .cornerRadius(8)
                                     }
-                                    .padding(.horizontal)
                                 }
+                                .padding(.horizontal, 20)
                             }
                         }
-                        .padding(5)
-
-                        // MARK: Map
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("Address")
-                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                    .font(.title2)
-                                    .bold()
-                                    .padding(.horizontal)
-                                Spacer()
-                            }
-
-                            VStack(alignment: .center) {
-                                Button(action: {
-                                    openMapsAppWithDirections()
-                                }) {
-                                    HStack {
-                                        SmallMap(coordinate: CLLocationCoordinate2D(latitude: coffeeShop.latitude, longitude: coffeeShop.longitude), name: coffeeShop.name)
-                                    }
-                                }
-
-                                Button(action: {
-                                    UIPasteboard.general.string = coffeeShop.address
-                                }) {
-                                    HStack {
-                                        Text(coffeeShop.address ?? "Address not available")
-                                            .padding([.leading, .trailing, .bottom, .top])
-                                            .lineLimit(2)
-                                            .multilineTextAlignment(.leading)
-                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                        Spacer()
-                                        Image(systemName: "doc.on.doc.fill")
-                                            .resizable()
-                                            .frame(width: geo.size.width * 0.05, height: geo.size.width * 0.05)
-                                            .foregroundColor(Color.accentColor)
-                                    }
-                                }
-                                .padding()
-
-                                Divider()
-                                Button(action: {
-                                    openMapsAppWithDirections()
-                                }) {
-                                    HStack {
-                                        Text("Get Directions")
-                                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                            .padding([.leading, .trailing, .bottom])
-                                            .lineLimit(2)
-                                        Spacer()
-                                        Image(systemName: "location.circle")
-                                            .resizable()
-                                            .foregroundColor(Color.accentColor)
-                                            .frame(width: geo.size.width * 0.05, height: geo.size.width * 0.05)
-                                    }
-                                    .padding()
-                                }
-                            }
-                            .background(.bar)
-                            .frame(width: geo.size.width, height: geo.size.height * 0.40)
-                            .cornerRadius(15)
+                        .padding(.top, 20)
+                    } else {
+                        VStack {
+                            Text("No Photos Available")
+                                .font(.headline)
+                                .padding(.horizontal, 20)
+                                .padding(.top, 20)
                         }
-
-                        // MARK: Details
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("Details")
-                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                    .font(.title2)
-                                    .bold()
-                                    .padding(.horizontal)
-                                Spacer()
-                            }
-
-                            VStack(alignment: .leading) {
-                                // MARK: Website
-                                if coffeeShop.website != nil {
-                                    Button(action: {
-                                        showSafariView = true
-                                    }) {
-                                        HStack {
-                                            Text("Website")
-                                                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                            Spacer()
-                                            Image(systemName: "arrow.up.right.square")
-                                                .resizable()
-                                                .frame(width: geo.size.width * 0.05, height: geo.size.width * 0.05)
-                                                .foregroundColor(Color.accentColor)
-                                        }
-                                    }
-                                    .padding()
-                                    Divider()
-                                }
-
-                                // MARK: Price Level
-                                if let priceLevel = coffeeShop.priceLevel {
-                                    HStack(alignment: .firstTextBaseline) {
-                                        VStack(alignment: .leading) {
-                                            Text("Price Level: \(convertGooglePriceToRange(priceLevel: priceLevel))")
-                                        }
-                                        .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .lineLimit(2)
-                                        .padding()
-                                        Spacer()
-                                    }
-                                    Divider()
-                                }
-
-                                // MARK: Phone
-                                if let phoneNumber = coffeeShop.phoneNumber {
-                                    Button(action: {
-                                        callCoffeeShop()
-                                    }) {
-                                        HStack {
-                                            Text(phoneNumber.isEmpty ? "Phone number unavailable" : phoneNumber)
-                                                .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                            Spacer()
-                                            Image(systemName: "phone.connection")
-                                                .resizable()
-                                                .frame(width: geo.size.width * 0.05, height: geo.size.width * 0.05)
-                                                .foregroundColor(Color.accentColor)
-                                        }
-                                    }
-                                    .padding()
-                                }
-                            }
-                            .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                            .background(.bar)
-                            .cornerRadius(15)
-                            .frame(width: geo.size.width, height: geo.size.height * 0.25)
-                        }
+                    }
+                    
+                    Spacer(minLength: 20)
+                }
+            }
+            .navigationTitle("Details")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Done") {
+                        presentationMode.wrappedValue.dismiss()
                     }
                 }
             }
-            .sheet(isPresented: $showSafariView) {
-                if let url = URL(string: coffeeShop.website ?? "https://nobosoftware.com") {
-                    SafariView(url: url)
-                }
+        }
+        .sheet(isPresented: $showSafariView) {
+            if let url = URL(string: coffeeShop.website ?? "https://nobosoftware.com") {
+                SafariView(url: url)
             }
-            .edgesIgnoringSafeArea(.top)
         }
     }
 
@@ -275,10 +214,17 @@ struct BrewDetailView: View {
         }
     }
 
-    private func buildGooglePhotoURL(photoReference: String?) -> String? {
+    private func buildGooglePhotoURL(photoReference: String?) -> URL? {
         guard let photoReference = photoReference else { return nil }
-        let apiKey = Secrets.PLACES_API // Replace this with your actual API key management
-        return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=\(photoReference)&key=\(apiKey)"
+        let apiKey = Secrets.PLACES_API
+        
+        // New Google Places API format
+        if photoReference.hasPrefix("places/") {
+            return URL(string: "https://places.googleapis.com/v1/\(photoReference)/media?maxWidthPx=400&key=\(apiKey)")
+        } else {
+            // Legacy format fallback
+            return URL(string: "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=\(photoReference)&key=\(apiKey)")
+        }
     }
 
     private func openMapsAppWithDirections() {

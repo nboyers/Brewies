@@ -9,13 +9,15 @@ import Foundation
 
 struct GooglePlacesResponse: Codable {
     let results: [GooglePlaceResult]
-    let status: String
+    let status: String?
     let nextPageToken: String?
+    let errorMessage: String?
 
     enum CodingKeys: String, CodingKey {
         case results
         case status
         case nextPageToken = "next_page_token"
+        case errorMessage = "error_message"
     }
 }
 

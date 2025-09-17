@@ -69,6 +69,8 @@
 		FFDD5F752E7A4F0F00A2A778 /* GooglePlacesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F732E7A4F0F00A2A778 /* GooglePlacesResponse.swift */; };
 		FFDD5F762E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F742E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift */; };
 		FFDD5F772E7A4F0F00A2A778 /* GooglePlaceDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F722E7A4F0F00A2A778 /* GooglePlaceDetail.swift */; };
+		FFDD5F792E7A4F7800A2A778 /* Brewies Storefront.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FFDD5F782E7A4F7800A2A778 /* Brewies Storefront.storekit */; };
+		FFDD5F7B2E7A4FAB00A2A778 /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F7A2E7A4FAB00A2A778 /* APIKeys.swift */; };
 		FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF424912A528A640088AC1D /* StoreKitManager.swift */; };
 		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
 		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
@@ -152,6 +154,8 @@
 		FFDD5F722E7A4F0F00A2A778 /* GooglePlaceDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlaceDetail.swift; sourceTree = "<group>"; };
 		FFDD5F732E7A4F0F00A2A778 /* GooglePlacesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesResponse.swift; sourceTree = "<group>"; };
 		FFDD5F742E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesSearchParams.swift; sourceTree = "<group>"; };
+		FFDD5F782E7A4F7800A2A778 /* Brewies Storefront.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Brewies Storefront.storekit"; sourceTree = "<group>"; };
+		FFDD5F7A2E7A4FAB00A2A778 /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
 		FFF424912A528A640088AC1D /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
@@ -234,6 +238,7 @@
 		FF3FF28529EA0D2300510FCD = {
 			isa = PBXGroup;
 			children = (
+				FFDD5F782E7A4F7800A2A778 /* Brewies Storefront.storekit */,
 				FF3FF29029EA0D2300510FCD /* Brewies */,
 				FF3FF28F29EA0D2300510FCD /* Products */,
 				FFB360D42A26C91F0099017F /* Frameworks */,
@@ -253,6 +258,7 @@
 		FF3FF29029EA0D2300510FCD /* Brewies */ = {
 			isa = PBXGroup;
 			children = (
+				FFDD5F7A2E7A4FAB00A2A778 /* APIKeys.swift */,
 				FF3FF29129EA0D2300510FCD /* BrewiesApp.swift */,
 				FF3FF29729EA0D2600510FCD /* Brewies.entitlements */,
 				FF3FF29529EA0D2600510FCD /* Assets.xcassets */,
@@ -587,7 +593,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					FF3FF28D29EA0D2300510FCD = {
 						CreatedOnToolsVersion = 14.3;
@@ -636,6 +642,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
+				FFDD5F792E7A4F7800A2A778 /* Brewies Storefront.storekit in Resources */,
 				FF3FF2D529EA1C0300510FCD /* readme.md in Resources */,
 				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
 			);
@@ -692,6 +699,7 @@
 				FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */,
 				FF3FF2C829EA0F2600510FCD /* LocationManager.swift in Sources */,
 				FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */,
+				FFDD5F7B2E7A4FAB00A2A778 /* APIKeys.swift in Sources */,
 				FF2467832A78824500B04BBE /* FoodDetailView.swift in Sources */,
 				FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */,
 				FF2467852A78881600B04BBE /* CoffeeModiferView.swift in Sources */,
@@ -754,6 +762,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -785,6 +794,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = JCL982F3T2;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -806,6 +816,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -815,6 +826,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -846,6 +858,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = JCL982F3T2;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -860,6 +873,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -876,9 +890,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
-				DEVELOPMENT_TEAM = JCL982F3T2;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Brewies/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Brewies;
@@ -896,13 +911,13 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"@executable_path/../Frameworks",
 					"-ObjC",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
@@ -928,9 +943,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
-				DEVELOPMENT_TEAM = JCL982F3T2;
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Brewies/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Brewies;
@@ -948,13 +964,13 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
 					"-ObjC",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
@@ -976,7 +992,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = JCL982F3T2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
@@ -1001,7 +1016,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = JCL982F3T2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
@@ -1025,7 +1039,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = JCL982F3T2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
@@ -1047,7 +1060,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = JCL982F3T2;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
@@ -1125,8 +1137,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 10.0.0;
+				kind = exactVersion;
+				version = 12.11.0;
 			};
 		};
 		FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {

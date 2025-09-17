@@ -19,8 +19,8 @@ struct SmallMap: View {
     }
     
     var body: some View {
-        Map(coordinateRegion: $region, annotationItems: [location]) { location in
-            MapAnnotation(coordinate: location.coordinate) {
+        Map(bounds: MapCameraBounds(centerCoordinateBounds: region)) {
+            Annotation(location.name, coordinate: location.coordinate) {
                 VStack(spacing: 1) {
                     Image(systemName: "mappin")
                         .resizable()
@@ -34,7 +34,8 @@ struct SmallMap: View {
                 }
             }
         }
-        .disabled(true) // Disable interaction if needed
+        .mapControlVisibility(.hidden)
+        .disabled(true)
     }
 }
 

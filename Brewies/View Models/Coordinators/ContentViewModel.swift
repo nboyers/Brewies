@@ -49,9 +49,18 @@ class ContentViewModel: ObservableObject {
 
     // Main method to fetch either coffee shops or alcohol venues using Google Places API
     func fetchBrewies(locationManager: LocationManager, visibleRegionCenter: CLLocationCoordinate2D?, brewType: String = "cafe", term: String = "coffee") {
-        deductUserCredit()
+        guard userViewModel.user.credits > 0 else {
+            return
+        }
+        
+        userViewModel.subtractCredits(1)
 
+        print("visibleRegionCenter: \(String(describing: visibleRegionCenter))")
+        print("locationManager.userLocation: \(String(describing: locationManager.userLocation))")
+        print("locationManager.isLocationAccessGranted: \(locationManager.isLocationAccessGranted)")
+        
         guard let centerCoordinate = visibleRegionCenter ?? locationManager.userLocation else {
+            print("No location available - showing alert")
             DispatchQueue.main.async {
                 self.showAlert = true
             }
@@ -59,39 +68,54 @@ class ContentViewModel: ObservableObject {
         }
 
         // Using async/await to fetch the API keys
-        Task {
+        Task { @MainActor [weak self] in
+            guard let self = self else { 
+                print("Self is nil in Task")
+                return 
+            }
+            
+            print("Using Google Places API key from Secrets...")
             do {
-                guard let apiKey = await apiKeysViewModel.fetchAPIKeys()?.GOOGLE_PLACES_API else {
-                    DispatchQueue.main.async {
-                        self.showAlert = true
-                    }
-                    return
-                }
+                let apiKey = Secrets.PLACES_API
+                print("API key available: \(!apiKey.isEmpty)")
 
                 // Use the Google Places API to fetch nearby locations asynchronously
+                print("Fetching places with coordinates: \(centerCoordinate.latitude), \(centerCoordinate.longitude)")
+                print("Search term: \(term)")
+                print("About to call googlePlacesAPI.fetchNearbyPlaces...")
+                
                 let shops = try await self.googlePlacesAPI.fetchNearbyPlaces(
                     apiKey: apiKey,
                     latitude: centerCoordinate.latitude,
                     longitude: centerCoordinate.longitude,
                     query: term
                 )
-
-                DispatchQueue.main.async {
-                    self.processBrewLocations(brewLocations: shops)
-                }
+                
+                print("API returned \(shops.count) locations")
+                print("About to process locations...")
+                self.processBrewLocations(brewLocations: shops)
+                print("Finished processing locations")
             } catch {
-                DispatchQueue.main.async {
-                    self.showAlert = true
-                }
-                print("Error fetching brew locations: \(error)")
+                print("Error in fetchBrewies Task: \(error)")
+                self.showAlert = true
             }
         }
     }
 
     private func processBrewLocations(brewLocations: [BrewLocation]) {
+        print("Processing \(brewLocations.count) brew locations")
         self.brewLocations = brewLocations
         self.selectedBrewLocation = brewLocations.first
         self.showBrewPreview = !brewLocations.isEmpty
+        print("showBrewPreview set to: \(self.showBrewPreview)")
+        print("First location: \(brewLocations.first?.name ?? "None")")
+        
+        // Trigger sheet presentation
+        if !brewLocations.isEmpty {
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: NSNotification.Name("ShowSearchResults"), object: nil)
+            }
+        }
     }
 
     private func saveToCache(brewLocations: [BrewLocation], forKey key: String) {
@@ -121,7 +145,7 @@ class ContentViewModel: ObservableObject {
                     let dataKey = String(cacheItem.key.dropLast("-date".count))
                     
                     // Remove from UserDefaults in the main thread to avoid thread safety issues
-                    Task {
+                    DispatchQueue.main.async {
                         userDefaults.removeObject(forKey: dataKey)
                         userDefaults.removeObject(forKey: cacheItem.key)
                     }
@@ -137,8 +161,8 @@ class ContentViewModel: ObservableObject {
         return nil
     }
 
-    func handleRewardAd(reward: String) {
-        DispatchQueue.main.async { [self] in
+    func handleRewardAd(reward: String, rewardAdController: RewardAdController) {
+        DispatchQueue.main.async {
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let viewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
                 rewardAdController.present(from: viewController, rewardType: reward)
@@ -146,13 +170,5 @@ class ContentViewModel: ObservableObject {
         }
     }
 
-    func deductUserCredit() {
-        DispatchQueue.main.async { [self] in
-            if userViewModel.user.credits > 0 {
-                userViewModel.subtractCredits(1)
-            } else {
-                showNoCreditsAlert = true
-            }
-        }
-    }
+
 }

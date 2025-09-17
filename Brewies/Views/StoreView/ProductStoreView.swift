@@ -73,7 +73,7 @@ struct ProductItem: View {
     @State private var isPurchasing: Bool = false // Add a loading state
 
     var product: Product
-    let BUTTON_COLOR = Color.init(hex:"#947329")
+    let BUTTON_COLOR = Color.init("#947329")
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -95,7 +95,7 @@ struct ProductItem: View {
     
     private var productTitle: some View {
         Text(product.displayName)
-            .foregroundColor(Color.init(hex: "#ffffff"))
+            .foregroundColor(Color.init("#ffffff"))
     }
     
     private var purchaseOrBoughtView: some View {

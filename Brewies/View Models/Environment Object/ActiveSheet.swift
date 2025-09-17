@@ -8,7 +8,7 @@
 import Foundation
 
 public enum ActiveSheet: Identifiable {
-    case filter, userProfile, signUpWithApple, storefront, detailBrew,shareApp
+    case filter, userProfile, signUpWithApple, storefront, detailBrew, shareApp, searchResults
 
     public var id: Int {
         switch self {
@@ -24,6 +24,8 @@ public enum ActiveSheet: Identifiable {
             return 5
         case .shareApp:
             return 6
+        case .searchResults:
+            return 7
         }
         
     }

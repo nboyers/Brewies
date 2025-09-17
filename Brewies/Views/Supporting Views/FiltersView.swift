@@ -24,9 +24,11 @@ struct FiltersView: View {
     @State private var showSubscriptionsView = false
     @State private var selectedSort: String = ""
     @State private var selectedOption: Int = 0
-    @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186] // 5, 10, 15, 20 miles in meters
+    @State private var radiusOptionsInMeters = [1609, 3219, 4828, 8047] // 1, 2, 3, 5 miles in meters
     @State private var selectedBrew = ""
     @State private var initialState: [String: Any] = [:]
+    
+    let radiusLabels = ["1 mi", "2 mi", "3 mi", "5 mi"]
     var visibleRegionCenter: CLLocationCoordinate2D?
     
     let sortOptions = ["Prominence", "Distance"]
@@ -68,186 +70,116 @@ struct FiltersView: View {
     }
     
     var body: some View {
-        VStack(alignment: .leading) {
-            // MARK: Headers
-            Group {
+        NavigationView {
+            VStack(spacing: 0) {
+                // Header
                 HStack {
-                    Button(action: {
-                        sharedAlertVM.currentAlertType = nil
-                        self.presentationMode.wrappedValue.dismiss()
-                        // Reset the settings
+                    Button("Reset") {
                         googlePlacesParams.resetFilters()
-                        selectedSort = ""
-                        selectedBrew = ""
-                        updateInitialState()
-                    }) {
-                        Text("Close")
-                            .font(.system(size: 20, weight: .medium))
-                            .padding()
-                            .font(.title3)
-                            .foregroundColor(.teal)
+                        selectedSort = "Prominence"
                     }
+                    .foregroundColor(.blue)
                     
                     Spacer()
-                    Text("Filters")
-                        .bold()
-                        .font(.title3)
-                    Spacer()
-                    Button(action: {
-                        if !userVM.user.isSubscribed {
-                            sharedAlertVM.currentAlertType = .notSubscribed
-                        } else {
-                            googlePlacesParams.resetFilters()
-                            selectedSort = ""
-                            selectedBrew = ""
-                            updateInitialState()
-                        }
-                    }) {
-                        Text("Reset")
-                            .font(.system(size: 20, weight: .medium))
-                            .padding()
-                            .font(.title3)
-                            .foregroundColor(.teal)
-                    }
-                }
-            }
-            
-            Divider()
-            
-            ScrollView {
-                // MARK: Price Filter
-                Group {
-                    Text("Price")
-                        .font(.title2)
-                        .bold()
-                        .padding(.horizontal)
                     
-                    HStack(alignment: .center, spacing: 10) {
-                        Spacer()
-                        ForEach(priceOptions, id: \.self) { price in
-                            Button(action: {
-                                if !userVM.user.isSubscribed {
-                                    sharedAlertVM.currentAlertType = .notSubscribed
-                                } else {
-                                    priceButtonAction(price: price)
-                                }
-                            }){
-                                Text(price)
-                                    .frame(width: 80, height: 35)
-                                    .background(googlePlacesParams.priceLevels.contains(price.count - 1) ? Color.blue : Color.clear)
-                                    .foregroundColor(colorScheme == .dark ? Color.white : Color.black)
-                                    .clipShape(Capsule())
-                                    .overlay(
-                                        Capsule()
-                                            .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: googlePlacesParams.priceLevels.contains(price.count - 1) ? 0 : 1)
-                                    )
-                                    .font(.body)
-                            }
-                        }.padding(.vertical)
-                        Spacer()
+                    Button("Done") {
+                        presentationMode.wrappedValue.dismiss()
                     }
+                    .fontWeight(.semibold)
+                    .foregroundColor(.blue)
                 }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
+                .background(Color(UIColor.systemBackground))
                 
                 Divider()
                 
-                // MARK: Sort Options
-                Group {
-                    Text("Sort")
-                        .font(.title2)
-                        .bold()
-                        .padding(.horizontal)
-                    
-                    ForEach(sortOptions, id: \.self) { sortOption in
-                        HStack {
-                            Text(sortOption)
-                                .font(.body)
-                            Spacer()
-                            Button(action: {
-                                if !userVM.user.isSubscribed {
-                                    sharedAlertVM.currentAlertType = .notSubscribed
-                                } else {
-                                    selectedSort = sortOption
-                                    googlePlacesParams.sortBy = apiSortOptions[selectedSort] ?? ""
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        // Price Range
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Price Range")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            HStack(spacing: 12) {
+                                ForEach(priceOptions, id: \.self) { price in
+                                    Button(action: {
+                                        priceButtonAction(price: price)
+                                    }) {
+                                        Text(price)
+                                            .font(.system(size: 16, weight: .medium))
+                                            .foregroundColor(googlePlacesParams.priceLevels.contains(price.count - 1) ? .white : .primary)
+                                            .frame(width: 60, height: 40)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .fill(googlePlacesParams.priceLevels.contains(price.count - 1) ? Color.blue : Color(UIColor.secondarySystemBackground))
+                                            )
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 8)
+                                                    .stroke(googlePlacesParams.priceLevels.contains(price.count - 1) ? Color.clear : Color(UIColor.separator), lineWidth: 1)
+                                            )
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
                                 }
-                            }) {
-                                Circle()
-                                    .frame(width: 24, height: 24)
-                                    .foregroundColor(selectedSort == sortOption ? .blue : .clear)
-                                    .overlay(
-                                        Capsule()
-                                            .strokeBorder(colorScheme == .dark ? Color.white : Color.black, lineWidth: selectedSort == sortOption ? 0 : 1)
-                                    )
+                                Spacer()
                             }
                         }
-                        .padding(.horizontal)
-                    }
-                }
-                
-                Divider()
-                
-                // MARK: Search Radius
-                Group {
-                    Text("Search Radius")
-                        .font(.title2)
-                        .bold()
-                        .padding(.horizontal)
-                    
-                    Picker("Search Radius", selection: $googlePlacesParams.radiusInMeters) {
-                        ForEach(radiusOptionsInMeters, id: \.self) { unit in
-                            Text("\(googlePlacesParams.radiusUnit == "km" ? Double(unit) / 1000.0 : Double(unit) / 1609.34, specifier: "%.2f") \(googlePlacesParams.radiusUnit)").tag(unit)
+                        
+                        // Sort By
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Sort By")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            VStack(spacing: 8) {
+                                ForEach(sortOptions, id: \.self) { sortOption in
+                                    Button(action: {
+                                        selectedSort = sortOption
+                                        googlePlacesParams.sortBy = apiSortOptions[selectedSort] ?? ""
+                                    }) {
+                                        HStack {
+                                            Text(sortOption)
+                                                .font(.body)
+                                                .foregroundColor(.primary)
+                                            Spacer()
+                                            Image(systemName: selectedSort == sortOption ? "checkmark.circle.fill" : "circle")
+                                                .foregroundColor(selectedSort == sortOption ? .blue : .secondary)
+                                                .font(.system(size: 20))
+                                        }
+                                        .padding(.vertical, 12)
+                                        .padding(.horizontal, 16)
+                                        .background(Color(UIColor.secondarySystemBackground))
+                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                            }
+                        }
+                        
+                        // Search Radius
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("Search Radius")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Picker("Search Radius", selection: $googlePlacesParams.radiusInMeters) {
+                                ForEach(0..<radiusOptionsInMeters.count, id: \.self) { index in
+                                    Text(radiusLabels[index]).tag(radiusOptionsInMeters[index])
+                                }
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
                         }
                     }
-                    .padding(.horizontal)
-                    .pickerStyle(SegmentedPickerStyle())
-                    
-                    Toggle(isOn: Binding<Bool>(
-                        get: { googlePlacesParams.radiusUnit == "km" },
-                        set: { newValue in
-                            googlePlacesParams.radiusUnit = newValue ? "km" : "mi"
-                        }
-                    ), label: { Text(googlePlacesParams.radiusUnit == "km" ? "Metric" : "Imperial") })
-                    .padding(.horizontal)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 24)
                 }
-                .disabled(!userVM.user.isSubscribed)
-                
-                Divider()
-                
-                // MARK: Apply Changes
-                HStack(alignment: .center) {
-                    Spacer()
-                        .frame(width: 25)
-                    
-                    Button(action: {
-                        if !userVM.user.isSubscribed {
-                            sharedAlertVM.currentAlertType = .notSubscribed
-                        } else {
-                            updateInitialState()
-                            sharedAlertVM.currentAlertType = nil
-                            self.presentationMode.wrappedValue.dismiss()
-                        }
-                    }) {
-                        let changesCount = self.changesCount()
-                        Text("Apply\(changesCount > 0 ? " (\(changesCount))" : "")")
-                            .fontWeight(.semibold)
-                            .font(.system(size: 16))
-                            .padding(15)
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .background(LinearGradient(gradient: Gradient(colors: [Color.red.opacity(0.5), Color.red.opacity(0.7)]), startPoint: .leading, endPoint: .trailing))
-                            .foregroundColor(.white)
-                            .cornerRadius(15)
-                            .padding(.horizontal, 20)
-                            .shadow(color: .blue.opacity(0.3), radius: 3, x: 0, y: 2)
-                    }
-                    .padding(.bottom, 10)
-                    .cornerRadius(15)
-                    
-                    Spacer()
-                        .frame(width: 25)
-                }
+                .background(Color(UIColor.systemGroupedBackground))
             }
         }
+        .navigationBarHidden(true)
         .onAppear {
-            updateInitialState()
+            selectedSort = googlePlacesParams.sortBy == "distance" ? "Distance" : "Prominence"
         }
     }
 }
