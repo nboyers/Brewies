@@ -30,11 +30,39 @@ struct BrewDetailView: View {
                     // MARK: Header Section
                     VStack(spacing: 16) {
                         if let imageURL = buildGooglePhotoURL(photoReference: coffeeShop.photos?.first) {
-                            KFImage(URL(string: imageURL))
+                            KFImage(imageURL)
+                                .placeholder {
+                                    Rectangle()
+                                        .fill(Color.gray.opacity(0.2))
+                                        .frame(height: 200)
+                                        .overlay(
+                                            Image(systemName: "photo")
+                                                .font(.largeTitle)
+                                                .foregroundColor(.gray)
+                                        )
+                                }
+                                .onFailure { _ in
+                                    print("Failed to load header image: \(imageURL)")
+                                }
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(height: 200)
                                 .clipped()
+                                .cornerRadius(12)
+                        } else {
+                            Rectangle()
+                                .fill(Color.gray.opacity(0.2))
+                                .frame(height: 200)
+                                .overlay(
+                                    VStack {
+                                        Image(systemName: "photo")
+                                            .font(.largeTitle)
+                                            .foregroundColor(.gray)
+                                        Text("No Photo Available")
+                                            .font(.caption)
+                                            .foregroundColor(.gray)
+                                    }
+                                )
                                 .cornerRadius(12)
                         }
                         
@@ -139,7 +167,7 @@ struct BrewDetailView: View {
                     }
                     .padding(.top, 20)
 
-                    // MARK: Photos Section
+                                       // MARK: Photos Section
                     if let photos = coffeeShop.photos, !photos.isEmpty {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Photos (\(photos.count))")
@@ -150,30 +178,29 @@ struct BrewDetailView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 12) {
                                     ForEach(photos.prefix(5), id: \.self) { photoReference in
-                                        AsyncImage(url: buildGooglePhotoURL(photoReference: photoReference)) { image in
-                                            image
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                        } placeholder: {
-                                            Rectangle()
-                                                .fill(Color.gray.opacity(0.3))
-                                        }
-                                        .frame(width: 120, height: 80)
-                                        .clipped()
-                                        .cornerRadius(8)
+                                        KFImage(buildGooglePhotoURL(photoReference: photoReference))
+                                            .placeholder {
+                                                Rectangle()
+                                                    .fill(Color.gray.opacity(0.2))
+                                                    .overlay(
+                                                        Image(systemName: "photo")
+                                                            .foregroundColor(.gray)
+                                                    )
+                                            }
+                                            .onFailure { error in
+                                                print("Photo load failed: \(error.localizedDescription)")
+                                            }
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 120, height: 80)
+                                            .clipped()
+                                            .cornerRadius(8)
                                     }
                                 }
                                 .padding(.horizontal, 20)
                             }
                         }
                         .padding(.top, 20)
-                    } else {
-                        VStack {
-                            Text("No Photos Available")
-                                .font(.headline)
-                                .padding(.horizontal, 20)
-                                .padding(.top, 20)
-                        }
                     }
                     
                     Spacer(minLength: 20)
@@ -218,11 +245,11 @@ struct BrewDetailView: View {
         guard let photoReference = photoReference else { return nil }
         let apiKey = Secrets.PLACES_API
         
-        // New Google Places API format
+        // New Google Places API format - use the photo name directly with new endpoint
         if photoReference.hasPrefix("places/") {
             return URL(string: "https://places.googleapis.com/v1/\(photoReference)/media?maxWidthPx=400&key=\(apiKey)")
         } else {
-            // Legacy format fallback
+            // Legacy format - use old Photos API
             return URL(string: "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=\(photoReference)&key=\(apiKey)")
         }
     }
