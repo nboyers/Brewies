@@ -13,5 +13,7 @@ struct APIResponse: Decodable {
 }
 
 struct APIKeys: Decodable {
-    let GOOGLE_PLACES_API: String
+    let PLACES_API: String
+    let placesAPI: String?
+    let googlePlacesAPIKey: String?
 }

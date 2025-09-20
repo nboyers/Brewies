@@ -26,22 +26,44 @@ class APIKeysViewModel: ObservableObject {
     /// In-memory cache for the API keys.
     private var apiKeysCache: APIKeys?
     
-    /// Function to fetch API keys from a specified URL.
+    /// Function to fetch API keys from Info.plist.
     func fetchAPIKeys() async -> APIKeys? {
         if let cachedKeys = apiKeysCache {
             return cachedKeys // Return cached keys to avoid redundant requests
         }
         
+        // Read Google Places API key from Info.plist
+        guard let placesAPIKey = Bundle.main.object(forInfoDictionaryKey: "GooglePlacesAPIKey") as? String, !placesAPIKey.isEmpty else {
+            // Fallback to Secrets if Info.plist key not found
+            let keys = APIKeys(
+                PLACES_API: Secrets.PLACES_API,
+                placesAPI: Secrets.PLACES_API,
+                googlePlacesAPIKey: Secrets.PLACES_API
+            )
+            self.apiKeys = keys
+            return keys
+        }
+        
+        let keys = APIKeys(
+            PLACES_API: placesAPIKey,
+            placesAPI: placesAPIKey,
+            googlePlacesAPIKey: placesAPIKey
+        )
+        
+        self.apiKeys = keys
+        return keys
+    }
+    
+    /// Function to fetch API keys from remote endpoint.
+    private func fetchRemoteAPIKeys() async -> APIKeys? {
         // Fetch the API key safely from Info.plist
         guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
-            errorMessage = "API Key not found in Info.plist"
             return nil
         }
         
         // URL string pointing to the API endpoint.
         let urlString = "https://kwahtvg02a.execute-api.us-east-1.amazonaws.com/Prod"
         guard let url = URL(string: urlString) else {
-            errorMessage = "Invalid URL"
             return nil
         }
         
@@ -55,7 +77,6 @@ class APIKeysViewModel: ObservableObject {
             
             // Check if the response is valid and the status code is 200
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                errorMessage = "Failed to fetch API keys: Invalid response"
                 return nil
             }
             
@@ -63,8 +84,6 @@ class APIKeysViewModel: ObservableObject {
             return try await decodeAPIResponse(data: data)
             
         } catch {
-            // Handle errors, such as network or decoding issues
-            errorMessage = "Error fetching API keys: \(error.localizedDescription)"
             return nil
         }
     }

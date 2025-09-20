@@ -22,12 +22,15 @@ class RewardAdController: UIViewController, FullScreenContentDelegate, Observabl
     var onUserDidEarnReward: (() -> Void)?
     var onAdDidDismissFullScreenContent: (() -> Void)?
     private var isLoading = false
+    private let adUnitID: String
     
-    init() {
+    init(adUnitID: String = "ca-app-pub-3940256099942544/1712485313") {
+        self.adUnitID = adUnitID
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
+        self.adUnitID = "ca-app-pub-3940256099942544/1712485313"
         super.init(coder: coder)
     }
     
@@ -36,7 +39,7 @@ class RewardAdController: UIViewController, FullScreenContentDelegate, Observabl
         isLoading = true
         
         let request = Request()
-        RewardedAd.load(with: Secrets.REWARD_AD_KEY, request: request) { [weak self] ad, error in
+        RewardedAd.load(with: adUnitID, request: request) { [weak self] ad, error in
             self?.isLoading = false
             if let error = error {
                 print("Failed to load rewarded ad with error: \(error.localizedDescription)")
@@ -95,3 +98,4 @@ class RewardAdController: UIViewController, FullScreenContentDelegate, Observabl
         // Don't automatically reload - only load when needed
     }
 }
+

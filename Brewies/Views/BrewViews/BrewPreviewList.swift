@@ -1,5 +1,67 @@
 import SwiftUI
 import Kingfisher
+import GooglePlaces
+
+struct GooglePlacesPhotoView: UIViewRepresentable {
+    let placeID: String
+    
+    func makeUIView(context: Context) -> UIImageView {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        imageView.backgroundColor = UIColor.systemGray6
+        
+        // Fetch place details to get photos
+        let request = GMSFetchPlaceRequest(placeID: placeID, placeProperties: ["photos"], sessionToken: nil)
+        print("[GooglePlacesPhotoView] Fetching photos for placeID: \(placeID)")
+        
+        GMSPlacesClient.shared().fetchPlace(with: request) { place, error in
+            if let error = error {
+                print("[GooglePlacesPhotoView] Fetch place error: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    imageView.image = UIImage(systemName: "cup.and.saucer.fill")
+                    imageView.tintColor = .brown
+                }
+                return
+            }
+            
+            if let place = place, let photos = place.photos, !photos.isEmpty {
+                let photo = photos[0] // Get first photo
+                print("[GooglePlacesPhotoView] Found \(photos.count) photos, loading first one")
+                
+                // Load the photo with max width of 400px
+                GMSPlacesClient.shared().loadPlacePhoto(photo, constrainedTo: CGSize(width: 400, height: 400), scale: UIScreen.main.scale) { image, error in
+                    if let error = error {
+                        print("[GooglePlacesPhotoView] Load photo error: \(error.localizedDescription)")
+                    }
+                    
+                    DispatchQueue.main.async {
+                        if let image = image {
+                            print("[GooglePlacesPhotoView] Successfully loaded photo")
+                            imageView.image = image
+                        } else {
+                            print("[GooglePlacesPhotoView] No image returned, using fallback")
+                            imageView.image = UIImage(systemName: "cup.and.saucer.fill")
+                            imageView.tintColor = .brown
+                        }
+                    }
+                }
+            } else {
+                print("[GooglePlacesPhotoView] No photos found for place")
+                DispatchQueue.main.async {
+                    imageView.image = UIImage(systemName: "cup.and.saucer.fill")
+                    imageView.tintColor = .brown
+                }
+            }
+        }
+        
+        return imageView
+    }
+    
+    func updateUIView(_ uiView: UIImageView, context: Context) {
+        // No updates needed
+    }
+}
 
 struct BrewPreviewList: View {
     @Binding var coffeeShops: [BrewLocation]
@@ -27,6 +89,12 @@ struct BrewPreviewList: View {
                 }
             }
         }
+        .onAppear {
+            print("[BrewPreviewList] Showing \(coffeeShops.count) coffee shops")
+            for shop in coffeeShops.prefix(3) {
+                print("[BrewPreviewList] Shop: \(shop.name), ID: \(shop.id)")
+            }
+        }
     }
 }
 
@@ -49,24 +117,34 @@ struct BrewPreview: View {
     @State private var favoriteSlotsUsed = 0
     @State private var showCustomAlertForFavorites = false
     
+    @ObservedObject var apiKeysViewModel = APIKeysViewModel.shared
+    
     var isFavorite: Bool { userViewModel.user.favorites.contains(coffeeShop) }
     
     var body: some View {
         VStack(alignment: .leading) {
             GeometryReader { geo in
                 ZStack {
-                    // Google Places uses photo references, not URLs. Use a helper function to build the full image URL.
-                    if let imageURL = buildGooglePhotoURL(photoReference: coffeeShop.photos?.first) {
-                        KFImage(URL(string: imageURL))
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
+                    // Use Google Places SDK photos
+                    if !coffeeShop.id.isEmpty {
+                        GooglePlacesPhotoView(placeID: coffeeShop.id)
                             .frame(width: geo.size.width * 0.9, height: geo.size.height * 0.66)
                             .clipped()
                             .cornerRadius(8)
                             .shadow(radius: 4)
+                            .onAppear {
+                                print("[BrewPreview] Creating GooglePlacesPhotoView for \(coffeeShop.name)")
+                            }
                     } else {
-                        Text("Image not available")
-                            .foregroundColor(.red)
+                        Image(systemName: "cup.and.saucer.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(.brown)
+                            .frame(width: geo.size.width * 0.9, height: geo.size.height * 0.66)
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(8)
+                            .onAppear {
+                                print("[BrewPreview] Using fallback image for \(coffeeShop.name) - empty ID")
+                            }
                     }
                 }
                 
@@ -146,7 +224,9 @@ struct BrewPreview: View {
 
     private func buildGooglePhotoURL(photoReference: String?) -> String? {
         guard let photoReference = photoReference else { return nil }
-        let apiKey = Secrets.PLACES_API // Replace this with your actual API key management
+        // Try multiple possible property names for the Places API key
+        let placesAPIKey = apiKeysViewModel.apiKeys?.placesAPI ?? apiKeysViewModel.apiKeys?.googlePlacesAPIKey
+        guard let apiKey = placesAPIKey, !apiKey.isEmpty else { return nil }
         return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=\(photoReference)&key=\(apiKey)"
     }
 
@@ -167,3 +247,4 @@ struct BrewPreview: View {
         }
     }
 }
+

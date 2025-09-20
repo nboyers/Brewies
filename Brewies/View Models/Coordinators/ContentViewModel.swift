@@ -74,10 +74,14 @@ class ContentViewModel: ObservableObject {
                 return 
             }
             
-            print("Using Google Places API key from Secrets...")
+            print("Using Google Places API key from APIKeysViewModel...")
             do {
-                let apiKey = Secrets.PLACES_API
-                print("API key available: \(!apiKey.isEmpty)")
+                let keys = await self.apiKeysViewModel.fetchAPIKeys()
+                guard let apiKey = keys?.PLACES_API, !apiKey.isEmpty else {
+                    print("No API key found from APIKeysViewModel")
+                    self.showAlert = true
+                    return
+                }
 
                 // Use the Google Places API to fetch nearby locations asynchronously
                 print("Fetching places with coordinates: \(centerCoordinate.latitude), \(centerCoordinate.longitude)")
@@ -172,3 +176,4 @@ class ContentViewModel: ObservableObject {
 
 
 }
+

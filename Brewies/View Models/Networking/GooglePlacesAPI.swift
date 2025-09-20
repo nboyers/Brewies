@@ -212,15 +212,13 @@ class GooglePlacesAPI: ObservableObject {
     private func isExcludedChain(name: String, types: [String]) -> Bool {
         let lowercaseName = name.lowercased()
         
-        // Filter out fast food chains and gas stations by name
-        let isFastFood = lowercaseName.contains("mcdonald") || lowercaseName.contains("burger") || lowercaseName.contains("kfc") || lowercaseName.contains("subway")
-        let isGasStation = lowercaseName.contains("shell") || lowercaseName.contains("chevron") || lowercaseName.contains("bp") || lowercaseName.contains("exxon")
-        let isConvenienceStore = lowercaseName.contains("mart") || lowercaseName.contains("7-eleven") || lowercaseName.contains("circle k")
+        // Filter major chains by name as fallback
+        let isChainCoffee = lowercaseName.contains("starbucks") || lowercaseName.contains("dunkin") || lowercaseName.contains("tim hortons") || lowercaseName.contains("costa coffee") || lowercaseName.contains("peet's")
         
         // Filter based on place types
         let hasExcludedType = types.contains { GooglePlacesAPI.excludedTypes.contains($0) }
         
-        return isFastFood || isGasStation || isConvenienceStore || hasExcludedType
+        return isChainCoffee || hasExcludedType
     }
 
     func fetchPlaceDetails(id: String, apiKey: String) async throws -> GooglePlaceDetail {

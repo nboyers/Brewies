@@ -22,6 +22,7 @@ class StoreKitManager: ObservableObject {
     // Define product identifiers directly in the class
     static let adRemovalProductId = "com.nobosoftware.removeAds"
     static let creditsProductId = "com.nobosoftware.BuyableRequests"
+    static let premiumProductId = "com.nobosoftware.PremiumPackage"
     static let favoritesSlotId = "com.nobosoftware.FavoriteSlot"
     
     static let yearlyID = "com.nobos.AnnualBrewies"
@@ -139,6 +140,7 @@ class StoreKitManager: ObservableObject {
             let productIdentifiers: Set<String> = [
                 StoreKitManager.adRemovalProductId,
                 StoreKitManager.creditsProductId,
+                StoreKitManager.premiumProductId,
                 StoreKitManager.favoritesSlotId,
                 StoreKitManager.yearlyID,
                 StoreKitManager.semiYearlyID,
@@ -186,6 +188,10 @@ class StoreKitManager: ObservableObject {
                 
                 if transaction.productID == StoreKitManager.adRemovalProductId {
                     storeStatus.isAdRemovalPurchased = true
+                }
+                
+                if transaction.productID == StoreKitManager.premiumProductId {
+                    storeStatus.isPremiumPurchased = true
                 }
                 
                 if let course = productLookup[transaction.productID] {
@@ -298,6 +304,7 @@ class StoreKitManager: ObservableObject {
         var storeProducts: [Product] = []
         var purchasedCourses: [Product] = []
         var isAdRemovalPurchased: Bool = false
+        var isPremiumPurchased: Bool = false
         var subscriptions: [Product] = []
         var purchasedSubscriptions: [Product] = []
         var subscriptionGroupStatus: RenewalState?

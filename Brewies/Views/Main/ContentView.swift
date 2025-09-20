@@ -11,6 +11,7 @@ import MapKit
 import BottomSheet
 import AuthenticationServices
 import AppTrackingTransparency
+import GooglePlaces
 
 struct ContentView: View {
     @ObservedObject var storeKit = StoreKitManager()
@@ -131,7 +132,11 @@ struct ContentView: View {
                                 selectedCoffeeShop.coffeeShop = location
                                 activeSheet = .detailBrew
                             }) {
-                                HStack {
+                                HStack(spacing: 12) {
+                                    GooglePlacesPhotoView(placeID: location.id)
+                                        .frame(width: 60, height: 60)
+                                        .cornerRadius(8)
+                                    
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(location.name)
                                             .font(.headline)
@@ -235,14 +240,31 @@ struct DiscoverView: View {
                         sharedAlertVM.currentAlertType = .earnCredits
                     }) {
                         HStack(spacing: 8) {
-                            Image(systemName: "creditcard.fill")
-                                .foregroundColor(.blue)
-                            Text("\(userVM.user.credits)")
-                                .fontWeight(.semibold)
+                            Image(systemName: "magnifyingglass.circle.fill")
+                                .foregroundColor(.white)
+                                .font(.system(size: 16, weight: .medium))
+                            
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text("\(userVM.user.credits)")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                Text("SEARCHES")
+                                    .font(.system(size: 9, weight: .medium, design: .rounded))
+                                    .foregroundColor(.white.opacity(0.8))
+                                    .tracking(0.5)
+                            }
                         }
                         .padding(.horizontal, 16)
-                        .padding(.vertical, 10)
-                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
+                        .padding(.vertical, 12)
+                        .background(
+                            LinearGradient(
+                                colors: [Color.blue, Color.blue.opacity(0.8)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            in: RoundedRectangle(cornerRadius: 16)
+                        )
+                        .shadow(color: .blue.opacity(0.3), radius: 4, x: 0, y: 2)
                     }
                     
                     Spacer()
@@ -351,8 +373,8 @@ struct DiscoverView: View {
                                 }
                             } else {
                                 contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
-                                sharedAlertVM.currentAlertType = nil
                             }
+                            // Don't dismiss alert here - let ad completion handle it
                         },
                         secondaryButtonTitle: "Purchase Credits",
                         secondaryAction: {
@@ -427,15 +449,7 @@ struct DiscoverView: View {
                 contentVM.selectedBrewLocation = location
                 selectedCoffeeShop.coffeeShop = location
                 
-                // Reorder search results to show tapped location first
-                if contentVM.brewLocations.firstIndex(where: { $0.id == location.id }) != nil {
-                    let reorderedLocations = contentVM.brewLocations
-                    contentVM.brewLocations.removeAll()
-                    contentVM.brewLocations.append(location)
-                    contentVM.brewLocations.append(contentsOf: reorderedLocations.filter { $0.id != location.id })
-                }
-                
-                // Show search results sheet with tapped location at top
+                // Show search results sheet (MapView already handles reordering)
                 activeSheet = .searchResults
             }
         }
