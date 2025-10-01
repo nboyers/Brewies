@@ -6,25 +6,27 @@
 //
 
 import SwiftUI
+import AppTrackingTransparency
 
 struct FavoritesView: View {
+    @EnvironmentObject var contentVM: ContentViewModel
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
+    @StateObject var sharedAlertVM = SharedAlertViewModel()
     @ObservedObject var coffeeShopData = CoffeeShopData.shared
-    @ObservedObject var storeKit = StoreKitManager()
     
     @Binding var showPreview: Bool
-    @Binding var activeSheet: ActiveSheet?
-    
-    @State private var searchText = ""
     @State private var showRemovalConfirmationAlert = false
     @State private var toRemoveCoffeeShop: BrewLocation?
+    @State private var searchText = ""
+    
+    @Binding var activeSheet: ActiveSheet?
     
     private var filteredFavorites: [BrewLocation] {
         if searchText.isEmpty {
-            return coffeeShopData.favoriteShops
+            return userVM.user.favorites
         } else {
-            return coffeeShopData.favoriteShops.filter { shop in
+            return userVM.user.favorites.filter { shop in
                 shop.name.localizedCaseInsensitiveContains(searchText) ||
                 (shop.address?.localizedCaseInsensitiveContains(searchText) ?? false)
             }
@@ -34,64 +36,80 @@ struct FavoritesView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Header with search
-                VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("My Favorites")
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                            Text("\(coffeeShopData.favoriteShops.count) saved locations")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        Spacer()
-                    }
-                    
-                    // Search bar
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.secondary)
-                        TextField("Search favorites...", text: $searchText)
-                            .textFieldStyle(PlainTextFieldStyle())
-                    }
-                    .padding(12)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(10)
+                // Search Bar
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.secondary)
+                    TextField("Search favorites...", text: $searchText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
-                .background(Color(.systemBackground))
+                .padding(.horizontal)
+                .padding(.top, 8)
                 
-                Divider()
-                
-                // Content
+                // Favorites List
                 if filteredFavorites.isEmpty {
                     emptyStateView
                 } else {
-                    favoritesList
-                }
-                
-                // Ad banner
-                if !storeKit.storeStatus.isPremiumPurchased {
-                    AdBannerView()
-                        .frame(height: 50)
+                    ScrollView(.vertical, showsIndicators: false) {
+                        LazyVStack(spacing: 12) {
+                            ForEach(filteredFavorites, id: \.id) { coffeeShop in
+                                FavoriteItemView(
+                                    coffeeShop: coffeeShop,
+                                    activeSheet: $activeSheet,
+                                    showPreview: $showPreview,
+                                    onRemove: {
+                                        toRemoveCoffeeShop = coffeeShop
+                                        showRemovalConfirmationAlert = true
+                                    }
+                                )
+                            }
+                        }
                         .padding(.horizontal)
+                        .padding(.top, 8)
+                        
+                        if !userVM.user.isPremium {
+                            AdBannerView()
+                                .frame(maxWidth: .infinity)
+                                .clipped()
+                                .padding(.top, 16)
+                        }
+                    }
                 }
             }
-            .navigationBarHidden(true)
-        }
-        .alert(isPresented: $showRemovalConfirmationAlert) {
-            Alert(
-                title: Text("Remove Favorite"),
-                message: Text("Remove this location from your favorites?"),
-                primaryButton: .destructive(Text("Remove")) {
-                    if let toRemove = toRemoveCoffeeShop {
-                        coffeeShopData.removeFromFavorites(toRemove)
+            .navigationTitle(favoritesTitle)
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if !userVM.user.favorites.isEmpty {
+                        Button("Clear All") {
+                            showClearAllAlert()
+                        }
+                        .foregroundColor(.red)
                     }
-                },
-                secondaryButton: .cancel()
-            )
+                }
+            }
+            .alert(isPresented: $showRemovalConfirmationAlert) {
+                Alert(
+                    title: Text("Remove Favorite"),
+                    message: Text("Remove \"\(toRemoveCoffeeShop?.name ?? "this location")\" from your favorites?"),
+                    primaryButton: .destructive(Text("Remove")) {
+                        if let toRemove = toRemoveCoffeeShop {
+                            userVM.removeFromFavorites(toRemove)
+                        }
+                    },
+                    secondaryButton: .cancel()
+                )
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+    }
+    
+    private var favoritesTitle: String {
+        let count = userVM.user.favorites.count
+        if userVM.user.isPremium {
+            return "Favorites (\(count))"
+        } else {
+            return "Favorites (\(count)/\(userVM.favoritesLimit))"
         }
     }
     
@@ -104,110 +122,72 @@ struct FavoritesView: View {
                 .foregroundColor(.secondary)
             
             VStack(spacing: 8) {
-                Text(searchText.isEmpty ? "No Favorites Yet" : "No Results")
+                Text("No Favorites Yet")
                     .font(.title2)
                     .fontWeight(.semibold)
                 
-                Text(searchText.isEmpty ? 
-                     "Start exploring and save your favorite coffee shops and breweries" :
-                     "Try adjusting your search terms")
+                Text("Discover coffee shops and breweries, then tap the heart icon to save them here.")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 40)
+                    .padding(.horizontal, 32)
             }
             
             Spacer()
         }
     }
     
-    private var favoritesList: some View {
-        ScrollView {
-            LazyVStack(spacing: 12) {
-                ForEach(filteredFavorites, id: \.id) { coffeeShop in
-                    FavoriteItemView(
-                        coffeeShop: coffeeShop,
-                        onTap: {
-                            selectedCoffeeShop.coffeeShop = coffeeShop
-                            activeSheet = .detailBrew
-                        },
-                        onRemove: {
-                            toRemoveCoffeeShop = coffeeShop
-                            showRemovalConfirmationAlert = true
-                        }
-                    )
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
+    private func showClearAllAlert() {
+        let alert = UIAlertController(
+            title: "Clear All Favorites",
+            message: "This will remove all \(userVM.user.favorites.count) favorites. This action cannot be undone.",
+            preferredStyle: .alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Clear All", style: .destructive) { _ in
+            userVM.user.favorites.removeAll()
+            userVM.saveFavorites()
+        })
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.rootViewController?.present(alert, animated: true)
         }
     }
 }
 
 struct FavoriteItemView: View {
     let coffeeShop: BrewLocation
-    let onTap: () -> Void
+    @Binding var activeSheet: ActiveSheet?
+    @Binding var showPreview: Bool
     let onRemove: () -> Void
     
     var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: 16) {
-                // Photo
-                if !coffeeShop.id.isEmpty {
-                    GooglePlacesPhotoView(placeID: coffeeShop.id)
-                        .frame(width: 60, height: 60)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                } else {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color(.systemGray5))
-                        .frame(width: 60, height: 60)
-                        .overlay(
-                            Image(systemName: "cup.and.saucer.fill")
-                                .foregroundColor(.secondary)
-                        )
-                }
-                
-                // Info
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(coffeeShop.name)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                        .lineLimit(1)
-                    
-                    if let address = coffeeShop.address {
-                        Text(address)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .lineLimit(2)
-                    }
-                    
-                    if let rating = coffeeShop.rating {
-                        HStack(spacing: 4) {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.yellow)
-                                .font(.caption)
-                            Text(String(format: "%.1f", rating))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                    }
-                }
-                
-                Spacer()
-                
-                // Remove button
-                Button(action: onRemove) {
-                    Image(systemName: "heart.fill")
-                        .foregroundColor(.red)
-                        .font(.title3)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .padding(16)
-            .background(Color(.systemBackground))
-            .cornerRadius(12)
-            .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
+        NavigationLink(destination: BrewDetailView(coffeeShop: coffeeShop)) {
+            BrewListItem(location: coffeeShop, photoIndex: 0, activeSheet: $activeSheet)
         }
-        .buttonStyle(PlainButtonStyle())
+        .contextMenu {
+            Button(action: onRemove) {
+                Label("Remove from Favorites", systemImage: "heart.slash")
+            }
+            
+            Button(action: {
+                shareLocation(coffeeShop)
+            }) {
+                Label("Share Location", systemImage: "square.and.arrow.up")
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+    }
+    
+    private func shareLocation(_ location: BrewLocation) {
+        let text = "Check out \(location.name)" + (location.address != nil ? " at \(location.address!)" : "")
+        let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
+        
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.rootViewController?.present(activityVC, animated: true)
+        }
     }
 }

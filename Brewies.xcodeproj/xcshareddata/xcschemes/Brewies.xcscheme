@@ -78,7 +78,7 @@
          referenceType = "1">
       </LocationScenarioReference>
       <StoreKitConfigurationFileReference
-         identifier = "../../Brewies Storefront.storekit">
+         identifier = "../../Brewies/Brewies.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction

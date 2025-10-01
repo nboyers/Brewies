@@ -14,7 +14,6 @@ struct User {
     var firstName: String
     var lastName: String
     var email: String
-    var isSubscribed: Bool
     var profileImage: Image?
     var favorites: [BrewLocation]
     var pastOrders: [Order]
@@ -22,11 +21,11 @@ struct User {
     var hasClaimedWeeklyReward: Bool
     var streakCount: Int
     var streakViewedDate: Date?
-    var subscriptionTier: SubscriptionTier = .none
+    var isPremium: Bool = false
 }
 
 
-//This will be used in a later date 
+//This will be used in a later date
 struct Order: Identifiable, Codable {
     let id: String
     let BrewLocation: BrewLocation

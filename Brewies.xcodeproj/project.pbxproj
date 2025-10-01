@@ -9,12 +9,10 @@
 /* Begin PBXBuildFile section */
 		FF0946E22A0EE7C300F705CB /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E12A0EE7C300F705CB /* FavoriteView.swift */; };
 		FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */; };
-		FF15EAA12AD0C79300F5F9FE /* VisualEffectBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF15EAA02AD0C79300F5F9FE /* VisualEffectBlur.swift */; };
 		FF16384C2ABA43F100E1E884 /* ActiveSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */; };
 		FF1B5F2A2A2FFAD1000B6D6F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F292A2FFAD1000B6D6F /* GoogleMobileAds */; };
 		FF1B5F2C2A2FFAE7000B6D6F /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FF1B5F2B2A2FFAE7000B6D6F /* Alamofire */; };
 		FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2F263B2A256EB5000D922E /* Date+Extension.swift */; };
-		FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */; };
 		FF3637B92A5749F800A33899 /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637B82A5749F800A33899 /* UserViewModel.swift */; };
 		FF3637BB2A57521400A33899 /* StorefrontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3637BA2A57521400A33899 /* StorefrontView.swift */; };
 		FF380E6A2AABCCCC00D327CD /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF380E692AABCCCC00D327CD /* SharedViewModel.swift */; };
@@ -27,14 +25,20 @@
 		FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF3FF2CE29EA11E700510FCD /* MapView.swift */; };
 		FF3FF2D529EA1C0300510FCD /* readme.md in Resources */ = {isa = PBXBuildFile; fileRef = FF3FF2D429EA1C0300510FCD /* readme.md */; };
 		FF45295C2A4E1F63003FDA82 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */; };
-		FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */; };
 		FF5377A72A0B1E5E0038E5E7 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = FF5377A62A0B1E5E0038E5E7 /* Kingfisher */; };
 		FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CC92A4624C5003894D9 /* FiltersView.swift */; };
 		FF5A6CCC2A47371C003894D9 /* BubbleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */; };
 		FF5AAB222AC6490300E7213F /* SelectedCoffeeShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */; };
 		FF656AB02E7F50680059F33E /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF656AAF2E7F50680059F33E /* Secrets.swift */; };
 		FF656AB22E7F51700059F33E /* APIKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF656AB12E7F51700059F33E /* APIKeys.swift */; };
-		FF656AB72E7F5D880059F33E /* GooglePlacesImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF656AB52E7F5D880059F33E /* GooglePlacesImageView.swift */; };
+		FF69E94E2E8D9334002340AB /* BrewListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF69E94D2E8D9334002340AB /* BrewListItem.swift */; };
+		FF69E9502E8D94CF002340AB /* Brewies.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FF69E94F2E8D94CF002340AB /* Brewies.storekit */; };
+		FF69E9522E8D97AC002340AB /* BrewPreviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF69E9512E8D97AC002340AB /* BrewPreviewList.swift */; };
+		FF69E95A2E8DCF7A002340AB /* VisualEffectBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF69E9592E8DCF7A002340AB /* VisualEffectBlur.swift */; };
+		FF69E95B2E8DCF7A002340AB /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF69E9552E8DCF7A002340AB /* ShareSheet.swift */; };
+		FF69E95C2E8DCF7A002340AB /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF69E9542E8DCF7A002340AB /* SettingsView.swift */; };
+		FF69E95D2E8DCF7A002340AB /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF69E9562E8DCF7A002340AB /* SignInWithAppleButton.swift */; };
+		FF69E95F2E8DCF7A002340AB /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF69E9582E8DCF7A002340AB /* UserProfileView.swift */; };
 		FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF7739382A1316D2007B603F /* BrewDetailView.swift */; };
 		FF8E43472A339FA700CEC800 /* RewardAdController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43462A339FA700CEC800 /* RewardAdController.swift */; };
 		FF8E43832A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */; };
@@ -47,15 +51,12 @@
 		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
 		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
-		FFBFFD282A59D28D004576EC /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD272A59D28D004576EC /* SettingsView.swift */; };
-		FFBFFD2D2A59DCD9004576EC /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */; };
 		FFC575CE2A9C258A008EB5E2 /* ApplyPayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */; };
 		FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */; };
 		FFC575DB2A9C273E008EB5E2 /* BackendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */; };
 		FFC5D12D2A44E608007D9F52 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = FFC5D12C2A44E608007D9F52 /* Introspect */; };
 		FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */; };
 		FFCB2A572A2141E00051B957 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FFCB2A562A2141E00051B957 /* BottomSheet */; };
-		FFD6F86F2A5B50A600575585 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD6F86E2A5B50A600575585 /* ShareSheet.swift */; };
 		FFDD5F672E7A4CA700A2A778 /* GooglePlaces in Frameworks */ = {isa = PBXBuildFile; productRef = FFDD5F662E7A4CA700A2A778 /* GooglePlaces */; };
 		FFDD5F692E7A4CA700A2A778 /* GooglePlacesSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FFDD5F682E7A4CA700A2A778 /* GooglePlacesSwift */; };
 		FFDD5F6B2E7A4E6700A2A778 /* BrewLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F6A2E7A4E6700A2A778 /* BrewLocation.swift */; };
@@ -65,10 +66,8 @@
 		FFDD5F752E7A4F0F00A2A778 /* GooglePlacesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F732E7A4F0F00A2A778 /* GooglePlacesResponse.swift */; };
 		FFDD5F762E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F742E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift */; };
 		FFDD5F772E7A4F0F00A2A778 /* GooglePlaceDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFDD5F722E7A4F0F00A2A778 /* GooglePlaceDetail.swift */; };
-		FFDD5F792E7A4F7800A2A778 /* Brewies Storefront.storekit in Resources */ = {isa = PBXBuildFile; fileRef = FFDD5F782E7A4F7800A2A778 /* Brewies Storefront.storekit */; };
 		FFF424922A528A640088AC1D /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF424912A528A640088AC1D /* StoreKitManager.swift */; };
-		FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */; };
-		FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */; };
+		FFF8C2422E8C28E8008490FC /* GooglePlacesPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF8C2412E8C28E8008490FC /* GooglePlacesPhotoView.swift */; };
 		FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */; };
 		FFFC118C2AA64BFD00849AAD /* CustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFC118B2AA64BFD00849AAD /* CustomAlertView.swift */; };
 /* End PBXBuildFile section */
@@ -93,10 +92,8 @@
 /* Begin PBXFileReference section */
 		FF0946E12A0EE7C300F705CB /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		FF0946E32A0EE84500F705CB /* CoffeeShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopData.swift; sourceTree = "<group>"; };
-		FF15EAA02AD0C79300F5F9FE /* VisualEffectBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBlur.swift; sourceTree = "<group>"; };
 		FF16384B2ABA43F100E1E884 /* ActiveSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSheet.swift; sourceTree = "<group>"; };
 		FF2F263B2A256EB5000D922E /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
-		FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionView.swift; sourceTree = "<group>"; };
 		FF3637B82A5749F800A33899 /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		FF3637BA2A57521400A33899 /* StorefrontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorefrontView.swift; sourceTree = "<group>"; };
 		FF380E692AABCCCC00D327CD /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViewModel.swift; sourceTree = "<group>"; };
@@ -112,13 +109,19 @@
 		FF3FF2CE29EA11E700510FCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		FF3FF2D429EA1C0300510FCD /* readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = readme.md; sourceTree = "<group>"; };
 		FF45295B2A4E1F63003FDA82 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
-		FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
 		FF5A6CC92A4624C5003894D9 /* FiltersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersView.swift; sourceTree = "<group>"; };
 		FF5A6CCB2A47371C003894D9 /* BubbleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BubbleButton.swift; sourceTree = "<group>"; };
 		FF5AAB212AC6490300E7213F /* SelectedCoffeeShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedCoffeeShop.swift; sourceTree = "<group>"; };
 		FF656AAF2E7F50680059F33E /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		FF656AB12E7F51700059F33E /* APIKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeys.swift; sourceTree = "<group>"; };
-		FF656AB52E7F5D880059F33E /* GooglePlacesImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesImageView.swift; sourceTree = "<group>"; };
+		FF69E94D2E8D9334002340AB /* BrewListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewListItem.swift; sourceTree = "<group>"; };
+		FF69E94F2E8D94CF002340AB /* Brewies.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Brewies.storekit; sourceTree = "<group>"; };
+		FF69E9512E8D97AC002340AB /* BrewPreviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewPreviewList.swift; sourceTree = "<group>"; };
+		FF69E9542E8DCF7A002340AB /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		FF69E9552E8DCF7A002340AB /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		FF69E9562E8DCF7A002340AB /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
+		FF69E9582E8DCF7A002340AB /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
+		FF69E9592E8DCF7A002340AB /* VisualEffectBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBlur.swift; sourceTree = "<group>"; };
 		FF7739382A1316D2007B603F /* BrewDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewDetailView.swift; sourceTree = "<group>"; };
 		FF8E43462A339FA700CEC800 /* RewardAdController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardAdController.swift; sourceTree = "<group>"; };
 		FF8E43822A33CE6D00CEC800 /* SignInWithAppleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleCoordinator.swift; sourceTree = "<group>"; };
@@ -130,13 +133,10 @@
 		FFB0A0E92A6F119A003E79E4 /* CoffeeOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeOrder.swift; sourceTree = "<group>"; };
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
-		FFBFFD272A59D28D004576EC /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPayModel.swift; sourceTree = "<group>"; };
 		FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentButton.swift; sourceTree = "<group>"; };
 		FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendModel.swift; sourceTree = "<group>"; };
 		FFC5D12E2A44EED7007D9F52 /* SearchCompleter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompleter.swift; sourceTree = "<group>"; };
-		FFD6F86E2A5B50A600575585 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		FFDD5F6A2E7A4E6700A2A778 /* BrewLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrewLocation.swift; sourceTree = "<group>"; };
 		FFDD5F6C2E7A4EB800A2A778 /* APIKeysViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeysViewModel.swift; sourceTree = "<group>"; };
 		FFDD5F6E2E7A4EC000A2A778 /* GooglePlacesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesAPI.swift; sourceTree = "<group>"; };
@@ -144,10 +144,8 @@
 		FFDD5F722E7A4F0F00A2A778 /* GooglePlaceDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlaceDetail.swift; sourceTree = "<group>"; };
 		FFDD5F732E7A4F0F00A2A778 /* GooglePlacesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesResponse.swift; sourceTree = "<group>"; };
 		FFDD5F742E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesSearchParams.swift; sourceTree = "<group>"; };
-		FFDD5F782E7A4F7800A2A778 /* Brewies Storefront.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Brewies Storefront.storekit"; sourceTree = "<group>"; };
 		FFF424912A528A640088AC1D /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
-		FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
-		FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleButton.swift; sourceTree = "<group>"; };
+		FFF8C2412E8C28E8008490FC /* GooglePlacesPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesPhotoView.swift; sourceTree = "<group>"; };
 		FFFB6B882A40CBE900F95D40 /* UIViewControllerKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerKey.swift; sourceTree = "<group>"; };
 		FFFC118B2AA64BFD00849AAD /* CustomAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,7 +195,6 @@
 		FF3637A92A55C9ED00A33899 /* StoreView */ = {
 			isa = PBXGroup;
 			children = (
-				FF3637AE2A55CC1F00A33899 /* SubscriptionView.swift */,
 				FF3637BA2A57521400A33899 /* StorefrontView.swift */,
 			);
 			path = StoreView;
@@ -214,7 +211,6 @@
 		FF3FF28529EA0D2300510FCD = {
 			isa = PBXGroup;
 			children = (
-				FFDD5F782E7A4F7800A2A778 /* Brewies Storefront.storekit */,
 				FF3FF29029EA0D2300510FCD /* Brewies */,
 				FF3FF28F29EA0D2300510FCD /* Products */,
 				FFB360D42A26C91F0099017F /* Frameworks */,
@@ -245,6 +241,7 @@
 				FF3FF2C629EA0F0800510FCD /* View Models */,
 				FF3FF2CB29EA107700510FCD /* Views */,
 				FF3FF29829EA0D2600510FCD /* Preview Content */,
+				FF69E94F2E8D94CF002340AB /* Brewies.storekit */,
 			);
 			path = Brewies;
 			sourceTree = "<group>";
@@ -288,13 +285,12 @@
 		FF3FF2CB29EA107700510FCD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FF656AB52E7F5D880059F33E /* GooglePlacesImageView.swift */,
+				FF69E9532E8DCF15002340AB /* Account */,
 				FFBFFD232A598F25004576EC /* Main */,
 				FF3637A92A55C9ED00A33899 /* StoreView */,
 				FF8E43932A34F99C00CEC800 /* Maps */,
 				FF8E43962A37BEBB00CEC800 /* Supporting Views */,
 				FF8E43412A339E6700CEC800 /* Monetization */,
-				FF8E433E2A339D9E00CEC800 /* Account */,
 				FF77393B2A1318B3007B603F /* BrewViews */,
 			);
 			path = Views;
@@ -343,24 +339,27 @@
 			path = Maps;
 			sourceTree = "<group>";
 		};
+		FF69E9532E8DCF15002340AB /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				FF69E9542E8DCF7A002340AB /* SettingsView.swift */,
+				FF69E9552E8DCF7A002340AB /* ShareSheet.swift */,
+				FF69E9562E8DCF7A002340AB /* SignInWithAppleButton.swift */,
+				FF69E9582E8DCF7A002340AB /* UserProfileView.swift */,
+				FF69E9592E8DCF7A002340AB /* VisualEffectBlur.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
 		FF77393B2A1318B3007B603F /* BrewViews */ = {
 			isa = PBXGroup;
 			children = (
-				FF5377A32A0B1DC40038E5E7 /* BrewPreviewList.swift */,
+				FF69E9512E8D97AC002340AB /* BrewPreviewList.swift */,
+				FF69E94D2E8D9334002340AB /* BrewListItem.swift */,
 				FF0946E12A0EE7C300F705CB /* FavoriteView.swift */,
 				FF7739382A1316D2007B603F /* BrewDetailView.swift */,
 			);
 			path = BrewViews;
-			sourceTree = "<group>";
-		};
-		FF8E433E2A339D9E00CEC800 /* Account */ = {
-			isa = PBXGroup;
-			children = (
-				FFFB6B842A3CE61400F95D40 /* UserProfileView.swift */,
-				FFD6F86C2A5B466400575585 /* Settings */,
-				FFBFFD292A59D297004576EC /* Design */,
-			);
-			path = Account;
 			sourceTree = "<group>";
 		};
 		FF8E43412A339E6700CEC800 /* Monetization */ = {
@@ -393,6 +392,7 @@
 		FF8E43962A37BEBB00CEC800 /* Supporting Views */ = {
 			isa = PBXGroup;
 			children = (
+				FFF8C2412E8C28E8008490FC /* GooglePlacesPhotoView.swift */,
 				FF5A6CC92A4624C5003894D9 /* FiltersView.swift */,
 				FF8E43912A34F5C100CEC800 /* PhotosView.swift */,
 				FFB360CE2A26B09F0099017F /* SafariView.swift */,
@@ -454,33 +454,6 @@
 				FF3FF29329EA0D2300510FCD /* ContentView.swift */,
 			);
 			path = Main;
-			sourceTree = "<group>";
-		};
-		FFBFFD292A59D297004576EC /* Design */ = {
-			isa = PBXGroup;
-			children = (
-				FFFB6B862A3CF57500F95D40 /* SignInWithAppleButton.swift */,
-				FF15EAA02AD0C79300F5F9FE /* VisualEffectBlur.swift */,
-			);
-			path = Design;
-			sourceTree = "<group>";
-		};
-		FFD6F86C2A5B466400575585 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				FFD6F86D2A5B509700575585 /* Helper */,
-				FFBFFD272A59D28D004576EC /* SettingsView.swift */,
-				FFBFFD2C2A59DCD9004576EC /* EditProfileView.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		FFD6F86D2A5B509700575585 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				FFD6F86E2A5B50A600575585 /* ShareSheet.swift */,
-			);
-			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -608,8 +581,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF69E9502E8D94CF002340AB /* Brewies.storekit in Resources */,
 				FF3FF29A29EA0D2600510FCD /* Preview Assets.xcassets in Resources */,
-				FFDD5F792E7A4F7800A2A778 /* Brewies Storefront.storekit in Resources */,
 				FF3FF2D529EA1C0300510FCD /* readme.md in Resources */,
 				FF3FF29629EA0D2600510FCD /* Assets.xcassets in Resources */,
 			);
@@ -636,10 +609,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FFBFFD282A59D28D004576EC /* SettingsView.swift in Sources */,
+				FF69E94E2E8D9334002340AB /* BrewListItem.swift in Sources */,
+				FFF8C2422E8C28E8008490FC /* GooglePlacesPhotoView.swift in Sources */,
 				FFAD7BAA2DF0B93B007D0488 /* UserCache.swift in Sources */,
-				FFFB6B872A3CF57500F95D40 /* SignInWithAppleButton.swift in Sources */,
 				FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */,
+				FF69E9522E8D97AC002340AB /* BrewPreviewList.swift in Sources */,
 				FFDD5F6F2E7A4EC000A2A778 /* GooglePlacesAPI.swift in Sources */,
 				FFDD5F6B2E7A4E6700A2A778 /* BrewLocation.swift in Sources */,
 				FF16384C2ABA43F100E1E884 /* ActiveSheet.swift in Sources */,
@@ -647,11 +621,9 @@
 				FF656AB02E7F50680059F33E /* Secrets.swift in Sources */,
 				FFDD5F762E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift in Sources */,
 				FFDD5F772E7A4F0F00A2A778 /* GooglePlaceDetail.swift in Sources */,
-				FF3637AF2A55CC1F00A33899 /* SubscriptionView.swift in Sources */,
 				FFFB6B892A40CBE900F95D40 /* UIViewControllerKey.swift in Sources */,
 				FF0946E42A0EE84500F705CB /* CoffeeShopData.swift in Sources */,
 				FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */,
-				FF656AB72E7F5D880059F33E /* GooglePlacesImageView.swift in Sources */,
 				FF8E43982A37BED500CEC800 /* RatingView.swift in Sources */,
 				FF7739392A1316D2007B603F /* BrewDetailView.swift in Sources */,
 				FF3FF2CF29EA11E700510FCD /* MapView.swift in Sources */,
@@ -671,20 +643,20 @@
 				FFFC118C2AA64BFD00849AAD /* CustomAlertView.swift in Sources */,
 				FFC5D12F2A44EED7007D9F52 /* SearchCompleter.swift in Sources */,
 				FF3FF29429EA0D2300510FCD /* ContentView.swift in Sources */,
-				FFBFFD2D2A59DCD9004576EC /* EditProfileView.swift in Sources */,
 				FF8E43922A34F5C100CEC800 /* PhotosView.swift in Sources */,
 				FF3FF29229EA0D2300510FCD /* BrewiesApp.swift in Sources */,
 				FF3637BB2A57521400A33899 /* StorefrontView.swift in Sources */,
 				FFDD5F712E7A4EF000A2A778 /* SharedAlertViewModel.swift in Sources */,
 				FFB0A0EA2A6F119A003E79E4 /* CoffeeOrder.swift in Sources */,
-				FFFB6B852A3CE61400F95D40 /* UserProfileView.swift in Sources */,
 				FF2F263C2A256EB5000D922E /* Date+Extension.swift in Sources */,
-				FFD6F86F2A5B50A600575585 /* ShareSheet.swift in Sources */,
 				FF5A6CCA2A4624C5003894D9 /* FiltersView.swift in Sources */,
-				FF5377A42A0B1DC40038E5E7 /* BrewPreviewList.swift in Sources */,
 				FF3637B92A5749F800A33899 /* UserViewModel.swift in Sources */,
 				FFC575DB2A9C273E008EB5E2 /* BackendModel.swift in Sources */,
-				FF15EAA12AD0C79300F5F9FE /* VisualEffectBlur.swift in Sources */,
+				FF69E95A2E8DCF7A002340AB /* VisualEffectBlur.swift in Sources */,
+				FF69E95B2E8DCF7A002340AB /* ShareSheet.swift in Sources */,
+				FF69E95C2E8DCF7A002340AB /* SettingsView.swift in Sources */,
+				FF69E95D2E8DCF7A002340AB /* SignInWithAppleButton.swift in Sources */,
+				FF69E95F2E8DCF7A002340AB /* UserProfileView.swift in Sources */,
 				FF8E43852A33D51800CEC800 /* User.swift in Sources */,
 				FF380E6A2AABCCCC00D327CD /* SharedViewModel.swift in Sources */,
 			);
@@ -868,7 +840,6 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -921,7 +892,6 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UIStatusBarStyle = "";
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -1099,8 +1069,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
 			requirement = {
-				kind = exactVersion;
-				version = 12.11.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.11.0;
 			};
 		};
 		FFC5D12B2A44E608007D9F52 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {

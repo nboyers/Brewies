@@ -38,7 +38,7 @@ struct MapView: UIViewRepresentable {
     @Binding var searchQuery: String
     @Binding var shouldSearchInArea: Bool
     
-    let DISTANCE = CLLocationDistance(2500)
+    let DISTANCE = CLLocationDistance(8047) // ~5 miles in meters
     var brewLocationAnnotationMap = [UUID: BrewLocationAnnotation]()
     
     // Creates the coordinator for the MapView
@@ -76,9 +76,12 @@ struct MapView: UIViewRepresentable {
         
         // Center map on user if permission is granted and centeredOnUser is true
         if locationManager.isLocationAccessGranted && centeredOnUser {
-            setRegion(to: userLocation, on: mapView) // Set the region to user location
-            context.coordinator.addRadiusOverlay(to: mapView, center: userLocation, radius: DISTANCE)
-            context.coordinator.resetCenteringState()
+            let region = MKCoordinateRegion(center: userLocation, latitudinalMeters: DISTANCE, longitudinalMeters: DISTANCE)
+            mapView.setRegion(region, animated: true)
+            DispatchQueue.main.async {
+                self.centeredOnUser = false // Reset after centering
+                self.showUserLocationButton = false
+            }
         }
         
         // Handle searched location or other updates...
@@ -89,9 +92,7 @@ struct MapView: UIViewRepresentable {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 mapView.addAnnotation(annotation)
                 self.setRegion?(MKCoordinateRegion(center: searchedLocation, latitudinalMeters: DISTANCE, longitudinalMeters: DISTANCE)) // Update region
-                DispatchQueue.main.async {
-                    self.searchedLocation = nil // Reset for new searches
-                }
+                self.searchedLocation = nil // Reset for new searches
             }
         }
         
@@ -174,34 +175,6 @@ struct MapView: UIViewRepresentable {
             parent.mapTapped = true
         }
         
-        func resetCenteringState() {
-            DispatchQueue.main.async {
-                self.parent.centeredOnUser = false
-                self.parent.showUserLocationButton = false
-            }
-        }
-        
-        func addRadiusOverlay(to mapView: MKMapView, center: CLLocationCoordinate2D, radius: CLLocationDistance) {
-            // Remove existing radius overlay
-            let existingOverlays = mapView.overlays.filter { $0 is MKCircle }
-            mapView.removeOverlays(existingOverlays)
-            
-            // Add new radius circle
-            let circle = MKCircle(center: center, radius: radius)
-            mapView.addOverlay(circle)
-        }
-        
-        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            if let circle = overlay as? MKCircle {
-                let renderer = MKCircleRenderer(circle: circle)
-                renderer.fillColor = UIColor.systemBlue.withAlphaComponent(0.1)
-                renderer.strokeColor = UIColor.systemBlue
-                renderer.lineWidth = 2
-                return renderer
-            }
-            return MKOverlayRenderer(overlay: overlay)
-        }
-        
         func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
             DispatchQueue.main.async {
                 self.parent.visibleRegionCenter = mapView.centerCoordinate
@@ -222,15 +195,40 @@ struct MapView: UIViewRepresentable {
             }
         }
         
+        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            guard annotation is BrewLocationAnnotation else { return nil }
+            
+            let identifier = "BrewLocationPin"
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+            
+            if annotationView == nil {
+                annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                annotationView?.canShowCallout = true
+            } else {
+                annotationView?.annotation = annotation
+            }
+            
+            return annotationView
+        }
+        
         func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-            if let brewAnnotation = view.annotation as? BrewLocationAnnotation {
-                parent.selectedCoffeeShop = brewAnnotation.brewLocation
+            if let brewLocation = parent.coffeeShops.first(where: {
+                $0.latitude == view.annotation?.coordinate.latitude && $0.longitude == view.annotation?.coordinate.longitude
+            }) {
+                DispatchQueue.main.async {
+                    self.parent.selectedCoffeeShop = brewLocation
+                    self.parent.showBrewPreview = true
+                    
+                    if let index = self.parent.coffeeShops.firstIndex(of: brewLocation) {
+                        self.parent.coffeeShops.remove(at: index)
+                        self.parent.coffeeShops.insert(brewLocation, at: 0)
+                    }
+                    
+                    self.updateBottomSheetPosition.wrappedValue = .relative(0.70)
+                }
                 
-                // Post notification to show detail sheet
-                NotificationCenter.default.post(
-                    name: NSNotification.Name("MapAnnotationTapped"),
-                    object: brewAnnotation.brewLocation
-                )
+                // Send notification specifically for map annotation taps
+                NotificationCenter.default.post(name: NSNotification.Name("MapAnnotationTapped"), object: brewLocation)
             }
         }
     }

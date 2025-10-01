@@ -4,7 +4,6 @@
 //
 //  Created by Noah Boyers on 4/14/23.
 //
-
 import SwiftUI
 import GoogleMobileAds
 import StoreKit
@@ -14,20 +13,16 @@ import GooglePlaces
 struct BrewiesApp: App {
     private let rewardAdController: RewardAdController
     private let contentViewModel: ContentViewModel
+    private let sharedViewModel = SharedViewModel()
     @StateObject private var locationManager = LocationManager() // Use @StateObject for LocationManager
-    @StateObject private var sharedViewModel = SharedViewModel()
-    @StateObject private var sharedAlertVM = SharedAlertViewModel()
     let storeKitManager = StoreKitManager()
     @StateObject private var selectedCoffeeShop = SelectedCoffeeShop()
 
     init() {
-        MobileAds.shared.start { status in
-            print("Google Mobile Ads SDK initialized with status: \(status)")
-        }
+        MobileAds.shared.start { status in }
 
         self.contentViewModel = ContentViewModel()
         rewardAdController = RewardAdController()
-        GMSPlacesClient.provideAPIKey(Secrets.PLACES_API)
     }
     
     var body: some Scene {
@@ -37,8 +32,8 @@ struct BrewiesApp: App {
                 .environmentObject(UserViewModel.shared)
                 .environmentObject(selectedCoffeeShop)
                 .environmentObject(contentViewModel)
+                .environmentObject(SharedAlertViewModel())
                 .environmentObject(sharedViewModel)
-                .environmentObject(sharedAlertVM)
                 .environmentObject(storeKitManager)
                 .environmentObject(locationManager) // Pass locationManager to environment
                 .onAppear {

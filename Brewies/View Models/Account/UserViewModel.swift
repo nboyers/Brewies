@@ -8,25 +8,15 @@
 import Foundation
 import SwiftUI
 
-
-enum SubscriptionTier: String {
-    case monthly = "Monthly"
-    case semiYearly = "SemiYearly"
-    case yearly = "Yearly"
-    case none = "None"
-}
-
-
 // Define a struct to hold your UserDefaults keys
 struct UserKeys {
     static let isLoggedIn = "isLoggedIn"
     static let userID = "userID"
-    static let isSubscribed = "isSubscribed"
     static let firstName = "UserFirstName"
     static let lastName = "UserLastName"
     static let userStreakCount = "UserStreakCount"
     static let userStreakContentViewed = "UserStreakContentViewed"
-    static let subscriptionTier = "SubscriptionTier"
+    static let isPremium = "isPremium"
 
     // Computed properties for user-specific keys
     static func userCredits(_ userID: String) -> String { "UserCredits_\(userID)" }
@@ -47,15 +37,15 @@ class UserViewModel: ObservableObject {
         let streakCount = UserDefaults.standard.integer(forKey: UserKeys.userStreakCount)
         let streakViewedDate = UserDefaults.standard.object(forKey: UserKeys.userStreakContentViewed) as? Date
         
-        user = User(isLoggedIn: isLoggedIn, userID: userID, firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: credits, hasClaimedWeeklyReward: false, streakCount: streakCount, streakViewedDate: streakViewedDate)
+        user = User(isLoggedIn: isLoggedIn, userID: userID, firstName: "", lastName: "", email: "", profileImage: nil, favorites: [], pastOrders: [], credits: credits, hasClaimedWeeklyReward: false, streakCount: streakCount, streakViewedDate: streakViewedDate, isPremium: UserDefaults.standard.bool(forKey: UserKeys.isPremium))
         
         loadUserDetails()
+        loadFavorites()
     }
     
     func saveUserLoginStatus() {
         UserDefaults.standard.set(true, forKey: UserKeys.isLoggedIn)
         UserDefaults.standard.set(user.userID, forKey: UserKeys.userID)
-        UserDefaults.standard.set(user.isSubscribed, forKey: UserKeys.isSubscribed)
         UserDefaults.standard.set(user.firstName, forKey: UserKeys.firstName)
         UserDefaults.standard.set(user.lastName, forKey: UserKeys.lastName)
     }
@@ -67,9 +57,9 @@ class UserViewModel: ObservableObject {
     func loadUserDetails() {
         let firstName = UserDefaults.standard.string(forKey: UserKeys.firstName) ?? ""
         let lastName = UserDefaults.standard.string(forKey: UserKeys.lastName) ?? ""
-        user.isSubscribed = UserDefaults.standard.bool(forKey: UserKeys.isSubscribed)
         user.firstName = firstName
         user.lastName = lastName
+        user.isPremium = UserDefaults.standard.bool(forKey: UserKeys.isPremium)
     }
     
     func signOut() {
@@ -123,31 +113,48 @@ class UserViewModel: ObservableObject {
         UserDefaults.standard.set(user.credits, forKey: key)
     }
     
-    func subscribe(tier: SubscriptionTier) {
-        user.isSubscribed = true
-        user.subscriptionTier = tier
-        UserDefaults.standard.set(true, forKey: UserKeys.isSubscribed)
-        UserDefaults.standard.set(tier.rawValue, forKey: UserKeys.subscriptionTier)
-    }
 
-    func unsubscribe() {
-        user.isSubscribed = false
-        user.subscriptionTier = .none
-        UserDefaults.standard.set(false, forKey: UserKeys.isSubscribed)
-        UserDefaults.standard.set(SubscriptionTier.none.rawValue, forKey: UserKeys.subscriptionTier)
-    }
 
     
     func addToFavorites(_ coffeeShop: BrewLocation) {
-        user.favorites.append(coffeeShop)
-        // Persist the user's favorites to your storage
+        // Check if user can add more favorites
+        if canAddFavorite() {
+            user.favorites.append(coffeeShop)
+            saveFavorites()
+        }
+    }
+    
+    func canAddFavorite() -> Bool {
+        return user.isPremium || user.favorites.count < 3
+    }
+    
+    var favoritesLimit: Int {
+        return user.isPremium ? Int.max : 3
     }
     
     func removeFromFavorites(_ coffeeShop: BrewLocation) {
         if let index = user.favorites.firstIndex(of: coffeeShop) {
             user.favorites.remove(at: index)
-            // Persist the user's favorites to your storage
+            saveFavorites()
         }
+    }
+    
+    func saveFavorites() {
+        if let encoded = try? JSONEncoder().encode(user.favorites) {
+            UserDefaults.standard.set(encoded, forKey: "UserFavorites")
+        }
+    }
+    
+    private func loadFavorites() {
+        if let data = UserDefaults.standard.data(forKey: "UserFavorites"),
+           let favorites = try? JSONDecoder().decode([BrewLocation].self, from: data) {
+            user.favorites = favorites
+        }
+    }
+    
+    func setPremium(_ isPremium: Bool) {
+        user.isPremium = isPremium
+        UserDefaults.standard.set(isPremium, forKey: UserKeys.isPremium)
     }
     
 
@@ -157,14 +164,14 @@ class UserViewModel: ObservableObject {
         // Remove user-related keys from UserDefaults
         UserDefaults.standard.removeObject(forKey: UserKeys.isLoggedIn)
         UserDefaults.standard.removeObject(forKey: UserKeys.userID)
-        UserDefaults.standard.removeObject(forKey: UserKeys.isSubscribed)
         UserDefaults.standard.removeObject(forKey: UserKeys.firstName)
         UserDefaults.standard.removeObject(forKey: UserKeys.lastName)
         UserDefaults.standard.removeObject(forKey: UserKeys.userStreakCount)
         UserDefaults.standard.removeObject(forKey: UserKeys.userStreakContentViewed)
         UserDefaults.standard.removeObject(forKey: UserKeys.userCredits(user.userID))
+        UserDefaults.standard.removeObject(forKey: "UserFavorites")
         
         // Reset in-memory user data
-        user = User(isLoggedIn: false, userID: "", firstName: "", lastName: "", email: "", isSubscribed: false, profileImage: nil, favorites: [], pastOrders: [], credits: 0, hasClaimedWeeklyReward: false, streakCount: 0, streakViewedDate: nil)
-    }    
+        user = User(isLoggedIn: false, userID: "", firstName: "", lastName: "", email: "", profileImage: nil, favorites: [], pastOrders: [], credits: 0, hasClaimedWeeklyReward: false, streakCount: 0, streakViewedDate: nil, isPremium: false)
+    }
 }

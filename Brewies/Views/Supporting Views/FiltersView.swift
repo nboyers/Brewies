@@ -16,19 +16,17 @@ struct FiltersView: View {
     @EnvironmentObject var userVM: UserViewModel
     @ObservedObject var contentVM: ContentViewModel
     @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
-    @ObservedObject var storeKit = StoreKitManager()
+    @EnvironmentObject var storeKit: StoreKitManager
     
     @State private var activeSheet: ActiveSheet?
     @State private var applyChangesCount: Int = 0
     @State private var showAlert = false
-    @State private var showSubscriptionsView = false
+
     @State private var selectedSort: String = ""
     @State private var selectedOption: Int = 0
-    @State private var radiusOptionsInMeters = [1609, 3219, 4828, 8047] // 1, 2, 3, 5 miles in meters
+    @State private var radiusOptionsInMeters = [8047, 16093, 24140, 32186] // 5, 10, 15, 20 miles in meters
     @State private var selectedBrew = ""
     @State private var initialState: [String: Any] = [:]
-    
-    let radiusLabels = ["1 mi", "2 mi", "3 mi", "5 mi"]
     var visibleRegionCenter: CLLocationCoordinate2D?
     
     let sortOptions = ["Prominence", "Distance"]
@@ -72,52 +70,27 @@ struct FiltersView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Header
-                HStack {
-                    Button("Reset") {
-                        googlePlacesParams.resetFilters()
-                        selectedSort = "Prominence"
-                    }
-                    .foregroundColor(.blue)
-                    
-                    Spacer()
-                    
-                    Button("Done") {
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                    .fontWeight(.semibold)
-                    .foregroundColor(.blue)
-                }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
-                .background(Color(UIColor.systemBackground))
-                
-                Divider()
-                
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 24) {
-                        // Price Range
+                    VStack(spacing: 24) {
+                        // Price Section
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Price Range")
                                 .font(.headline)
-                                .foregroundColor(.primary)
+                                .fontWeight(.semibold)
                             
-                            HStack(spacing: 12) {
+                            HStack(spacing: 8) {
                                 ForEach(priceOptions, id: \.self) { price in
                                     Button(action: {
                                         priceButtonAction(price: price)
                                     }) {
                                         Text(price)
-                                            .font(.system(size: 16, weight: .medium))
+                                            .font(.system(size: 15, weight: .medium))
                                             .foregroundColor(googlePlacesParams.priceLevels.contains(price.count - 1) ? .white : .primary)
-                                            .frame(width: 60, height: 40)
+                                            .frame(minWidth: 44, minHeight: 32)
+                                            .padding(.horizontal, 12)
                                             .background(
-                                                RoundedRectangle(cornerRadius: 8)
-                                                    .fill(googlePlacesParams.priceLevels.contains(price.count - 1) ? Color.blue : Color(UIColor.secondarySystemBackground))
-                                            )
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(googlePlacesParams.priceLevels.contains(price.count - 1) ? Color.clear : Color(UIColor.separator), lineWidth: 1)
+                                                RoundedRectangle(cornerRadius: 16)
+                                                    .fill(googlePlacesParams.priceLevels.contains(price.count - 1) ? Color.accentColor : Color(UIColor.secondarySystemGroupedBackground))
                                             )
                                     }
                                     .buttonStyle(PlainButtonStyle())
@@ -126,14 +99,14 @@ struct FiltersView: View {
                             }
                         }
                         
-                        // Sort By
+                        // Sort Section
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Sort By")
                                 .font(.headline)
-                                .foregroundColor(.primary)
+                                .fontWeight(.semibold)
                             
-                            VStack(spacing: 8) {
-                                ForEach(sortOptions, id: \.self) { sortOption in
+                            VStack(spacing: 0) {
+                                ForEach(Array(sortOptions.enumerated()), id: \.element) { index, sortOption in
                                     Button(action: {
                                         selectedSort = sortOption
                                         googlePlacesParams.sortBy = apiSortOptions[selectedSort] ?? ""
@@ -143,43 +116,104 @@ struct FiltersView: View {
                                                 .font(.body)
                                                 .foregroundColor(.primary)
                                             Spacer()
-                                            Image(systemName: selectedSort == sortOption ? "checkmark.circle.fill" : "circle")
-                                                .foregroundColor(selectedSort == sortOption ? .blue : .secondary)
-                                                .font(.system(size: 20))
+                                            if selectedSort == sortOption {
+                                                Image(systemName: "checkmark")
+                                                    .font(.system(size: 14, weight: .semibold))
+                                                    .foregroundColor(.accentColor)
+                                            }
                                         }
                                         .padding(.vertical, 12)
                                         .padding(.horizontal, 16)
-                                        .background(Color(UIColor.secondarySystemBackground))
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                                        .background(Color(UIColor.secondarySystemGroupedBackground))
                                     }
                                     .buttonStyle(PlainButtonStyle())
+                                    
+                                    if index < sortOptions.count - 1 {
+                                        Divider()
+                                            .padding(.leading, 16)
+                                    }
                                 }
                             }
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(UIColor.secondarySystemGroupedBackground))
+                            )
                         }
                         
-                        // Search Radius
+                        // Radius Section
                         VStack(alignment: .leading, spacing: 12) {
-                            Text("Search Radius")
+                            Text("Search Distance")
                                 .font(.headline)
-                                .foregroundColor(.primary)
+                                .fontWeight(.semibold)
                             
-                            Picker("Search Radius", selection: $googlePlacesParams.radiusInMeters) {
-                                ForEach(0..<radiusOptionsInMeters.count, id: \.self) { index in
-                                    Text(radiusLabels[index]).tag(radiusOptionsInMeters[index])
+                            VStack(spacing: 16) {
+                                Picker("Distance", selection: $googlePlacesParams.radiusInMeters) {
+                                    ForEach(radiusOptionsInMeters, id: \.self) { unit in
+                                        Text("\(googlePlacesParams.radiusUnit == "km" ? Double(unit) / 1000.0 : Double(unit) / 1609.34, specifier: "%.1f") \(googlePlacesParams.radiusUnit)")
+                                            .tag(unit)
+                                    }
                                 }
+                                .pickerStyle(SegmentedPickerStyle())
+                                
+                                Toggle("Use Metric (km)", isOn: Binding<Bool>(
+                                    get: { googlePlacesParams.radiusUnit == "km" },
+                                    set: { newValue in
+                                        googlePlacesParams.radiusUnit = newValue ? "km" : "mi"
+                                    }
+                                ))
+                                .toggleStyle(SwitchToggleStyle())
                             }
-                            .pickerStyle(SegmentedPickerStyle())
+                            .padding(16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color(UIColor.secondarySystemGroupedBackground))
+                            )
                         }
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 24)
+                    .padding(20)
+                }
+                
+                // Apply Button
+                VStack(spacing: 0) {
+                    Divider()
+                    
+                    Button(action: {
+                        updateInitialState()
+                        sharedAlertVM.currentAlertType = nil
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("Apply Filters")
+                            .font(.system(size: 17, weight: .semibold))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.accentColor)
+                            )
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(20)
                 }
                 .background(Color(UIColor.systemGroupedBackground))
             }
+            .background(Color(UIColor.systemGroupedBackground))
+            .navigationTitle("Filters")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                leading: Button("Reset") {
+                    googlePlacesParams.resetFilters()
+                    selectedSort = ""
+                    selectedBrew = ""
+                    updateInitialState()
+                },
+                trailing: Button("Done") {
+                    self.presentationMode.wrappedValue.dismiss()
+                }
+            )
         }
-        .navigationBarHidden(true)
         .onAppear {
-            selectedSort = googlePlacesParams.sortBy == "distance" ? "Distance" : "Prominence"
+            updateInitialState()
         }
     }
 }

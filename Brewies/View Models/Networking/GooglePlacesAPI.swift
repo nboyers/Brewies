@@ -28,33 +28,37 @@ class GooglePlacesAPI: ObservableObject {
         priceLevels = googlePlacesParams.priceLevels
     }
 
-    // Exclude non-coffee/brewery place types (valid Google Places API types)
-    private static var excludedTypes: Set<String> = [
-        "gas_station", "convenience_store", "pharmacy", "supermarket", 
-        "department_store", "shopping_mall", "meal_takeaway", "meal_delivery",
-        "car_dealer", "car_repair", "bank", "atm", "hospital", "dentist",
-        "school", "university", "gym", "beauty_salon", "laundry","breakfast_restaurant", "fast_food_restaurant",
-        "food_court", "liquor_store", "movie_theater", "truck_stop", "lodging"
+    // Filter out chain establishments and undesired business types
+    private static var chainTypes: Set<String> = [
+        "establishment", "point_of_interest", "store", "food", "meal_takeaway",
+        "meal_delivery", "restaurant", "bakery", "grocery_or_supermarket"
     ]
     
-    // Only include these coffee/brewery related types
-    private static var desiredTypes: Set<String> = [
-        "cafe", "coffee_shop", "bakery", "restaurant", "bar", "night_club"
+    private static var undesiredTypes: Set<String> = [
+        "gas_station", "convenience_store", "pharmacy", "supermarket",
+        "fast_food", "meal_takeaway", "meal_delivery", "restaurant",
+        "bakery", "grocery_or_supermarket", "store", "establishment"
     ]
 
     func fetchNearbyPlaces(
         apiKey: String,
         latitude: Double,
         longitude: Double,
-        query: String
+        query: String,
+        placeType: String = "cafe"
     ) async throws -> [BrewLocation] {
         let url = URL(string: "https://places.googleapis.com/v1/places:searchNearby")!
         
-        let placeType = query.lowercased().contains("brewery") || query.lowercased().contains("breweries") ? "bar" : "cafe"
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(apiKey, forHTTPHeaderField: "X-Goog-Api-Key")
+        request.setValue("places.id,places.displayName,places.location,places.rating,places.userRatingCount,places.photos,places.formattedAddress,places.types,places.regularOpeningHours,places.businessStatus,places.priceLevel", forHTTPHeaderField: "X-Goog-FieldMask")
+        
+        let includedTypes = placeType == "breweries" ? ["bar"] : ["cafe"]
         
         let requestBody: [String: Any] = [
-            "includedTypes": [placeType],
-            "excludedTypes": Array(GooglePlacesAPI.excludedTypes),
+            "includedTypes": includedTypes,
             "maxResultCount": 20,
             "locationRestriction": [
                 "circle": [
@@ -64,143 +68,48 @@ class GooglePlacesAPI: ObservableObject {
                     ],
                     "radius": Double(radiusInMeters)
                 ]
-            ],
-            "languageCode": "en"
+            ]
         ]
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue(apiKey, forHTTPHeaderField: "X-Goog-Api-Key")
-        request.setValue("places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.photos,places.types,places.currentOpeningHours,places.businessStatus,places.priceLevel,places.id", forHTTPHeaderField: "X-Goog-FieldMask")
-        
-        let bundleId = Bundle.main.bundleIdentifier ?? "com.nobosoftware.Brewies"
-        request.setValue(bundleId, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
         
         request.httpBody = try JSONSerialization.data(withJSONObject: requestBody)
         
-        print("New Google Places API URL: \(url)")
-        print("Bundle ID: \(Bundle.main.bundleIdentifier ?? "none")")
+        print("[GooglePlacesAPI] New API URL: \(url)")
+        print("[GooglePlacesAPI] Using radius: \(radiusInMeters), types: \(includedTypes)")
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, _) = try await URLSession.shared.data(for: request)
         
-        if let httpResponse = response as? HTTPURLResponse {
-            print("HTTP Status Code: \(httpResponse.statusCode)")
+        // Log raw response for debugging
+        if let responseString = String(data: data, encoding: .utf8) {
+            print("[GooglePlacesAPI] Raw response: \(responseString.prefix(500))")
         }
         
-        if let jsonResponse = try JSONSerialization.jsonObject(with: data) as? [String: Any] {
-            if let places = jsonResponse["places"] as? [[String: Any]] {
-                print("Found \(places.count) places")
-                let allLocations = parseNewAPILocations(places: places)
-                let filteredLocations = filterByDistance(locations: allLocations, centerLat: latitude, centerLng: longitude)
-                print("After distance filtering: \(filteredLocations.count) places")
-                return filteredLocations
-            } else if let error = jsonResponse["error"] {
-                print("API Error: \(error)")
-            }
-        }
-        
-        return []
+        let response = try JSONDecoder().decode(NewGooglePlacesResponse.self, from: data)
+        print("[GooglePlacesAPI] New API returned \(response.places?.count ?? 0) results")
+        let filteredResults = parseNewLocations(places: response.places ?? [], placeType: placeType)
+        print("[GooglePlacesAPI] After filtering: \(filteredResults.count) results")
+        return filteredResults
     }
 
-    private func parseNewAPILocations(places: [[String: Any]]) -> [BrewLocation] {
+    private func parseNewLocations(places: [NewGooglePlace], placeType: String) -> [BrewLocation] {
         var locations: [BrewLocation] = []
 
-        for place in places {
-            guard let id = place["id"] as? String,
-                  let displayName = place["displayName"] as? [String: Any],
-                  let name = displayName["text"] as? String,
-                  let location = place["location"] as? [String: Any],
-                  let latitude = location["latitude"] as? Double,
-                  let longitude = location["longitude"] as? Double else {
-                continue
-            }
-            
-            let rating = place["rating"] as? Double
-            let userRatingCount = place["userRatingCount"] as? Int
-            let formattedAddress = place["formattedAddress"] as? String
-            let types = place["types"] as? [String]
-            let priceLevel = place["priceLevel"] as? Int
-            
-            // Parse photos from new API format
-            var photoReferences: [String] = []
-            if let photos = place["photos"] as? [[String: Any]] {
-                for photo in photos {
-                    if let name = photo["name"] as? String {
-                        photoReferences.append(name)
-                    }
-                }
-            }
-            
-            // Skip excluded chains
-            if !isExcludedChain(name: name, types: types ?? []) {
-                let brewLocation = BrewLocation(
-                    id: id,
-                    name: name,
-                    latitude: latitude,
-                    longitude: longitude,
-                    rating: rating,
-                    userRatingsTotal: userRatingCount,
-                    imageURL: photoReferences.first,
-                    photos: photoReferences.isEmpty ? nil : photoReferences,
-                    address: formattedAddress,
-                    phoneNumber: nil,
-                    website: nil,
-                    types: types,
-                    openingHours: nil,
-                    isClosed: false,
-                    priceLevel: priceLevel,
-                    reviews: nil
-                )
-                locations.append(brewLocation)
-            }
-        }
-
-        return locations
-    }
-    
-    private func filterByDistance(locations: [BrewLocation], centerLat: Double, centerLng: Double) -> [BrewLocation] {
-        return locations.filter { location in
-            let distance = calculateDistance(
-                lat1: centerLat, lng1: centerLng,
-                lat2: location.latitude, lng2: location.longitude
-            )
-            return distance <= Double(radiusInMeters)
-        }
-    }
-    
-    private func calculateDistance(lat1: Double, lng1: Double, lat2: Double, lng2: Double) -> Double {
-        let earthRadius = 6371000.0 // Earth's radius in meters
-        let dLat = (lat2 - lat1) * .pi / 180.0
-        let dLng = (lng2 - lng1) * .pi / 180.0
-        let a = sin(dLat/2) * sin(dLat/2) + cos(lat1 * .pi / 180.0) * cos(lat2 * .pi / 180.0) * sin(dLng/2) * sin(dLng/2)
-        let c = 2 * atan2(sqrt(a), sqrt(1-a))
-        return earthRadius * c
-    }
-    
-    private func parseLocations(results: [GooglePlaceResult]) -> [BrewLocation] {
-        var locations: [BrewLocation] = []
-
-        for result in results where !isExcludedChain(name: result.name, types: result.types ?? []) {
+        for place in places where !isExcludedNewPlace(name: place.displayName?.text ?? "", types: place.types ?? [], placeType: placeType) {
             let location = BrewLocation(
-                id: result.placeId,
-                name: result.name,
-                latitude: result.geometry.location.lat,
-                longitude: result.geometry.location.lng,
-                rating: result.rating,
-                userRatingsTotal: result.userRatingsTotal,
-                imageURL: result.photos?.first?.photoReference,
-                photos: result.photos?.compactMap { $0.photoReference },
-                address: result.vicinity,
+                id: place.id,
+                name: place.displayName?.text ?? "Unknown",
+                latitude: place.location?.latitude ?? 0,
+                longitude: place.location?.longitude ?? 0,
+                rating: place.rating,
+                userRatingsTotal: place.userRatingCount,
+                imageURL: place.photos?.first?.name,
+                photos: place.photos?.compactMap { $0.name },
+                address: place.formattedAddress,
                 phoneNumber: nil,
                 website: nil,
-                types: result.types,
-                openingHours: result.openingHours != nil ? BrewLocation.OpeningHours(
-                    openNow: result.openingHours?.openNow,
-                    weekdayText: result.openingHours?.weekdayText
-                ) : nil,
-                isClosed: result.businessStatus == "CLOSED_TEMPORARILY" || result.businessStatus == "CLOSED_PERMANENTLY",
-                priceLevel: result.priceLevel,
+                types: place.types,
+                openingHours: nil,
+                isClosed: place.businessStatus == "CLOSED_TEMPORARILY" || place.businessStatus == "CLOSED_PERMANENTLY",
+                priceLevel: place.priceLevel,
                 reviews: nil
             )
             locations.append(location)
@@ -208,17 +117,59 @@ class GooglePlacesAPI: ObservableObject {
 
         return locations
     }
+    
+    private func isExcludedNewPlace(name: String, types: [String], placeType: String) -> Bool {
+        // Exclude specific chains and unwanted business types
+        let excludedNames = ["barnes", "noble", "mcdonald", "starbucks", "dunkin", "subway", "walmart", "target"]
+        let nameLower = name.lowercased()
+        
+        if excludedNames.contains(where: { nameLower.contains($0) }) {
+            return true
+        }
+        
+        // Exclude unwanted types
+        let excludedTypes: Set<String> = [
+            "book_store", "fast_food_restaurant", "meal_takeaway", "meal_delivery",
+            "restaurant", "grocery_store", "supermarket", "convenience_store",
+            "gas_station", "department_store", "shopping_mall"
+        ]
+        
+        return types.contains { excludedTypes.contains($0) }
+    }
 
-    private func isExcludedChain(name: String, types: [String]) -> Bool {
-        let lowercaseName = name.lowercased()
+    private func isExcludedPlace(name: String, types: [String], placeType: String) -> Bool {
+        // Define what we want to keep
+        let allowedTypes: Set<String> = placeType == "breweries" ?
+            ["bar", "pub", "wine_bar", "establishment", "point_of_interest", "food"] :
+            ["cafe", "coffee_shop", "establishment", "point_of_interest", "food"]
         
-        // Filter major chains by name as fallback
-        let isChainCoffee = lowercaseName.contains("starbucks") || lowercaseName.contains("dunkin") || lowercaseName.contains("tim hortons") || lowercaseName.contains("costa coffee") || lowercaseName.contains("peet's")
+        // All other Google Places API types to exclude
+        let excludedTypes: Set<String> = [
+            "car_dealer", "car_rental", "car_repair", "car_wash", "electric_vehicle_charging_station", "gas_station", "parking", "rest_stop",
+            "corporate_office", "farm", "ranch",
+            "art_gallery", "art_studio", "auditorium", "cultural_landmark", "historical_place", "monument", "museum", "performing_arts_theater", "sculpture",
+            "library", "preschool", "primary_school", "school", "secondary_school", "university",
+            "adventure_sports_center", "amphitheatre", "amusement_center", "amusement_park", "aquarium", "banquet_hall", "barbecue_area", "botanical_garden", "bowling_alley", "casino", "childrens_camp", "comedy_club", "community_center", "concert_hall", "convention_center", "cultural_center", "cycling_park", "dance_hall", "dog_park", "event_venue", "ferris_wheel", "garden", "hiking_area", "historical_landmark", "internet_cafe", "karaoke", "marina", "movie_rental", "movie_theater", "national_park", "night_club", "observation_deck", "off_roading_area", "opera_house", "park", "philharmonic_hall", "picnic_ground", "planetarium", "plaza", "roller_coaster", "skateboard_park", "state_park", "tourist_attraction", "video_arcade", "visitor_center", "water_park", "wedding_venue", "wildlife_park", "wildlife_refuge", "zoo",
+            "public_bath", "public_bathroom", "stable",
+            "accounting", "atm", "bank",
+            "acai_shop", "afghani_restaurant", "african_restaurant", "american_restaurant", "asian_restaurant", "bagel_shop", "bakery", "bar_and_grill", "barbecue_restaurant", "brazilian_restaurant", "breakfast_restaurant", "brunch_restaurant", "buffet_restaurant", "cafeteria", "candy_store", "cat_cafe", "chinese_restaurant", "chocolate_factory", "chocolate_shop", "confectionery", "deli", "dessert_restaurant", "dessert_shop", "diner", "dog_cafe", "donut_shop", "fast_food_restaurant", "fine_dining_restaurant", "food_court", "french_restaurant", "greek_restaurant", "hamburger_restaurant", "ice_cream_shop", "indian_restaurant", "indonesian_restaurant", "italian_restaurant", "japanese_restaurant", "juice_shop", "korean_restaurant", "lebanese_restaurant", "meal_delivery", "meal_takeaway", "mediterranean_restaurant", "mexican_restaurant", "middle_eastern_restaurant", "pizza_restaurant", "ramen_restaurant", "restaurant", "sandwich_shop", "seafood_restaurant", "spanish_restaurant", "steak_house", "sushi_restaurant", "tea_house", "thai_restaurant", "turkish_restaurant", "vegan_restaurant", "vegetarian_restaurant", "vietnamese_restaurant",
+            "city_hall", "courthouse", "embassy", "fire_station", "government_office", "local_government_office", "neighborhood_police_station", "police", "post_office",
+            "chiropractor", "dental_clinic", "dentist", "doctor", "drugstore", "hospital", "massage", "medical_lab", "pharmacy", "physiotherapist", "sauna", "skin_care_clinic", "spa", "tanning_studio", "wellness_center", "yoga_studio",
+            "apartment_building", "apartment_complex", "condominium_complex", "housing_complex",
+            "bed_and_breakfast", "budget_japanese_inn", "campground", "camping_cabin", "cottage", "extended_stay_hotel", "farmstay", "guest_house", "hostel", "hotel", "inn", "japanese_inn", "lodging", "mobile_home_park", "motel", "private_guest_room", "resort_hotel", "rv_park",
+            "beach",
+            "church", "hindu_temple", "mosque", "synagogue",
+            "astrologer", "barber_shop", "beautician", "beauty_salon", "body_art_service", "catering_service", "cemetery", "child_care_agency", "consultant", "courier_service", "electrician", "florist", "food_delivery", "foot_care", "funeral_home", "hair_care", "hair_salon", "insurance_agency", "laundry", "lawyer", "locksmith", "makeup_artist", "moving_company", "nail_salon", "painter", "plumber", "psychic", "real_estate_agency", "roofing_contractor", "storage", "summer_camp_organizer", "tailor", "telecommunications_service_provider", "tour_agency", "tourist_information_center", "travel_agency", "veterinary_care",
+            "asian_grocery_store", "auto_parts_store", "bicycle_store", "book_store", "butcher_shop", "cell_phone_store", "clothing_store", "convenience_store", "department_store", "discount_store", "electronics_store", "food_store", "furniture_store", "gift_shop", "grocery_store", "hardware_store", "home_goods_store", "home_improvement_store", "jewelry_store", "liquor_store", "market", "pet_store", "shoe_store", "shopping_mall", "sporting_goods_store", "store", "supermarket", "warehouse_store", "wholesaler",
+            "arena", "athletic_field", "fishing_charter", "fishing_pond", "fitness_center", "golf_course", "gym", "ice_skating_rink", "playground", "ski_resort", "sports_activity_location", "sports_club", "sports_coaching", "sports_complex", "stadium", "swimming_pool",
+            "airport", "airstrip", "bus_station", "bus_stop", "ferry_terminal", "heliport", "international_airport", "light_rail_station", "park_and_ride", "subway_station", "taxi_stand", "train_station", "transit_depot", "transit_station", "truck_stop"
+        ]
         
-        // Filter based on place types
-        let hasExcludedType = types.contains { GooglePlacesAPI.excludedTypes.contains($0) }
+        // Exclude if it has any excluded types AND doesn't have any allowed types
+        let hasExcludedType = types.contains { excludedTypes.contains($0) }
+        let hasAllowedType = types.contains { allowedTypes.contains($0) }
         
-        return isChainCoffee || hasExcludedType
+        return hasExcludedType && !hasAllowedType
     }
 
     func fetchPlaceDetails(id: String, apiKey: String) async throws -> GooglePlaceDetail {

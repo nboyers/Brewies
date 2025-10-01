@@ -9,6 +9,7 @@ import Foundation
 import BottomSheet
 
 class SharedViewModel: ObservableObject {
-    @Published var bottomSheetPosition: BottomSheetPosition = .relative(0.20)
+    @Published var bottomSheetPosition: BottomSheetPosition = .relativeBottom(0.35)
     @Published var selectedBrew: BrewLocation?
 }
+

@@ -21,56 +21,119 @@ struct StorefrontView: View {
     }
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: 20) {
-                Text("Search Credits")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top)
-                
-                VStack(spacing: 12) {
-                    Text("Each search uses 1 credit to discover coffee shops and breweries near you.")
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                    
-                    Text("💡 Tip: Watch ads to earn free credits!")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-                .padding(.horizontal)
-                
-                // Store Products
-                VStack(alignment: .leading) {
-                    Text("Store")
-                        .bold()
-                        .padding(.bottom, 10)
-                    
-                    ForEach(filteredProducts) { product in
-                        ProductItem(storeKit: storeKitManager, product: product)
-                    }
-                    .cardStyle()
-                    
-                    HStack {
-                        Spacer()
-                        Button("Restore Purchases") {
-                            Task {
-                                try? await AppStore.sync()
-                            }
+        NavigationView {
+            ScrollView {
+                VStack(spacing: 32) {
+                    // Header Section
+                    VStack(spacing: 16) {
+                        Image(systemName: "creditcard.circle.fill")
+                            .font(.system(size: 60))
+                            .foregroundColor(.accentColor)
+                        
+                        VStack(spacing: 8) {
+                            Text("Search Credits")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                            
+                            Text("Discover amazing coffee shops and breweries")
+                                .font(.title3)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
                         }
-                        .buttonStyle(ProfessionalButtonStyle())
-                        Spacer()
                     }
                     .padding(.top, 20)
+                    
+                    // Info Card
+                    VStack(spacing: 16) {
+                        HStack {
+                            Image(systemName: "info.circle.fill")
+                                .foregroundColor(.blue)
+                            Text("How it works")
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack(alignment: .top, spacing: 12) {
+                                Text("1")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .frame(width: 20, height: 20)
+                                    .background(Circle().fill(.blue))
+                                Text("Each search uses 1 credit")
+                                    .font(.subheadline)
+                                Spacer()
+                            }
+                            
+                            HStack(alignment: .top, spacing: 12) {
+                                Text("2")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .frame(width: 20, height: 20)
+                                    .background(Circle().fill(.blue))
+                                Text("Watch ads to earn free credits")
+                                    .font(.subheadline)
+                                Spacer()
+                            }
+                            
+                            HStack(alignment: .top, spacing: 12) {
+                                Text("3")
+                                    .font(.caption)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .frame(width: 20, height: 20)
+                                    .background(Circle().fill(.blue))
+                                Text("Discover local favorites near you")
+                                    .font(.subheadline)
+                                Spacer()
+                            }
+                        }
+                    }
+                    .padding(20)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(colorScheme == .dark ? Color(.systemGray6) : Color(.systemBackground))
+                            .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+                    )
+                    .padding(.horizontal)
+                    
+                    // Products Section
+                    VStack(spacing: 20) {
+                        HStack {
+                            Text("Purchase Options")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        
+                        LazyVStack(spacing: 16) {
+                            ForEach(filteredProducts) { product in
+                                ProductItem(storeKit: storeKitManager, product: product)
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                    
+                    // Restore Purchases
+                    Button("Restore Purchases") {
+                        Task {
+                            try? await AppStore.sync()
+                        }
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 32)
                 }
-                .padding()
-                .cornerRadius(10)
-                .shadow(radius: 5)
-                .onReceive(storeKitManager.$storeStatus) { _ in }
-                
-                Spacer()
             }
+            .navigationTitle("Store")
+            .navigationBarTitleDisplayMode(.inline)
         }
+        .onReceive(storeKitManager.$storeStatus) { _ in }
     }
 }
 
@@ -79,63 +142,119 @@ struct ProductItem: View {
     @State private var isPurchasing: Bool = false
     
     var product: Product
-    let BUTTON_COLOR = Color("#947329")
     @Environment(\.colorScheme) var colorScheme
     
+    private var isPremium: Bool {
+        product.id == StoreKitManager.premiumProductId
+    }
+    
+    private var isPurchased: Bool {
+        storeKit.storeStatus.isPremiumPurchased && isPremium
+    }
+    
     var body: some View {
-        Button(action: purchaseAction) {
-            HStack {
-                productTitle
-                Spacer()
-                purchaseOrBoughtView
+        VStack(spacing: 0) {
+            // Premium Badge
+            if isPremium {
+                HStack {
+                    Spacer()
+                    Text("MOST POPULAR")
+                        .font(.caption2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
+                        .background(
+                            Capsule()
+                                .fill(.orange)
+                        )
+                    Spacer()
+                }
+                .padding(.top, -8)
+                .zIndex(1)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-        }
-        .buttonStyle(PlainButtonStyle())
-        .background(BUTTON_COLOR)
-        .cornerRadius(10)
-        .shadow(radius: 5)
-    }
-    
-    private var productTitle: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(product.displayName)
-                .foregroundColor(Color("#ffffff"))
-                .font(.headline)
-            Text(getProductDescription())
-                .foregroundColor(Color("#ffffff").opacity(0.8))
-                .font(.caption)
-        }
-    }
-    
-    private var purchaseOrBoughtView: some View {
-        Group {
-            if storeKit.storeStatus.isPremiumPurchased && product.id == StoreKitManager.premiumProductId {
-                purchasedLabel
-            } else if isPurchasing {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-            } else {
-                Text(product.displayPrice)
-                    .padding(5)
-                    .foregroundColor(.white)
+            
+            // Main Card
+            VStack(spacing: 20) {
+                // Header
+                VStack(spacing: 8) {
+                    HStack {
+                        Image(systemName: isPremium ? "crown.fill" : "creditcard.fill")
+                            .font(.title2)
+                            .foregroundColor(isPremium ? .orange : .blue)
+                        
+                        Text(product.displayName)
+                            .font(.title3)
+                            .fontWeight(.bold)
+                        
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text(getProductDescription())
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.leading)
+                        Spacer()
+                    }
+                }
+                
+                // Features
+                VStack(alignment: .leading, spacing: 8) {
+                    ForEach(getFeatures(), id: \.self) { feature in
+                        HStack(spacing: 8) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                                .font(.caption)
+                            Text(feature)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                        }
+                    }
+                }
+                
+                // Purchase Button
+                Button(action: purchaseAction) {
+                    HStack {
+                        if isPurchased {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.green)
+                            Text("Purchased")
+                                .fontWeight(.semibold)
+                        } else if isPurchasing {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .scaleEffect(0.8)
+                            Text("Processing...")
+                                .fontWeight(.semibold)
+                        } else {
+                            Text("Purchase for \(product.displayPrice)")
+                                .fontWeight(.semibold)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(isPurchased ? Color.green.opacity(0.2) : (isPremium ? Color.orange : Color.blue))
+                    )
+                    .foregroundColor(isPurchased ? .green : .white)
+                }
+                .disabled(isPurchased || isPurchasing)
             }
-        }
-    }
-    
-    private var purchasedLabel: some View {
-        Text("BOUGHT")
-            .foregroundColor(.white)
-            .padding(5)
+            .padding(20)
             .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .strokeBorder(.red, lineWidth: 2)
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(colorScheme == .dark ? Color(.systemGray6) : Color(.systemBackground))
+                    .stroke(isPremium ? Color.orange.opacity(0.3) : Color.clear, lineWidth: 2)
+                    .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
             )
+        }
     }
     
     private func purchaseAction() {
-        guard !isPurchasing else { return }
+        guard !isPurchasing && !isPurchased else { return }
         isPurchasing = true
         Task {
             do {
@@ -150,40 +269,23 @@ struct ProductItem: View {
     private func getProductDescription() -> String {
         switch product.id {
         case StoreKitManager.creditsProductId:
-            return "5 search credits - Discover more coffee shops and breweries"
+            return "Perfect for occasional searches"
         case StoreKitManager.premiumProductId:
-            return "50 search credits + Remove ads + Unlimited favorites"
+            return "Best value with premium features"
         default:
             return product.description
         }
     }
-}
-
-// MARK: - Custom Button Style
-struct ProfessionalButtonStyle: ButtonStyle {
-    func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-            .padding()
-            .background(Color.black)
-            .foregroundColor(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .scaleEffect(configuration.isPressed ? 0.95 : 1)
-    }
-}
-
-// MARK: - Card Style Modifier
-struct CardStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .padding()
-            .cornerRadius(8)
-            .shadow(radius: 3)
-    }
-}
-
-extension View {
-    func cardStyle() -> some View {
-        modifier(CardStyle())
+    
+    private func getFeatures() -> [String] {
+        switch product.id {
+        case StoreKitManager.creditsProductId:
+            return ["5 search credits", "Discover coffee shops", "Find local breweries"]
+        case StoreKitManager.premiumProductId:
+            return ["50 search credits", "Remove all ads", "Unlimited favorites"]
+        default:
+            return []
+        }
     }
 }
 

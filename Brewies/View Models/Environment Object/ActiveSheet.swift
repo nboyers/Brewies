@@ -8,25 +8,20 @@
 import Foundation
 
 public enum ActiveSheet: Identifiable {
-    case filter, userProfile, signUpWithApple, storefront, detailBrew, shareApp, searchResults
+    case filter, storefront, detailBrew, shareApp, searchResults
 
     public var id: Int {
         switch self {
         case .filter:
             return 1
-        case .userProfile:
-            return 2
-        case .signUpWithApple:
-            return 3
         case .storefront:
-            return 4
+            return 2
         case .detailBrew:
-            return 5
+            return 3
         case .shareApp:
-            return 6
+            return 4
         case .searchResults:
-            return 7
+            return 5
         }
-        
     }
 }

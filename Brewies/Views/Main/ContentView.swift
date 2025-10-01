@@ -11,538 +11,524 @@ import MapKit
 import BottomSheet
 import AuthenticationServices
 import AppTrackingTransparency
-import GooglePlaces
 
 struct ContentView: View {
-    @ObservedObject var storeKit = StoreKitManager()
-    @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
+    @EnvironmentObject var storeKit: StoreKitManager
+    @StateObject var sharedAlertVM = SharedAlertViewModel()
+
     let signInCoordinator = SignInWithAppleCoordinator()
-    
+
+    @Environment(\.colorScheme) var colorScheme
+
     @EnvironmentObject var sharedVM: SharedViewModel
     @EnvironmentObject var rewardAd: RewardAdController
     @EnvironmentObject var userVM: UserViewModel
     @EnvironmentObject var contentVM: ContentViewModel
     @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
     @EnvironmentObject var locationManager: LocationManager
-    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
     @State private var activeSheet: ActiveSheet?
+
     @State private var showLocationAccessAlert = false
     @State private var centeredOnUser = false
+    @State private var showingBrewPreviewList = false
     @State private var userHasMoved = false
     @State private var showUserLocationButton = false
+    @State private var isAnnotationSelected = false
+    @State private var mapTapped = false
+    @State private var showNoCreditsAlert = false
+    @State private var shouldSearchInArea = false
+    @State var searchedLocation: CLLocationCoordinate2D?
+    @State private var searchQuery: String = ""
+    @State private var settingsView = false
     @State private var isCoffeeSelected = true
-    
+
+    @FocusState var isInputActive: Bool
+
     let DISTANCE = CLLocationDistance(2500)
     
-    var body: some View {
-        TabView {
-            Tab("Discover", systemImage: "map.fill") {
-                DiscoverView(
-                    locationManager: locationManager,
-                    contentVM: contentVM,
-                    userVM: userVM,
-                    sharedAlertVM: sharedAlertVM,
-                    selectedCoffeeShop: selectedCoffeeShop,
-                    storeKit: storeKit,
-                    rewardAd: rewardAd,
-                    signInCoordinator: signInCoordinator,
-                    activeSheet: $activeSheet,
-                    showLocationAccessAlert: $showLocationAccessAlert
-                )
-                .environmentObject(sharedAlertVM)
-            }
-            
-            Tab("Favorites", systemImage: "heart.fill") {
-                FavoritesView(showPreview: $contentVM.showBrewPreview, activeSheet: $activeSheet)
-                    .environmentObject(rewardAd)
-                    .environmentObject(userVM)
-            }
-        }
-        .alert(isPresented: $showLocationAccessAlert) {
-            Alert(
-                title: Text("Location Access Required"),
-                message: Text("To give local recommendations, Brewies needs access to your location. You can enable location services for Brewies in the Settings app."),
-                primaryButton: .default(Text("Settings"), action: {
-                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
-                }),
-                secondaryButton: .cancel()
-            )
-        }
-        .sheet(item: $activeSheet) { sheet in
-            switch sheet {
-            case .filter:
-                FiltersView(googlePlacesParams: GooglePlacesSearchParams(), contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
-                    .environmentObject(userVM)
-                    .environmentObject(sharedAlertVM)
-                
-            case .userProfile:
-                UserProfileSheetView(userVM: userVM, contentVM: contentVM)
-                    .presentationDragIndicator(.visible)
-                    .presentationDetents([.medium])
-                
-            case .signUpWithApple:
-                if userVM.user.isLoggedIn {
-                    UserProfileSheetView(userVM: userVM, contentVM: contentVM)
-                        .presentationDetents([.medium])
-                } else {
-                    SignInWithAppleButton(action: {
-                        signInCoordinator.startSignInWithAppleFlow()
-                    }, label: "Sign in with Apple")
-                    .frame(width: 280, height: 45)
-                    .padding([.top, .bottom], 50)
-                    .presentationDetents([.medium])
-                }
-                
-            case .storefront:
-                StorefrontView()
-                
-            case .detailBrew:
-                if let coffeeShop = selectedCoffeeShop.coffeeShop {
-                    BrewDetailView(coffeeShop: coffeeShop)
-                }
-                
-            case .shareApp:
-                ShareSheet(activityItems: ["Share Brewies", URL(string: "https://apps.apple.com/us/app/brewies/id6450864433")!])
-                    .presentationDetents([.medium])
-                    
-            case .searchResults:
-                VStack(spacing: 0) {
-                    // Compact header for small detent
-                    HStack {
-                        Text("\(contentVM.brewLocations.count) \(isCoffeeSelected ? "Coffee Shops" : "Breweries") Found")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        Spacer()
-                        Button("✕") {
-                            contentVM.showBrewPreview = false
-                            activeSheet = nil
-                        }
-                        .foregroundColor(.secondary)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                    .background(.ultraThinMaterial)
-                    
-                    NavigationView {
-                        List {
-                            ForEach(contentVM.brewLocations, id: \.id) { location in
-                            Button(action: {
-                                contentVM.selectedBrewLocation = location
-                                selectedCoffeeShop.coffeeShop = location
-                                activeSheet = .detailBrew
-                            }) {
-                                HStack(spacing: 12) {
-                                    GooglePlacesPhotoView(placeID: location.id)
-                                        .frame(width: 60, height: 60)
-                                        .cornerRadius(8)
-                                    
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(location.name)
-                                            .font(.headline)
-                                            .foregroundColor(.primary)
-                                        
-                                        if let address = location.address, !address.isEmpty {
-                                            Text(address)
-                                                .font(.subheadline)
-                                                .foregroundColor(.secondary)
-                                                .lineLimit(2)
-                                        }
-                                        
-                                        HStack(spacing: 4) {
-                                            ForEach(0..<5) { star in
-                                                Image(systemName: star < Int(location.rating ?? 0) ? "star.fill" : "star")
-                                                    .foregroundColor(.orange)
-                                                    .font(.caption)
-                                            }
-                                            Text(String(format: "%.1f", location.rating ?? 0.0))
-                                                .font(.caption)
-                                                .foregroundColor(.secondary)
-                                        }
-                                    }
-                                    
-                                    Spacer()
-                                    
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.secondary)
-                                        .font(.caption)
-                                }
-                                .contentShape(Rectangle())
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .navigationTitle("\(contentVM.brewLocations.count) \(isCoffeeSelected ? "Coffee Shops" : "Breweries")")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button("Done") {
-                                contentVM.showBrewPreview = false
-                                activeSheet = nil
-                            }
-                            }
-                        }
-                        .navigationBarHidden(true)
-                    }
-                }
-                .presentationDetents([.height(80), .fraction(0.25), .medium, .large], selection: .constant(.fraction(0.25)))
-                .presentationDragIndicator(.visible)
-                .presentationBackgroundInteraction(.enabled(upThrough: .fraction(0.25)))
-                .interactiveDismissDisabled()
-            }
-        }
-    }
-}
-
-struct DiscoverView: View {
-    let locationManager: LocationManager
-    let contentVM: ContentViewModel
-    let userVM: UserViewModel
-    let sharedAlertVM: SharedAlertViewModel
-    let selectedCoffeeShop: SelectedCoffeeShop
-    let storeKit: StoreKitManager
-    let rewardAd: RewardAdController
-    let signInCoordinator: SignInWithAppleCoordinator
-    @Binding var activeSheet: ActiveSheet?
-    @Binding var showLocationAccessAlert: Bool
-    
-    @State private var visibleRegionCenter: CLLocationCoordinate2D?
-    @State private var centeredOnUser = false
-    @State private var userHasMoved = false
-    @State private var showUserLocationButton = false
-    @State private var isCoffeeSelected = true
-    
-    var body: some View {
-        let mapView = MapView(
+    private var mapView: some View {
+        MapView(
             locationManager: locationManager,
-            coffeeShops: .constant(contentVM.brewLocations),
-            selectedCoffeeShop: .constant(contentVM.selectedBrewLocation),
+            coffeeShops: $contentVM.brewLocations,
+            selectedCoffeeShop: $contentVM.selectedBrewLocation,
             centeredOnUser: $centeredOnUser,
             userHasMoved: $userHasMoved,
             visibleRegionCenter: $visibleRegionCenter,
             showUserLocationButton: $showUserLocationButton,
-            isAnnotationSelected: .constant(false),
-            mapTapped: .constant(false),
-            showBrewPreview: .constant(contentVM.showBrewPreview),
-            searchedLocation: .constant(nil),
-            searchQuery: .constant(""),
-            shouldSearchInArea: .constant(false)
+            isAnnotationSelected: $isAnnotationSelected,
+            mapTapped: $mapTapped,
+            showBrewPreview: $contentVM.showBrewPreview,
+            searchedLocation: $searchedLocation,
+            searchQuery: $searchQuery,
+            shouldSearchInArea: $shouldSearchInArea
         )
-        
-        ZStack {
-            mapView
-            
-            VStack {
-                HStack {
-                    Spacer()
-                    
-                    Button(action: {
-                        sharedAlertVM.currentAlertType = .earnCredits
-                    }) {
-                        HStack(spacing: 8) {
-                            Image(systemName: "magnifyingglass.circle.fill")
-                                .foregroundColor(.white)
-                                .font(.system(size: 16, weight: .medium))
-                            
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text("\(userVM.user.credits)")
-                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
-                                Text("SEARCHES")
-                                    .font(.system(size: 9, weight: .medium, design: .rounded))
-                                    .foregroundColor(.white.opacity(0.8))
-                                    .tracking(0.5)
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(
-                            LinearGradient(
-                                colors: [Color.blue, Color.blue.opacity(0.8)],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            in: RoundedRectangle(cornerRadius: 16)
-                        )
-                        .shadow(color: .blue.opacity(0.3), radius: 4, x: 0, y: 2)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        activeSheet = userVM.user.isLoggedIn ? .userProfile : .signUpWithApple
-                    }) {
-                        if userVM.user.isLoggedIn {
-                            Text(String(userVM.user.firstName.prefix(1)))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .frame(width: 40, height: 40)
-                                .background(Color.blue, in: Circle())
-                        } else {
-                            Image(systemName: "person.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(.blue)
-                                .frame(width: 40, height: 40)
-                                .background(.ultraThinMaterial, in: Circle())
-                        }
-                    }
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 16)
-                
-                Spacer()
-            }
-            
-            if showUserLocationButton {
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            if locationManager.isLocationAccessGranted {
-                                centeredOnUser = true
-                            } else {
-                                showLocationAccessAlert = true
-                            }
-                        }) {
-                            Image(systemName: locationManager.isLocationAccessGranted ? "location.fill" : "location.slash")
-                                .font(.title3)
-                                .foregroundColor(.white)
-                                .frame(width: 50, height: 50)
-                                .background(locationManager.isLocationAccessGranted ? Color.blue : Color.red, in: Circle())
-                                .shadow(radius: 4)
-                        }
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 120)
-                    }
-                }
-            }
-            
-            BottomControlPanel(
-                isCoffeeSelected: $isCoffeeSelected,
-                locationManager: locationManager,
-                centeredOnUser: $centeredOnUser,
-                showLocationAccessAlert: $showLocationAccessAlert,
-                activeSheet: $activeSheet,
-                userVM: userVM,
-                contentVM: contentVM,
-                visibleRegionCenter: visibleRegionCenter
-            )
-            
-
-            
-            if sharedAlertVM.currentAlertType != nil {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea(.all)
-                
-                switch sharedAlertVM.currentAlertType {
-                case .maxFavoritesReached:
-                    CustomAlertView(
-                        title: "Favorites Limit Reached",
-                        message: "Upgrade your account to save more locations or watch an advertisement.",
-                        primaryButtonTitle: "Upgrade Account",
-                        primaryAction: {
-                            activeSheet = .storefront
-                            sharedAlertVM.currentAlertType = nil
-                        },
-                        secondaryButtonTitle: "Watch Ad",
-                        secondaryAction: {
-                            if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                                ATTrackingManager.requestTrackingAuthorization { status in
-                                    contentVM.handleRewardAd(reward: "favorites", rewardAdController: rewardAd)
-                                }
-                            } else {
-                                contentVM.handleRewardAd(reward: "favorites", rewardAdController: rewardAd)
-                                sharedAlertVM.currentAlertType = nil
-                            }
-                        },
-                        dismissAction: {
-                            sharedAlertVM.currentAlertType = nil
-                        })
-                    
-                case .insufficientCredits:
-                    CustomAlertView(
-                        title: "Search Credits Required",
-                        message: "Purchase additional search credits or watch an advertisement to continue.",
-                        primaryButtonTitle: "Watch Advertisement",
-                        primaryAction: {
-                            print("Watch Ad button tapped")
-                            if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                                ATTrackingManager.requestTrackingAuthorization { status in
-                                    contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
-                                }
-                            } else {
-                                contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
-                            }
-                            // Don't dismiss alert here - let ad completion handle it
-                        },
-                        secondaryButtonTitle: "Purchase Credits",
-                        secondaryAction: {
-                            print("Purchase Credits button tapped")
-                            activeSheet = .storefront
-                            sharedAlertVM.currentAlertType = nil
-                        },
-                        dismissAction: {
-                            print("X button tapped - dismissing alert")
-                            DispatchQueue.main.async {
-                                sharedAlertVM.currentAlertType = nil
-                            }
-                            print("Alert dismissed, currentAlertType: \(String(describing: sharedAlertVM.currentAlertType))")
-                        })
-                    
-                case .noAdsAvailableAlert:
-                    CustomAlertView(
-                        title: "Advertisement Unavailable",
-                        message: "No advertisements are currently available. Please try again later.",
-                        primaryButtonTitle: "OK",
-                        primaryAction: {
-                            sharedAlertVM.currentAlertType = nil
-                            DispatchQueue.global(qos: .background).async {
-                                rewardAd.loadRewardedAd()
-                            }
-                        },
-                        dismissAction: {
-                            sharedAlertVM.currentAlertType = nil
-                            DispatchQueue.global(qos: .background).async {
-                                rewardAd.loadRewardedAd()
-                            }
-                        }
-                    )
-                    
-                case .earnCredits:
-                    CustomAlertView(
-                        title: "Acquire Search Credits",
-                        message: "View advertisements to earn search credits at no cost. An advertisement will play if available.",
-                        primaryButtonTitle: "View Advertisement",
-                        primaryAction: {
-                            contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
-                            sharedAlertVM.currentAlertType = nil
-                        },
-                        secondaryButtonTitle: "Purchase",
-                        secondaryAction: {
-                            activeSheet = .storefront
-                            sharedAlertVM.currentAlertType = nil
-                        },
-                        dismissAction: {
-                            sharedAlertVM.currentAlertType = nil
-                        }
-                    )
-                    
-                default:
-                    CustomAlertView(
-                        title: "Error",
-                        message: "Something went wrong.",
-                        dismissAction: {
-                            sharedAlertVM.currentAlertType = nil
-                        }
-                    )
-                }
-            }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("ShowSearchResults"))) { _ in
-            if contentVM.showBrewPreview && !contentVM.brewLocations.isEmpty {
-                activeSheet = .searchResults
-            }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("MapAnnotationTapped"))) { notification in
-            if let location = notification.object as? BrewLocation {
-                contentVM.selectedBrewLocation = location
-                selectedCoffeeShop.coffeeShop = location
-                
-                // Show search results sheet (MapView already handles reordering)
-                activeSheet = .searchResults
-            }
-        }
-        .onAppear {
-            if locationManager.isLocationAccessGranted {
+        .onReceive(locationManager.$isLocationAccessGranted) { isGranted in
+            if isGranted {
                 centeredOnUser = true
             }
         }
     }
-}
 
-struct BottomControlPanel: View {
-    @Binding var isCoffeeSelected: Bool
-    let locationManager: LocationManager
-    @Binding var centeredOnUser: Bool
-    @Binding var showLocationAccessAlert: Bool
-    @Binding var activeSheet: ActiveSheet?
-    let userVM: UserViewModel
-    let contentVM: ContentViewModel
-    let visibleRegionCenter: CLLocationCoordinate2D?
-    @EnvironmentObject var sharedAlertVM: SharedAlertViewModel
-    
-    var body: some View {
-        VStack {
-            Spacer()
-            
-            HStack(spacing: 16) {
+    private var userLocationButton: some View {
+        GeometryReader { geo in
+            if !locationManager.isLocationAccessGranted {
                 Button(action: {
-                    print("Search button tapped. User credits: \(userVM.user.credits)")
-                    if userVM.user.credits > 0 {
-                        if isCoffeeSelected {
-                            print("Searching for coffee shops")
-                            contentVM.fetchBrewies(locationManager: locationManager, visibleRegionCenter: visibleRegionCenter, brewType: "coffee", term: "Local Coffee")
-                        } else {
-                            print("Searching for breweries")
-                            contentVM.fetchBrewies(locationManager: locationManager, visibleRegionCenter: visibleRegionCenter, brewType: "breweries", term: "Local Brewery")
-                        }
-                    } else {
-                        print("Insufficient credits, showing alert")
-                        print("Current alert type before: \(String(describing: sharedAlertVM.currentAlertType))")
-                        sharedAlertVM.currentAlertType = .insufficientCredits
-                        print("Current alert type after: \(String(describing: sharedAlertVM.currentAlertType))")
-                    }
+                    showLocationAccessAlert = true
                 }) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.title2)
+                    Image(systemName: "questionmark.app.fill")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(Color.primary)
+                        .background(
+                            Rectangle()
+                                .fill(Color.accentColor)
+                        )
+                }
+                .offset(CGSize(width: geo.size.width/10, height: geo.size.width*1.55))
+            } else {
+                Button(action: {
+                    centeredOnUser = true
+                }) {
+                    Image(systemName: "location.circle.fill")
+                        .resizable()
+                        .clipShape(Circle())
+                        .aspectRatio(contentMode: .fit)
                         .foregroundColor(.white)
                         .frame(width: 50, height: 50)
-                        .background(Color.blue, in: Circle())
+                        .background(Circle().fill(Color.blue))
                 }
-                
-                Toggle(isOn: $isCoffeeSelected) {
-                    HStack(spacing: 8) {
-                        Image(systemName: isCoffeeSelected ? "cup.and.saucer.fill" : "wineglass.fill")
-                        Text(isCoffeeSelected ? "Coffee" : "Breweries")
-                            .fontWeight(.medium)
+                .offset(CGSize(width: geo.size.width/10 - 20, height: geo.size.width*1.55))
+            }
+        }
+    }
+    
+    private var mapWithLocationButton: some View {
+        ZStack {
+            mapView
+            if showUserLocationButton {
+                userLocationButton
+            }
+        }
+    }
+    
+    private var filterButton: some View {
+        Button(action: {
+            activeSheet = .filter
+        }) {
+            Image(systemName: "ellipsis.circle")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 30, height: 30)
+                .foregroundColor(.white)
+                .background(Color.accentColor)
+                .clipShape(Circle())
+                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var coffeeWineToggleButton: some View {
+        Button(action: {
+            isCoffeeSelected.toggle()
+        }) {
+            Image(systemName: isCoffeeSelected ? "cup.and.saucer.fill" : "wineglass.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 30, height: 30)
+                .foregroundColor(isCoffeeSelected ? Color("#504b3a") : Color("#72195a"))
+                .background(Color.white)
+                .clipShape(Circle())
+                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var searchButton: some View {
+        Button(action: {
+            if userVM.user.credits > 0 {
+                if isCoffeeSelected {
+                    contentVM.fetchBrewies(locationManager: locationManager, visibleRegionCenter: visibleRegionCenter, brewType: "cafe", term: "Coffee")
+                } else {
+                    contentVM.fetchBrewies(locationManager: locationManager, visibleRegionCenter: visibleRegionCenter, brewType: "breweries", term: "Brewery")
+                }
+            } else {
+                sharedAlertVM.currentAlertType = .insufficientCredits
+            }
+        }) {
+            Text("Search")
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .frame(width: 125, height: 50)
+                .background(isCoffeeSelected ? Color("#504b3a") : Color("#72195a"))
+                .cornerRadius(25)
+                .shadow(color: .gray.opacity(0.5), radius: 3, x: 0, y: 2)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+
+    private var bottomSheetHeader: some View {
+        VStack(spacing: 0) {
+            // Credits and filter row
+            HStack {
+                // Credits display
+                Button(action: {
+                    activeSheet = .storefront
+                }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "creditcard")
+                            .font(.system(size: 13, weight: .medium))
+                        Text("\(userVM.user.credits)")
+                            .font(.system(size: 15, weight: .semibold))
+                        Text("credits")
+                            .font(.system(size: 13, weight: .medium))
                     }
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 4)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color(UIColor.tertiarySystemFill))
+                    )
                 }
-                .toggleStyle(SwitchToggleStyle(tint: .blue))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
-                .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 25))
+                .buttonStyle(PlainButtonStyle())
+                .simultaneousGesture(TapGesture())
                 
+                Spacer()
+                
+                // Filter button
                 Button(action: {
                     activeSheet = .filter
                 }) {
                     Image(systemName: "slider.horizontal.3")
-                        .font(.title2)
-                        .foregroundColor(.blue)
-                        .frame(width: 50, height: 50)
-                        .background(.ultraThinMaterial, in: Circle())
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.primary)
+                        .frame(width: 32, height: 32)
+                        .background(
+                            Circle()
+                                .fill(Color(UIColor.tertiarySystemFill))
+                        )
                 }
+                .buttonStyle(PlainButtonStyle())
+                .simultaneousGesture(TapGesture())
             }
             .padding(.horizontal, 20)
-            .padding(.bottom, 50)
+            .padding(.top, 8)
+            .padding(.bottom, 6)
+            
+            // Coffee/Brewery toggle
+            HStack(spacing: 0) {
+                Button(action: {
+                    isCoffeeSelected = true
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "cup.and.saucer.fill")
+                            .font(.system(size: 13, weight: .medium))
+                        Text("Coffee")
+                            .font(.system(size: 15, weight: .medium))
+                    }
+                    .foregroundColor(isCoffeeSelected ? .white : .primary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(isCoffeeSelected ? Color.accentColor : Color.clear)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+                .simultaneousGesture(TapGesture())
+                
+                Button(action: {
+                    isCoffeeSelected = false
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "wineglass.fill")
+                            .font(.system(size: 13, weight: .medium))
+                        Text("Breweries")
+                            .font(.system(size: 15, weight: .medium))
+                    }
+                    .foregroundColor(!isCoffeeSelected ? .white : .primary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(!isCoffeeSelected ? Color.accentColor : Color.clear)
+                    )
+                }
+                .buttonStyle(PlainButtonStyle())
+                .simultaneousGesture(TapGesture())
+            }
+            .padding(.horizontal, 2)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color(UIColor.secondarySystemGroupedBackground))
+            )
+            .padding(.horizontal, 20)
+            .padding(.bottom, 8)
+            
+            // Search button
+            Button(action: {
+                if userVM.user.credits > 0 {
+                    if isCoffeeSelected {
+                        contentVM.fetchBrewies(locationManager: locationManager, visibleRegionCenter: visibleRegionCenter, brewType: "cafe", term: "Coffee")
+                    } else {
+                        contentVM.fetchBrewies(locationManager: locationManager, visibleRegionCenter: visibleRegionCenter, brewType: "breweries", term: "Brewery")
+                    }
+                } else {
+                    sharedAlertVM.currentAlertType = .insufficientCredits
+                }
+            }) {
+                HStack(spacing: 6) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.system(size: 15, weight: .semibold))
+                    Text("Search Nearby")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 10)
+                .background(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.accentColor)
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
+            .simultaneousGesture(TapGesture())
+            .padding(.horizontal, 20)
+            .padding(.bottom, 8)
         }
+        .background(Color(UIColor.systemGroupedBackground))
     }
-}
 
-struct UserProfileSheetView: View {
-    let userVM: UserViewModel
-    let contentVM: ContentViewModel
-    @State private var localActiveSheet: ActiveSheet?
-    
     var body: some View {
-        UserProfileView(userViewModel: userVM, contentViewModel: contentVM, activeSheet: $localActiveSheet)
-            .sheet(item: $localActiveSheet) { sheet in
+        TabView {
+            ZStack {
+                mapWithLocationButton
+
+                // Bottom Sheet
+                .bottomSheet(bottomSheetPosition: $sharedVM.bottomSheetPosition, switchablePositions: [
+                    .relativeBottom(0.30),  // Bottom position - shows search button
+                    .relative(0.70),        // Mid swipe
+                    .relativeTop(0.95)      // Top full swipe
+                ], headerContent: {
+                    bottomSheetHeader
+                }, mainContent: {
+                    if contentVM.selectedBrewLocation != nil && contentVM.showBrewPreview {
+                        VStack(spacing: 0) {
+                            // Results header
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("\(min(contentVM.brewLocations.count, 10)) Results")
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                    Text("Coffee shops and breweries nearby")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                                Spacer()
+                            }
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(Color(UIColor.systemBackground))
+                            
+                            Divider()
+                            
+                            // Results list
+                            LazyVStack(spacing: 0) {
+                                ForEach(Array(contentVM.brewLocations.enumerated().prefix(10)), id: \.element.id) { index, location in
+                                    BrewListItem(location: location, photoIndex: index, activeSheet: $activeSheet)
+                                        .id("\(location.id)-\(index)")
+                                        .onTapGesture {
+                                            selectedCoffeeShop.coffeeShop = location
+                                            activeSheet = .detailBrew
+                                        }
+                                }
+                                
+                                AdBannerView()
+                                    .frame(maxWidth: .infinity, maxHeight: 60)
+                                    .padding(.top, 16)
+                                
+                                Color.clear
+                                    .frame(height: 100)
+                            }
+                        }
+                    } else {
+                        VStack(spacing: 16) {
+                            Image(systemName: "magnifyingglass")
+                                .font(.system(size: 48))
+                                .foregroundColor(.secondary)
+                            
+                            VStack(spacing: 8) {
+                                Text("Find Coffee & Breweries")
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                
+                                Text("Search to discover nearby places")
+                                    .font(.body)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color(UIColor.systemBackground))
+                    }
+                })
+
+                .enableAppleScrollBehavior()
+                .enableBackgroundBlur()
+                .backgroundBlurMaterial(.systemDark)
+
+
+
+                if sharedAlertVM.currentAlertType != nil {
+                    Color.black.opacity(0.4)
+                        .edgesIgnoringSafeArea(.all)
+
+                    switch sharedAlertVM.currentAlertType {
+                    case .insufficientCredits:
+                        CustomAlertView(
+                            title: "Insufficient Credits",
+                            message: "Watch an ad to get a discover credit or go to the store.",
+                            primaryButtonTitle: "Watch Ad",
+                            primaryAction: {
+                                if rewardAd.isAdAvailable() {
+                                    if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+                                        ATTrackingManager.requestTrackingAuthorization { status in
+                                            Task {
+                                                await contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
+                                            }
+                                        }
+                                    } else {
+                                        Task {
+                                            contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
+                                        }
+                                    }
+                                    sharedAlertVM.currentAlertType = nil
+                                } else {
+                                    sharedAlertVM.currentAlertType = .noAdsAvailableAlert
+                                }
+                            },
+                            secondaryButtonTitle: "Go to Store",
+                            secondaryAction: {
+                                activeSheet = .storefront
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                            })
+
+                    case .noAdsAvailableAlert:
+                        CustomAlertView(
+                            title: "No Ad Available",
+                            message: "Sorry, there is no ad available to watch right now. Please try again later.",
+                            primaryButtonTitle: "OK",
+                            primaryAction: {
+                                sharedAlertVM.currentAlertType = nil
+                                DispatchQueue.global(qos: .background).async {
+                                    rewardAd.loadRewardedAd()
+                                }
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                                DispatchQueue.global(qos: .background).async {
+                                    rewardAd.loadRewardedAd()
+                                }
+                            }
+                        )
+
+                    case .earnCredits:
+                        CustomAlertView(
+                            title: "Earn Credits",
+                            message: "Watch ads to earn credits for free. An Ad will play if one is ready.",
+                            primaryButtonTitle: "Earn Credits",
+                            primaryAction: {
+                                if rewardAd.isAdAvailable() {
+                                    Task {
+                                        contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
+                                    }
+                                    sharedAlertVM.currentAlertType = nil
+                                } else {
+                                    sharedAlertVM.currentAlertType = .noAdsAvailableAlert
+                                }
+                            },
+                            secondaryButtonTitle: "Store",
+                            secondaryAction: {
+                                activeSheet = .storefront
+                                sharedAlertVM.currentAlertType = nil
+                            },
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                            }
+                        )
+
+                    default:
+                        CustomAlertView(
+                            title: "Error",
+                            message: "Something went wrong.",
+                            dismissAction: {
+                                sharedAlertVM.currentAlertType = nil
+                            }
+                        )
+                    }
+                }
+            }
+
+            .sheet(item: $activeSheet) { sheet in
                 switch sheet {
+                case .filter:
+                    FiltersView(googlePlacesParams: contentVM.googlePlacesParams, contentVM: contentVM, visibleRegionCenter: visibleRegionCenter)
+                        .environmentObject(userVM)
+                        .environmentObject(sharedAlertVM)
+
                 case .storefront:
                     StorefrontView()
-                default:
+
+                case .detailBrew:
+                    if let coffeeShop = selectedCoffeeShop.coffeeShop {
+                        BrewDetailView(coffeeShop: coffeeShop)
+                    }
+
+                case .shareApp:
+                    ShareSheet(activityItems: ["Share Brewies", URL(string: "https://apps.apple.com/us/app/brewies/id6450864433")!])
+                        .presentationDetents([.medium])
+
+                case .searchResults:
                     EmptyView()
                 }
             }
+            .sheet(isPresented: $settingsView) {
+                SettingsView(activeSheet: $activeSheet)
+                    .presentationDragIndicator(.visible)
+                    .presentationDetents([.medium])
+            }
+            .alert(isPresented: $showLocationAccessAlert) {
+                Alert(
+                    title: Text("Location Access Required"),
+                    message: Text("To give local recommendations, Brewies needs access to your location. You can enable location services for Brewies in the Settings app."),
+                    primaryButton: .default(Text("Settings"), action: {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+                    }),
+                    secondaryButton: .cancel()
+                )
+            }
+            .edgesIgnoringSafeArea(.top)
+            .tabItem {
+                Image(systemName: "map")
+                Text("Map")
+            }
+
+            FavoritesView(showPreview: $contentVM.showBrewPreview,
+                          activeSheet: $activeSheet)
+                .environmentObject(rewardAd)
+                .environmentObject(userVM)
+                .tabItem {
+                    Image(systemName: "star.fill")
+                    Text("Favorites")
+                }
+        }
+
     }
 }
+

@@ -9,15 +9,13 @@ import Foundation
 
 struct GooglePlacesResponse: Codable {
     let results: [GooglePlaceResult]
-    let status: String?
+    let status: String
     let nextPageToken: String?
-    let errorMessage: String?
 
     enum CodingKeys: String, CodingKey {
         case results
         case status
         case nextPageToken = "next_page_token"
-        case errorMessage = "error_message"
     }
 }
 
@@ -80,4 +78,59 @@ struct OpeningHours: Codable {
         case openNow = "open_now"
         case weekdayText = "weekday_text"
     }
+}
+
+// New Google Places API (New) models
+struct NewGooglePlacesResponse: Codable {
+    let places: [NewGooglePlace]?
+}
+
+struct NewGooglePlace: Codable {
+    let id: String
+    let displayName: DisplayName?
+    let location: NewLocation?
+    let rating: Double?
+    let userRatingCount: Int?
+    let photos: [NewPhoto]?
+    let formattedAddress: String?
+    let types: [String]?
+    let businessStatus: String?
+    let priceLevel: Int?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, displayName, location, rating, userRatingCount, photos, formattedAddress, types, businessStatus, priceLevel
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        displayName = try container.decodeIfPresent(DisplayName.self, forKey: .displayName)
+        location = try container.decodeIfPresent(NewLocation.self, forKey: .location)
+        rating = try container.decodeIfPresent(Double.self, forKey: .rating)
+        userRatingCount = try container.decodeIfPresent(Int.self, forKey: .userRatingCount)
+        photos = try container.decodeIfPresent([NewPhoto].self, forKey: .photos)
+        formattedAddress = try container.decodeIfPresent(String.self, forKey: .formattedAddress)
+        types = try container.decodeIfPresent([String].self, forKey: .types)
+        businessStatus = try container.decodeIfPresent(String.self, forKey: .businessStatus)
+        
+        // Handle priceLevel as either string or int
+        if let priceLevelString = try? container.decodeIfPresent(String.self, forKey: .priceLevel) {
+            priceLevel = Int(priceLevelString)
+        } else {
+            priceLevel = try container.decodeIfPresent(Int.self, forKey: .priceLevel)
+        }
+    }
+}
+
+struct DisplayName: Codable {
+    let text: String
+}
+
+struct NewLocation: Codable {
+    let latitude: Double
+    let longitude: Double
+}
+
+struct NewPhoto: Codable {
+    let name: String
 }

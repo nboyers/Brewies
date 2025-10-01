@@ -66,127 +66,20 @@ struct BrewDetailView: View {
         return nil
     }
     
-    private func loadFirstPlacePhoto(placeID: String) {
-        guard !isLoadingPlacePhoto else { return }
-        isLoadingPlacePhoto = true
 
-        let client = GMSPlacesClient.shared()
-        client.lookUpPhotos(forPlaceID: placeID) { photoMetadataList, error in
-            if let error = error {
-                print("[BrewDetailView] lookUpPhotos error:", error.localizedDescription)
-                self.isLoadingPlacePhoto = false
-                return
-            }
-
-            guard let first = photoMetadataList?.results.first else {
-                print("[BrewDetailView] No photo metadata for place")
-                self.isLoadingPlacePhoto = false
-                return
-            }
-
-            client.loadPlacePhoto(first) { image, error in
-                if let error = error {
-                    print("[BrewDetailView] loadPlacePhoto error:", error.localizedDescription)
-                }
-                self.placePhoto = image
-                self.isLoadingPlacePhoto = false
-            }
-        }
-    }
-    
-    private func loadHeroImage(photoRef: String, apiKey: String) {
-        guard !isLoadingHeroImage else { return }
-        isLoadingHeroImage = true
-        
-        let urlString: String
-        if photoRef.hasPrefix("places/") {
-            urlString = "https://places.googleapis.com/v1/\(photoRef)/media?maxWidthPx=800"
-        } else {
-            urlString = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=\(photoRef)&key=\(apiKey)"
-        }
-        
-        print("[BrewDetailView] Loading hero image from URL: \(urlString)")
-        
-        guard let url = URL(string: urlString) else {
-            print("[BrewDetailView] Invalid URL: \(urlString)")
-            isLoadingHeroImage = false
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        if photoRef.hasPrefix("places/") {
-            request.setValue(apiKey, forHTTPHeaderField: "X-Goog-Api-Key")
-            print("[BrewDetailView] Using v1 API with X-Goog-Api-Key header")
-        } else {
-            print("[BrewDetailView] Using legacy API with key in URL")
-        }
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("[BrewDetailView] Image load error: \(error.localizedDescription)")
-            }
-            
-            if let httpResponse = response as? HTTPURLResponse {
-                print("[BrewDetailView] Image response status: \(httpResponse.statusCode)")
-            }
-            
-            DispatchQueue.main.async {
-                self.isLoadingHeroImage = false
-                if let data = data, let image = UIImage(data: data) {
-                    print("[BrewDetailView] Successfully loaded hero image")
-                    self.heroImage = image
-                } else {
-                    print("[BrewDetailView] Failed to create image from data")
-                }
-            }
-        }.resume()
-    }
 
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack(spacing: 0) {
-                    Group {}.onAppear {
-                        let hasKey = (placesAPIKey?.isEmpty == false)
-                        let firstRef = coffeeShop.photos?.first ?? "<nil>"
-                        print("[BrewDetailView] has Places key:", hasKey, "first photo ref:", firstRef)
-                        let placeID = coffeeShop.id
-                        if !placeID.isEmpty {
-                            print("[BrewDetailView] Loading SDK photo for placeID:", placeID)
-                            loadFirstPlacePhoto(placeID: placeID)
-                        } else {
-                            print("[BrewDetailView] No placeID available to load SDK photo")
-                        }
-                        
-                        // Load hero image from photo reference
-                        if let apiKey = placesAPIKey, !apiKey.isEmpty,
-                           let photoRef = coffeeShop.photos?.first {
-                            loadHeroImage(photoRef: photoRef, apiKey: apiKey)
-                        }
-                    }
+
                     
                     // MARK: Hero Image
                     ZStack(alignment: .bottomLeading) {
-                        if let uiImage = placePhoto {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
+                        if !coffeeShop.id.isEmpty {
+                            GooglePlacesPhotoView(placeID: coffeeShop.id)
                                 .frame(height: 280)
                                 .clipped()
-                        } else if let heroImage = heroImage {
-                            Image(uiImage: heroImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(height: 280)
-                                .clipped()
-                        } else if isLoadingHeroImage {
-                            Rectangle()
-                                .fill(LinearGradient(colors: [Color.gray.opacity(0.1), Color.gray.opacity(0.3)], startPoint: .top, endPoint: .bottom))
-                                .frame(height: 280)
-                                .overlay(
-                                    ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle())
-                                )
                         } else {
                             Rectangle()
                                 .fill(LinearGradient(colors: [Color.gray.opacity(0.1), Color.gray.opacity(0.3)], startPoint: .top, endPoint: .bottom))
@@ -352,18 +245,12 @@ struct BrewDetailView: View {
                                 
                                 ScrollView(.horizontal, showsIndicators: false) {
                                     HStack(spacing: 12) {
-                                        if let apiKey = placesAPIKey, !apiKey.isEmpty {
-                                            ForEach(photos.prefix(8), id: \.self) { photoReference in
-                                                GooglePlacesImageView(
-                                                    photoReference: photoReference,
-                                                    apiKey: apiKey,
-                                                    width: 140,
-                                                    height: 100
-                                                )
+                                        ForEach(0..<min(photos.count, 8), id: \.self) { index in
+                                            GooglePlacesPhotoView(placeID: coffeeShop.id, photoIndex: index)
+                                                .frame(width: 140, height: 100)
                                                 .clipped()
                                                 .cornerRadius(12)
                                                 .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
-                                            }
                                         }
                                     }
                                     .padding(.horizontal, 2)
@@ -455,3 +342,4 @@ struct BrewDetailView: View {
         }
     }
 }
+

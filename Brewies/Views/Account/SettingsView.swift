@@ -30,9 +30,6 @@ struct SettingsView: View {
             .sheet(isPresented: $showStorefront) {
                 StorefrontView()
             }
-            .sheet(isPresented: $editProfile) {
-                EditProfileView()
-            }
         }
     }
     
@@ -136,10 +133,4 @@ struct SettingsView: View {
     private var privacyPolicyURL: URL {
         URL(string: "https://nobosoftware.com/privacy")!
     }
-}
-
-// MARK: - Preview
-#Preview {
-    SettingsView(activeSheet: .constant(.userProfile))
-            .environmentObject(UserViewModel.shared)
 }
