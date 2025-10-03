@@ -51,6 +51,7 @@
 		FFB360CD2A26A5830099017F /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = FFB360CC2A26A5830099017F /* GoogleMobileAds */; settings = {ATTRIBUTES = (Required, ); }; };
 		FFB360CF2A26B09F0099017F /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360CE2A26B09F0099017F /* SafariView.swift */; };
 		FFB360D32A26C8480099017F /* AdmobBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB360D22A26C8480099017F /* AdmobBanner.swift */; };
+		FFBB2DF42E8EF04600E4336B /* ATTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBB2DF32E8EF04600E4336B /* ATTManager.swift */; };
 		FFC575CE2A9C258A008EB5E2 /* ApplyPayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */; };
 		FFC575D92A9C2713008EB5E2 /* PaymentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */; };
 		FFC575DB2A9C273E008EB5E2 /* BackendModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */; };
@@ -133,6 +134,7 @@
 		FFB0A0E92A6F119A003E79E4 /* CoffeeOrder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeOrder.swift; sourceTree = "<group>"; };
 		FFB360CE2A26B09F0099017F /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		FFB360D22A26C8480099017F /* AdmobBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdmobBanner.swift; sourceTree = "<group>"; };
+		FFBB2DF32E8EF04600E4336B /* ATTManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATTManager.swift; sourceTree = "<group>"; };
 		FFC575CD2A9C258A008EB5E2 /* ApplyPayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyPayModel.swift; sourceTree = "<group>"; };
 		FFC575D82A9C2713008EB5E2 /* PaymentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentButton.swift; sourceTree = "<group>"; };
 		FFC575DA2A9C273E008EB5E2 /* BackendModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendModel.swift; sourceTree = "<group>"; };
@@ -271,6 +273,7 @@
 		FF3FF2C629EA0F0800510FCD /* View Models */ = {
 			isa = PBXGroup;
 			children = (
+				FFBB2DF32E8EF04600E4336B /* ATTManager.swift */,
 				FFDD5F702E7A4EF000A2A778 /* SharedAlertViewModel.swift */,
 				FF5AAB202AC648D800E7213F /* Environment Object */,
 				FFBFFD212A598EA2004576EC /* Account */,
@@ -618,6 +621,7 @@
 				FFDD5F6B2E7A4E6700A2A778 /* BrewLocation.swift in Sources */,
 				FF16384C2ABA43F100E1E884 /* ActiveSheet.swift in Sources */,
 				FFDD5F752E7A4F0F00A2A778 /* GooglePlacesResponse.swift in Sources */,
+				FFBB2DF42E8EF04600E4336B /* ATTManager.swift in Sources */,
 				FF656AB02E7F50680059F33E /* Secrets.swift in Sources */,
 				FFDD5F762E7A4F0F00A2A778 /* GooglePlacesSearchParams.swift in Sources */,
 				FFDD5F772E7A4F0F00A2A778 /* GooglePlaceDetail.swift in Sources */,
@@ -821,7 +825,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Brewies/Brewies.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -851,7 +855,7 @@
 					"-ObjC",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.11.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -873,7 +877,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Brewies/Brewies.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Brewies/Preview Content\"";
 				ENABLE_APP_SANDBOX = YES;
@@ -903,7 +907,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.11.0;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nobosoftware.Brewies;
 				PRODUCT_NAME = "$(TARGET_NAME)";

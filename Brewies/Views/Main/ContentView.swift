@@ -26,6 +26,7 @@ struct ContentView: View {
     @EnvironmentObject var contentVM: ContentViewModel
     @EnvironmentObject var selectedCoffeeShop: SelectedCoffeeShop
     @EnvironmentObject var locationManager: LocationManager
+    @EnvironmentObject var attManager: ATTManager
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     @State private var visibleRegionCenter: CLLocationCoordinate2D?
@@ -394,16 +395,8 @@ struct ContentView: View {
                             primaryButtonTitle: "Watch Ad",
                             primaryAction: {
                                 if rewardAd.isAdAvailable() {
-                                    if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                                        ATTrackingManager.requestTrackingAuthorization { status in
-                                            Task {
-                                                await contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
-                                            }
-                                        }
-                                    } else {
-                                        Task {
-                                            contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
-                                        }
+                                    Task {
+                                        contentVM.handleRewardAd(reward: "credits", rewardAdController: rewardAd)
                                     }
                                     sharedAlertVM.currentAlertType = nil
                                 } else {
