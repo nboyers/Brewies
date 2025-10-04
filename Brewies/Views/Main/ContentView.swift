@@ -11,6 +11,7 @@ import MapKit
 import BottomSheet
 import AuthenticationServices
 import AppTrackingTransparency
+import GoogleMobileAds
 
 struct ContentView: View {
     @EnvironmentObject var storeKit: StoreKitManager
@@ -521,7 +522,17 @@ struct ContentView: View {
                     Text("Favorites")
                 }
         }
-
+        .onReceive(locationManager.$locationStatus) { status in
+            guard let status = status, status != .notDetermined else { return }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                ATTrackingManager.requestTrackingAuthorization { _ in
+                    DispatchQueue.main.async {
+                        MobileAds.shared.start { _ in }
+                    }
+                }
+            }
+        }
     }
 }
 

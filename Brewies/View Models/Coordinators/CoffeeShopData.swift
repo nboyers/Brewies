@@ -85,10 +85,6 @@ class CoffeeShopData: ObservableObject {
     func addFavoriteSlots(_ slots: Int) {
         maxFavoriteSlots += slots
     }
-
-    func removeSubscriptionSlots(_ slots: Int) {
-        maxFavoriteSlots = max(0, maxFavoriteSlots - slots)
-    }
     
     func hadnleAdsWatchedCount() {
          adsWatchedCount += 1

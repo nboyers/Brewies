@@ -57,64 +57,7 @@ struct PremiumUpgradeView: View {
                         }
                     }
                     
-                    // Pricing
-                    VStack(spacing: 16) {
-                        HStack {
-                            VStack(spacing: 8) {
-                                Text("Monthly")
-                                    .font(.headline)
-                                Text("$2.99")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                Text("per month")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
-                            .background(Color(UIColor.secondarySystemBackground))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            
-                            VStack(spacing: 8) {
-                                Text("Annual")
-                                    .font(.headline)
-                                Text("$24.99")
-                                    .font(.title2)
-                                    .fontWeight(.bold)
-                                Text("per year")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text("Save 30%")
-                                    .font(.caption)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.green)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
-                            .background(Color.blue.opacity(0.1))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.blue, lineWidth: 2)
-                            )
-                        }
-                        .padding(.horizontal, 20)
-                        
-                        Button("Start Free Trial") {
-                            // Handle subscription
-                        }
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(Color.blue)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .padding(.horizontal, 20)
-                        
-                        Text("7-day free trial, then $24.99/year")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
+
                 }
                 .padding(.bottom, 40)
             }

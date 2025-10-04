@@ -9,6 +9,7 @@ import GoogleMobileAds
 import StoreKit
 import GooglePlaces
 import AppTrackingTransparency
+import AdSupport
 
 @main
 struct BrewiesApp: App {
@@ -23,19 +24,6 @@ struct BrewiesApp: App {
     init() {
         self.contentViewModel = ContentViewModel()
         rewardAdController = RewardAdController()
-        
-        // Request ATT permission immediately on app launch
-        DispatchQueue.main.async {
-            if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
-                ATTrackingManager.requestTrackingAuthorization { status in
-                    DispatchQueue.main.async {
-                        MobileAds.shared.start { _ in }
-                    }
-                }
-            } else {
-                MobileAds.shared.start { _ in }
-            }
-        }
     }
     
     var body: some Scene {
@@ -48,7 +36,7 @@ struct BrewiesApp: App {
                 .environmentObject(SharedAlertViewModel())
                 .environmentObject(sharedViewModel)
                 .environmentObject(storeKitManager)
-                .environmentObject(locationManager) // Pass locationManager to environment
+                .environmentObject(locationManager)
                 .environmentObject(attManager)
                 .onAppear {
                     _ = storeKitManager.listenForTransactions()
