@@ -9,8 +9,11 @@ GoogleService-Info.plist
 Config.xcconfig
 
 *.storekit
+!Brewies/Brewies.storekit
 
 *.plist
+# The project points at this Info.plist, so it must be tracked or a fresh clone won't build.
+!Brewies/Info.plist
 
 ### macOS ###
 # General
